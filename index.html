@@ -1613,8 +1613,8 @@ function addHaptaRow(){
   haptaRowCount++;
   const n=haptaRowCount;
   const tr=document.createElement('tr');tr.id='hr-'+n;
-  tr.innerHTML=`<td><input type="month" oninput="calcHapta()"></td>
-    <td><input type="date" oninput="calcHapta()"></td>
+  tr.innerHTML=`<td><input type="month" oninput="onHaptaDateChange(this)"></td>
+    <td><input type="date" oninput="onHaptaDateChange(this)"></td>
     <td><input type="number" min="0" placeholder="0" oninput="autoCalcHaptaRow(this);calcHapta()"></td>
     <td><input type="number" min="0" placeholder="0" style="background:rgba(245,166,35,.06);color:var(--amber)" oninput="calcHapta()" title="auto calculated"></td>
     <td><input type="number" min="0" placeholder="0" style="background:rgba(58,111,216,.04);color:var(--accent)" oninput="calcHapta()" title="auto calculated"></td>
@@ -1622,6 +1622,22 @@ function addHaptaRow(){
     <td><input type="number" min="0" placeholder="0" oninput="calcHapta()"></td>
     <td><button class="btn-icon" onclick="document.getElementById('hr-${n}').remove();calcHapta()" title="काढा">✕</button></td>`;
   document.getElementById('h-body').appendChild(tr);
+}
+
+function onHaptaDateChange(el){
+  const tr=el.closest('tr');
+  const inputs=tr.querySelectorAll('input');
+  const monthVal=inputs[0].value;
+  const dateVal=inputs[1].value;
+  if(monthVal && dateVal){
+    const [my,mm]=monthVal.split('-').map(Number);
+    const [dy,dm]=dateVal.split('-').map(Number);
+    let vilamb=(dy-my)*12+(dm-mm);
+    if(vilamb<0) vilamb=0;
+    inputs[2].value=vilamb;
+    autoCalcHaptaRow(inputs[2]);
+  }
+  calcHapta();
 }
 
 function autoCalcHaptaRow(el){
