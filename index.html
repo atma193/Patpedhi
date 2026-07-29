@@ -683,7 +683,7 @@ window.addEventListener('DOMContentLoaded', function(){
         <table style="min-width:700px">
           <thead><tr>
             <th style="min-width:130px">हप्त्याचा महिना</th><th style="min-width:110px">दिनांक</th><th style="min-width:100px">विलंब (महिने)</th>
-            <th style="min-width:100px">दंड (₹) <span style="color:var(--amber);font-size:9px">●auto</span></th><th style="min-width:120px">व्याज @२% (₹) <span style="color:var(--accent);font-size:9px">●auto</span></th><th style="min-width:90px">हप्ता (₹)</th><th style="min-width:90px">जमा (₹)</th><th style="min-width:36px"></th>
+            <th style="min-width:100px">दंड (₹) <span style="color:var(--amber);font-size:9px">●auto</span></th><th style="min-width:120px">व्याज @२% (₹) <span style="color:var(--accent);font-size:9px">●auto</span></th><th style="min-width:90px">हप्ता (₹) <span style="color:#e05252;font-size:11px">*</span></th><th style="min-width:90px">जमा (₹) <span style="color:var(--gold,#d4a017);font-size:9px">●auto</span></th><th style="min-width:36px"></th>
           </tr></thead>
           <tbody id="e-body"></tbody>
         </table>
@@ -1008,8 +1008,33 @@ function toast(msg,type='ok'){
 function addRow(){
   rowCount++;const n=rowCount;
   const tr=document.createElement('tr');tr.id='er-'+n;
-  tr.innerHTML=`<td><input type="month" oninput="autoCalcRow(this);calcE()"></td><td><input type="date" oninput="calcE()"></td><td><input type="number" min="0" placeholder="0" oninput="autoCalcRow(this);calcE()"></td><td><input type="number" min="0" placeholder="0" style="background:rgba(245,166,35,.06);color:var(--amber)" oninput="calcE()" title="auto calculated"></td><td><input type="number" min="0" placeholder="0" style="background:rgba(58,111,216,.04);color:var(--accent)" oninput="calcE()" title="auto calculated"></td><td><input type="number" min="0" placeholder="0" oninput="calcE()"></td><td><input type="number" min="0" placeholder="0" oninput="calcE()"></td><td><button class="btn-icon" onclick="document.getElementById('er-${n}').remove();calcE()" title="काढा">✕</button></td>`;
+  tr.innerHTML=`<td><input type="month" oninput="onEntryDateChange(this)"></td><td><input type="date" oninput="onEntryDateChange(this)"></td><td><input type="number" min="0" placeholder="0" readonly style="background:rgba(148,163,184,.08);cursor:not-allowed" title="महिना व तारीख वरून आपोआप"></td><td><input type="number" min="0" placeholder="0" style="background:rgba(245,166,35,.06);color:var(--amber)" oninput="calcJamaRowE(this.closest('tr'));calcE()" title="auto calculated"></td><td><input type="number" min="0" placeholder="0" style="background:rgba(58,111,216,.04);color:var(--accent)" oninput="calcJamaRowE(this.closest('tr'));calcE()" title="auto calculated"></td><td><input type="number" min="0" placeholder="0" oninput="calcJamaRowE(this.closest('tr'));calcE()"></td><td><input type="number" min="0" placeholder="0" readonly style="background:rgba(148,163,184,.08);cursor:not-allowed" title="हप्ता+दंड+व्याज वरून आपोआप"></td><td><button class="btn-icon" onclick="document.getElementById('er-${n}').remove();calcE()" title="काढा">✕</button></td>`;
   document.getElementById('e-body').appendChild(tr);
+}
+
+function calcJamaRowE(tr){
+  const inputs=tr.querySelectorAll('input');
+  const dand=parseFloat(inputs[3]?.value)||0;
+  const vyaj=parseFloat(inputs[4]?.value)||0;
+  const hapta=parseFloat(inputs[5]?.value)||0;
+  const jama=dand+vyaj+hapta;
+  inputs[6].value=jama>0?jama:'';
+}
+
+function onEntryDateChange(el){
+  const tr=el.closest('tr');
+  const inputs=tr.querySelectorAll('input');
+  const monthVal=inputs[0].value;
+  const dateVal=inputs[1].value;
+  if(monthVal && dateVal){
+    const [my,mm]=monthVal.split('-').map(Number);
+    const [dy,dm]=dateVal.split('-').map(Number);
+    let vilamb=(dy-my)*12+(dm-mm);
+    if(vilamb<0) vilamb=0;
+    inputs[2].value=vilamb;
+    autoCalcRow(inputs[2]);
+  }
+  calcE();
 }
 
 function autoCalcRow(el){
@@ -1032,6 +1057,7 @@ function autoCalcRow(el){
   const vyaj=shillak*0.02*vilamb;
   if(inputs[3]) inputs[3].value=dand>0?dand:'';
   if(inputs[4]) inputs[4].value=vyaj>0?Math.round(vyaj):'';
+  calcJamaRowE(tr);
 }
 
 function calcE(){
@@ -1071,10 +1097,20 @@ async function saveEntry(){
   if(!nav){toast('कृपया सभासदाचे नाव भरा.','warn');return;}
   if(!vatap){toast('कृपया कर्ज वाटप रक्कम भरा.','warn');return;}
   const hapte=[];
+  let missingHapta=false;
   document.querySelectorAll('#e-body tr').forEach(r=>{
     const i=r.querySelectorAll('input');
-    hapte.push({mahina:i[0]?.value,dinank:i[1]?.value,vilamb:parseFloat(i[2]?.value)||0,dand:parseFloat(i[3]?.value)||0,vyaj:parseFloat(i[4]?.value)||0,hapta:parseFloat(i[5]?.value)||0,jama:parseFloat(i[6]?.value)||0});
+    const monthVal=i[0]?.value;
+    const dateVal=i[1]?.value;
+    const dand=parseFloat(i[3]?.value)||0;
+    const vyaj=parseFloat(i[4]?.value)||0;
+    const hapta=parseFloat(i[5]?.value)||0;
+    const hasAnyData = monthVal||dateVal||dand>0||vyaj>0||hapta>0;
+    if(!hasAnyData) return;
+    if(hapta<=0){ missingHapta=true; return; }
+    hapte.push({mahina:monthVal,dinank:dateVal,vilamb:parseFloat(i[2]?.value)||0,dand,vyaj,hapta,jama:parseFloat(i[6]?.value)||0});
   });
+  if(missingHapta){toast('कृपया प्रत्येक ओळीत हप्ता रक्कम भरा — हप्त्याशिवाय नोंद जतन होणार नाही.','warn');return;}
   const karjtype = document.getElementById('e-karjtype').value;
   const guarantor = karjtype === 'etar' ? document.getElementById('e-guarantor').value.trim() : '';
   // Check if editing existing member
