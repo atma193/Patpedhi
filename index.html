@@ -915,6 +915,44 @@ window.addEventListener('DOMContentLoaded', function(){
       </div>
     </div>
   </div>
+
+  <div class="card" style="margin-top:22px">
+    <div class="card-body" style="padding-bottom:0">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <div class="sec-label" style="margin-bottom:2px">📋 व्यवहार तपशील — तारीखनिहाय (Tally साठी)</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:10px">प्रत्येक कर्ज वाटप व हप्ता जमा व्यवहार, तारीखनिहाय — वरचे वर्ष/महिना फिल्टर इथेही लागू होतात</div>
+        </div>
+        <div class="download-dropdown">
+          <button class="btn btn-ghost">📥 डाउनलोड ▼</button>
+          <div class="dropdown-content">
+            <a href="#" onclick="exportTxnExcel()">📊 Excel डाउनलोड</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tbl-wrap" style="border:none">
+      <table>
+        <thead><tr>
+          <th>अ.क्र.</th>
+          <th>दिनांक</th>
+          <th>सभासद नाव</th>
+          <th>प्रकार</th>
+          <th>कर्ज वाटप (₹)</th>
+          <th>हप्ता (₹)</th>
+          <th>दंड (₹)</th>
+          <th>व्याज (₹)</th>
+          <th>जमा (₹)</th>
+        </tr></thead>
+        <tbody id="txn-body"></tbody>
+        <tfoot id="txn-foot"></tfoot>
+      </table>
+      <div id="txn-empty" class="empty" style="display:none">
+        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:.3;margin-bottom:8px"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <br>कोणतीही नोंद सापडली नाही
+      </div>
+    </div>
+  </div>
 </div>
 
 </main>
@@ -1263,6 +1301,41 @@ function populateYears(){
   sel.value=cur;
 }
 
+function renderTxnDetail(){
+  const yr=document.getElementById('f-yr').value;
+  const mo=document.getElementById('f-mo').value;
+  const txns=[];
+  members.forEach(m=>{
+    if(m.date){
+      const y=m.date.slice(0,4), mm=m.date.slice(5,7);
+      if((!yr||y===yr)&&(!mo||mm===mo)){
+        txns.push({date:m.date,nav:m.nav,type:'कर्ज वाटप',vatapAmt:m.vatap||0,hapta:0,dand:0,vyaj:0,jama:0,isVatap:true});
+      }
+    }
+    (m.hapte||[]).forEach(h=>{
+      const d=h.dinank;
+      if(!d) return;
+      const y=d.slice(0,4), mm=d.slice(5,7);
+      if((!yr||y===yr)&&(!mo||mm===mo)){
+        txns.push({date:d,nav:m.nav,type:'हप्ता जमा',vatapAmt:0,hapta:h.hapta||0,dand:h.dand||0,vyaj:h.vyaj||0,jama:h.jama||0,isVatap:false});
+      }
+    });
+  });
+  txns.sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
+  const tbody=document.getElementById('txn-body');
+  const foot=document.getElementById('txn-foot');
+  const empty=document.getElementById('txn-empty');
+  if(!txns.length){ tbody.innerHTML=''; foot.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  let tVatap=0,tHapta=0,tDand=0,tVyaj=0,tJama=0;
+  tbody.innerHTML=txns.map((t,i)=>{
+    tVatap+=t.vatapAmt;tHapta+=t.hapta;tDand+=t.dand;tVyaj+=t.vyaj;tJama+=t.jama;
+    const typeColor=t.isVatap?'color:var(--accent)':'color:var(--green,#16a34a)';
+    return `<tr><td>${i+1}</td><td>${t.date}</td><td style="font-weight:600">${t.nav}</td><td style="${typeColor};font-weight:600">${t.type}</td><td style="color:var(--accent)">${t.vatapAmt?fmt(t.vatapAmt):'-'}</td><td>${t.hapta?fmt(t.hapta):'-'}</td><td>${t.dand?fmt(t.dand):'-'}</td><td>${t.vyaj?fmt(t.vyaj):'-'}</td><td style="font-weight:600;color:var(--green,#16a34a)">${t.jama?fmt(t.jama):'-'}</td></tr>`;
+  }).join('');
+  foot.innerHTML=`<td colspan="4">एकूण (${txns.length} व्यवहार)</td><td>${fmt(tVatap)}</td><td>${fmt(tHapta)}</td><td>${fmt(tDand)}</td><td>${fmt(tVyaj)}</td><td>${fmt(tJama)}</td>`;
+}
+
 function renderMonthlyReport(){
   const yr=document.getElementById('f-yr').value;
   const monthMap={}; // key: 'YYYY-MM' -> {vatap, hapta, dand, vyaj, jama}
@@ -1336,7 +1409,7 @@ function renderSum(){
     [va,vb]=map[sortCol]||[a.m.kram,b.m.kram];
     return va<vb?(sortAsc?-1:1):va>vb?(sortAsc?1:-1):0;
   });
-  if(!rows.length){document.getElementById('sum-body').innerHTML='';document.getElementById('sum-foot').innerHTML='';document.getElementById('sum-empty').style.display='block';renderMonthlyReport();return;}
+  if(!rows.length){document.getElementById('sum-body').innerHTML='';document.getElementById('sum-foot').innerHTML='';document.getElementById('sum-empty').style.display='block';renderMonthlyReport();renderTxnDetail();return;}
   document.getElementById('sum-empty').style.display='none';
   document.getElementById('sum-body').innerHTML=rows.map(({m,s})=>{
     const p=pct(m.vatap-s.shillak,m.vatap);
@@ -1345,6 +1418,7 @@ function renderSum(){
   }).join('');
   document.getElementById('sum-foot').innerHTML=`<td colspan="3">एकूण (${rows.length})</td><td>${fmt(tV)}</td><td>${fmt(tK)}</td><td>${fmt(tD)}</td><td>${fmt(tY)}</td><td>${fmt(tJ)}</td><td style="color:var(--red)">${fmt(tS)}</td><td colspan="4"></td>`;
   renderMonthlyReport();
+  renderTxnDetail();
 }
 
 function sortBy(col){
@@ -1704,6 +1778,77 @@ function exportExcel(){
 }
 
 
+
+function exportTxnExcel(){
+  const yr=document.getElementById('f-yr').value;
+  const mo=document.getElementById('f-mo').value;
+  const txns=[];
+  members.forEach(m=>{
+    if(m.date){
+      const y=m.date.slice(0,4), mm=m.date.slice(5,7);
+      if((!yr||y===yr)&&(!mo||mm===mo)){
+        txns.push({date:m.date,nav:m.nav,type:'कर्ज वाटप',vatapAmt:m.vatap||0,hapta:0,dand:0,vyaj:0,jama:0});
+      }
+    }
+    (m.hapte||[]).forEach(h=>{
+      const d=h.dinank;
+      if(!d) return;
+      const y=d.slice(0,4), mm=d.slice(5,7);
+      if((!yr||y===yr)&&(!mo||mm===mo)){
+        txns.push({date:d,nav:m.nav,type:'हप्ता जमा',vatapAmt:0,hapta:h.hapta||0,dand:h.dand||0,vyaj:h.vyaj||0,jama:h.jama||0});
+      }
+    });
+  });
+  txns.sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('mr-IN',{day:'2-digit',month:'long',year:'numeric'});
+  let tVatap=0,tHapta=0,tDand=0,tVyaj=0,tJama=0;
+  const tableRows=txns.map((t,i)=>{
+    tVatap+=t.vatapAmt;tHapta+=t.hapta;tDand+=t.dand;tVyaj+=t.vyaj;tJama+=t.jama;
+    const bg=i%2===0?'#ffffff':'#f8f9fc';
+    return `<tr style="background:${bg}">
+      <td style="padding:7px 10px;border:1px solid #e2e8f0;text-align:center;">${i+1}</td>
+      <td style="padding:7px 10px;border:1px solid #e2e8f0;text-align:center;mso-number-format:'\@';">${t.date}</td>
+      <td style="padding:7px 10px;border:1px solid #e2e8f0;font-weight:600;mso-number-format:'\@';">${t.nav}</td>
+      <td style="padding:7px 10px;border:1px solid #e2e8f0;text-align:center;mso-number-format:'\@';">${t.type}</td>
+      <td style="padding:7px 10px;border:1px solid #e2e8f0;text-align:right;color:#1e40af;mso-number-format:'#,##0';">${t.vatapAmt||''}</td>
+      <td style="padding:7px 10px;border:1px solid #e2e8f0;text-align:right;mso-number-format:'#,##0';">${t.hapta||''}</td>
+      <td style="padding:7px 10px;border:1px solid #e2e8f0;text-align:right;color:#92400e;mso-number-format:'#,##0';">${t.dand||''}</td>
+      <td style="padding:7px 10px;border:1px solid #e2e8f0;text-align:right;color:#1e40af;mso-number-format:'#,##0';">${t.vyaj||''}</td>
+      <td style="padding:7px 10px;border:1px solid #e2e8f0;text-align:right;color:#166534;font-weight:600;mso-number-format:'#,##0';">${t.jama||''}</td>
+    </tr>`;
+  }).join('');
+  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="UTF-8">
+<!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
+<x:Name>व्यवहार तपशील</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>
+</x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+<style>
+  body{font-family:'Tiro Devanagari Marathi',serif;color:#1e293b;}
+  .hdr{background:#1a2540;color:#e2b65a;font-size:16px;font-weight:bold;text-align:center;padding:12px;}
+  .sub{background:#1a2540;color:#d6def0;font-size:11px;text-align:center;padding:5px;}
+  th{background:#1a2540;color:#ffffff;padding:9px 10px;border:1px solid #334155;font-size:12px;font-weight:bold;text-align:center;}
+  td{font-size:12px;padding:7px 10px;border:1px solid #e2e8f0;}
+  .tot td{background:#fef3c7;font-weight:bold;border:1px solid #d97706;}
+</style></head><body>
+<table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
+  <tr><td colspan="9" class="hdr">अबगुलवाडी नवतरुण ग्रामविकास मंडळ — पतपेढी</td></tr>
+  <tr><td colspan="9" class="sub">साकुर्डे (अबगुलवाडी), ता. दापोली, जि. रत्नागिरी | मुंबई – ४००००२</td></tr>
+  <tr><td colspan="9" class="sub" style="font-size:13px;font-weight:bold;color:#e2b65a;">व्यवहार तपशील | ${dateStr}${yr?' | वर्ष: '+yr:''}${mo?' | महिना: '+mo:''}</td></tr>
+  <tr><td colspan="9" style="padding:5px;"></td></tr>
+  <tr><th>अ.क्र.</th><th>दिनांक</th><th>सभासद नाव</th><th>प्रकार</th><th>कर्ज वाटप</th><th>हप्ता</th><th>दंड</th><th>व्याज</th><th>जमा</th></tr>
+  ${tableRows}
+  <tr class="tot">
+    <td colspan="4" style="text-align:center;">एकूण (${txns.length} व्यवहार)</td>
+    <td style="text-align:right;">${tVatap}</td>
+    <td style="text-align:right;">${tHapta}</td>
+    <td style="text-align:right;">${tDand}</td>
+    <td style="text-align:right;">${tVyaj}</td>
+    <td style="text-align:right;">${tJama}</td>
+  </tr>
+</table></body></html>`;
+  downloadExcel(html, 'Patpedhi_Vyavahar_Tapshil.xls');
+}
 
 function haptaSearch(){
   const q = (document.getElementById('h-search').value || '').trim().toLowerCase();
