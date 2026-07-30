@@ -889,6 +889,32 @@ window.addEventListener('DOMContentLoaded', function(){
       </div>
     </div>
   </div>
+
+  <div class="card" style="margin-top:22px">
+    <div class="card-body" style="padding-bottom:0">
+      <div class="sec-label" style="margin-bottom:2px">📅 महिनावार अहवाल — कर्ज वाटप वि. जमा (Tally)</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:10px">प्रत्येक महिन्यात किती कर्ज वाटप झालं आणि किती रक्कम प्रत्यक्ष जमा झाली — तुलना करण्यासाठी</div>
+    </div>
+    <div class="tbl-wrap" style="border:none">
+      <table>
+        <thead><tr>
+          <th>महिना</th>
+          <th>कर्ज वाटप (₹)</th>
+          <th>हप्ता जमा (₹)</th>
+          <th>दंड जमा (₹)</th>
+          <th>व्याज जमा (₹)</th>
+          <th>एकूण जमा (₹)</th>
+          <th>फरक (वाटप − जमा)</th>
+        </tr></thead>
+        <tbody id="monthly-body"></tbody>
+        <tfoot id="monthly-foot"></tfoot>
+      </table>
+      <div id="monthly-empty" class="empty" style="display:none">
+        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:.3;margin-bottom:8px"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        <br>कोणतीही नोंद सापडली नाही
+      </div>
+    </div>
+  </div>
 </div>
 
 </main>
@@ -1237,6 +1263,53 @@ function populateYears(){
   sel.value=cur;
 }
 
+function renderMonthlyReport(){
+  const yr=document.getElementById('f-yr').value;
+  const monthMap={}; // key: 'YYYY-MM' -> {vatap, hapta, dand, vyaj, jama}
+  function getRow(key){
+    if(!monthMap[key]) monthMap[key]={vatap:0,hapta:0,dand:0,vyaj:0,jama:0};
+    return monthMap[key];
+  }
+  members.forEach(m=>{
+    if(m.date){
+      const key=m.date.slice(0,7);
+      if(!yr || key.startsWith(yr)){ getRow(key).vatap += (m.vatap||0); }
+    }
+    (m.hapte||[]).forEach(h=>{
+      const dateKey = h.dinank ? h.dinank.slice(0,7) : (h.mahina || null);
+      if(!dateKey) return;
+      if(yr && !dateKey.startsWith(yr)) return;
+      const row=getRow(dateKey);
+      row.hapta += (h.hapta||0);
+      row.dand += (h.dand||0);
+      row.vyaj += (h.vyaj||0);
+      row.jama += (h.jama||0);
+    });
+  });
+  const keys=Object.keys(monthMap).sort();
+  const tbody=document.getElementById('monthly-body');
+  const foot=document.getElementById('monthly-foot');
+  const empty=document.getElementById('monthly-empty');
+  if(!keys.length){ tbody.innerHTML=''; foot.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  const monthNames=['','जाने','फेब्रु','मार्च','एप्रि','मे','जून','जुलै','ऑग','सप्टें','ऑक्टो','नोव्हें','डिसें'];
+  function fmtMonth(key){
+    const [y,mo]=key.split('-');
+    return monthNames[parseInt(mo,10)]+' '+y;
+  }
+  let tV=0,tH=0,tD=0,tY=0,tJ=0;
+  tbody.innerHTML=keys.map(k=>{
+    const r=monthMap[k];
+    tV+=r.vatap;tH+=r.hapta;tD+=r.dand;tY+=r.vyaj;tJ+=r.jama;
+    const diff=r.vatap-r.jama;
+    const diffColor=diff>0?'color:var(--red)':diff<0?'color:var(--green,#16a34a)':'';
+    return `<tr><td style="font-weight:600">${fmtMonth(k)}</td><td>${fmt(r.vatap)}</td><td>${fmt(r.hapta)}</td><td>${fmt(r.dand)}</td><td>${fmt(r.vyaj)}</td><td style="font-weight:600">${fmt(r.jama)}</td><td style="${diffColor}">${fmt(diff)}</td></tr>`;
+  }).join('');
+  const tDiff=tV-tJ;
+  const tDiffColor=tDiff>0?'color:var(--red)':tDiff<0?'color:var(--green,#16a34a)':'';
+  foot.innerHTML=`<td>एकूण</td><td>${fmt(tV)}</td><td>${fmt(tH)}</td><td>${fmt(tD)}</td><td>${fmt(tY)}</td><td style="font-weight:600">${fmt(tJ)}</td><td style="${tDiffColor}">${fmt(tDiff)}</td>`;
+}
+
 function renderSum(){
   const yr=document.getElementById('f-yr').value;
   const mo=document.getElementById('f-mo').value;
@@ -1263,7 +1336,7 @@ function renderSum(){
     [va,vb]=map[sortCol]||[a.m.kram,b.m.kram];
     return va<vb?(sortAsc?-1:1):va>vb?(sortAsc?1:-1):0;
   });
-  if(!rows.length){document.getElementById('sum-body').innerHTML='';document.getElementById('sum-foot').innerHTML='';document.getElementById('sum-empty').style.display='block';return;}
+  if(!rows.length){document.getElementById('sum-body').innerHTML='';document.getElementById('sum-foot').innerHTML='';document.getElementById('sum-empty').style.display='block';renderMonthlyReport();return;}
   document.getElementById('sum-empty').style.display='none';
   document.getElementById('sum-body').innerHTML=rows.map(({m,s})=>{
     const p=pct(m.vatap-s.shillak,m.vatap);
@@ -1271,6 +1344,7 @@ function renderSum(){
     return `<tr><td>${m.kram}</td><td style="font-weight:600">${m.nav}</td><td>${m.mobile||'-'}</td><td>${fmt(m.vatap)}</td><td>${fmt(s.karj)}</td><td>${fmt(s.dand)}</td><td>${fmt(s.vyaj)}</td><td>${fmt(s.jama)}</td><td style="color:var(--red)">${fmt(s.shillak)}</td><td style="min-width:90px"><div style="font-size:11px;color:var(--text2);margin-bottom:3px">${p}%</div><div class="progress"><div class="progress-fill" style="width:${Math.min(100,p)}%"></div></div></td><td>${badge}</td><td style="white-space:nowrap"><button class="btn-icon" title="पहा" onclick="openDrawer(${members.indexOf(m)})">👁</button> <button class="btn-icon" title="संपादन" onclick="editMember(${members.indexOf(m)})" style="color:var(--accent)">✏️</button> <button class="btn-icon" title="काढा" onclick="deleteMember(${members.indexOf(m)})" style="color:var(--red)">🗑️</button></td></tr>`;
   }).join('');
   document.getElementById('sum-foot').innerHTML=`<td colspan="3">एकूण (${rows.length})</td><td>${fmt(tV)}</td><td>${fmt(tK)}</td><td>${fmt(tD)}</td><td>${fmt(tY)}</td><td>${fmt(tJ)}</td><td style="color:var(--red)">${fmt(tS)}</td><td colspan="4"></td>`;
+  renderMonthlyReport();
 }
 
 function sortBy(col){
