@@ -520,6 +520,11 @@ window.addEventListener('DOMContentLoaded', function(){
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
       पूर्ण तपशील
     </button>
+    <button class="nav-item" data-page="requests" onclick="goPage('requests',this)" style="position:relative">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/><path d="M20 8v6m3-3h-6"/></svg>
+      सभासद विनंत्या
+      <span id="req-badge-sidebar" style="display:none;position:absolute;top:6px;right:10px;background:#e05252;color:#fff;font-size:10px;font-weight:700;border-radius:10px;padding:1px 6px;min-width:16px;text-align:center;"></span>
+    </button>
   </nav>
   <div style="padding:10px 10px 0;position:relative;">
   <!-- Admin Popup Button -->
@@ -542,7 +547,14 @@ window.addEventListener('DOMContentLoaded', function(){
     <div style="padding:10px 14px;border-bottom:1px solid rgba(212,160,23,.2);font-size:11px;color:#94a3b8;">
       👤 <span id="popup-username" style="color:#e2b65a;font-weight:600;">Admin</span>
     </div>
-    <button onclick="openChangePassModal();closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
+    <button onclick="goPage('requests',document.querySelector('[data-page=requests]'));closeAdminPopup();" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
+      <span style="display:flex;align-items:center;gap:10px;">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        सभासद विनंत्या
+      </span>
+      <span id="req-badge-popup" style="display:none;background:#e05252;color:#fff;font-size:10px;font-weight:700;border-radius:10px;padding:1px 6px;min-width:16px;text-align:center;"></span>
+    </button>
+    <button onclick="openChangePassModal();closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
       पासवर्ड बदला
     </button>
@@ -961,6 +973,44 @@ window.addEventListener('DOMContentLoaded', function(){
   </div>
 </div>
 
+<div id="page-requests" class="page">
+  <div class="page-header">
+    <div class="page-title">👥 सभासद विनंत्या</div>
+    <div class="page-sub">सभासदांनी केलेल्या नोंदणी विनंत्या — approve/reject करा</div>
+  </div>
+
+  <div class="card">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr>
+          <th>अ.क्र.</th>
+          <th>नाव</th>
+          <th>मोबाईल</th>
+          <th>दिनांक</th>
+          <th>स्थिती</th>
+          <th>क्रिया</th>
+        </tr></thead>
+        <tbody id="req-body"></tbody>
+      </table>
+      <div id="req-empty" class="empty" style="display:none">
+        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:.3;margin-bottom:8px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        <br>कोणतीही विनंती सापडली नाही
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Approve Modal -->
+<div id="approve-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9997;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;width:90%;max-width:420px;max-height:80vh;overflow:auto;padding:20px;">
+    <div style="font-size:15px;font-weight:700;margin-bottom:4px;">सभासदाशी लिंक करा</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:12px;" id="approve-req-info"></div>
+    <input type="text" id="approve-search" placeholder="नाव किंवा मोबाईल टाइप करा..." oninput="renderApproveSearchResults()" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;margin-bottom:10px;">
+    <div id="approve-search-results" style="max-height:280px;overflow:auto;"></div>
+    <button class="btn btn-ghost" onclick="closeApproveModal()" style="margin-top:14px;width:100%;">रद्द करा</button>
+  </div>
+</div>
+
 </main>
 
 <!-- MEMBER DETAIL DRAWER -->
@@ -1051,6 +1101,7 @@ function goPage(id,btn,skipHistory){
   if(id==='home') renderHome();
   if(id==='summary'){populateYears();renderSum();}
   if(id==='search') doSearch();
+  if(id==='requests') loadMemberRequests();
   closeSidebar();
   if(!skipHistory){
     if(history.state && history.state.page===id){
@@ -2256,9 +2307,110 @@ function openChangePassModal(){
 }
 
 // Check on page load
+let memberRequests = [];
+let currentApproveReqId = null;
+
+async function loadMemberRequests(){
+  const {data, error} = await sb.from('member_requests').select('*').order('created_at',{ascending:false});
+  if(error){ console.error(error); return; }
+  memberRequests = data || [];
+  renderRequests();
+  updateReqBadge();
+}
+
+function updateReqBadge(){
+  const pendingCount = memberRequests.filter(r=>r.status==='pending').length;
+  ['req-badge-sidebar','req-badge-popup'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    if(pendingCount>0){ el.textContent = pendingCount; el.style.display='inline-block'; }
+    else { el.style.display='none'; }
+  });
+}
+
+function renderRequests(){
+  const tbody = document.getElementById('req-body');
+  const empty = document.getElementById('req-empty');
+  if(!tbody) return;
+  if(!memberRequests.length){ tbody.innerHTML=''; if(empty) empty.style.display='block'; return; }
+  if(empty) empty.style.display='none';
+  const statusLabel = {pending:'⏳ प्रलंबित', approved:'✅ मंजूर', rejected:'❌ नाकारले'};
+  const statusColor = {pending:'color:var(--amber,#d97706)', approved:'color:var(--green,#16a34a)', rejected:'color:var(--red,#dc2626)'};
+  tbody.innerHTML = memberRequests.map((r,i)=>{
+    const dt = r.created_at ? fmtDate(r.created_at.slice(0,10)) : '—';
+    let actions = '';
+    if(r.status==='pending'){
+      actions = `<button class="btn-icon" title="Approve" onclick="openApproveModal(${r.id})" style="color:var(--green,#16a34a)">✅</button>
+                 <button class="btn-icon" title="Reject" onclick="rejectRequest(${r.id})" style="color:var(--red,#dc2626)">❌</button>`;
+    } else {
+      actions = '-';
+    }
+    return `<tr><td>${i+1}</td><td style="font-weight:600">${r.nav}</td><td>${r.mobile}</td><td>${dt}</td><td style="${statusColor[r.status]||''}">${statusLabel[r.status]||r.status}</td><td>${actions}</td></tr>`;
+  }).join('');
+}
+
+function openApproveModal(requestId){
+  currentApproveReqId = requestId;
+  const req = memberRequests.find(r=>r.id===requestId);
+  if(!req) return;
+  document.getElementById('approve-req-info').textContent = `विनंती: ${req.nav} — ${req.mobile}. खालील यादीतून योग्य सभासद निवडा:`;
+  document.getElementById('approve-search').value = req.nav;
+  document.getElementById('approve-modal-overlay').style.display = 'flex';
+  renderApproveSearchResults();
+}
+
+function closeApproveModal(){
+  document.getElementById('approve-modal-overlay').style.display = 'none';
+  currentApproveReqId = null;
+}
+
+function renderApproveSearchResults(){
+  const q = (document.getElementById('approve-search').value||'').trim().toLowerCase();
+  const resultsDiv = document.getElementById('approve-search-results');
+  let matches = members;
+  if(q){
+    matches = members.filter(m => m.nav.toLowerCase().includes(q) || (m.mobile||'').includes(q));
+  }
+  if(!matches.length){
+    resultsDiv.innerHTML = '<div style="padding:12px;text-align:center;color:var(--text2);font-size:12px;">कोणताही सभासद सापडला नाही</div>';
+    return;
+  }
+  resultsDiv.innerHTML = matches.map(m=>`
+    <div onclick="confirmApprove(${m.id})" style="padding:10px 12px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onmouseover="this.style.background='var(--gold-pale,#fdf6e3)'" onmouseout="this.style.background='none'">
+      <div>
+        <div style="font-weight:600;font-size:13px;">अ.क्र. ${m.kram} — ${m.nav}</div>
+        <div style="font-size:11px;color:var(--text2);">${m.mobile||'मोबाईल नाही'}</div>
+      </div>
+      <span style="font-size:11px;color:var(--accent);font-weight:600;">लिंक करा →</span>
+    </div>
+  `).join('');
+}
+
+async function confirmApprove(sabhasadId){
+  if(!currentApproveReqId) return;
+  const req = memberRequests.find(r=>r.id===currentApproveReqId);
+  const m = members.find(x=>x.id===sabhasadId);
+  if(!confirm(`"${req.nav}" ची विनंती "${m.nav}" (अ.क्र. ${m.kram}) शी लिंक करून approve करायची आहे का?`)) return;
+  const {error} = await sb.from('member_requests').update({status:'approved', sabhasad_id:sabhasadId}).eq('id', currentApproveReqId);
+  if(error){ toast('त्रुटी: '+error.message,'warn'); return; }
+  toast('✓ '+req.nav+' ची विनंती मंजूर झाली!');
+  closeApproveModal();
+  loadMemberRequests();
+}
+
+async function rejectRequest(requestId){
+  const req = memberRequests.find(r=>r.id===requestId);
+  if(!confirm(`"${req.nav}" ची विनंती नाकारायची आहे का?`)) return;
+  const {error} = await sb.from('member_requests').update({status:'rejected'}).eq('id', requestId);
+  if(error){ toast('त्रुटी: '+error.message,'warn'); return; }
+  toast('🗑 विनंती नाकारली.','warn');
+  loadMemberRequests();
+}
+
 window.addEventListener('DOMContentLoaded', function(){
   checkLogin();
   loadMembers();
+  loadMemberRequests();
   try{ if(!history.state){ history.replaceState({page:'home'}, '', '#home'); } }catch(e){}
   // show username if logged in
   const unEl=document.getElementById('sidebar-username');
