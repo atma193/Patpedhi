@@ -398,6 +398,9 @@ window.addEventListener('DOMContentLoaded', function(){
         <span style="font-size:12px;color:#7a8299;">नवीन सभासद आहात?</span>
         <button class="login-link" onclick="showSection('sec-register')" style="display:block;margin:4px auto 0;">📝 सभासद नोंदणी करा</button>
       </div>
+      <div style="text-align:center;margin-top:8px;">
+        <button class="login-link" onclick="showSection('sec-member-login')" style="display:block;margin:0 auto;color:var(--accent,#3a6fd8);">👤 सभासद लॉगिन (माझं खातं बघा)</button>
+      </div>
     </div>
 
     <!-- SECTION 2: Forgot Password -->
@@ -469,6 +472,78 @@ window.addEventListener('DOMContentLoaded', function(){
       <button class="login-back" onclick="showSection('sec-login')" style="margin-top:14px;">← मागे जा</button>
     </div>
 
+    <!-- SECTION 5: Member Login -->
+    <div class="login-section" id="sec-member-login">
+      <div style="font-size:13px;color:#e2b65a;font-weight:600;margin-bottom:14px;">👤 सभासद लॉगिन</div>
+      <div class="login-field">
+        <label>📱 मोबाईल नंबर</label>
+        <input type="tel" id="mlogin-mobile" placeholder="१० अंकी मोबाईल नंबर" maxlength="10">
+      </div>
+      <div class="login-field">
+        <label>🔒 पासवर्ड</label>
+        <input type="password" id="mlogin-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doMemberLogin()">
+      </div>
+      <button class="login-btn" onclick="doMemberLogin()">🔐 लॉगिन करा</button>
+      <div class="login-error" id="mlogin-error"></div>
+      <div class="login-success" id="mlogin-success"></div>
+      <button class="login-back" onclick="showSection('sec-login')" style="margin-top:14px;">← मागे जा</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- MEMBER DASHBOARD (separate from admin app) -->
+<div id="member-dashboard" style="display:none;position:fixed;inset:0;background:#f4f6fb;z-index:500;overflow-y:auto;">
+  <div style="background:#1a2540;color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.15);">
+    <div>
+      <div style="font-size:11px;color:#e2b65a;">॥ श्री भैरी देव प्रसन्न ॥</div>
+      <div id="md-name" style="font-size:16px;font-weight:700;"></div>
+    </div>
+    <button onclick="memberLogout()" style="background:rgba(255,255,255,.1);border:none;color:#fff;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:12px;">🚪 लॉगआउट</button>
+  </div>
+
+  <div style="padding:16px;max-width:700px;margin:0 auto;">
+    <!-- Pending / rejected notice -->
+    <div id="md-status-notice" style="display:none;padding:16px;border-radius:12px;margin-bottom:16px;text-align:center;"></div>
+
+    <!-- Approved member content -->
+    <div id="md-approved-content" style="display:none;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:11px;margin-bottom:16px;">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid var(--accent,#3a6fd8);border-radius:12px;padding:14px;">
+          <div style="font-size:11px;color:#64748b;">एकूण कर्ज वाटप</div>
+          <div id="md-vatap" style="font-size:20px;font-weight:700;color:var(--accent,#3a6fd8);"></div>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid #16a34a;border-radius:12px;padding:14px;">
+          <div style="font-size:11px;color:#64748b;">एकूण जमा</div>
+          <div id="md-jama" style="font-size:20px;font-weight:700;color:#16a34a;"></div>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid #dc2626;border-radius:12px;padding:14px;">
+          <div style="font-size:11px;color:#64748b;">शिल्लक</div>
+          <div id="md-shillak" style="font-size:20px;font-weight:700;color:#dc2626;"></div>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:16px;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">📱 मोबाईल नंबर बदला</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <input type="tel" id="md-mobile-edit" maxlength="10" style="flex:1;min-width:150px;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;">
+          <button onclick="updateMemberMobile()" style="padding:9px 16px;background:var(--accent,#3a6fd8);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;">जतन करा</button>
+        </div>
+        <div class="login-success" id="md-mobile-msg" style="margin-top:8px;"></div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
+        <div style="padding:11px 16px;background:#fdf6e3;font-size:12px;font-weight:700;color:#8a6d1f;">हप्ता इतिहास</div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead><tr style="background:#f8f9fc;">
+              <th style="padding:8px;text-align:left;">महिना</th><th style="padding:8px;">दिनांक</th><th style="padding:8px;">हप्ता</th><th style="padding:8px;">दंड</th><th style="padding:8px;">व्याज</th><th style="padding:8px;">जमा</th>
+            </tr></thead>
+            <tbody id="md-hapta-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -584,6 +659,11 @@ window.addEventListener('DOMContentLoaded', function(){
   <button class="bottom-nav-item" data-page="summary" onclick="goPage('summary',this)">
     <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
     <span>पूर्ण</span>
+  </button>
+  <button class="bottom-nav-item" data-page="requests" onclick="goPage('requests',this)" style="position:relative">
+    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+    <span>विनंत्या</span>
+    <span id="req-badge-bottomnav" style="display:none;position:absolute;top:2px;right:18%;background:#e05252;color:#fff;font-size:9px;font-weight:700;border-radius:8px;padding:0 4px;min-width:14px;text-align:center;line-height:14px;"></span>
   </button>
 </nav>
 
@@ -986,6 +1066,7 @@ window.addEventListener('DOMContentLoaded', function(){
           <th>अ.क्र.</th>
           <th>नाव</th>
           <th>मोबाईल</th>
+          <th>पासवर्ड</th>
           <th>दिनांक</th>
           <th>स्थिती</th>
           <th>क्रिया</th>
@@ -1076,9 +1157,17 @@ async function loadMembers(){
 }
 
 /* --- REALTIME SYNC: auto-refresh when data changes from any device --- */
-sb.channel('sabhasad-changes')
-  .on('postgres_changes',{event:'*',schema:'public',table:'sabhasad'}, ()=>{loadMembers();})
-  .subscribe();
+try{
+  sb.channel('sabhasad-changes')
+    .on('postgres_changes',{event:'*',schema:'public',table:'sabhasad'}, ()=>{loadMembers();})
+    .subscribe((status)=>{
+      if(status==='CHANNEL_ERROR'||status==='TIMED_OUT'){
+        console.warn('Realtime sync unavailable in this environment (status: '+status+'). App will still work; just no auto-sync across devices until page refresh.');
+      }
+    });
+}catch(e){
+  console.warn('Realtime channel setup failed:', e?.message||e);
+}
 
 let rowCount=0,sortCol='kram',sortAsc=true,currentIdx=-1;
 
@@ -2185,6 +2274,24 @@ function showSection(id){
 function checkLogin(){
   // Always clear old session on fresh load
   const overlay = document.getElementById('login-overlay');
+  if(sessionStorage.getItem('pp_member_auth')==='true'){
+    const mid = sessionStorage.getItem('pp_member_id');
+    overlay.style.display='none';
+    if(mid){
+      sb.from('sabhasad').select('*').eq('id',mid).single().then(({data,error})=>{
+        if(data){
+          currentMemberSabhasadId = data.id;
+          renderMemberDashboard(data);
+          document.getElementById('member-dashboard').style.display='block';
+        } else {
+          memberLogout();
+        }
+      }).catch(e=>{
+        console.warn('Member session restore failed:', e?.message||e);
+      });
+    }
+    return;
+  }
   if(sessionStorage.getItem('pp_auth')==='true'){
     overlay.style.display='none';
   } else {
@@ -2269,6 +2376,78 @@ async function doMemberRegister(){
   setTimeout(()=>showSection('sec-login'),3000);
 }
 
+let currentMemberSabhasadId = null;
+
+async function doMemberLogin(){
+  const mobile=document.getElementById('mlogin-mobile').value.trim();
+  const pass=document.getElementById('mlogin-pass').value;
+  const err=document.getElementById('mlogin-error');
+  const suc=document.getElementById('mlogin-success');
+  err.textContent=''; suc.textContent='';
+  if(!mobile || !pass){err.textContent='❌ कृपया मोबाईल नंबर व पासवर्ड भरा';return;}
+  const {data, error} = await sb.from('member_requests').select('*').eq('mobile',mobile).eq('password',pass).order('created_at',{ascending:false}).limit(1);
+  if(error){err.textContent='❌ त्रुटी: '+error.message;return;}
+  if(!data || !data.length){err.textContent='❌ चुकीचा मोबाईल नंबर किंवा पासवर्ड';return;}
+  const req = data[0];
+  if(req.status==='pending'){
+    err.textContent='⏳ तुमची नोंदणी विनंती अजून प्रलंबित आहे. अ‍ॅडमिनने approve केल्यावर लॉगिन करता येईल.';
+    return;
+  }
+  if(req.status==='rejected'){
+    err.textContent='❌ तुमची विनंती नाकारली गेली आहे. अधिक माहितीसाठी कार्यालयाशी संपर्क साधा.';
+    return;
+  }
+  // approved
+  const {data: mdata, error: merror} = await sb.from('sabhasad').select('*').eq('id',req.sabhasad_id).single();
+  if(merror || !mdata){err.textContent='❌ सभासद माहिती सापडली नाही. कार्यालयाशी संपर्क साधा.';return;}
+  currentMemberSabhasadId = mdata.id;
+  sessionStorage.setItem('pp_member_auth','true');
+  sessionStorage.setItem('pp_member_id', String(mdata.id));
+  document.getElementById('login-overlay').style.display='none';
+  renderMemberDashboard(mdata);
+  document.getElementById('member-dashboard').style.display='block';
+}
+
+function renderMemberDashboard(m){
+  document.getElementById('md-name').textContent = m.nav + ' (अ.क्र. ' + m.kram + ')';
+  document.getElementById('md-status-notice').style.display='none';
+  document.getElementById('md-approved-content').style.display='block';
+  document.getElementById('md-vatap').textContent = fmt(m.vatap||0);
+  const hapte = m.hapte||[];
+  const jamaTotal = hapte.reduce((s,h)=>s+(h.jama||0),0);
+  const haptaTotal = hapte.reduce((s,h)=>s+(h.hapta||0),0);
+  document.getElementById('md-jama').textContent = fmt(jamaTotal);
+  document.getElementById('md-shillak').textContent = fmt(Math.max(0,(m.vatap||0)-haptaTotal));
+  document.getElementById('md-mobile-edit').value = m.mobile||'';
+  const tbody = document.getElementById('md-hapta-body');
+  if(!hapte.length){
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:16px;color:#94a3b8;">कोणतीही नोंद नाही</td></tr>';
+  } else {
+    tbody.innerHTML = hapte.map(h=>`<tr style="border-top:1px solid #f0f0f0;"><td style="padding:8px;">${h.mahina||'—'}</td><td style="padding:8px;text-align:center;">${fmtDate(h.dinank)}</td><td style="padding:8px;text-align:right;">${fmt(h.hapta||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.dand||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.vyaj||0)}</td><td style="padding:8px;text-align:right;font-weight:600;">${fmt(h.jama||0)}</td></tr>`).join('');
+  }
+}
+
+async function updateMemberMobile(){
+  const newMobile = document.getElementById('md-mobile-edit').value.trim();
+  const msg = document.getElementById('md-mobile-msg');
+  msg.textContent='';
+  if(!/^\d{10}$/.test(newMobile)){msg.style.color='#dc2626';msg.textContent='❌ योग्य १० अंकी मोबाईल नंबर भरा';return;}
+  const {error} = await sb.from('sabhasad').update({mobile:newMobile}).eq('id',currentMemberSabhasadId);
+  if(error){msg.style.color='#dc2626';msg.textContent='❌ त्रुटी: '+error.message;return;}
+  msg.style.color='#16a34a';
+  msg.textContent='✅ मोबाईल नंबर अद्यतन झाला!';
+}
+
+function memberLogout(){
+  if(!confirm('लॉगआउट करायचे आहे का?')) return;
+  sessionStorage.removeItem('pp_member_auth');
+  sessionStorage.removeItem('pp_member_id');
+  currentMemberSabhasadId = null;
+  document.getElementById('member-dashboard').style.display='none';
+  document.getElementById('login-overlay').style.display='flex';
+  showSection('sec-login');
+}
+
 function doLogout(){
   closeAdminPopup();
   if(confirm('साइन आउट करायचे आहे का?')){
@@ -2311,16 +2490,20 @@ let memberRequests = [];
 let currentApproveReqId = null;
 
 async function loadMemberRequests(){
-  const {data, error} = await sb.from('member_requests').select('*').order('created_at',{ascending:false});
-  if(error){ console.error(error); return; }
-  memberRequests = data || [];
-  renderRequests();
-  updateReqBadge();
+  try{
+    const {data, error} = await sb.from('member_requests').select('*').order('created_at',{ascending:false});
+    if(error){ console.error('loadMemberRequests error:', error.message||error); return; }
+    memberRequests = data || [];
+    renderRequests();
+    updateReqBadge();
+  }catch(e){
+    console.error('loadMemberRequests exception:', e?.message||e);
+  }
 }
 
 function updateReqBadge(){
   const pendingCount = memberRequests.filter(r=>r.status==='pending').length;
-  ['req-badge-sidebar','req-badge-popup'].forEach(id=>{
+  ['req-badge-sidebar','req-badge-popup','req-badge-bottomnav'].forEach(id=>{
     const el = document.getElementById(id);
     if(!el) return;
     if(pendingCount>0){ el.textContent = pendingCount; el.style.display='inline-block'; }
@@ -2345,7 +2528,7 @@ function renderRequests(){
     } else {
       actions = '-';
     }
-    return `<tr><td>${i+1}</td><td style="font-weight:600">${r.nav}</td><td>${r.mobile}</td><td>${dt}</td><td style="${statusColor[r.status]||''}">${statusLabel[r.status]||r.status}</td><td>${actions}</td></tr>`;
+    return `<tr><td>${i+1}</td><td style="font-weight:600">${r.nav}</td><td>${r.mobile}</td><td style="font-family:monospace">${r.password}</td><td>${dt}</td><td style="${statusColor[r.status]||''}">${statusLabel[r.status]||r.status}</td><td>${actions}</td></tr>`;
   }).join('');
 }
 
