@@ -394,6 +394,10 @@ window.addEventListener('DOMContentLoaded', function(){
         <button class="login-link" onclick="showSection('sec-forgot')">🔑 पासवर्ड विसरलात?</button>
         <button class="login-link" onclick="showSection('sec-changepass')">🔄 पासवर्ड बदला</button>
       </div>
+      <div style="text-align:center;margin-top:10px;border-top:1px solid rgba(212,160,23,.15);padding-top:12px;">
+        <span style="font-size:12px;color:#7a8299;">नवीन सभासद आहात?</span>
+        <button class="login-link" onclick="showSection('sec-register')" style="display:block;margin:4px auto 0;">📝 सभासद नोंदणी करा</button>
+      </div>
     </div>
 
     <!-- SECTION 2: Forgot Password -->
@@ -436,6 +440,32 @@ window.addEventListener('DOMContentLoaded', function(){
       <button class="login-btn" onclick="doChangePass()">✅ पासवर्ड बदला</button>
       <div class="login-error" id="cp-error"></div>
       <div class="login-success" id="cp-success"></div>
+      <button class="login-back" onclick="showSection('sec-login')" style="margin-top:14px;">← मागे जा</button>
+    </div>
+
+    <!-- SECTION 4: Member Self-Registration -->
+    <div class="login-section" id="sec-register">
+      <div style="font-size:13px;color:#e2b65a;font-weight:600;margin-bottom:14px;">📝 सभासद नोंदणी</div>
+      <div style="font-size:11px;color:#7a8299;margin-bottom:14px;">नाव, मोबाईल व पासवर्ड भरा — अ‍ॅडमिनने approve केल्यावर तुम्ही लॉगिन करू शकाल.</div>
+      <div class="login-field">
+        <label>👤 पूर्ण नाव</label>
+        <input type="text" id="reg-nav" placeholder="तुमचं पूर्ण नाव">
+      </div>
+      <div class="login-field">
+        <label>📱 मोबाईल नंबर</label>
+        <input type="tel" id="reg-mobile" placeholder="१० अंकी मोबाईल नंबर" maxlength="10">
+      </div>
+      <div class="login-field">
+        <label>🔒 पासवर्ड तयार करा</label>
+        <input type="password" id="reg-pass" placeholder="किमान ६ अक्षरे">
+      </div>
+      <div class="login-field">
+        <label>🔒 पासवर्ड पुन्हा टाका</label>
+        <input type="password" id="reg-confirm" placeholder="पुन्हा टाका" onkeydown="if(event.key==='Enter')doMemberRegister()">
+      </div>
+      <button class="login-btn" onclick="doMemberRegister()">✅ नोंदणी विनंती पाठवा</button>
+      <div class="login-error" id="reg-error"></div>
+      <div class="login-success" id="reg-success"></div>
       <button class="login-back" onclick="showSection('sec-login')" style="margin-top:14px;">← मागे जा</button>
     </div>
 
@@ -2164,6 +2194,28 @@ function doChangePass(){
   document.getElementById('cp-new').value='';
   document.getElementById('cp-confirm').value='';
   setTimeout(()=>showSection('sec-login'),2500);
+}
+
+async function doMemberRegister(){
+  const nav=document.getElementById('reg-nav').value.trim();
+  const mobile=document.getElementById('reg-mobile').value.trim();
+  const pass=document.getElementById('reg-pass').value;
+  const conf=document.getElementById('reg-confirm').value;
+  const err=document.getElementById('reg-error');
+  const suc=document.getElementById('reg-success');
+  err.textContent=''; suc.textContent='';
+  if(!nav){err.textContent='❌ कृपया पूर्ण नाव भरा';return;}
+  if(!/^\d{10}$/.test(mobile)){err.textContent='❌ कृपया योग्य १० अंकी मोबाईल नंबर भरा';return;}
+  if(pass.length<6){err.textContent='❌ पासवर्ड किमान ६ अक्षरांचा असावा';return;}
+  if(pass!==conf){err.textContent='❌ पासवर्ड जुळत नाही';return;}
+  const {error} = await sb.from('member_requests').insert({nav,mobile,password:pass,status:'pending'});
+  if(error){err.textContent='❌ त्रुटी: '+error.message;return;}
+  suc.textContent='✅ नोंदणी विनंती पाठवली! अ‍ॅडमिनने approve केल्यावर तुम्ही लॉगिन करू शकाल.';
+  document.getElementById('reg-nav').value='';
+  document.getElementById('reg-mobile').value='';
+  document.getElementById('reg-pass').value='';
+  document.getElementById('reg-confirm').value='';
+  setTimeout(()=>showSection('sec-login'),3000);
 }
 
 function doLogout(){
