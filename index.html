@@ -381,8 +381,8 @@ window.addEventListener('DOMContentLoaded', function(){
     <!-- SECTION 1: Login -->
     <div class="login-section active" id="sec-login">
       <div class="login-field">
-        <label>👤 युजरनेम (Username)</label>
-        <input type="text" id="login-user" placeholder="username टाका" autocomplete="username">
+        <label>👤 युजरनेम / मोबाईल नंबर</label>
+        <input type="text" id="login-user" placeholder="Admin username किंवा सभासद मोबाईल नंबर" autocomplete="username">
       </div>
       <div class="login-field">
         <label>🔒 पासवर्ड (Password)</label>
@@ -397,9 +397,6 @@ window.addEventListener('DOMContentLoaded', function(){
       <div style="text-align:center;margin-top:10px;border-top:1px solid rgba(212,160,23,.15);padding-top:12px;">
         <span style="font-size:12px;color:#7a8299;">नवीन सभासद आहात?</span>
         <button class="login-link" onclick="showSection('sec-register')" style="display:block;margin:4px auto 0;">📝 सभासद नोंदणी करा</button>
-      </div>
-      <div style="text-align:center;margin-top:8px;">
-        <button class="login-link" onclick="showSection('sec-member-login')" style="display:block;margin:0 auto;color:var(--accent,#3a6fd8);">👤 सभासद लॉगिन (माझं खातं बघा)</button>
       </div>
     </div>
 
@@ -473,38 +470,63 @@ window.addEventListener('DOMContentLoaded', function(){
     </div>
 
     <!-- SECTION 5: Member Login -->
-    <div class="login-section" id="sec-member-login">
-      <div style="font-size:13px;color:#e2b65a;font-weight:600;margin-bottom:14px;">👤 सभासद लॉगिन</div>
-      <div class="login-field">
-        <label>📱 मोबाईल नंबर</label>
-        <input type="tel" id="mlogin-mobile" placeholder="१० अंकी मोबाईल नंबर" maxlength="10">
-      </div>
-      <div class="login-field">
-        <label>🔒 पासवर्ड</label>
-        <input type="password" id="mlogin-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doMemberLogin()">
-      </div>
-      <button class="login-btn" onclick="doMemberLogin()">🔐 लॉगिन करा</button>
-      <div class="login-error" id="mlogin-error"></div>
-      <div class="login-success" id="mlogin-success"></div>
-      <button class="login-back" onclick="showSection('sec-login')" style="margin-top:14px;">← मागे जा</button>
-    </div>
-
   </div>
 </div>
 
 <!-- MEMBER DASHBOARD (separate from admin app) -->
 <div id="member-dashboard" style="display:none;position:fixed;inset:0;background:#f4f6fb;z-index:500;overflow-y:auto;">
   <div style="background:#1a2540;color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.15);">
-    <div>
-      <div style="font-size:11px;color:#e2b65a;">॥ श्री भैरी देव प्रसन्न ॥</div>
-      <div id="md-name" style="font-size:16px;font-weight:700;"></div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img id="md-avatar" src="" style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid rgba(212,160,23,.5);display:none;">
+      <div id="md-avatar-placeholder" style="width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="22" height="22" fill="none" stroke="#e2b65a" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+      </div>
+      <div>
+        <div style="font-size:11px;color:#e2b65a;">॥ श्री भैरी देव प्रसन्न ॥</div>
+        <div id="md-name" style="font-size:16px;font-weight:700;"></div>
+      </div>
     </div>
-    <button onclick="memberLogout()" style="background:rgba(255,255,255,.1);border:none;color:#fff;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:12px;">🚪 लॉगआउट</button>
+    <div style="display:flex;gap:8px;">
+      <button onclick="toggleMemberProfileEdit()" style="background:rgba(212,160,23,.15);border:none;color:#e2b65a;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:12px;">👤 प्रोफाईल</button>
+      <button onclick="memberLogout()" style="background:rgba(255,255,255,.1);border:none;color:#fff;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:12px;">🚪 लॉगआउट</button>
+    </div>
   </div>
 
   <div style="padding:16px;max-width:700px;margin:0 auto;">
     <!-- Pending / rejected notice -->
     <div id="md-status-notice" style="display:none;padding:16px;border-radius:12px;margin-bottom:16px;text-align:center;"></div>
+
+    <!-- Profile Edit (photo + mobile) -->
+    <div id="md-profile-edit" style="display:none;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:16px;">
+      <div style="font-size:13px;font-weight:700;margin-bottom:14px;">✏️ प्रोफाईल एडिट करा</div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <img id="md-photo-preview" src="" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid #e2e8f0;display:none;">
+        <div id="md-photo-placeholder" style="width:64px;height:64px;border-radius:50%;background:#f0f4fb;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="30" height="30" fill="none" stroke="#94a3b8" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </div>
+        <div>
+          <input type="file" id="md-photo-input" accept="image/*" onchange="onMemberPhotoSelected(event)" style="display:none;">
+          <button onclick="document.getElementById('md-photo-input').click()" style="padding:8px 14px;background:#f0f4fb;border:1px solid #e2e8f0;border-radius:8px;cursor:pointer;font-size:12px;">📷 फोटो निवडा</button>
+          <div style="font-size:10px;color:#94a3b8;margin-top:5px;">JPG/PNG, कमाल ५ MB</div>
+        </div>
+      </div>
+      <div style="font-size:12px;font-weight:600;margin-bottom:6px;color:#334155;">📱 मोबाईल नंबर</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <input type="tel" id="md-mobile-edit" maxlength="10" style="flex:1;min-width:150px;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;">
+        <button onclick="saveMemberProfile()" style="padding:9px 16px;background:var(--accent,#3a6fd8);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;">जतन करा</button>
+      </div>
+      <div class="login-success" id="md-mobile-msg" style="margin-top:8px;"></div>
+
+      <div style="border-top:1px solid #f0f0f0;margin-top:16px;padding-top:16px;">
+        <div style="font-size:12px;font-weight:600;margin-bottom:6px;color:#334155;">🔒 पासवर्ड बदला</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+          <input type="password" id="md-newpass" placeholder="नवीन पासवर्ड (किमान ६ अक्षरे)" style="flex:1;min-width:150px;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;">
+          <input type="password" id="md-newpass-confirm" placeholder="पुन्हा टाका" style="flex:1;min-width:150px;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;">
+        </div>
+        <button onclick="saveMemberPassword()" style="padding:9px 16px;background:#8a6d1f;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;">पासवर्ड बदला</button>
+        <div class="login-success" id="md-pass-msg" style="margin-top:8px;"></div>
+      </div>
+    </div>
 
     <!-- Approved member content -->
     <div id="md-approved-content" style="display:none;">
@@ -521,15 +543,6 @@ window.addEventListener('DOMContentLoaded', function(){
           <div style="font-size:11px;color:#64748b;">शिल्लक</div>
           <div id="md-shillak" style="font-size:20px;font-weight:700;color:#dc2626;"></div>
         </div>
-      </div>
-
-      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:16px;">
-        <div style="font-size:13px;font-weight:700;margin-bottom:10px;">📱 मोबाईल नंबर बदला</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <input type="tel" id="md-mobile-edit" maxlength="10" style="flex:1;min-width:150px;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;">
-          <button onclick="updateMemberMobile()" style="padding:9px 16px;background:var(--accent,#3a6fd8);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;">जतन करा</button>
-        </div>
-        <div class="login-success" id="md-mobile-msg" style="margin-top:8px;"></div>
       </div>
 
       <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
@@ -1150,7 +1163,7 @@ let members=[];
 async function loadMembers(){
   const {data,error} = await sb.from('sabhasad').select('*').order('kram',{ascending:true});
   if(error){ toast('डेटा लोड करताना त्रुटी: '+error.message,'warn'); return; }
-  members = (data||[]).map(r=>({id:r.id,kram:r.kram,nav:r.nav,mobile:r.mobile,vatap:r.vatap,date:r.date,hapte:r.hapte||[],karjtype:r.karjtype,guarantor:r.guarantor}));
+  members = (data||[]).map(r=>({id:r.id,kram:r.kram,nav:r.nav,mobile:r.mobile,vatap:r.vatap,date:r.date,hapte:r.hapte||[],karjtype:r.karjtype,guarantor:r.guarantor,photo:r.photo||null}));
   renderHome();
   if(document.getElementById('page-search')?.classList.contains('active')) doSearch();
   if(document.getElementById('page-summary')?.classList.contains('active')) renderSum();
@@ -2300,23 +2313,48 @@ function checkLogin(){
   }
 }
 
-function doLogin(){
+async function doLogin(){
   const u=document.getElementById('login-user').value.trim();
   const p=document.getElementById('login-pass').value;
   const err=document.getElementById('login-error');
   const creds=getCreds();
+  err.textContent='';
   if(u===creds.user && p===creds.pass){
     sessionStorage.setItem('pp_auth','true');
     // show logged in user name in sidebar
     const unEl=document.getElementById('sidebar-username');
     if(unEl) unEl.textContent='👤 '+u;
     document.getElementById('login-overlay').style.display='none';
-    err.textContent='';
-  } else {
-    err.textContent='❌ चुकीचे युजरनेम किंवा पासवर्ड';
-    document.getElementById('login-pass').value='';
-    document.getElementById('login-pass').focus();
+    return;
   }
+  // Not admin — try member login (username field doubles as mobile number)
+  if(/^\d{10}$/.test(u)){
+    const {data, error} = await sb.from('member_requests').select('*').eq('mobile',u).eq('password',p).order('created_at',{ascending:false}).limit(1);
+    if(!error && data && data.length){
+      const req = data[0];
+      if(req.status==='pending'){
+        err.textContent='⏳ तुमची नोंदणी विनंती अजून प्रलंबित आहे. अ‍ॅडमिनने approve केल्यावर लॉगिन करता येईल.';
+        return;
+      }
+      if(req.status==='rejected'){
+        err.textContent='❌ तुमची विनंती नाकारली गेली आहे. अधिक माहितीसाठी कार्यालयाशी संपर्क साधा.';
+        return;
+      }
+      // approved
+      const {data: mdata, error: merror} = await sb.from('sabhasad').select('*').eq('id',req.sabhasad_id).single();
+      if(merror || !mdata){err.textContent='❌ सभासद माहिती सापडली नाही. कार्यालयाशी संपर्क साधा.';return;}
+      currentMemberSabhasadId = mdata.id;
+      sessionStorage.setItem('pp_member_auth','true');
+      sessionStorage.setItem('pp_member_id', String(mdata.id));
+      document.getElementById('login-overlay').style.display='none';
+      renderMemberDashboard(mdata);
+      document.getElementById('member-dashboard').style.display='block';
+      return;
+    }
+  }
+  err.textContent='❌ चुकीचे युजरनेम/मोबाईल किंवा पासवर्ड';
+  document.getElementById('login-pass').value='';
+  document.getElementById('login-pass').focus();
 }
 
 function doForgot(){
@@ -2378,38 +2416,10 @@ async function doMemberRegister(){
 
 let currentMemberSabhasadId = null;
 
-async function doMemberLogin(){
-  const mobile=document.getElementById('mlogin-mobile').value.trim();
-  const pass=document.getElementById('mlogin-pass').value;
-  const err=document.getElementById('mlogin-error');
-  const suc=document.getElementById('mlogin-success');
-  err.textContent=''; suc.textContent='';
-  if(!mobile || !pass){err.textContent='❌ कृपया मोबाईल नंबर व पासवर्ड भरा';return;}
-  const {data, error} = await sb.from('member_requests').select('*').eq('mobile',mobile).eq('password',pass).order('created_at',{ascending:false}).limit(1);
-  if(error){err.textContent='❌ त्रुटी: '+error.message;return;}
-  if(!data || !data.length){err.textContent='❌ चुकीचा मोबाईल नंबर किंवा पासवर्ड';return;}
-  const req = data[0];
-  if(req.status==='pending'){
-    err.textContent='⏳ तुमची नोंदणी विनंती अजून प्रलंबित आहे. अ‍ॅडमिनने approve केल्यावर लॉगिन करता येईल.';
-    return;
-  }
-  if(req.status==='rejected'){
-    err.textContent='❌ तुमची विनंती नाकारली गेली आहे. अधिक माहितीसाठी कार्यालयाशी संपर्क साधा.';
-    return;
-  }
-  // approved
-  const {data: mdata, error: merror} = await sb.from('sabhasad').select('*').eq('id',req.sabhasad_id).single();
-  if(merror || !mdata){err.textContent='❌ सभासद माहिती सापडली नाही. कार्यालयाशी संपर्क साधा.';return;}
-  currentMemberSabhasadId = mdata.id;
-  sessionStorage.setItem('pp_member_auth','true');
-  sessionStorage.setItem('pp_member_id', String(mdata.id));
-  document.getElementById('login-overlay').style.display='none';
-  renderMemberDashboard(mdata);
-  document.getElementById('member-dashboard').style.display='block';
-}
+let pendingMemberPhoto = null;
 
 function renderMemberDashboard(m){
-  document.getElementById('md-name').textContent = m.nav + ' (अ.क्र. ' + m.kram + ')';
+  document.getElementById('md-name').textContent = m.nav;
   document.getElementById('md-status-notice').style.display='none';
   document.getElementById('md-approved-content').style.display='block';
   document.getElementById('md-vatap').textContent = fmt(m.vatap||0);
@@ -2419,6 +2429,9 @@ function renderMemberDashboard(m){
   document.getElementById('md-jama').textContent = fmt(jamaTotal);
   document.getElementById('md-shillak').textContent = fmt(Math.max(0,(m.vatap||0)-haptaTotal));
   document.getElementById('md-mobile-edit').value = m.mobile||'';
+  pendingMemberPhoto = null;
+  setMemberAvatarDisplay('md-avatar','md-avatar-placeholder', m.photo);
+  setMemberAvatarDisplay('md-photo-preview','md-photo-placeholder', m.photo);
   const tbody = document.getElementById('md-hapta-body');
   if(!hapte.length){
     tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:16px;color:#94a3b8;">कोणतीही नोंद नाही</td></tr>';
@@ -2427,15 +2440,76 @@ function renderMemberDashboard(m){
   }
 }
 
-async function updateMemberMobile(){
+function setMemberAvatarDisplay(imgId, placeholderId, photoUrl){
+  const img = document.getElementById(imgId);
+  const ph = document.getElementById(placeholderId);
+  if(photoUrl){
+    img.src = photoUrl;
+    img.style.display = 'block';
+    ph.style.display = 'none';
+  } else {
+    img.style.display = 'none';
+    ph.style.display = 'flex';
+  }
+}
+
+function toggleMemberProfileEdit(){
+  const el = document.getElementById('md-profile-edit');
+  el.style.display = (el.style.display==='none') ? 'block' : 'none';
+}
+
+function onMemberPhotoSelected(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  if(file.size > 5*1024*1024){ toast('फोटो ५ MB पेक्षा लहान असावा','warn'); return; }
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const img = new Image();
+    img.onload = function(){
+      const canvas = document.createElement('canvas');
+      const maxSize = 300;
+      let w = img.width, h = img.height;
+      if(w>h){ if(w>maxSize){ h=Math.round(h*maxSize/w); w=maxSize; } }
+      else { if(h>maxSize){ w=Math.round(w*maxSize/h); h=maxSize; } }
+      canvas.width=w; canvas.height=h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img,0,0,w,h);
+      pendingMemberPhoto = canvas.toDataURL('image/jpeg',0.8);
+      setMemberAvatarDisplay('md-photo-preview','md-photo-placeholder', pendingMemberPhoto);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function saveMemberProfile(){
   const newMobile = document.getElementById('md-mobile-edit').value.trim();
   const msg = document.getElementById('md-mobile-msg');
   msg.textContent='';
   if(!/^\d{10}$/.test(newMobile)){msg.style.color='#dc2626';msg.textContent='❌ योग्य १० अंकी मोबाईल नंबर भरा';return;}
-  const {error} = await sb.from('sabhasad').update({mobile:newMobile}).eq('id',currentMemberSabhasadId);
+  const updatePayload = {mobile:newMobile};
+  if(pendingMemberPhoto) updatePayload.photo = pendingMemberPhoto;
+  const {error} = await sb.from('sabhasad').update(updatePayload).eq('id',currentMemberSabhasadId);
   if(error){msg.style.color='#dc2626';msg.textContent='❌ त्रुटी: '+error.message;return;}
   msg.style.color='#16a34a';
-  msg.textContent='✅ मोबाईल नंबर अद्यतन झाला!';
+  msg.textContent='✅ प्रोफाईल अद्यतन झालं!';
+  if(pendingMemberPhoto) setMemberAvatarDisplay('md-avatar','md-avatar-placeholder', pendingMemberPhoto);
+  pendingMemberPhoto = null;
+}
+
+async function saveMemberPassword(){
+  const newPass = document.getElementById('md-newpass').value;
+  const confirmPass = document.getElementById('md-newpass-confirm').value;
+  const msg = document.getElementById('md-pass-msg');
+  msg.textContent='';
+  if(newPass.length<6){msg.style.color='#dc2626';msg.textContent='❌ पासवर्ड किमान ६ अक्षरांचा असावा';return;}
+  if(newPass!==confirmPass){msg.style.color='#dc2626';msg.textContent='❌ पासवर्ड जुळत नाही';return;}
+  const {error} = await sb.from('member_requests').update({password:newPass}).eq('sabhasad_id',currentMemberSabhasadId).eq('status','approved');
+  if(error){msg.style.color='#dc2626';msg.textContent='❌ त्रुटी: '+error.message;return;}
+  msg.style.color='#16a34a';
+  msg.textContent='✅ पासवर्ड बदलला!';
+  document.getElementById('md-newpass').value='';
+  document.getElementById('md-newpass-confirm').value='';
 }
 
 function memberLogout(){
