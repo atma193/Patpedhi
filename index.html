@@ -73,6 +73,27 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .sidebar-close-btn:hover{background:rgba(255,255,255,.1)}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
 .sidebar-overlay.show{display:block}
+
+/* MEMBER DASHBOARD - DESKTOP SIDEBAR */
+.member-sidebar{display:none}
+.member-main{width:100%}
+@media(min-width:861px){
+  .member-sidebar{
+    display:flex;flex-direction:column;
+    position:fixed;left:0;top:0;bottom:0;width:230px;
+    background:#0f172a;border-right:1px solid #c8860a;z-index:50;overflow-y:auto
+  }
+  .member-sidebar-head{padding:22px 16px 18px;border-bottom:1px solid rgba(212,160,23,.25);text-align:center;background:linear-gradient(180deg,rgba(212,160,23,.08),transparent)}
+  .member-sidebar-avatar{width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid rgba(212,160,23,.5);margin:0 auto 10px;display:block}
+  .member-sidebar-name{font-family:'Tiro Devanagari Marathi',serif;font-size:14px;line-height:1.5;color:#fdf0e0;font-weight:600;word-break:break-word}
+  .member-sidebar-sub{font-size:10px;color:var(--text3);margin-top:4px;letter-spacing:.05em}
+  .member-sidebar-nav{flex:1;padding:14px 10px}
+  .member-sidebar-footer{padding:14px 10px;border-top:1px solid rgba(212,160,23,.2)}
+  .member-sidebar-logout{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:none;color:#fff;font-size:12px;cursor:pointer}
+  .member-sidebar-logout:hover{background:rgba(255,255,255,.08)}
+  .member-main{margin-left:230px}
+  .member-topbar-wrap{display:none!important}
+}
 .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#0f172a;border-top:1px solid rgba(212,160,23,.3);z-index:100;padding:6px 2px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(0,0,0,.25)}
 .bottom-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:none;color:#9aa5b8;font-size:10px;padding:5px 2px;border-radius:10px;cursor:pointer}
 .bottom-nav-item svg{width:19px;height:19px;opacity:.75}
@@ -475,6 +496,37 @@ window.addEventListener('DOMContentLoaded', function(){
 
 <!-- MEMBER DASHBOARD (separate from admin app) -->
 <div id="member-dashboard" style="display:none;position:fixed;inset:0;background:#f4f6fb;z-index:500;overflow-y:auto;">
+
+  <!-- DESKTOP SIDEBAR (Home / तपशील) -->
+  <aside class="member-sidebar">
+    <div class="member-sidebar-head" style="cursor:pointer;" onclick="goMemberPage('profile')" title="प्रोफाईल पहा">
+      <img id="md-side-avatar" src="" class="member-sidebar-avatar" style="display:none;">
+      <div id="md-side-avatar-placeholder" class="member-sidebar-avatar" style="background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;">
+        <svg width="24" height="24" fill="none" stroke="#e2b65a" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+      </div>
+      <div id="md-side-name" class="member-sidebar-name"></div>
+      <div class="member-sidebar-sub">सभासद पॅनल</div>
+    </div>
+    <div class="member-sidebar-nav">
+      <button id="md-side-home" class="nav-item active" onclick="goMemberPage('home')">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10l9-7 9 7"/><path d="M5 9v11h14V9"/></svg>
+        मुख्यपृष्ठ
+      </button>
+      <button id="md-side-details" class="nav-item" onclick="goMemberPage('details')">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 4h6a2 2 0 012 2v14l-5-3-5 3V6a2 2 0 012-2z"/></svg>
+        तपशील
+      </button>
+    </div>
+    <div class="member-sidebar-footer">
+      <button class="member-sidebar-logout" onclick="memberLogout()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><path d="M12 3v8"/><path d="M18.4 6.6a8 8 0 11-12.77 0"/></svg>
+        लॉगआउट
+      </button>
+    </div>
+  </aside>
+
+  <div class="member-main">
+  <div class="member-topbar-wrap">
   <div style="background:#1a2540;color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.15);">
     <div style="display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="goMemberPage('profile')" title="प्रोफाईल पहा">
       <img id="md-avatar" src="" style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid rgba(212,160,23,.5);display:none;">
@@ -490,10 +542,11 @@ window.addEventListener('DOMContentLoaded', function(){
     </button>
   </div>
 
-  <nav style="display:flex;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:10;">
+  <nav class="md-mobile-tabs" style="display:flex;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:10;">
     <button id="md-nav-home" onclick="goMemberPage('home')" style="flex:1;padding:12px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:600;color:var(--accent,#3a6fd8);border-bottom:2px solid var(--accent,#3a6fd8);">🏠 मुख्यपृष्ठ</button>
     <button id="md-nav-details" onclick="goMemberPage('details')" style="flex:1;padding:12px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:600;color:#94a3b8;border-bottom:2px solid transparent;">📋 तपशील</button>
   </nav>
+  </div>
 
   <div style="padding:16px;max-width:700px;margin:0 auto;">
     <!-- Pending / rejected notice -->
@@ -616,6 +669,7 @@ window.addEventListener('DOMContentLoaded', function(){
         <div class="login-success" id="md-mobile-msg" style="margin-top:8px;"></div>
       </div>
     </div>
+  </div>
   </div>
 </div>
 
@@ -2540,6 +2594,14 @@ function goMemberPage(id){
   homeBtn.style.borderBottomColor = id==='home' ? 'var(--accent,#3a6fd8)' : 'transparent';
   detailsBtn.style.color = id==='details' ? 'var(--accent,#3a6fd8)' : '#94a3b8';
   detailsBtn.style.borderBottomColor = id==='details' ? 'var(--accent,#3a6fd8)' : 'transparent';
+
+  // Sync desktop sidebar nav highlight
+  const sideHome = document.getElementById('md-side-home');
+  const sideDetails = document.getElementById('md-side-details');
+  if(sideHome && sideDetails){
+    sideHome.classList.toggle('active', id==='home');
+    sideDetails.classList.toggle('active', id==='details');
+  }
 }
 
 function ymToNum(ym){
@@ -2578,6 +2640,8 @@ function computeMemberOverdue(m){
 
 function renderMemberDashboard(m){
   document.getElementById('md-name').textContent = m.nav;
+  const sideNameEl = document.getElementById('md-side-name');
+  if(sideNameEl) sideNameEl.textContent = m.nav;
   document.getElementById('md-welcome-msg').textContent = 'नमस्कार, ' + m.nav + '! 🙏';
   document.getElementById('md-status-notice').style.display='none';
   document.getElementById('md-approved-content').style.display='block';
@@ -2617,6 +2681,7 @@ function renderMemberDashboard(m){
   pendingMemberPhoto = null;
   setMemberAvatarDisplay('md-avatar','md-avatar-placeholder', m.photo);
   setMemberAvatarDisplay('md-photo-preview','md-photo-placeholder', m.photo);
+  if(document.getElementById('md-side-avatar')) setMemberAvatarDisplay('md-side-avatar','md-side-avatar-placeholder', m.photo);
   goMemberPage('home');
   const tbody = document.getElementById('md-hapta-body');
   if(!hapte.length){
@@ -2721,7 +2786,10 @@ async function saveMemberProfile(){
   if(error){msg.style.color='#dc2626';msg.textContent='❌ त्रुटी: '+error.message;return;}
   msg.style.color='#16a34a';
   msg.textContent='✅ प्रोफाईल अद्यतन झालं!';
-  if(pendingMemberPhoto) setMemberAvatarDisplay('md-avatar','md-avatar-placeholder', pendingMemberPhoto);
+  if(pendingMemberPhoto){
+    setMemberAvatarDisplay('md-avatar','md-avatar-placeholder', pendingMemberPhoto);
+    if(document.getElementById('md-side-avatar')) setMemberAvatarDisplay('md-side-avatar','md-side-avatar-placeholder', pendingMemberPhoto);
+  }
   pendingMemberPhoto = null;
   if(isEditingMobile){
     document.getElementById('md-mobile-display').textContent = newMobile;
