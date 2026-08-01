@@ -493,7 +493,6 @@ window.addEventListener('DOMContentLoaded', function(){
   <nav style="display:flex;background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:10;">
     <button id="md-nav-home" onclick="goMemberPage('home')" style="flex:1;padding:12px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:600;color:var(--accent,#3a6fd8);border-bottom:2px solid var(--accent,#3a6fd8);">🏠 मुख्यपृष्ठ</button>
     <button id="md-nav-details" onclick="goMemberPage('details')" style="flex:1;padding:12px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:600;color:#94a3b8;border-bottom:2px solid transparent;">📋 तपशील</button>
-    <button id="md-nav-profile" onclick="goMemberPage('profile')" style="flex:1;padding:12px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:600;color:#94a3b8;border-bottom:2px solid transparent;">👤 प्रोफाईल</button>
   </nav>
 
   <div style="padding:16px;max-width:700px;margin:0 auto;">
@@ -2504,7 +2503,6 @@ let pendingMemberPhoto = null;
 function goMemberPage(id){
   const homeBtn = document.getElementById('md-nav-home');
   const detailsBtn = document.getElementById('md-nav-details');
-  const profileBtn = document.getElementById('md-nav-profile');
   document.getElementById('md-page-home').style.display = id==='home' ? 'block' : 'none';
   document.getElementById('md-page-details').style.display = id==='details' ? 'block' : 'none';
   document.getElementById('md-page-profile').style.display = id==='profile' ? 'block' : 'none';
@@ -2512,8 +2510,6 @@ function goMemberPage(id){
   homeBtn.style.borderBottomColor = id==='home' ? 'var(--accent,#3a6fd8)' : 'transparent';
   detailsBtn.style.color = id==='details' ? 'var(--accent,#3a6fd8)' : '#94a3b8';
   detailsBtn.style.borderBottomColor = id==='details' ? 'var(--accent,#3a6fd8)' : 'transparent';
-  profileBtn.style.color = id==='profile' ? 'var(--accent,#3a6fd8)' : '#94a3b8';
-  profileBtn.style.borderBottomColor = id==='profile' ? 'var(--accent,#3a6fd8)' : 'transparent';
 }
 
 function renderMemberDashboard(m){
@@ -2604,22 +2600,31 @@ function onMemberPhotoSelected(event){
 }
 
 async function saveMemberProfile(){
-  const newMobile = document.getElementById('md-mobile-edit').value.trim();
+  const mobileInput = document.getElementById('md-mobile-edit');
+  const isEditingMobile = mobileInput.style.display !== 'none';
   const msg = document.getElementById('md-mobile-msg');
   msg.textContent='';
-  if(!/^\d{10}$/.test(newMobile)){msg.style.color='#dc2626';msg.textContent='❌ योग्य १० अंकी मोबाईल नंबर भरा';return;}
-  const updatePayload = {mobile:newMobile};
+  const updatePayload = {};
+  let newMobile = null;
+  if(isEditingMobile){
+    newMobile = mobileInput.value.trim();
+    if(!/^\d{10}$/.test(newMobile)){msg.style.color='#dc2626';msg.textContent='❌ योग्य १० अंकी मोबाईल नंबर भरा';return;}
+    updatePayload.mobile = newMobile;
+  }
   if(pendingMemberPhoto) updatePayload.photo = pendingMemberPhoto;
+  if(Object.keys(updatePayload).length===0){msg.style.color='#dc2626';msg.textContent='❌ काहीही बदल केलेला नाही';return;}
   const {error} = await sb.from('sabhasad').update(updatePayload).eq('id',currentMemberSabhasadId);
   if(error){msg.style.color='#dc2626';msg.textContent='❌ त्रुटी: '+error.message;return;}
   msg.style.color='#16a34a';
   msg.textContent='✅ प्रोफाईल अद्यतन झालं!';
   if(pendingMemberPhoto) setMemberAvatarDisplay('md-avatar','md-avatar-placeholder', pendingMemberPhoto);
   pendingMemberPhoto = null;
-  document.getElementById('md-mobile-display').textContent = newMobile;
-  document.getElementById('md-mobile-display').style.display='block';
-  document.getElementById('md-mobile-edit').style.display='none';
-  document.getElementById('md-mobile-edit-link').textContent='✏️ Edit';
+  if(isEditingMobile){
+    document.getElementById('md-mobile-display').textContent = newMobile;
+    document.getElementById('md-mobile-display').style.display='block';
+    mobileInput.style.display='none';
+    document.getElementById('md-mobile-edit-link').textContent='✏️ Edit';
+  }
 }
 
 async function saveMemberPassword(){
