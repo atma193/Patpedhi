@@ -506,6 +506,10 @@ window.addEventListener('DOMContentLoaded', function(){
         <div id="md-welcome-msg" style="font-size:17px;font-weight:700;margin-bottom:6px;"></div>
         <div style="font-size:12px;color:#d6def0;line-height:1.5;">अबगुलवाडी नवतरुण ग्रामविकास मंडळ पतपेढीमध्ये आपले स्वागत आहे. तुमची कर्ज व हप्त्याची माहिती "तपशील" टॅबमध्ये बघता येईल.</div>
       </div>
+      <div id="md-overdue-notice" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:14px 16px;margin-bottom:16px;">
+        <div style="font-size:13px;font-weight:700;color:#b91c1c;margin-bottom:6px;">⚠️ हप्ता विलंब सूचना</div>
+        <div id="md-overdue-text" style="font-size:12px;color:#7f1d1d;line-height:1.7;"></div>
+      </div>
       <div id="md-home-summary" style="display:none;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:11px;">
         <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid var(--accent,#3a6fd8);border-radius:12px;padding:14px;">
           <div style="font-size:11px;color:#64748b;">एकूण कर्ज वाटप</div>
@@ -525,12 +529,20 @@ window.addEventListener('DOMContentLoaded', function(){
     <div id="md-approved-content" style="display:none;">
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:11px;margin-bottom:16px;">
         <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid var(--accent,#3a6fd8);border-radius:12px;padding:14px;">
-          <div style="font-size:11px;color:#64748b;">एकूण कर्ज वाटप</div>
+          <div style="font-size:11px;color:#64748b;">एकूण कर्ज घेतले</div>
           <div id="md-vatap" style="font-size:20px;font-weight:700;color:var(--accent,#3a6fd8);"></div>
         </div>
         <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid #16a34a;border-radius:12px;padding:14px;">
           <div style="font-size:11px;color:#64748b;">एकूण जमा</div>
           <div id="md-jama" style="font-size:20px;font-weight:700;color:#16a34a;"></div>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid #d97706;border-radius:12px;padding:14px;">
+          <div style="font-size:11px;color:#64748b;">एकूण दंड</div>
+          <div id="md-dand" style="font-size:20px;font-weight:700;color:#d97706;"></div>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid #d97706;border-radius:12px;padding:14px;">
+          <div style="font-size:11px;color:#64748b;">एकूण व्याज</div>
+          <div id="md-vyaj" style="font-size:20px;font-weight:700;color:#d97706;"></div>
         </div>
         <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid #dc2626;border-radius:12px;padding:14px;">
           <div style="font-size:11px;color:#64748b;">शिल्लक</div>
@@ -539,11 +551,11 @@ window.addEventListener('DOMContentLoaded', function(){
       </div>
 
       <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
-        <div style="padding:11px 16px;background:#fdf6e3;font-size:12px;font-weight:700;color:#8a6d1f;">हप्ता इतिहास</div>
+        <div style="padding:11px 16px;background:#fdf6e3;font-size:12px;font-weight:700;color:#8a6d1f;">हप्ता इतिहास (दिनांकानुसार)</div>
         <div style="overflow-x:auto;">
           <table style="width:100%;border-collapse:collapse;font-size:12px;">
             <thead><tr style="background:#f8f9fc;">
-              <th style="padding:8px;text-align:left;">महिना</th><th style="padding:8px;">दिनांक</th><th style="padding:8px;">हप्ता</th><th style="padding:8px;">दंड</th><th style="padding:8px;">व्याज</th><th style="padding:8px;">जमा</th>
+              <th style="padding:8px;text-align:left;">महिना</th><th style="padding:8px;">दिनांक</th><th style="padding:8px;">विलंब</th><th style="padding:8px;">दंड</th><th style="padding:8px;">व्याज</th><th style="padding:8px;">हप्ता</th><th style="padding:8px;">शिल्लक</th><th style="padding:8px;">स्थिती</th>
             </tr></thead>
             <tbody id="md-hapta-body"></tbody>
           </table>
@@ -585,18 +597,23 @@ window.addEventListener('DOMContentLoaded', function(){
           <input type="tel" id="md-mobile-edit" maxlength="10" style="display:none;width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;margin-top:4px;">
         </div>
 
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+            <span style="font-size:11px;color:#94a3b8;">पासवर्ड</span>
+            <button id="md-password-edit-link" onclick="togglePasswordEditMode()" style="background:none;border:none;color:var(--accent,#3a6fd8);font-size:11px;font-weight:600;cursor:pointer;">✏️ Edit</button>
+          </div>
+          <div id="md-password-fields" style="display:none;margin-top:6px;">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+              <input type="password" id="md-newpass" placeholder="नवीन पासवर्ड (किमान ६ अक्षरे)" style="flex:1;min-width:150px;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;">
+              <input type="password" id="md-newpass-confirm" placeholder="पुन्हा टाका" style="flex:1;min-width:150px;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;">
+            </div>
+            <button onclick="saveMemberPassword()" style="padding:9px 16px;background:#8a6d1f;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;">पासवर्ड बदला</button>
+            <div class="login-success" id="md-pass-msg" style="margin-top:8px;"></div>
+          </div>
+        </div>
+
         <button onclick="saveMemberProfile()" style="width:100%;margin-top:10px;padding:11px 16px;background:var(--accent,#3a6fd8);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;">जतन करा</button>
         <div class="login-success" id="md-mobile-msg" style="margin-top:8px;"></div>
-
-        <div style="border-top:1px solid #f0f0f0;margin-top:16px;padding-top:16px;">
-          <div style="font-size:12px;font-weight:600;margin-bottom:6px;color:#334155;">🔒 पासवर्ड बदला</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
-            <input type="password" id="md-newpass" placeholder="नवीन पासवर्ड (किमान ६ अक्षरे)" style="flex:1;min-width:150px;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;">
-            <input type="password" id="md-newpass-confirm" placeholder="पुन्हा टाका" style="flex:1;min-width:150px;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;">
-          </div>
-          <button onclick="saveMemberPassword()" style="padding:9px 16px;background:#8a6d1f;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;">पासवर्ड बदला</button>
-          <div class="login-success" id="md-pass-msg" style="margin-top:8px;"></div>
-        </div>
       </div>
     </div>
   </div>
@@ -1040,6 +1057,13 @@ window.addEventListener('DOMContentLoaded', function(){
         <option value="done">कर्ज फेडले</option>
       </select>
     </div>
+    <div class="fg">
+      <label>&nbsp;</label>
+      <label style="display:flex;align-items:center;gap:6px;height:36px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;">
+        <input type="checkbox" id="f-outstanding" onchange="renderSum()" style="width:16px;height:16px;cursor:pointer;">
+        ⚠️ फक्त विलंबीत (outstanding) सभासद
+      </label>
+    </div>
     <button class="btn btn-ghost" onclick="clearF()" style="height:36px">साफ करा</button>
   </div>
 
@@ -1466,8 +1490,10 @@ function doSearch(){
     const p=pct(m.vatap-sh,m.vatap);
     const late=m.hapte.some(h=>h.vilamb>0);
     const badge=sh<=0?'<span class="badge badge-green">कर्ज फेडले</span>':late?'<span class="badge badge-amber">विलंब आहे</span>':'<span class="badge badge-green">नियमित</span>';
+    const overdue=computeMemberOverdue(m);
+    const overdueTag=overdue?`<span style="font-size:10px;color:#fff;background:#dc2626;font-weight:700;margin-left:7px;padding:2px 7px;border-radius:8px;white-space:nowrap;">⚠️ ${overdue.months} महिने विलंब</span>`:'';
     const div=document.createElement('div');div.className='s-card';
-    div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;"><div style="font-weight:600;font-size:14px;color:var(--text)"><span style="font-size:12px;font-weight:500;color:var(--text3);margin-right:6px;">अ.क्र. ${m.kram}</span>${m.nav}</div>${badge}</div><div style="font-size:12px;color:var(--text2);margin-bottom:7px;">${m.mobile ? '📱 '+m.mobile+' &nbsp;|&nbsp; ' : ''}कर्ज: ${fmt(m.vatap)} &nbsp;|&nbsp; शिल्लक: ${fmt(sh)} &nbsp;|&nbsp; परतफेड: ${p}%</div><div class="progress"><div class="progress-fill" style="width:${Math.min(100,p)}%"></div></div>`;
+    div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;"><div style="font-weight:600;font-size:14px;color:var(--text)"><span style="font-size:12px;font-weight:500;color:var(--text3);margin-right:6px;">अ.क्र. ${m.kram}</span>${m.nav}${overdueTag}</div>${badge}</div><div style="font-size:12px;color:var(--text2);margin-bottom:7px;">${m.mobile ? '📱 '+m.mobile+' &nbsp;|&nbsp; ' : ''}कर्ज: ${fmt(m.vatap)} &nbsp;|&nbsp; शिल्लक: ${fmt(sh)} &nbsp;|&nbsp; परतफेड: ${p}%</div><div class="progress"><div class="progress-fill" style="width:${Math.min(100,p)}%"></div></div>`;
     div.onclick=()=>openDrawer(members.indexOf(m));
     res.appendChild(div);
   });
@@ -1593,6 +1619,8 @@ function renderSum(){
   let rows=members.map(m=>({m,s:getStats(m,yr,mo)}));
   if(nameF)rows=rows.filter(r=>r.m.nav.toLowerCase().includes(nameF));
   if(st)rows=rows.filter(r=>r.s.status===st);
+  const outstandingOnly = document.getElementById('f-outstanding')?.checked;
+  if(outstandingOnly) rows=rows.filter(r=>computeMemberOverdue(r.m));
   const tV=rows.reduce((s,r)=>s+r.m.vatap,0);
   const tK=rows.reduce((s,r)=>s+r.s.karj,0);
   const tD=rows.reduce((s,r)=>s+r.s.dand,0);
@@ -1618,7 +1646,9 @@ function renderSum(){
   document.getElementById('sum-body').innerHTML=rows.map(({m,s})=>{
     const p=pct(m.vatap-s.shillak,m.vatap);
     const badge=s.status==='done'?'<span class="badge badge-green">कर्ज फेडले</span>':s.status==='warn'?'<span class="badge badge-amber">विलंब आहे</span>':'<span class="badge badge-green">नियमित</span>';
-    return `<tr><td>${m.kram}</td><td style="font-weight:600">${m.nav}</td><td>${m.mobile||'-'}</td><td>${fmt(m.vatap)}</td><td>${fmt(s.karj)}</td><td>${fmt(s.dand)}</td><td>${fmt(s.vyaj)}</td><td>${fmt(s.jama)}</td><td style="color:var(--red)">${fmt(s.shillak)}</td><td style="min-width:90px"><div style="font-size:11px;color:var(--text2);margin-bottom:3px">${p}%</div><div class="progress"><div class="progress-fill" style="width:${Math.min(100,p)}%"></div></div></td><td>${badge}</td><td style="white-space:nowrap"><button class="btn-icon" title="पहा" onclick="openDrawer(${members.indexOf(m)})">👁</button> <button class="btn-icon" title="संपादन" onclick="editMember(${members.indexOf(m)})" style="color:var(--accent)">✏️</button></td></tr>`;
+    const overdue=computeMemberOverdue(m);
+    const overdueTag=overdue?`<span style="font-size:9px;color:#fff;background:#dc2626;font-weight:700;margin-left:6px;padding:2px 6px;border-radius:8px;white-space:nowrap;">⚠️ ${overdue.months} म. विलंब</span>`:'';
+    return `<tr><td>${m.kram}</td><td style="font-weight:600">${m.nav}${overdueTag}</td><td>${m.mobile||'-'}</td><td>${fmt(m.vatap)}</td><td>${fmt(s.karj)}</td><td>${fmt(s.dand)}</td><td>${fmt(s.vyaj)}</td><td>${fmt(s.jama)}</td><td style="color:var(--red)">${fmt(s.shillak)}</td><td style="min-width:90px"><div style="font-size:11px;color:var(--text2);margin-bottom:3px">${p}%</div><div class="progress"><div class="progress-fill" style="width:${Math.min(100,p)}%"></div></div></td><td>${badge}</td><td style="white-space:nowrap"><button class="btn-icon" title="पहा" onclick="openDrawer(${members.indexOf(m)})">👁</button> <button class="btn-icon" title="संपादन" onclick="editMember(${members.indexOf(m)})" style="color:var(--accent)">✏️</button></td></tr>`;
   }).join('');
   document.getElementById('sum-foot').innerHTML=`<td colspan="3">एकूण (${rows.length})</td><td>${fmt(tV)}</td><td>${fmt(tK)}</td><td>${fmt(tD)}</td><td>${fmt(tY)}</td><td>${fmt(tJ)}</td><td style="color:var(--red)">${fmt(tS)}</td><td colspan="4"></td>`;
   renderTxnDetail();
@@ -1630,7 +1660,7 @@ function sortBy(col){
   document.getElementById('si-'+col).textContent=sortAsc?'↑':'↓';
   renderSum();
 }
-function clearF(){document.getElementById('f-name').value='';document.getElementById('f-yr').value='';document.getElementById('f-mo').value='';document.getElementById('f-st').value='';renderSum();}
+function clearF(){document.getElementById('f-name').value='';document.getElementById('f-yr').value='';document.getElementById('f-mo').value='';document.getElementById('f-st').value='';document.getElementById('f-outstanding').checked=false;renderSum();}
 
 /* --- DELETE MEMBER --- */
 async function deleteMember(idx){
@@ -2512,6 +2542,40 @@ function goMemberPage(id){
   detailsBtn.style.borderBottomColor = id==='details' ? 'var(--accent,#3a6fd8)' : 'transparent';
 }
 
+function ymToNum(ym){
+  if(!ym) return null;
+  const parts = ym.split('-');
+  if(parts.length<2) return null;
+  const y = parseInt(parts[0],10), mo = parseInt(parts[1],10);
+  if(!y || !mo) return null;
+  return y*12+(mo-1);
+}
+
+function computeMemberOverdue(m){
+  const hapte = m.hapte||[];
+  const haptaTotal = hapte.reduce((s,h)=>s+(h.hapta||0),0);
+  const shillak = Math.max(0,(m.vatap||0)-haptaTotal);
+  if(shillak<=0) return null; // कर्ज फेडले आहे
+  let lastMonthNum = null;
+  hapte.forEach(h=>{
+    const n = ymToNum(h.mahina);
+    if(n!==null && (lastMonthNum===null || n>lastMonthNum)) lastMonthNum = n;
+  });
+  if(lastMonthNum===null && m.date) lastMonthNum = ymToNum(m.date.slice(0,7));
+  if(lastMonthNum===null) return null;
+  const today = new Date();
+  const curMonthNum = today.getFullYear()*12+today.getMonth();
+  const overdueMonths = curMonthNum - lastMonthNum - 1; // चालू महिना धरत नाही
+  if(overdueMonths<1) return null;
+  const validHaptas = hapte.filter(h=>h.hapta>0).map(h=>h.hapta);
+  const estHapta = validHaptas.length ? (validHaptas.reduce((s,v)=>s+v,0)/validHaptas.length) : 0;
+  const n = overdueMonths;
+  const estPendingAmt = estHapta*n;
+  const estDand = 20*(n*(n+1)/2);
+  const estVyaj = shillak*0.02*n;
+  return {months:n, estHapta, estPendingAmt, estDand, estVyaj, shillak};
+}
+
 function renderMemberDashboard(m){
   document.getElementById('md-name').textContent = m.nav;
   document.getElementById('md-welcome-msg').textContent = 'नमस्कार, ' + m.nav + '! 🙏';
@@ -2523,10 +2587,27 @@ function renderMemberDashboard(m){
   const hapte = m.hapte||[];
   const jamaTotal = hapte.reduce((s,h)=>s+(h.jama||0),0);
   const haptaTotal = hapte.reduce((s,h)=>s+(h.hapta||0),0);
+  const dandTotal = hapte.reduce((s,h)=>s+(h.dand||0),0);
+  const vyajTotal = hapte.reduce((s,h)=>s+(h.vyaj||0),0);
   document.getElementById('md-jama').textContent = fmt(jamaTotal);
+  document.getElementById('md-dand').textContent = fmt(dandTotal);
+  document.getElementById('md-vyaj').textContent = fmt(vyajTotal);
   const shillakVal = Math.max(0,(m.vatap||0)-haptaTotal);
   document.getElementById('md-shillak').textContent = fmt(shillakVal);
   document.getElementById('md-home-shillak').textContent = fmt(shillakVal);
+  const overdue = computeMemberOverdue(m);
+  const overdueNotice = document.getElementById('md-overdue-notice');
+  const overdueText = document.getElementById('md-overdue-text');
+  if(overdue){
+    overdueNotice.style.display = 'block';
+    overdueText.innerHTML = `तुम्ही गेल्या <b>${overdue.months} महिन्यां</b>पासून हप्ता भरलेला नाही.<br>
+      रखडलेली हप्ता रक्कम (अंदाजे): <b>${fmt(overdue.estPendingAmt)}</b><br>
+      अंदाजे दंड: <b>${fmt(overdue.estDand)}</b> &nbsp;|&nbsp; अंदाजे व्याज: <b>${fmt(overdue.estVyaj)}</b><br>
+      <span style="font-size:11px;">(अंतिम रक्कम हप्ता भरताना पतपेढी कार्यालयात निश्चित होईल)</span><br>
+      कृपया लवकरात लवकर हप्ता भरा 🙏`;
+  } else {
+    overdueNotice.style.display = 'none';
+  }
   document.getElementById('md-mobile-edit').value = m.mobile||'';
   document.getElementById('md-profile-name').textContent = m.nav;
   document.getElementById('md-mobile-display').textContent = m.mobile||'—';
@@ -2539,9 +2620,18 @@ function renderMemberDashboard(m){
   goMemberPage('home');
   const tbody = document.getElementById('md-hapta-body');
   if(!hapte.length){
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:16px;color:#94a3b8;">कोणतीही नोंद नाही</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:16px;color:#94a3b8;">कोणतीही नोंद नाही</td></tr>';
   } else {
-    tbody.innerHTML = hapte.map(h=>`<tr style="border-top:1px solid #f0f0f0;"><td style="padding:8px;">${h.mahina||'—'}</td><td style="padding:8px;text-align:center;">${fmtDate(h.dinank)}</td><td style="padding:8px;text-align:right;">${fmt(h.hapta||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.dand||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.vyaj||0)}</td><td style="padding:8px;text-align:right;font-weight:600;">${fmt(h.jama||0)}</td></tr>`).join('');
+    const sortedHapte = [...hapte].sort((a,b)=>{
+      const da=a.dinank||''; const db=b.dinank||'';
+      return da<db?-1:da>db?1:0;
+    });
+    let run = m.vatap||0;
+    tbody.innerHTML = sortedHapte.map(h=>{
+      run -= (h.hapta||0);
+      const st = h.vilamb===0 ? '<span class="badge badge-green" style="font-size:10px">वेळेवर</span>' : (h.vilamb<=1 ? '<span class="badge badge-amber" style="font-size:10px">थोडा विलंब</span>' : '<span class="badge badge-amber" style="font-size:10px">विलंब</span>');
+      return `<tr style="border-top:1px solid #f0f0f0;"><td style="padding:8px;">${h.mahina||'—'}</td><td style="padding:8px;text-align:center;">${fmtDate(h.dinank)}</td><td style="padding:8px;text-align:center;">${h.vilamb||0}</td><td style="padding:8px;text-align:right;">${fmt(h.dand||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.vyaj||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.hapta||0)}</td><td style="padding:8px;text-align:right;color:#dc2626;">${fmt(Math.max(0,run))}</td><td style="padding:8px;text-align:center;">${st}</td></tr>`;
+    }).join('');
   }
 }
 
@@ -2572,6 +2662,20 @@ function toggleMobileEditMode(){
     display.style.display='none';
     link.textContent='रद्द करा';
     input.focus();
+  }
+}
+
+function togglePasswordEditMode(){
+  const fields = document.getElementById('md-password-fields');
+  const link = document.getElementById('md-password-edit-link');
+  const editing = fields.style.display !== 'none';
+  if(editing){
+    fields.style.display='none';
+    link.textContent='✏️ Edit';
+  } else {
+    fields.style.display='block';
+    link.textContent='रद्द करा';
+    document.getElementById('md-newpass').focus();
   }
 }
 
