@@ -1119,12 +1119,12 @@ window.addEventListener('DOMContentLoaded', function(){
       <table>
         <thead><tr>
           <th>अ.क्र.</th>
-          <th>क्रिया</th>
+          <th>दिनांक</th>
           <th>नाव</th>
           <th>मोबाईल</th>
           <th>पासवर्ड</th>
-          <th>दिनांक</th>
           <th>स्थिती</th>
+          <th>क्रिया</th>
         </tr></thead>
         <tbody id="req-body"></tbody>
       </table>
@@ -1143,7 +1143,8 @@ window.addEventListener('DOMContentLoaded', function(){
     <div style="font-size:12px;color:var(--text2);margin-bottom:12px;" id="approve-req-info"></div>
     <input type="text" id="approve-search" placeholder="नाव किंवा मोबाईल टाइप करा..." oninput="renderApproveSearchResults()" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;margin-bottom:10px;">
     <div id="approve-search-results" style="max-height:280px;overflow:auto;"></div>
-    <button class="btn btn-ghost" onclick="closeApproveModal()" style="margin-top:14px;width:100%;">रद्द करा</button>
+    <button class="btn" onclick="addAsNewMemberAndApprove()" style="margin-top:12px;width:100%;background:var(--green,#16a34a);color:#fff;border:none;">➕ नवीन सभासद म्हणून जोडा व मंजूर करा</button>
+    <button class="btn btn-ghost" onclick="closeApproveModal()" style="margin-top:8px;width:100%;">रद्द करा</button>
   </div>
 </div>
 
@@ -1246,6 +1247,19 @@ try{
     });
 }catch(e){
   console.warn('Realtime channel setup failed:', e?.message||e);
+}
+
+/* --- REALTIME SYNC for member_requests: badge & list auto-update on new/changed requests --- */
+try{
+  sb.channel('member-requests-changes')
+    .on('postgres_changes',{event:'*',schema:'public',table:'member_requests'}, ()=>{loadMemberRequests();})
+    .subscribe((status)=>{
+      if(status==='CHANNEL_ERROR'||status==='TIMED_OUT'){
+        console.warn('Realtime sync unavailable for member_requests (status: '+status+').');
+      }
+    });
+}catch(e){
+  console.warn('member_requests realtime channel setup failed:', e?.message||e);
 }
 
 let rowCount=0,sortCol='kram',sortAsc=true,currentIdx=-1;
@@ -2711,7 +2725,7 @@ function renderRequests(){
       actions += `<button class="btn-icon" title="Approve" onclick="openApproveModal(${r.id})" style="color:var(--green,#16a34a)">✅</button>
                  <button class="btn-icon" title="Reject" onclick="rejectRequest(${r.id})" style="color:var(--red,#dc2626)">❌</button>`;
     }
-    return `<tr><td>${i+1}</td><td style="white-space:nowrap">${actions}</td><td style="font-weight:600">${r.nav}</td><td>${r.mobile}</td><td style="font-family:monospace">${r.password}</td><td>${dt}</td><td style="${statusColor[r.status]||''}">${statusLabel[r.status]||r.status}</td></tr>`;
+    return `<tr><td>${i+1}</td><td>${dt}</td><td style="font-weight:600">${r.nav}</td><td>${r.mobile}</td><td style="font-family:monospace">${r.password}</td><td style="${statusColor[r.status]||''}">${statusLabel[r.status]||r.status}</td><td style="white-space:nowrap">${actions}</td></tr>`;
   }).join('');
 }
 
@@ -2760,6 +2774,26 @@ async function confirmApprove(sabhasadId){
   const {error} = await sb.from('member_requests').update({status:'approved', sabhasad_id:sabhasadId}).eq('id', currentApproveReqId);
   if(error){ toast('त्रुटी: '+error.message,'warn'); return; }
   toast('✓ '+req.nav+' ची विनंती मंजूर झाली!');
+  closeApproveModal();
+  loadMemberRequests();
+}
+
+async function addAsNewMemberAndApprove(){
+  if(!currentApproveReqId) return;
+  const req = memberRequests.find(r=>r.id===currentApproveReqId);
+  if(!req) return;
+  if(!confirm(`"${req.nav}" यांना नवीन सभासद म्हणून जोडून विनंती मंजूर करायची आहे का?`)) return;
+  const maxKram = members.length > 0 ? Math.max(...members.map(m=>m.kram)) : 0;
+  const kram = maxKram + 1;
+  const today = new Date().toISOString().slice(0,10);
+  const {data, error} = await sb.from('sabhasad').insert({
+    kram, nav:req.nav, mobile:req.mobile, vatap:0, date:today, hapte:[], karjtype:'', guarantor:''
+  }).select().single();
+  if(error){ toast('सभासद जोडताना त्रुटी: '+error.message,'warn'); return; }
+  members.push({id:data.id, kram, nav:req.nav, mobile:req.mobile, vatap:0, date:today, hapte:[], karjtype:'', guarantor:'', photo:null});
+  const {error:updErr} = await sb.from('member_requests').update({status:'approved', sabhasad_id:data.id}).eq('id', currentApproveReqId);
+  if(updErr){ toast('त्रुटी: '+updErr.message,'warn'); return; }
+  toast('✓ '+req.nav+' नवीन सभासद (अ.क्र. '+kram+') म्हणून जोडले व विनंती मंजूर झाली!');
   closeApproveModal();
   loadMemberRequests();
 }
