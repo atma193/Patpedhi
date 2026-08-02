@@ -561,19 +561,19 @@ window.addEventListener('DOMContentLoaded', function(){
       <div style="background:linear-gradient(135deg,#1a2540,#2a3a5c);color:#fff;border-radius:14px;padding:22px 18px;margin-bottom:16px;">
         <div style="font-size:12px;color:#e2b65a;margin-bottom:4px;">॥ श्री भैरी देव प्रसन्न ॥</div>
         <div id="md-welcome-msg" style="font-size:17px;font-weight:700;margin-bottom:6px;"></div>
-        <div style="font-size:12px;color:#d6def0;line-height:1.5;">अबगुलवाडी नवतरुण ग्रामविकास मंडळ पतपेढीमध्ये आपले स्वागत आहे. तुमची कर्ज व हप्त्याची माहिती "तपशील" टॅबमध्ये बघता येईल.</div>
+        <div style="font-size:12px;color:#d6def0;line-height:1.5;" data-i18n="txt_md_welcome_body">अबगुलवाडी नवतरुण ग्रामविकास मंडळ पतपेढीमध्ये आपले स्वागत आहे. तुमची कर्ज व हप्त्याची माहिती "तपशील" टॅबमध्ये बघता येईल.</div>
       </div>
       <div id="md-overdue-notice" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:14px 16px;margin-bottom:16px;">
-        <div style="font-size:13px;font-weight:700;color:#b91c1c;margin-bottom:6px;">⚠️ हप्ता विलंब सूचना</div>
+        <div style="font-size:13px;font-weight:700;color:#b91c1c;margin-bottom:6px;">⚠️ <span data-i18n="txt_overdue_notice">हप्ता विलंब सूचना</span></div>
         <div id="md-overdue-text" style="font-size:12px;color:#7f1d1d;line-height:1.7;"></div>
       </div>
       <div id="md-home-summary" style="display:none;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:11px;">
         <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid var(--accent,#3a6fd8);border-radius:12px;padding:14px;">
-          <div style="font-size:11px;color:#64748b;">एकूण कर्ज वाटप</div>
+          <div style="font-size:11px;color:#64748b;" data-i18n="m_loan_disb">एकूण कर्ज वाटप</div>
           <div id="md-home-vatap" style="font-size:18px;font-weight:700;color:var(--accent,#3a6fd8);"></div>
         </div>
         <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid #dc2626;border-radius:12px;padding:14px;">
-          <div style="font-size:11px;color:#64748b;">शिल्लक</div>
+          <div style="font-size:11px;color:#64748b;" data-i18n="th_shillak">शिल्लक</div>
           <div id="md-home-shillak" style="font-size:18px;font-weight:700;color:#dc2626;"></div>
         </div>
       </div>
@@ -586,19 +586,19 @@ window.addEventListener('DOMContentLoaded', function(){
     <div id="md-approved-content" style="display:none;">
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:11px;margin-bottom:16px;">
         <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid var(--accent,#3a6fd8);border-radius:12px;padding:14px;">
-          <div style="font-size:11px;color:#64748b;">एकूण कर्ज घेतले</div>
+          <div style="font-size:11px;color:#64748b;" data-i18n="txt_total_loan_taken">एकूण कर्ज घेतले</div>
           <div id="md-vatap" style="font-size:20px;font-weight:700;color:var(--accent,#3a6fd8);"></div>
         </div>
         <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid #16a34a;border-radius:12px;padding:14px;">
-          <div style="font-size:11px;color:#64748b;">एकूण जमा</div>
+          <div style="font-size:11px;color:#64748b;" data-i18n="m_total_paid">एकूण जमा</div>
           <div id="md-jama" style="font-size:20px;font-weight:700;color:#16a34a;"></div>
         </div>
         <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid #d97706;border-radius:12px;padding:14px;">
-          <div style="font-size:11px;color:#64748b;">एकूण दंड</div>
+          <div style="font-size:11px;color:#64748b;" data-i18n="txt_total_dand">एकूण दंड</div>
           <div id="md-dand" style="font-size:20px;font-weight:700;color:#d97706;"></div>
         </div>
         <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid #d97706;border-radius:12px;padding:14px;">
-          <div style="font-size:11px;color:#64748b;">एकूण व्याज</div>
+          <div style="font-size:11px;color:#64748b;" data-i18n="txt_total_vyaj">एकूण व्याज</div>
           <div id="md-vyaj" style="font-size:20px;font-weight:700;color:#d97706;"></div>
         </div>
         <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid #dc2626;border-radius:12px;padding:14px;">
@@ -608,11 +608,11 @@ window.addEventListener('DOMContentLoaded', function(){
       </div>
 
       <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
-        <div style="padding:11px 16px;background:#fdf6e3;font-size:12px;font-weight:700;color:#8a6d1f;">हप्ता इतिहास (दिनांकानुसार)</div>
+        <div style="padding:11px 16px;background:#fdf6e3;font-size:12px;font-weight:700;color:#8a6d1f;" data-i18n="txt_hapta_history_date">हप्ता इतिहास (दिनांकानुसार)</div>
         <div style="overflow-x:auto;">
           <table style="width:100%;border-collapse:collapse;font-size:12px;">
             <thead><tr style="background:#f8f9fc;">
-              <th style="padding:8px;text-align:left;">महिना</th><th style="padding:8px;">दिनांक</th><th style="padding:8px;">विलंब</th><th style="padding:8px;">दंड</th><th style="padding:8px;">व्याज</th><th style="padding:8px;">हप्ता</th><th style="padding:8px;">शिल्लक</th><th style="padding:8px;">स्थिती</th>
+              <th style="padding:8px;text-align:left;" data-i18n="lbl_month">महिना</th><th style="padding:8px;" data-i18n="th_date">दिनांक</th><th style="padding:8px;" data-i18n="th_delay">विलंब</th><th style="padding:8px;" data-i18n="th_dand">दंड</th><th style="padding:8px;" data-i18n="th_vyaj">व्याज</th><th style="padding:8px;" data-i18n="th_hapta">हप्ता</th><th style="padding:8px;" data-i18n="th_shillak">शिल्लक</th><th style="padding:8px;" data-i18n="lbl_status">स्थिती</th>
             </tr></thead>
             <tbody id="md-hapta-body"></tbody>
           </table>
@@ -624,7 +624,7 @@ window.addEventListener('DOMContentLoaded', function(){
     <!-- PAGE: PROFILE -->
     <div id="md-page-profile" style="display:none;">
       <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:16px;">
-        <div style="font-size:13px;font-weight:700;margin-bottom:14px;">👤 माझी प्रोफाईल</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:14px;">👤 <span data-i18n="txt_my_profile">माझी प्रोफाईल</span></div>
 
         <div style="display:flex;justify-content:center;margin-bottom:18px;">
           <div style="position:relative;width:140px;height:140px;">
@@ -638,16 +638,16 @@ window.addEventListener('DOMContentLoaded', function(){
             </button>
           </div>
         </div>
-        <div style="text-align:center;font-size:10px;color:#94a3b8;margin-bottom:18px;margin-top:-10px;">JPG/PNG, कमाल ५ MB</div>
+        <div style="text-align:center;font-size:10px;color:#94a3b8;margin-bottom:18px;margin-top:-10px;" data-i18n="txt_photo_hint">JPG/PNG, कमाल ५ MB</div>
 
         <div style="margin-bottom:14px;">
-          <div style="font-size:11px;color:#94a3b8;margin-bottom:2px;">नाव</div>
+          <div style="font-size:11px;color:#94a3b8;margin-bottom:2px;" data-i18n="lbl_name">नाव</div>
           <div id="md-profile-name" style="font-size:14px;font-weight:600;color:#1e293b;"></div>
         </div>
 
         <div style="margin-bottom:8px;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
-            <span style="font-size:11px;color:#94a3b8;">मोबाईल नंबर</span>
+            <span style="font-size:11px;color:#94a3b8;" data-i18n="lbl_mobile">मोबाईल नंबर</span>
             <button id="md-mobile-edit-link" onclick="toggleMobileEditMode()" style="background:none;border:none;color:var(--accent,#3a6fd8);font-size:11px;font-weight:600;cursor:pointer;">✏️ Edit</button>
           </div>
           <div id="md-mobile-display" style="font-size:14px;font-weight:600;color:#1e293b;"></div>
@@ -656,20 +656,20 @@ window.addEventListener('DOMContentLoaded', function(){
 
         <div style="margin-bottom:14px;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
-            <span style="font-size:11px;color:#94a3b8;">पासवर्ड</span>
+            <span style="font-size:11px;color:#94a3b8;" data-i18n="th_password">पासवर्ड</span>
             <button id="md-password-edit-link" onclick="togglePasswordEditMode()" style="background:none;border:none;color:var(--accent,#3a6fd8);font-size:11px;font-weight:600;cursor:pointer;">✏️ Edit</button>
           </div>
           <div id="md-password-fields" style="display:none;margin-top:6px;">
             <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
-              <input type="password" id="md-newpass" placeholder="नवीन पासवर्ड (किमान ६ अक्षरे)" style="flex:1;min-width:150px;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;">
-              <input type="password" id="md-newpass-confirm" placeholder="पुन्हा टाका" style="flex:1;min-width:150px;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;">
+              <input type="password" id="md-newpass" placeholder="नवीन पासवर्ड (किमान ६ अक्षरे)" data-i18n-ph="ph_new_pass" style="flex:1;min-width:150px;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;">
+              <input type="password" id="md-newpass-confirm" placeholder="पुन्हा टाका" data-i18n-ph="ph_retype" style="flex:1;min-width:150px;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;">
             </div>
-            <button onclick="saveMemberPassword()" style="padding:9px 16px;background:#8a6d1f;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;">पासवर्ड बदला</button>
+            <button onclick="saveMemberPassword()" style="padding:9px 16px;background:#8a6d1f;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;" data-i18n="btn_changepass">पासवर्ड बदला</button>
             <div class="login-success" id="md-pass-msg" style="margin-top:8px;"></div>
           </div>
         </div>
 
-        <button onclick="saveMemberProfile()" style="width:100%;margin-top:10px;padding:11px 16px;background:var(--accent,#3a6fd8);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;">जतन करा</button>
+        <button onclick="saveMemberProfile()" style="width:100%;margin-top:10px;padding:11px 16px;background:var(--accent,#3a6fd8);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;" data-i18n="btn_save">जतन करा</button>
         <div class="login-success" id="md-mobile-msg" style="margin-top:8px;"></div>
       </div>
     </div>
@@ -861,48 +861,48 @@ window.addEventListener('DOMContentLoaded', function(){
   </div>
 
   <!-- Summary Cards -->
-  <div style="font-size:10px;font-weight:600;color:#64748b;letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px;">📊 एकूण सारांश</div>
+  <div style="font-size:10px;font-weight:600;color:#64748b;letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px;">📊 <span data-i18n="txt_total_summary">एकूण सारांश</span></div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:11px;margin-bottom:22px;" id="home-metrics"></div>
 
   <!-- Two column -->
   <div class="two-col-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px;">
     <div style="background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;">
       <div style="padding:11px 16px;border-bottom:1px solid var(--border);background:var(--gold-pale);display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;">👥 अलीकडील सभासद</span>
-        <button onclick="document.querySelectorAll('.nav-item')[3].click()" style="font-size:11px;color:var(--gold);background:none;border:none;cursor:pointer;font-weight:600;">सर्व पहा →</button>
+        <span style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;">👥 <span data-i18n="txt_recent_members">अलीकडील सभासद</span></span>
+        <button onclick="document.querySelectorAll('.nav-item')[3].click()" style="font-size:11px;color:var(--gold);background:none;border:none;cursor:pointer;font-weight:600;"><span data-i18n="txt_view_all">सर्व पहा →</span></button>
       </div>
       <div id="home-recent" style="padding:6px 0;"></div>
     </div>
     <div style="background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;">
       <div style="padding:11px 16px;border-bottom:1px solid var(--border);background:var(--gold-pale);">
-        <span style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;">📋 स्थिती अहवाल</span>
+        <span style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;">📋 <span data-i18n="txt_status_report">स्थिती अहवाल</span></span>
       </div>
       <div id="home-status" style="padding:12px 16px;"></div>
     </div>
   </div>
 
   <!-- Quick Actions -->
-  <div style="font-size:10px;font-weight:600;color:#64748b;letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px;">⚡ त्वरित कार्य</div>
+  <div style="font-size:10px;font-weight:600;color:#64748b;letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px;">⚡ <span data-i18n="txt_quick_actions">त्वरित कार्य</span></div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:11px;">
     <button onclick="document.querySelectorAll('.nav-item')[1].click()" class="quick-btn" style="background:linear-gradient(135deg,#b91c1c,#9b1a1a);">
       <div style="font-size:22px;margin-bottom:6px;">📝</div>
-      <div style="font-size:13px;font-weight:600;">सभासद नोंदणी</div>
-      <div style="font-size:11px;opacity:.75;margin-top:3px;">नवीन सभासद जोडा</div>
+      <div style="font-size:13px;font-weight:600;" data-i18n="nav_entry">सभासद नोंदणी</div>
+      <div style="font-size:11px;opacity:.75;margin-top:3px;" data-i18n="txt_add_new_member">नवीन सभासद जोडा</div>
     </button>
     <button onclick="document.querySelectorAll('.nav-item')[2].click()" class="quick-btn" style="background:linear-gradient(135deg,#166534,#14532d);">
       <div style="font-size:22px;margin-bottom:6px;">💰</div>
-      <div style="font-size:13px;font-weight:600;">हप्ता नोंदणी</div>
-      <div style="font-size:11px;opacity:.75;margin-top:3px;">हप्ता जोडा</div>
+      <div style="font-size:13px;font-weight:600;" data-i18n="nav_hapta">हप्ता नोंदणी</div>
+      <div style="font-size:11px;opacity:.75;margin-top:3px;" data-i18n="btn_add_hapta">हप्ता जोडा</div>
     </button>
     <button onclick="document.querySelectorAll('.nav-item')[3].click()" class="quick-btn" style="background:linear-gradient(135deg,#1e40af,#1e3a8a);">
       <div style="font-size:22px;margin-bottom:6px;">🔍</div>
-      <div style="font-size:13px;font-weight:600;">सभासद तपशील</div>
-      <div style="font-size:11px;opacity:.75;margin-top:3px;">माहिती शोधा</div>
+      <div style="font-size:13px;font-weight:600;" data-i18n="nav_search">सभासद तपशील</div>
+      <div style="font-size:11px;opacity:.75;margin-top:3px;" data-i18n="txt_search_info">माहिती शोधा</div>
     </button>
     <button onclick="document.querySelectorAll('.nav-item')[4].click()" class="quick-btn" style="background:linear-gradient(135deg,#92400e,#78350f);">
       <div style="font-size:22px;margin-bottom:6px;">📊</div>
-      <div style="font-size:13px;font-weight:600;">पूर्ण तपशील</div>
-      <div style="font-size:11px;opacity:.75;margin-top:3px;">सर्व सारांश पहा</div>
+      <div style="font-size:13px;font-weight:600;" data-i18n="nav_summary">पूर्ण तपशील</div>
+      <div style="font-size:11px;opacity:.75;margin-top:3px;" data-i18n="txt_view_all_summary">सर्व सारांश पहा</div>
     </button>
   </div>
 
@@ -910,65 +910,65 @@ window.addEventListener('DOMContentLoaded', function(){
 
 <!-- DATA ENTRY PAGE -->
 <div id="page-entry" class="page">
-  <div class="page-title">सभासद नोंदणी</div>
-  <div class="page-sub">नवीन सभासदाची नोंद करा किंवा अस्तित्वातील नोंद अद्यतन करा</div>
+  <div class="page-title" data-i18n="nav_entry">सभासद नोंदणी</div>
+  <div class="page-sub" data-i18n="txt_entry_sub">नवीन सभासदाची नोंद करा किंवा अस्तित्वातील नोंद अद्यतन करा</div>
 
   <div class="card">
     <div class="card-head">
-      <span class="card-head-title">सभासद माहिती</span>
+      <span class="card-head-title" data-i18n="txt_member_info">सभासद माहिती</span>
     </div>
     <div class="card-body">
       <div class="form-grid">
         
-        <div class="fg"><label>कर्ज वाटप दिनांक</label><input type="date" id="e-date"></div>
-        <div class="fg"><label>सभासदाचे नाव</label><input type="text" id="e-nav" placeholder="पूर्ण नाव लिहा"></div>
-          <div class="fg"><label>मोबाईल नंबर</label><input type="text" id="e-mobile" placeholder="9876543210" maxlength="10"></div>
-        <div class="fg"><label>एकूण कर्ज वाटप (₹)</label><input type="number" id="e-vatap" placeholder="25000" oninput="calcE()"></div>
+        <div class="fg"><label data-i18n="lbl_loan_date">कर्ज वाटप दिनांक</label><input type="date" id="e-date"></div>
+        <div class="fg"><label data-i18n="lbl_member_name">सभासदाचे नाव</label><input type="text" id="e-nav" placeholder="पूर्ण नाव लिहा"></div>
+          <div class="fg"><label data-i18n="lbl_mobile">मोबाईल नंबर</label><input type="text" id="e-mobile" placeholder="9876543210" maxlength="10"></div>
+        <div class="fg"><label data-i18n="lbl_total_loan">एकूण कर्ज वाटप (₹)</label><input type="number" id="e-vatap" placeholder="25000" oninput="calcE()"></div>
       <div class="fg">
-        <label>कर्ज कोणासाठी?</label>
+        <label data-i18n="lbl_loan_for">कर्ज कोणासाठी?</label>
         <select id="e-karjtype" onchange="toggleGuarantor()">
-          <option value="swataha">स्वतःसाठी</option>
-          <option value="etar">इतरांसाठी</option>
+          <option value="swataha" data-i18n="opt_self">स्वतःसाठी</option>
+          <option value="etar" data-i18n="opt_other">इतरांसाठी</option>
         </select>
       </div>
       <div class="fg" id="e-guarantor-fg" style="display:none;">
-        <label>इतर व्यक्तीचे नाव</label>
-        <input type="text" id="e-guarantor" placeholder="व्यक्तीचे पूर्ण नाव लिहा">
+        <label data-i18n="lbl_other_person_name">इतर व्यक्तीचे नाव</label>
+        <input type="text" id="e-guarantor" placeholder="व्यक्तीचे पूर्ण नाव लिहा" data-i18n-ph="ph_full_name_person">
       </div>
       
       </div>
 
-      <div class="sec-label">हप्ता नोंदी</div>
+      <div class="sec-label" data-i18n="txt_hapta_entries">हप्ता नोंदी</div>
       <div class="tbl-wrap">
         <table style="min-width:700px">
           <thead><tr>
-            <th style="min-width:130px">हप्त्याचा महिना</th><th style="min-width:110px">दिनांक</th><th style="min-width:100px">विलंब (महिने)</th>
-            <th style="min-width:100px">दंड (₹) <span style="color:var(--amber);font-size:9px">●auto</span></th><th style="min-width:120px">व्याज @२% (₹) <span style="color:var(--accent);font-size:9px">●auto</span></th><th style="min-width:90px">हप्ता (₹) <span style="color:#e05252;font-size:11px">*</span></th><th style="min-width:90px">जमा (₹) <span style="color:var(--gold,#d4a017);font-size:9px">●auto</span></th><th style="min-width:36px"></th>
+            <th style="min-width:130px" data-i18n="th_installment_month">हप्त्याचा महिना</th><th style="min-width:110px" data-i18n="th_date">दिनांक</th><th style="min-width:100px" data-i18n="th_delay_months">विलंब (महिने)</th>
+            <th style="min-width:100px"><span data-i18n="th_dand">दंड</span> (₹) <span style="color:var(--amber);font-size:9px">●auto</span></th><th style="min-width:120px"><span data-i18n="th_vyaj2">व्याज @२%</span> (₹) <span style="color:var(--accent);font-size:9px">●auto</span></th><th style="min-width:90px"><span data-i18n="th_hapta">हप्ता</span> (₹) <span style="color:#e05252;font-size:11px">*</span></th><th style="min-width:90px"><span data-i18n="th_jama">जमा</span> (₹) <span style="color:var(--gold,#d4a017);font-size:9px">●auto</span></th><th style="min-width:36px"></th>
           </tr></thead>
           <tbody id="e-body"></tbody>
         </table>
       </div>
       <button class="btn btn-ghost" style="margin-top:10px;font-size:12px" onclick="addRow()">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-        हप्ता जोडा
+        <span data-i18n="btn_add_hapta">हप्ता जोडा</span>
       </button>
 
-      <div class="sec-label">एकूण तपशील</div>
+      <div class="sec-label" data-i18n="txt_total_details">एकूण तपशील</div>
       <div class="metrics-row" style="margin-bottom:0">
-        <div class="metric-card blue"><div class="metric-label">कर्ज वाटप</div><div class="metric-value" id="m-vatap">₹0</div></div>
-        <div class="metric-card green"><div class="metric-label">कर्ज जमा</div><div class="metric-value" id="m-karj">₹0</div></div>
-        <div class="metric-card amber"><div class="metric-label">दंड जमा</div><div class="metric-value" id="m-dand">₹0</div></div>
-      <div class="metric-card amber"><div class="metric-label">व्याज जमा</div><div class="metric-value" id="m-vyaj">₹0</div></div>
-        <div class="metric-card green"><div class="metric-label">एकूण जमा</div><div class="metric-value" id="m-jama">₹0</div></div>
-        <div class="metric-card red"><div class="metric-label">शिल्लक कर्ज</div><div class="metric-value" id="m-shillak">₹0</div></div>
+        <div class="metric-card blue"><div class="metric-label" data-i18n="m_loan_disb">कर्ज वाटप</div><div class="metric-value" id="m-vatap">₹0</div></div>
+        <div class="metric-card green"><div class="metric-label" data-i18n="m_loan_paid">कर्ज जमा</div><div class="metric-value" id="m-karj">₹0</div></div>
+        <div class="metric-card amber"><div class="metric-label" data-i18n="m_dand_paid">दंड जमा</div><div class="metric-value" id="m-dand">₹0</div></div>
+      <div class="metric-card amber"><div class="metric-label" data-i18n="m_vyaj_paid">व्याज जमा</div><div class="metric-value" id="m-vyaj">₹0</div></div>
+        <div class="metric-card green"><div class="metric-label" data-i18n="m_total_paid">एकूण जमा</div><div class="metric-value" id="m-jama">₹0</div></div>
+        <div class="metric-card red"><div class="metric-label" data-i18n="m_balance_loan">शिल्लक कर्ज</div><div class="metric-value" id="m-shillak">₹0</div></div>
       </div>
 
       <div class="btn-row">
         <button class="btn btn-primary" onclick="saveEntry()">
           <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
-          जतन करा
+          <span data-i18n="btn_save">जतन करा</span>
         </button>
-        <button class="btn btn-ghost" onclick="resetEntry()">रिसेट</button>
+        <button class="btn btn-ghost" onclick="resetEntry()" data-i18n="btn_reset">रिसेट</button>
       </div>
     </div>
   </div>
@@ -978,17 +978,17 @@ window.addEventListener('DOMContentLoaded', function(){
 <!-- HAPTA PAGE -->
 <div id="page-hapta" class="page">
   <div style="margin-bottom:14px;">
-    <div class="page-title">हप्ता नोंदणी</div>
-    <div class="page-sub">सभासद निवडा आणि हप्ता जोडा</div>
+    <div class="page-title" data-i18n="nav_hapta">हप्ता नोंदणी</div>
+    <div class="page-sub" data-i18n="txt_hapta_sub">सभासद निवडा आणि हप्ता जोडा</div>
   </div>
 
   <!-- Member search -->
   <div class="card" style="margin-bottom:14px;overflow:visible;">
-    <div class="card-head"><span class="card-head-title">सभासद निवडा</span></div>
+    <div class="card-head"><span class="card-head-title" data-i18n="txt_select_member">सभासद निवडा</span></div>
     <div class="card-body" style="padding:14px 18px;overflow:visible;">
       <div class="fg" style="max-width:420px;position:relative;">
-        <label>सभासदाचे नाव किंवा अ. क्र. लिहा</label>
-        <input type="text" id="h-search" placeholder="नाव टाइप करा..." 
+        <label data-i18n="lbl_name_or_no">सभासदाचे नाव किंवा अ. क्र. लिहा</label>
+        <input type="text" id="h-search" placeholder="नाव टाइप करा..." data-i18n-ph="ph_type_name"
           oninput="haptaSearch()" autocomplete="off" style="font-size:14px;">
         <div id="h-dropdown" style="display:none;position:absolute;top:100%;left:0;right:0;
           background:var(--white);border:1px solid var(--border2);border-radius:8px;
@@ -1003,7 +1003,7 @@ window.addEventListener('DOMContentLoaded', function(){
           <div style="font-weight:600;font-size:14px;" id="h-sel-name"></div>
           <div style="font-size:12px;color:var(--text2);margin-top:2px;" id="h-sel-detail"></div>
         </div>
-        <button onclick="clearHaptaSel()" class="btn btn-ghost" style="padding:5px 12px;font-size:12px;">✕ बदला</button>
+        <button onclick="clearHaptaSel()" class="btn btn-ghost" style="padding:5px 12px;font-size:12px;">✕ <span data-i18n="btn_change">बदला</span></button>
       </div>
     </div>
   </div>
@@ -1011,18 +1011,18 @@ window.addEventListener('DOMContentLoaded', function(){
   <!-- Hapta form - shown after member selected -->
   <div id="h-form" style="display:none">
     <div class="card">
-      <div class="card-head"><span class="card-head-title">नवीन हप्ता जोडा</span></div>
+      <div class="card-head"><span class="card-head-title" data-i18n="txt_new_hapta">नवीन हप्ता जोडा</span></div>
       <div class="card-body">
         <div class="tbl-wrap">
           <table style="min-width:700px">
             <thead><tr>
-              <th style="min-width:130px">हप्त्याचा महिना</th>
-              <th style="min-width:110px">दिनांक</th>
-              <th style="min-width:100px">विलंब (महिने)</th>
-              <th style="min-width:100px">दंड (₹) <span style="color:var(--amber);font-size:9px">●auto</span></th>
-              <th style="min-width:120px">व्याज @२% (₹) <span style="color:var(--accent);font-size:9px">●auto</span></th>
-              <th style="min-width:90px">हप्ता (₹) <span style="color:#e05252;font-size:11px">*</span></th>
-              <th style="min-width:90px">जमा (₹) <span style="color:var(--gold,#d4a017);font-size:9px">●auto</span></th>
+              <th style="min-width:130px" data-i18n="th_installment_month">हप्त्याचा महिना</th>
+              <th style="min-width:110px" data-i18n="th_date">दिनांक</th>
+              <th style="min-width:100px" data-i18n="th_delay_months">विलंब (महिने)</th>
+              <th style="min-width:100px"><span data-i18n="th_dand">दंड</span> (₹) <span style="color:var(--amber);font-size:9px">●auto</span></th>
+              <th style="min-width:120px"><span data-i18n="th_vyaj2">व्याज @२%</span> (₹) <span style="color:var(--accent);font-size:9px">●auto</span></th>
+              <th style="min-width:90px"><span data-i18n="th_hapta">हप्ता</span> (₹) <span style="color:#e05252;font-size:11px">*</span></th>
+              <th style="min-width:90px"><span data-i18n="th_jama">जमा</span> (₹) <span style="color:var(--gold,#d4a017);font-size:9px">●auto</span></th>
               <th style="min-width:36px"></th>
             </tr></thead>
             <tbody id="h-body"></tbody>
@@ -1030,24 +1030,24 @@ window.addEventListener('DOMContentLoaded', function(){
         </div>
         <button class="btn btn-ghost" style="margin-top:10px;font-size:12px" onclick="addHaptaRow()">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          हप्ता जोडा
+          <span data-i18n="btn_add_hapta">हप्ता जोडा</span>
         </button>
 
-        <div class="sec-label" style="margin-top:14px">सारांश</div>
+        <div class="sec-label" style="margin-top:14px" data-i18n="txt_summary">सारांश</div>
         <div class="metrics-row" style="margin-bottom:0">
-          <div class="metric-card blue"><div class="metric-label">कर्ज वाटप</div><div class="metric-value" id="hm-vatap">₹0</div></div>
-          <div class="metric-card green"><div class="metric-label">आधीचे जमा</div><div class="metric-value" id="hm-paid">₹0</div></div>
-          <div class="metric-card amber"><div class="metric-label">दंड जमा</div><div class="metric-value" id="hm-dand">₹0</div></div>
-          <div class="metric-card amber"><div class="metric-label">व्याज जमा</div><div class="metric-value" id="hm-vyaj">₹0</div></div>
-          <div class="metric-card red"><div class="metric-label">शिल्लक कर्ज</div><div class="metric-value" id="hm-shillak">₹0</div></div>
+          <div class="metric-card blue"><div class="metric-label" data-i18n="m_loan_disb">कर्ज वाटप</div><div class="metric-value" id="hm-vatap">₹0</div></div>
+          <div class="metric-card green"><div class="metric-label" data-i18n="m_prev_paid">आधीचे जमा</div><div class="metric-value" id="hm-paid">₹0</div></div>
+          <div class="metric-card amber"><div class="metric-label" data-i18n="m_dand_paid">दंड जमा</div><div class="metric-value" id="hm-dand">₹0</div></div>
+          <div class="metric-card amber"><div class="metric-label" data-i18n="m_vyaj_paid">व्याज जमा</div><div class="metric-value" id="hm-vyaj">₹0</div></div>
+          <div class="metric-card red"><div class="metric-label" data-i18n="m_balance_loan">शिल्लक कर्ज</div><div class="metric-value" id="hm-shillak">₹0</div></div>
         </div>
 
         <div class="btn-row">
           <button class="btn btn-primary" onclick="saveHapta()">
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
-            हप्ता जतन करा
+            <span data-i18n="btn_save_hapta">हप्ता जतन करा</span>
           </button>
-          <button class="btn btn-ghost" onclick="clearHaptaRows()">रिसेट</button>
+          <button class="btn btn-ghost" onclick="clearHaptaRows()" data-i18n="btn_reset">रिसेट</button>
         </div>
       </div>
     </div>
@@ -1056,14 +1056,14 @@ window.addEventListener('DOMContentLoaded', function(){
 
 <!-- SEARCH PAGE -->
 <div id="page-search" class="page">
-  <div class="page-title">सभासद तपशील</div>
-  <div class="page-sub">नाव किंवा अ. क्र. टाकून सभासदाचे कर्ज तपशील पहा</div>
+  <div class="page-title" data-i18n="nav_search">सभासद तपशील</div>
+  <div class="page-sub" data-i18n="txt_search_sub">नाव किंवा अ. क्र. टाकून सभासदाचे कर्ज तपशील पहा</div>
 
   <div class="card" style="margin-bottom:16px">
     <div class="card-body" style="padding:14px 18px">
       <div class="fg" style="max-width:400px">
-        <label>अ. क्र. किंवा नाव टाका</label>
-        <input type="text" id="s-q" placeholder="अ. क्र. किंवा नाव लिहा..." oninput="doSearch()" style="font-size:14px">
+        <label data-i18n="lbl_no_or_name">अ. क्र. किंवा नाव टाका</label>
+        <input type="text" id="s-q" placeholder="अ. क्र. किंवा नाव लिहा..." data-i18n-ph="ph_no_or_name" oninput="doSearch()" style="font-size:14px">
       </div>
     </div>
   </div>
@@ -1075,18 +1075,18 @@ window.addEventListener('DOMContentLoaded', function(){
 <div id="page-summary" class="page">
   <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:4px">
     <div>
-      <div class="page-title">सर्व तपशील</div>
-      <div class="page-sub" style="margin-bottom:0">सर्व सभासदांचा एकत्रित आढावा — वर्ष, महिना किंवा स्थितीनुसार फिल्टर करा</div>
+      <div class="page-title" data-i18n="txt_all_details">सर्व तपशील</div>
+      <div class="page-sub" style="margin-bottom:0" data-i18n="txt_summary_sub">सर्व सभासदांचा एकत्रित आढावा — वर्ष, महिना किंवा स्थितीनुसार फिल्टर करा</div>
     </div>
     <div class="download-dropdown">
 
   <button class="btn btn-ghost">
-    📥 डाउनलोड ▼
+    📥 <span data-i18n="btn_download">डाउनलोड</span> ▼
   </button>
 
   <div class="dropdown-content">
-    <a href="#" onclick="exportExcel()">📊 Excel डाउनलोड</a>
-    <a href="#" onclick="exportPDF()">📄 PDF डाउनलोड</a>
+    <a href="#" onclick="exportExcel()">📊 <span data-i18n="btn_excel_download">Excel डाउनलोड</span></a>
+    <a href="#" onclick="exportPDF()">📄 <span data-i18n="btn_pdf_download">PDF डाउनलोड</span></a>
   </div>
 
 </div>
@@ -1094,41 +1094,41 @@ window.addEventListener('DOMContentLoaded', function(){
   <div style="margin-bottom:24px"></div>
 
   <div class="filter-bar">
-    <div class="fg"><label>नाव</label>
-      <input type="text" id="f-name" placeholder="सभासद नाव..." oninput="renderSum()" style="height:36px">
+    <div class="fg"><label data-i18n="lbl_name">नाव</label>
+      <input type="text" id="f-name" placeholder="सभासद नाव..." data-i18n-ph="ph_member_name" oninput="renderSum()" style="height:36px">
     </div>
-    <div class="fg"><label>वर्ष</label>
+    <div class="fg"><label data-i18n="lbl_year">वर्ष</label>
       <select id="f-yr" onchange="renderSum()">
-        <option value="">सर्व वर्षे</option>
+        <option value="" data-i18n="opt_all_years">सर्व वर्षे</option>
       </select>
     </div>
-    <div class="fg"><label>महिना</label>
+    <div class="fg"><label data-i18n="lbl_month">महिना</label>
       <select id="f-mo" onchange="renderSum()">
-        <option value="">सर्व महिने</option>
-        <option value="01">जानेवारी</option><option value="02">फेब्रुवारी</option>
-        <option value="03">मार्च</option><option value="04">एप्रिल</option>
-        <option value="05">मे</option><option value="06">जून</option>
-        <option value="07">जुलै</option><option value="08">ऑगस्ट</option>
-        <option value="09">सप्टेंबर</option><option value="10">ऑक्टोबर</option>
-        <option value="11">नोव्हेंबर</option><option value="12">डिसेंबर</option>
+        <option value="" data-i18n="opt_all_months">सर्व महिने</option>
+        <option value="01" data-i18n="mo_01">जानेवारी</option><option value="02" data-i18n="mo_02">फेब्रुवारी</option>
+        <option value="03" data-i18n="mo_03">मार्च</option><option value="04" data-i18n="mo_04">एप्रिल</option>
+        <option value="05" data-i18n="mo_05">मे</option><option value="06" data-i18n="mo_06">जून</option>
+        <option value="07" data-i18n="mo_07">जुलै</option><option value="08" data-i18n="mo_08">ऑगस्ट</option>
+        <option value="09" data-i18n="mo_09">सप्टेंबर</option><option value="10" data-i18n="mo_10">ऑक्टोबर</option>
+        <option value="11" data-i18n="mo_11">नोव्हेंबर</option><option value="12" data-i18n="mo_12">डिसेंबर</option>
       </select>
     </div>
-    <div class="fg"><label>स्थिती</label>
+    <div class="fg"><label data-i18n="lbl_status">स्थिती</label>
       <select id="f-st" onchange="renderSum()">
-        <option value="">सर्व</option>
-        <option value="ok">नियमित</option>
-        <option value="warn">विलंब आहे</option>
-        <option value="done">कर्ज फेडले</option>
+        <option value="" data-i18n="opt_all">सर्व</option>
+        <option value="ok" data-i18n="opt_regular">नियमित</option>
+        <option value="warn" data-i18n="opt_delayed">विलंब आहे</option>
+        <option value="done" data-i18n="opt_paid_off">कर्ज फेडले</option>
       </select>
     </div>
     <div class="fg">
       <label>&nbsp;</label>
       <label style="display:flex;align-items:center;gap:6px;height:36px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;">
         <input type="checkbox" id="f-outstanding" onchange="renderSum()" style="width:16px;height:16px;cursor:pointer;">
-        ⚠️ फक्त विलंबीत (outstanding) सभासद
+        ⚠️ <span data-i18n="txt_only_outstanding">फक्त विलंबीत (outstanding) सभासद</span>
       </label>
     </div>
-    <button class="btn btn-ghost" onclick="clearF()" style="height:36px">साफ करा</button>
+    <button class="btn btn-ghost" onclick="clearF()" style="height:36px" data-i18n="btn_clear">साफ करा</button>
   </div>
 
   <div class="metrics-row" id="sum-metrics"></div>
@@ -1137,25 +1137,25 @@ window.addEventListener('DOMContentLoaded', function(){
     <div class="tbl-wrap" style="border:none">
       <table>
         <thead><tr>
-          <th onclick="sortBy('kram')">अ.क्र. <span id="si-kram">↕</span></th>
-          <th onclick="sortBy('nav')">नाव <span id="si-nav">↕</span></th>
-          <th>मोबाईल नंबर</th>
-          <th onclick="sortBy('vatap')">कर्ज वाटप <span id="si-vatap">↕</span></th>
-          <th onclick="sortBy('karj')">कर्ज जमा <span id="si-karj">↕</span></th>
-          <th onclick="sortBy('dand')">दंड <span id="si-dand">↕</span></th>
-          <th onclick="sortBy('vyaj')">व्याज <span id="si-vyaj">↕</span></th>
-          <th onclick="sortBy('jama')">एकूण जमा <span id="si-jama">↕</span></th>
-          <th onclick="sortBy('shillak')">शिल्लक <span id="si-shillak">↕</span></th>
-          <th>परतफेड %</th>
-          <th>स्थिती</th>
-          <th>क्रिया</th>
+          <th onclick="sortBy('kram')"><span data-i18n="th_sr_no">अ.क्र.</span> <span id="si-kram">↕</span></th>
+          <th onclick="sortBy('nav')"><span data-i18n="lbl_name">नाव</span> <span id="si-nav">↕</span></th>
+          <th data-i18n="lbl_mobile">मोबाईल नंबर</th>
+          <th onclick="sortBy('vatap')"><span data-i18n="m_loan_disb">कर्ज वाटप</span> <span id="si-vatap">↕</span></th>
+          <th onclick="sortBy('karj')"><span data-i18n="m_loan_paid">कर्ज जमा</span> <span id="si-karj">↕</span></th>
+          <th onclick="sortBy('dand')"><span data-i18n="th_dand">दंड</span> <span id="si-dand">↕</span></th>
+          <th onclick="sortBy('vyaj')"><span data-i18n="th_vyaj">व्याज</span> <span id="si-vyaj">↕</span></th>
+          <th onclick="sortBy('jama')"><span data-i18n="m_total_paid">एकूण जमा</span> <span id="si-jama">↕</span></th>
+          <th onclick="sortBy('shillak')"><span data-i18n="th_shillak">शिल्लक</span> <span id="si-shillak">↕</span></th>
+          <th data-i18n="th_repay_pct">परतफेड %</th>
+          <th data-i18n="lbl_status">स्थिती</th>
+          <th data-i18n="th_action">क्रिया</th>
         </tr></thead>
         <tbody id="sum-body"></tbody>
         <tfoot id="sum-foot"></tfoot>
       </table>
       <div id="sum-empty" class="empty" style="display:none">
         <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:.3;margin-bottom:8px"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0l-8-4-8 4"/></svg>
-        <br>कोणतीही नोंद सापडली नाही
+        <br><span data-i18n="txt_no_records">कोणतीही नोंद सापडली नाही</span>
       </div>
     </div>
   </div>
@@ -1164,13 +1164,13 @@ window.addEventListener('DOMContentLoaded', function(){
     <div class="card-body" style="padding-bottom:0">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
         <div>
-          <div class="sec-label" style="margin-bottom:2px">📋 व्यवहार तपशील — तारीखनिहाय (Tally साठी)</div>
-          <div style="font-size:12px;color:var(--text2);margin-bottom:10px">प्रत्येक कर्ज वाटप व हप्ता जमा व्यवहार, तारीखनिहाय — वरचे वर्ष/महिना फिल्टर इथेही लागू होतात</div>
+          <div class="sec-label" style="margin-bottom:2px">📋 <span data-i18n="txt_txn_details">व्यवहार तपशील — तारीखनिहाय (Tally साठी)</span></div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:10px" data-i18n="txt_txn_details_sub">प्रत्येक कर्ज वाटप व हप्ता जमा व्यवहार, तारीखनिहाय — वरचे वर्ष/महिना फिल्टर इथेही लागू होतात</div>
         </div>
         <div class="download-dropdown">
-          <button class="btn btn-ghost">📥 डाउनलोड ▼</button>
+          <button class="btn btn-ghost">📥 <span data-i18n="btn_download">डाउनलोड</span> ▼</button>
           <div class="dropdown-content">
-            <a href="#" onclick="exportTxnExcel()">📊 Excel डाउनलोड</a>
+            <a href="#" onclick="exportTxnExcel()">📊 <span data-i18n="btn_excel_download">Excel डाउनलोड</span></a>
           </div>
         </div>
       </div>
@@ -1178,21 +1178,21 @@ window.addEventListener('DOMContentLoaded', function(){
     <div class="tbl-wrap" style="border:none">
       <table>
         <thead><tr>
-          <th>अ.क्र.</th>
-          <th>दिनांक</th>
-          <th>सभासद नाव</th>
-          <th>कर्ज वाटप (₹)</th>
-          <th>हप्ता (₹)</th>
-          <th>दंड (₹)</th>
-          <th>व्याज (₹)</th>
-          <th>जमा (₹)</th>
+          <th data-i18n="th_sr_no">अ.क्र.</th>
+          <th data-i18n="th_date">दिनांक</th>
+          <th data-i18n="lbl_member_name">सभासद नाव</th>
+          <th><span data-i18n="m_loan_disb">कर्ज वाटप</span> (₹)</th>
+          <th><span data-i18n="th_hapta">हप्ता</span> (₹)</th>
+          <th><span data-i18n="th_dand">दंड</span> (₹)</th>
+          <th><span data-i18n="th_vyaj">व्याज</span> (₹)</th>
+          <th><span data-i18n="th_jama">जमा</span> (₹)</th>
         </tr></thead>
         <tbody id="txn-body"></tbody>
         <tfoot id="txn-foot"></tfoot>
       </table>
       <div id="txn-empty" class="empty" style="display:none">
         <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:.3;margin-bottom:8px"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-        <br>कोणतीही नोंद सापडली नाही
+        <br><span data-i18n="txt_no_records">कोणतीही नोंद सापडली नाही</span>
       </div>
     </div>
   </div>
@@ -1200,27 +1200,27 @@ window.addEventListener('DOMContentLoaded', function(){
 
 <div id="page-requests" class="page">
   <div class="page-header">
-    <div class="page-title">👥 सभासद विनंत्या</div>
-    <div class="page-sub">सभासदांनी केलेल्या नोंदणी विनंत्या — approve/reject करा</div>
+    <div class="page-title">👥 <span data-i18n="nav_requests">सभासद विनंत्या</span></div>
+    <div class="page-sub" data-i18n="txt_requests_sub">सभासदांनी केलेल्या नोंदणी विनंत्या — approve/reject करा</div>
   </div>
 
   <div class="card">
     <div class="tbl-wrap">
       <table>
         <thead><tr>
-          <th>अ.क्र.</th>
-          <th>दिनांक</th>
-          <th>नाव</th>
-          <th>मोबाईल</th>
-          <th>पासवर्ड</th>
-          <th>स्थिती</th>
-          <th>क्रिया</th>
+          <th data-i18n="th_sr_no">अ.क्र.</th>
+          <th data-i18n="th_date">दिनांक</th>
+          <th data-i18n="lbl_name">नाव</th>
+          <th data-i18n="th_mobile_short">मोबाईल</th>
+          <th data-i18n="th_password">पासवर्ड</th>
+          <th data-i18n="lbl_status">स्थिती</th>
+          <th data-i18n="th_action">क्रिया</th>
         </tr></thead>
         <tbody id="req-body"></tbody>
       </table>
       <div id="req-empty" class="empty" style="display:none">
         <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:.3;margin-bottom:8px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-        <br>कोणतीही विनंती सापडली नाही
+        <br><span data-i18n="txt_no_requests">कोणतीही विनंती सापडली नाही</span>
       </div>
     </div>
   </div>
@@ -1229,34 +1229,34 @@ window.addEventListener('DOMContentLoaded', function(){
 <!-- Approve Modal -->
 <div id="approve-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9997;align-items:center;justify-content:center;">
   <div style="background:#fff;border-radius:14px;width:90%;max-width:420px;max-height:80vh;overflow:auto;padding:20px;">
-    <div style="font-size:15px;font-weight:700;margin-bottom:4px;">सभासदाशी लिंक करा</div>
+    <div style="font-size:15px;font-weight:700;margin-bottom:4px;" data-i18n="txt_link_member">सभासदाशी लिंक करा</div>
     <div style="font-size:12px;color:var(--text2);margin-bottom:12px;" id="approve-req-info"></div>
-    <input type="text" id="approve-search" placeholder="नाव किंवा मोबाईल टाइप करा..." oninput="renderApproveSearchResults()" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;margin-bottom:10px;">
+    <input type="text" id="approve-search" placeholder="नाव किंवा मोबाईल टाइप करा..." data-i18n-ph="ph_name_or_mobile" oninput="renderApproveSearchResults()" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;margin-bottom:10px;">
     <div id="approve-search-results" style="max-height:280px;overflow:auto;"></div>
-    <button class="btn" onclick="addAsNewMemberAndApprove()" style="margin-top:12px;width:100%;background:var(--green,#16a34a);color:#fff;border:none;">➕ नवीन सभासद म्हणून जोडा व मंजूर करा</button>
-    <button class="btn btn-ghost" onclick="closeApproveModal()" style="margin-top:8px;width:100%;">रद्द करा</button>
+    <button class="btn" onclick="addAsNewMemberAndApprove()" style="margin-top:12px;width:100%;background:var(--green,#16a34a);color:#fff;border:none;">➕ <span data-i18n="btn_add_new_and_approve">नवीन सभासद म्हणून जोडा व मंजूर करा</span></button>
+    <button class="btn btn-ghost" onclick="closeApproveModal()" style="margin-top:8px;width:100%;" data-i18n="btn_cancel">रद्द करा</button>
   </div>
 </div>
 
 <!-- Edit Request Modal -->
 <div id="edit-req-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9997;align-items:center;justify-content:center;">
   <div style="background:#fff;border-radius:14px;width:90%;max-width:380px;padding:20px;">
-    <div style="font-size:15px;font-weight:700;margin-bottom:14px;">✏️ विनंती एडिट करा</div>
+    <div style="font-size:15px;font-weight:700;margin-bottom:14px;">✏️ <span data-i18n="txt_edit_request">विनंती एडिट करा</span></div>
     <div class="login-field">
-      <label>नाव</label>
+      <label data-i18n="lbl_name">नाव</label>
       <input type="text" id="edit-req-nav" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
     </div>
     <div class="login-field">
-      <label>मोबाईल नंबर</label>
+      <label data-i18n="lbl_mobile">मोबाईल नंबर</label>
       <input type="tel" id="edit-req-mobile" maxlength="10" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
     </div>
     <div class="login-field">
-      <label>पासवर्ड</label>
+      <label data-i18n="th_password">पासवर्ड</label>
       <input type="text" id="edit-req-password" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:monospace;">
     </div>
     <div style="display:flex;gap:8px;margin-top:14px;">
-      <button class="btn btn-ghost" onclick="closeEditRequestModal()" style="flex:1;">रद्द करा</button>
-      <button class="btn" onclick="saveEditRequest()" style="flex:1;background:var(--accent,#3a6fd8);color:#fff;">जतन करा</button>
+      <button class="btn btn-ghost" onclick="closeEditRequestModal()" style="flex:1;" data-i18n="btn_cancel">रद्द करा</button>
+      <button class="btn" onclick="saveEditRequest()" style="flex:1;background:var(--accent,#3a6fd8);color:#fff;" data-i18n="btn_save">जतन करा</button>
     </div>
     <div class="login-error" id="edit-req-error" style="margin-top:8px;"></div>
   </div>
@@ -1276,30 +1276,30 @@ window.addEventListener('DOMContentLoaded', function(){
     </div>
     <div class="drawer-body">
       <div id="dr-metrics" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px"></div>
-      <div class="sec-label">हप्ता इतिहास</div>
+      <div class="sec-label" data-i18n="txt_hapta_history">हप्ता इतिहास</div>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>महिना</th><th>दिनांक</th><th>विलंब</th><th>दंड</th><th>व्याज</th><th>हप्ता</th><th>शिल्लक</th><th>स्थिती</th></tr></thead>
+          <thead><tr><th data-i18n="lbl_month">महिना</th><th data-i18n="th_date">दिनांक</th><th data-i18n="th_delay">विलंब</th><th data-i18n="th_dand">दंड</th><th data-i18n="th_vyaj">व्याज</th><th data-i18n="th_hapta">हप्ता</th><th data-i18n="th_shillak">शिल्लक</th><th data-i18n="lbl_status">स्थिती</th></tr></thead>
           <tbody id="dr-body"></tbody>
         </table>
       </div>
       <div class="btn-row">
         <button class="btn btn-ghost" id="dr-edit-btn" onclick="editMember(currentIdx)">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-          संपादन करा
+          <span data-i18n="btn_edit">संपादन करा</span>
         </button>
         <div class="download-dropdown">
           <button class="btn btn-ghost" style="border-color:#b45309;color:#b45309;">
-            📥 डाउनलोड ▼
+            📥 <span data-i18n="btn_download">डाउनलोड</span> ▼
           </button>
           <div class="dropdown-content">
-            <a href="#" onclick="exportMemberExcel(currentIdx)">📊 Excel डाउनलोड</a>
-            <a href="#" onclick="exportMemberPDF(currentIdx)">📄 PDF डाउनलोड</a>
+            <a href="#" onclick="exportMemberExcel(currentIdx)">📊 <span data-i18n="btn_excel_download">Excel डाउनलोड</span></a>
+            <a href="#" onclick="exportMemberPDF(currentIdx)">📄 <span data-i18n="btn_pdf_download">PDF डाउनलोड</span></a>
           </div>
         </div>
         <button class="btn btn-ghost" id="dr-del-btn" style="border-color:var(--red);color:var(--red)" onclick="">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-          नोंद काढा
+          <span data-i18n="btn_delete_record">नोंद काढा</span>
         </button>
       </div>
     </div>
@@ -1336,7 +1336,87 @@ const translations = {
     nav_home:"मुख्यपृष्ठ", nav_entry:"सभासद नोंदणी", nav_hapta:"हप्ता नोंदणी", nav_search:"सभासद तपशील",
     nav_summary:"पूर्ण तपशील", nav_requests:"सभासद विनंत्या", nav_details:"तपशील",
     btn_install_app:"App Install करा", txt_footer_branch:"मुंबई शाखा", txt_footer_dept:"पतपेढी विभाग",
-    txt_member_panel:"सभासद पॅनल", btn_logout:"लॉगआउट"
+    txt_member_panel:"सभासद पॅनल", btn_logout:"लॉगआउट",
+    txt_total_summary:"एकूण सारांश", txt_recent_members:"अलीकडील सभासद", txt_view_all:"सर्व पहा →",
+    txt_status_report:"स्थिती अहवाल", txt_quick_actions:"त्वरित कार्य", txt_add_new_member:"नवीन सभासद जोडा",
+    btn_add_hapta:"हप्ता जोडा", txt_search_info:"माहिती शोधा", txt_view_all_summary:"सर्व सारांश पहा",
+    txt_entry_sub:"नवीन सभासदाची नोंद करा किंवा अस्तित्वातील नोंद अद्यतन करा", txt_member_info:"सभासद माहिती",
+    lbl_loan_date:"कर्ज वाटप दिनांक", lbl_member_name:"सभासदाचे नाव", lbl_total_loan:"एकूण कर्ज वाटप (₹)",
+    lbl_loan_for:"कर्ज कोणासाठी?", opt_self:"स्वतःसाठी", opt_other:"इतरांसाठी",
+    lbl_other_person_name:"इतर व्यक्तीचे नाव", ph_full_name_person:"व्यक्तीचे पूर्ण नाव लिहा",
+    txt_hapta_entries:"हप्ता नोंदी", txt_total_details:"एकूण तपशील", txt_summary:"सारांश",
+    th_installment_month:"हप्त्याचा महिना", th_date:"दिनांक", th_delay_months:"विलंब (महिने)",
+    th_dand:"दंड", th_vyaj2:"व्याज @२%", th_hapta:"हप्ता", th_jama:"जमा",
+    m_loan_disb:"कर्ज वाटप", m_loan_paid:"कर्ज जमा", m_dand_paid:"दंड जमा", m_vyaj_paid:"व्याज जमा",
+    m_total_paid:"एकूण जमा", m_balance_loan:"शिल्लक कर्ज", m_prev_paid:"आधीचे जमा",
+    btn_save:"जतन करा", btn_reset:"रिसेट",
+    txt_hapta_sub:"सभासद निवडा आणि हप्ता जोडा", txt_select_member:"सभासद निवडा",
+    lbl_name_or_no:"सभासदाचे नाव किंवा अ. क्र. लिहा", ph_type_name:"नाव टाइप करा...", btn_change:"बदला",
+    txt_new_hapta:"नवीन हप्ता जोडा", btn_save_hapta:"हप्ता जतन करा",
+    txt_search_sub:"नाव किंवा अ. क्र. टाकून सभासदाचे कर्ज तपशील पहा", lbl_no_or_name:"अ. क्र. किंवा नाव टाका",
+    ph_no_or_name:"अ. क्र. किंवा नाव लिहा...",
+    txt_all_details:"सर्व तपशील", txt_summary_sub:"सर्व सभासदांचा एकत्रित आढावा — वर्ष, महिना किंवा स्थितीनुसार फिल्टर करा",
+    btn_download:"डाउनलोड", btn_excel_download:"Excel डाउनलोड", btn_pdf_download:"PDF डाउनलोड",
+    lbl_name:"नाव", ph_member_name:"सभासद नाव...", lbl_year:"वर्ष", opt_all_years:"सर्व वर्षे",
+    lbl_month:"महिना", opt_all_months:"सर्व महिने",
+    mo_01:"जानेवारी", mo_02:"फेब्रुवारी", mo_03:"मार्च", mo_04:"एप्रिल", mo_05:"मे", mo_06:"जून",
+    mo_07:"जुलै", mo_08:"ऑगस्ट", mo_09:"सप्टेंबर", mo_10:"ऑक्टोबर", mo_11:"नोव्हेंबर", mo_12:"डिसेंबर",
+    lbl_status:"स्थिती", opt_all:"सर्व", opt_regular:"नियमित", opt_delayed:"विलंब आहे", opt_paid_off:"कर्ज फेडले",
+    txt_only_outstanding:"फक्त विलंबीत (outstanding) सभासद", btn_clear:"साफ करा",
+    th_sr_no:"अ.क्र.", th_vyaj:"व्याज", th_shillak:"शिल्लक", th_repay_pct:"परतफेड %", th_action:"क्रिया",
+    txt_no_records:"कोणतीही नोंद सापडली नाही", txt_txn_details:"व्यवहार तपशील — तारीखनिहाय (Tally साठी)",
+    txt_txn_details_sub:"प्रत्येक कर्ज वाटप व हप्ता जमा व्यवहार, तारीखनिहाय — वरचे वर्ष/महिना फिल्टर इथेही लागू होतात",
+    txt_requests_sub:"सभासदांनी केलेल्या नोंदणी विनंत्या — approve/reject करा",
+    th_mobile_short:"मोबाईल", th_password:"पासवर्ड", txt_no_requests:"कोणतीही विनंती सापडली नाही",
+    txt_link_member:"सभासदाशी लिंक करा", ph_name_or_mobile:"नाव किंवा मोबाईल टाइप करा...",
+    btn_add_new_and_approve:"नवीन सभासद म्हणून जोडा व मंजूर करा", btn_cancel:"रद्द करा",
+    txt_edit_request:"विनंती एडिट करा",
+    txt_hapta_history:"हप्ता इतिहास", th_delay:"विलंब", btn_edit:"संपादन करा", btn_delete_record:"नोंद काढा",
+    txt_md_welcome_body:"अबगुलवाडी नवतरुण ग्रामविकास मंडळ पतपेढीमध्ये आपले स्वागत आहे. तुमची कर्ज व हप्त्याची माहिती \"तपशील\" टॅबमध्ये बघता येईल.",
+    txt_overdue_notice:"हप्ता विलंब सूचना", txt_total_loan_taken:"एकूण कर्ज घेतले",
+    txt_total_dand:"एकूण दंड", txt_total_vyaj:"एकूण व्याज", txt_hapta_history_date:"हप्ता इतिहास (दिनांकानुसार)",
+    txt_my_profile:"माझी प्रोफाईल", txt_photo_hint:"JPG/PNG, कमाल ५ MB",
+    exp_pdf_started:"PDF डाउनलोड सुरू झाले!", exp_excel_started:"Excel डाउनलोड सुरू झाले!",
+    exp_org_name:"अबगुलवाडी नवतरुण ग्रामविकास मंडळ — पतपेढी",
+    exp_org_address_full:"साकुर्डे (अबगुलवाडी), ता. दापोली, जि. रत्नागिरी | ६१, डी.व्ही. रेळे चाळ, मुंबई – ४००००२",
+    exp_org_address_short:"साकुर्डे (अबगुलवाडी), ता. दापोली, जि. रत्नागिरी | मुंबई – ४००००२",
+    exp_title_member_detail:"सभासद कर्ज तपशील पत्रक", exp_title_all_summary:"सर्व सभासद — एकत्रित तपशील",
+    exp_title_txn:"व्यवहार तपशील", exp_print:"मुद्रण", exp_date:"तारीख", exp_loan_date:"कर्ज दिनांक",
+    exp_total_members:"एकूण सभासद", exp_total:"एकूण", exp_installments:"हप्ते",
+    exp_members_word:"सभासद", exp_transactions_word:"व्यवहार",
+    exp_on_time:"वेळेवर", exp_slight_delay:"थोडा विलंब", exp_delayed:"विलंब", exp_paid_off:"फेडले",
+    exp_repayment:"परतफेड", exp_worksheet_member:"सभासद तपशील", exp_worksheet_summary:"सारांश",
+    exp_worksheet_txn:"व्यवहार तपशील", exp_file_details:"तपशील", exp_file_all:"Sarv_Tapshil",
+    exp_file_txn:"Vyavahar_Tapshil",
+    msg_data_load_error:"डेटा लोड करताना त्रुटी: ", msg_enter_member_name:"कृपया सभासदाचे नाव भरा.",
+    msg_enter_loan_amount:"कृपया कर्ज वाटप रक्कम भरा.",
+    msg_enter_hapta_each_row:"कृपया प्रत्येक ओळीत हप्ता रक्कम भरा — हप्त्याशिवाय नोंद जतन होणार नाही.",
+    msg_save_error:"जतन करताना त्रुटी: ", msg_record_updated:"यांची नोंद अद्यतन झाली!",
+    msg_record_saved:"यांची नोंद जतन झाली!", msg_delete_error:"काढताना त्रुटी: ",
+    msg_record_deleted:"यांची नोंद काढली.", msg_select_member_first:"कृपया आधी सभासद निवडा.",
+    msg_enter_at_least_one_hapta:"कृपया किमान एक हप्ता भरा.", msg_your:"यांचे",
+    msg_saved_bang:"जतन झाले!", msg_photo_size:"फोटो ५ MB पेक्षा लहान असावा",
+    err_prefix:"त्रुटी: ", msg_request_approved:"ची विनंती मंजूर झाली!",
+    msg_add_member_error:"सभासद जोडताना त्रुटी: ",
+    msg_added_as_new_member_pre:"नवीन सभासद (अ.क्र. ", msg_added_as_new_member_post:") म्हणून जोडले व विनंती मंजूर झाली!",
+    msg_request_rejected_toast:"विनंती नाकारली.", msg_request_updated:"विनंती अद्यतन झाली!",
+    msg_request_deleted:"विनंती काढली.", msg_app_installed:"App यशस्वीरित्या Install झाले!",
+    msg_app_installing:"App Install होत आहे...",
+    msg_chrome_install_hint:"Chrome menu → \"Add to Home Screen\" वर click करा",
+    msg_safari_install_hint:"Safari → Share button → \"Add to Home Screen\" वर click करा",
+    msg_browser_install_hint:"Browser address bar मधील Install icon वर click करा",
+    msg_request_rejected_contact:"तुमची विनंती नाकारली गेली आहे. अधिक माहितीसाठी कार्यालयाशी संपर्क साधा.",
+    msg_member_info_not_found:"सभासद माहिती सापडली नाही. कार्यालयाशी संपर्क साधा.",
+    msg_wrong_credentials:"चुकीचे युजरनेम/मोबाईल किंवा पासवर्ड", msg_username_not_found:"युजरनेम सापडले नाही",
+    msg_wrong_answer:"चुकीचे उत्तर", msg_password_reset:"पासवर्ड रिसेट झाला! नवीन पासवर्ड:",
+    msg_wrong_username_or_old_pass:"चुकीचे युजरनेम किंवा जुना पासवर्ड", msg_pass_min6:"पासवर्ड किमान ६ अक्षरांचा असावा",
+    msg_new_pass_mismatch:"नवीन पासवर्ड जुळत नाही", msg_pass_changed:"पासवर्ड यशस्वीरित्या बदलला!",
+    msg_enter_full_name:"कृपया पूर्ण नाव भरा", msg_enter_valid_mobile:"कृपया योग्य १० अंकी मोबाईल नंबर भरा",
+    msg_pass_mismatch:"पासवर्ड जुळत नाही", msg_reg_request_sent:"नोंदणी विनंती पाठवली! अ‍ॅडमिनने approve केल्यावर तुम्ही लॉगिन करू शकाल.",
+    msg_valid_mobile:"योग्य १० अंकी मोबाईल नंबर भरा", msg_no_changes:"काहीही बदल केलेला नाही",
+    msg_profile_updated:"प्रोफाईल अद्यतन झालं!", msg_enter_name:"कृपया नाव भरा",
+    msg_pass_changed_short:"पासवर्ड बदलला!", msg_enter_password:"कृपया पासवर्ड भरा",
+    msg_reg_pending:"तुमची नोंदणी विनंती अजून प्रलंबित आहे. अ‍ॅडमिनने approve केल्यावर लॉगिन करता येईल."
   },
   en: {
     lbl_mobile:"Mobile Number", ph_mobile:"Enter mobile number",
@@ -1356,7 +1436,87 @@ const translations = {
     nav_home:"Home", nav_entry:"Member Registration", nav_hapta:"Installment Entry", nav_search:"Member Details",
     nav_summary:"Full Details", nav_requests:"Member Requests", nav_details:"Details",
     btn_install_app:"Install App", txt_footer_branch:"Mumbai Branch", txt_footer_dept:"Credit Society Dept",
-    txt_member_panel:"Member Panel", btn_logout:"Logout"
+    txt_member_panel:"Member Panel", btn_logout:"Logout",
+    txt_total_summary:"Total Summary", txt_recent_members:"Recent Members", txt_view_all:"View all →",
+    txt_status_report:"Status Report", txt_quick_actions:"Quick Actions", txt_add_new_member:"Add new member",
+    btn_add_hapta:"Add Installment", txt_search_info:"Search details", txt_view_all_summary:"View full summary",
+    txt_entry_sub:"Register a new member or update an existing record", txt_member_info:"Member Information",
+    lbl_loan_date:"Loan Disbursement Date", lbl_member_name:"Member Name", lbl_total_loan:"Total Loan Amount (₹)",
+    lbl_loan_for:"Loan for?", opt_self:"Self", opt_other:"Other",
+    lbl_other_person_name:"Other Person's Name", ph_full_name_person:"Enter person's full name",
+    txt_hapta_entries:"Installment Entries", txt_total_details:"Total Details", txt_summary:"Summary",
+    th_installment_month:"Installment Month", th_date:"Date", th_delay_months:"Delay (Months)",
+    th_dand:"Penalty", th_vyaj2:"Interest @2%", th_hapta:"Installment", th_jama:"Paid",
+    m_loan_disb:"Loan Disbursed", m_loan_paid:"Loan Paid", m_dand_paid:"Penalty Paid", m_vyaj_paid:"Interest Paid",
+    m_total_paid:"Total Paid", m_balance_loan:"Balance Loan", m_prev_paid:"Previously Paid",
+    btn_save:"Save", btn_reset:"Reset",
+    txt_hapta_sub:"Select a member and add an installment", txt_select_member:"Select Member",
+    lbl_name_or_no:"Enter member name or serial no.", ph_type_name:"Type name...", btn_change:"Change",
+    txt_new_hapta:"Add New Installment", btn_save_hapta:"Save Installment",
+    txt_search_sub:"Enter name or serial no. to view a member's loan details", lbl_no_or_name:"Enter serial no. or name",
+    ph_no_or_name:"Enter serial no. or name...",
+    txt_all_details:"Full Details", txt_summary_sub:"Combined overview of all members — filter by year, month or status",
+    btn_download:"Download", btn_excel_download:"Download Excel", btn_pdf_download:"Download PDF",
+    lbl_name:"Name", ph_member_name:"Member name...", lbl_year:"Year", opt_all_years:"All years",
+    lbl_month:"Month", opt_all_months:"All months",
+    mo_01:"January", mo_02:"February", mo_03:"March", mo_04:"April", mo_05:"May", mo_06:"June",
+    mo_07:"July", mo_08:"August", mo_09:"September", mo_10:"October", mo_11:"November", mo_12:"December",
+    lbl_status:"Status", opt_all:"All", opt_regular:"Regular", opt_delayed:"Delayed", opt_paid_off:"Paid Off",
+    txt_only_outstanding:"Only outstanding members", btn_clear:"Clear",
+    th_sr_no:"Sr. No.", th_vyaj:"Interest", th_shillak:"Balance", th_repay_pct:"Repay %", th_action:"Action",
+    txt_no_records:"No records found", txt_txn_details:"Transaction Details — Date-wise (for Tally)",
+    txt_txn_details_sub:"Every loan disbursement and installment payment transaction, date-wise — the year/month filters above apply here too",
+    txt_requests_sub:"Registration requests submitted by members — approve/reject",
+    th_mobile_short:"Mobile", th_password:"Password", txt_no_requests:"No requests found",
+    txt_link_member:"Link to a Member", ph_name_or_mobile:"Type name or mobile...",
+    btn_add_new_and_approve:"Add as new member & approve", btn_cancel:"Cancel",
+    txt_edit_request:"Edit Request",
+    txt_hapta_history:"Installment History", th_delay:"Delay", btn_edit:"Edit", btn_delete_record:"Delete Record",
+    txt_md_welcome_body:"Welcome to Abgulwadi Navtarun Gramvikas Mandal Credit Society. You can view your loan and installment details in the \"Details\" tab.",
+    txt_overdue_notice:"Installment Delay Notice", txt_total_loan_taken:"Total Loan Taken",
+    txt_total_dand:"Total Penalty", txt_total_vyaj:"Total Interest", txt_hapta_history_date:"Installment History (Date-wise)",
+    txt_my_profile:"My Profile", txt_photo_hint:"JPG/PNG, max 5 MB",
+    exp_pdf_started:"PDF download started!", exp_excel_started:"Excel download started!",
+    exp_org_name:"Abgulwadi Navtarun Gramvikas Mandal — Credit Society",
+    exp_org_address_full:"Sakurde (Abgulwadi), Tal. Dapoli, Dist. Ratnagiri | 61, D.V. Rele Chal, Mumbai – 400002",
+    exp_org_address_short:"Sakurde (Abgulwadi), Tal. Dapoli, Dist. Ratnagiri | Mumbai – 400002",
+    exp_title_member_detail:"Member Loan Detail Sheet", exp_title_all_summary:"All Members — Combined Summary",
+    exp_title_txn:"Transaction Details", exp_print:"Printed", exp_date:"Date", exp_loan_date:"Loan Date",
+    exp_total_members:"Total Members", exp_total:"Total", exp_installments:"installments",
+    exp_members_word:"members", exp_transactions_word:"transactions",
+    exp_on_time:"On time", exp_slight_delay:"Slight delay", exp_delayed:"Delayed", exp_paid_off:"Paid off",
+    exp_repayment:"Repayment", exp_worksheet_member:"Member Details", exp_worksheet_summary:"Summary",
+    exp_worksheet_txn:"Transaction Details", exp_file_details:"Details", exp_file_all:"All_Details",
+    exp_file_txn:"Transaction_Details",
+    msg_data_load_error:"Error loading data: ", msg_enter_member_name:"Please enter the member's name.",
+    msg_enter_loan_amount:"Please enter the loan disbursement amount.",
+    msg_enter_hapta_each_row:"Please enter an installment amount in every row — the record won't save without an installment.",
+    msg_save_error:"Error while saving: ", msg_record_updated:"'s record updated!",
+    msg_record_saved:"'s record saved!", msg_delete_error:"Error while deleting: ",
+    msg_record_deleted:"'s record deleted.", msg_select_member_first:"Please select a member first.",
+    msg_enter_at_least_one_hapta:"Please add at least one installment.", msg_your:"'s",
+    msg_saved_bang:"installments saved!", msg_photo_size:"Photo should be under 5 MB",
+    err_prefix:"Error: ", msg_request_approved:"'s request approved!",
+    msg_add_member_error:"Error adding member: ",
+    msg_added_as_new_member_pre:"added as new member (Sr. No. ", msg_added_as_new_member_post:") and request approved!",
+    msg_request_rejected_toast:"Request rejected.", msg_request_updated:"Request updated!",
+    msg_request_deleted:"Request deleted.", msg_app_installed:"App installed successfully!",
+    msg_app_installing:"Installing app...",
+    msg_chrome_install_hint:"Click Chrome menu → \"Add to Home Screen\"",
+    msg_safari_install_hint:"Click Safari → Share button → \"Add to Home Screen\"",
+    msg_browser_install_hint:"Click the Install icon in your browser's address bar",
+    msg_request_rejected_contact:"Your request has been rejected. Please contact the office for more information.",
+    msg_member_info_not_found:"Member information not found. Please contact the office.",
+    msg_wrong_credentials:"Incorrect username/mobile or password", msg_username_not_found:"Username not found",
+    msg_wrong_answer:"Incorrect answer", msg_password_reset:"Password reset! New password:",
+    msg_wrong_username_or_old_pass:"Incorrect username or old password", msg_pass_min6:"Password must be at least 6 characters",
+    msg_new_pass_mismatch:"New passwords don't match", msg_pass_changed:"Password changed successfully!",
+    msg_enter_full_name:"Please enter your full name", msg_enter_valid_mobile:"Please enter a valid 10-digit mobile number",
+    msg_pass_mismatch:"Passwords don't match", msg_reg_request_sent:"Registration request sent! You can log in once approved by admin.",
+    msg_valid_mobile:"Enter a valid 10-digit mobile number", msg_no_changes:"No changes made",
+    msg_profile_updated:"Profile updated!", msg_enter_name:"Please enter a name",
+    msg_pass_changed_short:"Password changed!", msg_enter_password:"Please enter a password",
+    msg_reg_pending:"Your registration request is still pending. You can log in once approved by admin."
   }
 };
 
@@ -1380,11 +1540,17 @@ function setLanguage(lang){
   if(btn1) btn1.textContent = label;
   if(btn2) btn2.textContent = label;
   try{ localStorage.setItem('appLang', lang); }catch(e){}
+  try{ if(typeof members!=='undefined' && members.length && typeof renderHome==='function') renderHome(); }catch(e){}
 }
 
 function toggleLanguage(){
   const next = getLanguage()==='mr' ? 'en' : 'mr';
   setLanguage(next);
+}
+
+function t(key){
+  const dict = translations[getLanguage()] || translations.mr;
+  return dict[key] !== undefined ? dict[key] : key;
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{ setLanguage(getLanguage()); });
@@ -1394,7 +1560,7 @@ document.addEventListener('DOMContentLoaded', ()=>{ setLanguage(getLanguage()); 
 /* --- LOAD FROM SUPABASE --- */
 async function loadMembers(){
   const {data,error} = await sb.from('sabhasad').select('*').order('kram',{ascending:true});
-  if(error){ toast('डेटा लोड करताना त्रुटी: '+error.message,'warn'); return; }
+  if(error){ toast(t('msg_data_load_error')+error.message,'warn'); return; }
   members = (data||[]).map(r=>({id:r.id,kram:r.kram,nav:r.nav,mobile:r.mobile,vatap:r.vatap,date:r.date,hapte:r.hapte||[],karjtype:r.karjtype,guarantor:r.guarantor,photo:r.photo||null}));
   renderHome();
   if(document.getElementById('page-search')?.classList.contains('active')) doSearch();
@@ -1569,8 +1735,8 @@ async function saveEntry(){
   const mobile=document.getElementById('e-mobile').value.trim();
   const vatap=parseFloat(document.getElementById('e-vatap').value)||0;
   const date=document.getElementById('e-date').value;
-  if(!nav){toast('कृपया सभासदाचे नाव भरा.','warn');return;}
-  if(!vatap){toast('कृपया कर्ज वाटप रक्कम भरा.','warn');return;}
+  if(!nav){toast(t('msg_enter_member_name'),'warn');return;}
+  if(!vatap){toast(t('msg_enter_loan_amount'),'warn');return;}
   const hapte=[];
   let missingHapta=false;
   document.querySelectorAll('#e-body tr').forEach(r=>{
@@ -1585,7 +1751,7 @@ async function saveEntry(){
     if(hapta<=0){ missingHapta=true; return; }
     hapte.push({mahina:monthVal,dinank:dateVal,vilamb:parseFloat(i[2]?.value)||0,dand,vyaj,hapta,jama:parseFloat(i[6]?.value)||0});
   });
-  if(missingHapta){toast('कृपया प्रत्येक ओळीत हप्ता रक्कम भरा — हप्त्याशिवाय नोंद जतन होणार नाही.','warn');return;}
+  if(missingHapta){toast(t('msg_enter_hapta_each_row'),'warn');return;}
   const karjtype = document.getElementById('e-karjtype').value;
   const guarantor = karjtype === 'etar' ? document.getElementById('e-guarantor').value.trim() : '';
   // Check if editing existing member
@@ -1593,21 +1759,21 @@ async function saveEntry(){
   if(!isNaN(editIdx) && editIdx >= 0 && members[editIdx]) {
     const existing = members[editIdx];
     const {error} = await sb.from('sabhasad').update({nav,mobile,vatap,date,hapte,karjtype,guarantor}).eq('id',existing.id);
-    if(error){toast('जतन करताना त्रुटी: '+error.message,'warn');return;}
+    if(error){toast(t('msg_save_error')+error.message,'warn');return;}
     members[editIdx] = {id:existing.id,kram:existing.kram,nav,mobile,vatap,date,hapte,karjtype,guarantor};
     const kd=document.getElementById('e-kram-display');
     if(kd)kd.textContent=existing.kram;
     document.getElementById('e-nav').dataset.editIdx='';
-    toast('✓ अ.क्र. '+existing.kram+' — '+nav+' यांची नोंद अद्यतन झाली!');
+    toast('✓ '+t('th_sr_no')+' '+existing.kram+' — '+nav+' '+t('msg_record_updated'));
   } else {
     const maxKram = members.length > 0 ? Math.max(...members.map(m=>m.kram)) : 0;
     const kram = maxKram + 1;
     const {data,error} = await sb.from('sabhasad').insert({kram,nav,mobile,vatap,date,hapte,karjtype,guarantor}).select().single();
-    if(error){toast('जतन करताना त्रुटी: '+error.message,'warn');return;}
+    if(error){toast(t('msg_save_error')+error.message,'warn');return;}
     members.push({id:data.id,kram,nav,mobile,vatap,date,hapte,karjtype,guarantor});
     const kd=document.getElementById('e-kram-display');
     if(kd)kd.textContent=kram;
-    toast('✓ अ.क्र. '+kram+' — '+nav+' यांची नोंद जतन झाली!');
+    toast('✓ '+t('th_sr_no')+' '+kram+' — '+nav+' '+t('msg_record_saved'));
   }
 }
 
@@ -1770,9 +1936,9 @@ function renderSum(){
     <div class="metric-card blue"><div class="metric-label">एकूण सभासद</div><div class="metric-value">${rows.length}</div></div>
     <div class="metric-card blue"><div class="metric-label">एकूण कर्ज वाटप</div><div class="metric-value">${fmt(tV)}</div></div>
     <div class="metric-card green"><div class="metric-label">एकूण कर्ज जमा</div><div class="metric-value">${fmt(tK)}</div></div>
-    <div class="metric-card amber"><div class="metric-label">दंड जमा</div><div class="metric-value">${fmt(tD)}</div></div>
-    <div class="metric-card amber"><div class="metric-label">व्याज जमा</div><div class="metric-value">${fmt(tY)}</div></div>
-    <div class="metric-card green"><div class="metric-label">एकूण जमा</div><div class="metric-value">${fmt(tJ)}</div></div>
+    <div class="metric-card amber"><div class="metric-label" data-i18n="m_dand_paid">दंड जमा</div><div class="metric-value">${fmt(tD)}</div></div>
+    <div class="metric-card amber"><div class="metric-label" data-i18n="m_vyaj_paid">व्याज जमा</div><div class="metric-value">${fmt(tY)}</div></div>
+    <div class="metric-card green"><div class="metric-label" data-i18n="m_total_paid">एकूण जमा</div><div class="metric-value">${fmt(tJ)}</div></div>
     <div class="metric-card red"><div class="metric-label">एकूण शिल्लक</div><div class="metric-value">${fmt(tS)}</div></div>`;
   rows.sort((a,b)=>{
     let va,vb;
@@ -1806,9 +1972,9 @@ async function deleteMember(idx){
   const m=members[idx];
   if(!confirm('"'+m.nav+'" यांची नोंद कायमची काढायची आहे का?')) return;
   const {error} = await sb.from('sabhasad').delete().eq('id',m.id);
-  if(error){toast('काढताना त्रुटी: '+error.message,'warn');return;}
+  if(error){toast(t('msg_delete_error')+error.message,'warn');return;}
   members.splice(idx,1);
-  toast('🗑 '+m.nav+' यांची नोंद काढली.','warn');
+  toast('🗑 '+m.nav+' '+t('msg_record_deleted'),'warn');
   renderSum();doSearch();
 }
 
@@ -1837,8 +2003,8 @@ function getPDFCss(){
 
 function getOrgHeader(title){
   return `<div class="org-header">
-    <h1>अबगुलवाडी नवतरुण ग्रामविकास मंडळ — पतपेढी</h1>
-    <p>साकुर्डे (अबगुलवाडी), ता. दापोली, जि. रत्नागिरी &nbsp;|&nbsp; ६१, डी.व्ही. रेळे चाळ, मुंबई – ४००००२</p>
+    <h1>${t('exp_org_name')}</h1>
+    <p>${t('exp_org_address_full')}</p>
     <div class="doc-title">${title}</div>
   </div>`;
 }
@@ -1853,7 +2019,7 @@ function downloadPDF(htmlContent, filename){
     html2canvas: { scale: 3, useCORS: true },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
   }).from(el).save();
-  toast('✓ PDF डाउनलोड सुरू झाले!');
+  toast('✓ '+t('exp_pdf_started'));
 }
 
 function downloadExcel(htmlContent, filename){
@@ -1863,7 +2029,7 @@ function downloadExcel(htmlContent, filename){
   a.href = url; a.download = filename;
   document.body.appendChild(a); a.click();
   document.body.removeChild(a); URL.revokeObjectURL(url);
-  toast('✓ Excel डाउनलोड सुरू झाले!');
+  toast('✓ '+t('exp_excel_started'));
 }
 
 /* ── सभासद PDF ── */
@@ -1881,7 +2047,7 @@ function exportMemberPDF(idx){
   const rows=m.hapte.map((h,i)=>{
     run-=h.hapta;
     const bg=i%2===0?'':'background:#f8f9fc;';
-    const st=h.vilamb===0?'<span style="color:#166534">वेळेवर</span>':h.vilamb<=1?'<span style="color:#92400e">थोडा विलंब</span>':'<span style="color:#b91c1c">विलंब</span>';
+    const st=h.vilamb===0?'<span style="color:#166534">'+t('exp_on_time')+'</span>':h.vilamb<=1?'<span style="color:#92400e">'+t('exp_slight_delay')+'</span>':'<span style="color:#b91c1c">'+t('exp_delayed')+'</span>';
     return `<tr><td style="text-align:center;${bg}">${h.mahina||'—'}</td>
       <td style="${bg}">${fmtDate(h.dinank)}</td>
       <td style="text-align:center;${bg}">${h.vilamb||0}</td>
@@ -1894,34 +2060,34 @@ function exportMemberPDF(idx){
   }).join('');
 
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8">${getPDFCss()}</head><body>
-${getOrgHeader('सभासद कर्ज तपशील पत्रक')}
+${getOrgHeader(t('exp_title_member_detail'))}
 <div class="info-bar">
-  <strong>अ.क्र. ${m.kram} &nbsp;|&nbsp; ${m.nav} &nbsp;<span style="font-weight:400;color:#475569;">(${m.mobile||'—'})</span></strong>
-  <span>कर्ज दिनांक: <strong>${fmtDate(m.date)}</strong> &nbsp;|&nbsp; मुद्रण: ${dateStr}</span>
+  <strong>${t('th_sr_no')} ${m.kram} &nbsp;|&nbsp; ${m.nav} &nbsp;<span style="font-weight:400;color:#475569;">(${m.mobile||'—'})</span></strong>
+  <span>${t('exp_loan_date')}: <strong>${fmtDate(m.date)}</strong> &nbsp;|&nbsp; ${t('exp_print')}: ${dateStr}</span>
 </div>
 <div class="metrics-row">
-  <div class="metric-box" style="background:#eff6ff;border-color:#bfdbfe;"><div class="lbl">कर्ज वाटप</div><div class="val" style="color:#1d4ed8;">${fmt(m.vatap)}</div></div>
-  <div class="metric-box" style="background:#f0fdf4;border-color:#bbf7d0;"><div class="lbl">कर्ज जमा</div><div class="val" style="color:#166534;">${fmt(tK)}</div></div>
-  <div class="metric-box" style="background:#fffbeb;border-color:#fde68a;"><div class="lbl">दंड जमा</div><div class="val" style="color:#92400e;">${fmt(tD)}</div></div>
-  <div class="metric-box" style="background:#fffbeb;border-color:#fde68a;"><div class="lbl">व्याज जमा</div><div class="val" style="color:#92400e;">${fmt(tV)}</div></div>
-  <div class="metric-box" style="background:#fef2f2;border-color:#fecaca;"><div class="lbl">शिल्लक</div><div class="val" style="color:#b91c1c;">${fmt(sh)}</div></div>
-  <div class="metric-box" style="background:#f0fdf4;border-color:#bbf7d0;"><div class="lbl">परतफेड</div><div class="val" style="color:#166534;">${p}%</div></div>
+  <div class="metric-box" style="background:#eff6ff;border-color:#bfdbfe;"><div class="lbl">${t('m_loan_disb')}</div><div class="val" style="color:#1d4ed8;">${fmt(m.vatap)}</div></div>
+  <div class="metric-box" style="background:#f0fdf4;border-color:#bbf7d0;"><div class="lbl">${t('m_loan_paid')}</div><div class="val" style="color:#166534;">${fmt(tK)}</div></div>
+  <div class="metric-box" style="background:#fffbeb;border-color:#fde68a;"><div class="lbl">${t('m_dand_paid')}</div><div class="val" style="color:#92400e;">${fmt(tD)}</div></div>
+  <div class="metric-box" style="background:#fffbeb;border-color:#fde68a;"><div class="lbl">${t('m_vyaj_paid')}</div><div class="val" style="color:#92400e;">${fmt(tV)}</div></div>
+  <div class="metric-box" style="background:#fef2f2;border-color:#fecaca;"><div class="lbl">${t('th_shillak')}</div><div class="val" style="color:#b91c1c;">${fmt(sh)}</div></div>
+  <div class="metric-box" style="background:#f0fdf4;border-color:#bbf7d0;"><div class="lbl">${t('exp_repayment')}</div><div class="val" style="color:#166534;">${p}%</div></div>
 </div>
 <table>
-  <thead><tr><th>महिना</th><th>दिनांक</th><th>विलंब</th><th style="text-align:right">दंड (₹)</th><th style="text-align:right">व्याज (₹)</th><th style="text-align:right">हप्ता (₹)</th><th style="text-align:right">जमा (₹)</th><th style="text-align:right">शिल्लक (₹)</th><th>स्थिती</th></tr></thead>
+  <thead><tr><th>${t('lbl_month')}</th><th>${t('th_date')}</th><th>${t('th_delay')}</th><th style="text-align:right">${t('th_dand')} (₹)</th><th style="text-align:right">${t('th_vyaj')} (₹)</th><th style="text-align:right">${t('th_hapta')} (₹)</th><th style="text-align:right">${t('th_jama')} (₹)</th><th style="text-align:right">${t('th_shillak')} (₹)</th><th>${t('lbl_status')}</th></tr></thead>
   <tbody>${rows}</tbody>
   <tfoot><tr>
-    <td colspan="3">एकूण (${m.hapte.length} हप्ते)</td>
+    <td colspan="3">${t('exp_total')} (${m.hapte.length} ${t('exp_installments')})</td>
     <td style="text-align:right;color:#92400e;">${fmt(tD)}</td>
     <td style="text-align:right;color:#1e40af;">${fmt(tV)}</td>
     <td style="text-align:right;">${fmt(tK)}</td>
     <td style="text-align:right;">${fmt(tJ)}</td>
     <td style="text-align:right;color:#b91c1c;">${fmt(sh)}</td>
-    <td style="text-align:center;">${p}% परतफेड</td>
+    <td style="text-align:center;">${p}% ${t('exp_repayment')}</td>
   </tr></tfoot>
 </table>
 </body></html>`;
-  downloadPDF(html, m.nav+'_तपशील.pdf');
+  downloadPDF(html, m.nav+'_'+t('exp_file_details')+'.pdf');
 }
 
 /* ── सभासद Excel ── */
@@ -1940,7 +2106,7 @@ function exportMemberExcel(idx){
   const rows=m.hapte.map((h,i)=>{
     run-=h.hapta;
     const bg=i%2===0?'#ffffff':'#f8f9fc';
-    const st=h.vilamb===0?'वेळेवर':h.vilamb<=1?'थोडा विलंब':'विलंब';
+    const st=h.vilamb===0?t('exp_on_time'):h.vilamb<=1?t('exp_slight_delay'):t('exp_delayed');
     return `<tr style="background:${bg}">
       <td style="padding:7px 10px;border:1px solid #e2e8f0;mso-number-format:'\@';">${h.mahina||'—'}</td>
       <td style="padding:7px 10px;border:1px solid #e2e8f0;mso-number-format:'\@';">${fmtDate(h.dinank)}</td>
@@ -1956,7 +2122,7 @@ function exportMemberExcel(idx){
 
   const html=`<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>
 <head><meta charset='UTF-8'><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
-<x:Name>सभासद तपशील</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>
+<x:Name>${t('exp_worksheet_member')}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>
 </x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
 <style>
   body{font-family:'Tiro Devanagari Marathi',serif;font-size:12px;color:#1e293b;}
@@ -1968,34 +2134,34 @@ function exportMemberExcel(idx){
   .tot td{background:#e8edf5;font-weight:bold;border:1px solid #b0bdd4;}
 </style></head><body>
 <table style="width:100%;border-collapse:collapse;">
-  <tr><td colspan="9" class="hdr">अबगुलवाडी नवतरुण ग्रामविकास मंडळ — पतपेढी</td></tr>
-  <tr><td colspan="9" class="sub">साकुर्डे (अबगुलवाडी), ता. दापोली, जि. रत्नागिरी | मुंबई – ४००००२</td></tr>
-  <tr><td colspan="9" class="sub" style="font-size:12px;font-weight:bold;color:#e2b65a;">सभासद कर्ज तपशील पत्रक</td></tr>
+  <tr><td colspan="9" class="hdr">${t('exp_org_name')}</td></tr>
+  <tr><td colspan="9" class="sub">${t('exp_org_address_short')}</td></tr>
+  <tr><td colspan="9" class="sub" style="font-size:12px;font-weight:bold;color:#e2b65a;">${t('exp_title_member_detail')}</td></tr>
   <tr><td colspan="9" style="padding:4px;"></td></tr>
-  <tr><td colspan="5" class="ibar">अ.क्र. ${m.kram} | ${m.nav} (${m.mobile||'—'})</td>
-      <td colspan="4" style="padding:8px;background:#f0f4fb;text-align:right;font-size:12px;">कर्ज दिनांक: ${fmtDate(m.date)} | मुद्रण: ${dateStr}</td></tr>
+  <tr><td colspan="5" class="ibar">${t('th_sr_no')} ${m.kram} | ${m.nav} (${m.mobile||'—'})</td>
+      <td colspan="4" style="padding:8px;background:#f0f4fb;text-align:right;font-size:12px;">${t('exp_loan_date')}: ${fmtDate(m.date)} | ${t('exp_print')}: ${dateStr}</td></tr>
   <tr><td colspan="9" style="padding:4px;"></td></tr>
   <tr>
-    <td style="background:#dbeafe;font-weight:bold;font-size:10px;">कर्ज वाटप</td><td style="background:#dbeafe;color:#1d4ed8;font-weight:bold;">${fmt(m.vatap)}</td>
-    <td style="background:#dcfce7;font-weight:bold;font-size:10px;">कर्ज जमा</td><td style="background:#dcfce7;color:#166534;font-weight:bold;">${fmt(tK)}</td>
-    <td style="background:#fef3c7;font-weight:bold;font-size:10px;">दंड जमा</td><td style="background:#fef3c7;color:#92400e;font-weight:bold;">${fmt(tD)}</td>
-    <td style="background:#fef3c7;font-weight:bold;font-size:10px;">व्याज जमा</td><td style="background:#fef3c7;color:#1e40af;font-weight:bold;">${fmt(tV)}</td>
-    <td style="background:#fee2e2;color:#b91c1c;font-weight:bold;">${fmt(sh)} शिल्लक</td>
+    <td style="background:#dbeafe;font-weight:bold;font-size:10px;">${t('m_loan_disb')}</td><td style="background:#dbeafe;color:#1d4ed8;font-weight:bold;">${fmt(m.vatap)}</td>
+    <td style="background:#dcfce7;font-weight:bold;font-size:10px;">${t('m_loan_paid')}</td><td style="background:#dcfce7;color:#166534;font-weight:bold;">${fmt(tK)}</td>
+    <td style="background:#fef3c7;font-weight:bold;font-size:10px;">${t('m_dand_paid')}</td><td style="background:#fef3c7;color:#92400e;font-weight:bold;">${fmt(tD)}</td>
+    <td style="background:#fef3c7;font-weight:bold;font-size:10px;">${t('m_vyaj_paid')}</td><td style="background:#fef3c7;color:#1e40af;font-weight:bold;">${fmt(tV)}</td>
+    <td style="background:#fee2e2;color:#b91c1c;font-weight:bold;">${fmt(sh)} ${t('th_shillak')}</td>
   </tr>
   <tr><td colspan="9" style="padding:4px;"></td></tr>
-  <tr><th>महिना</th><th>दिनांक</th><th>विलंब</th><th>दंड (₹)</th><th>व्याज (₹)</th><th>हप्ता (₹)</th><th>जमा (₹)</th><th>शिल्लक (₹)</th><th>स्थिती</th></tr>
+  <tr><th>${t('lbl_month')}</th><th>${t('th_date')}</th><th>${t('th_delay')}</th><th>${t('th_dand')} (₹)</th><th>${t('th_vyaj')} (₹)</th><th>${t('th_hapta')} (₹)</th><th>${t('th_jama')} (₹)</th><th>${t('th_shillak')} (₹)</th><th>${t('lbl_status')}</th></tr>
   ${rows}
   <tr class="tot">
-    <td colspan="3" style="text-align:center;">एकूण (${m.hapte.length} हप्ते)</td>
+    <td colspan="3" style="text-align:center;">${t('exp_total')} (${m.hapte.length} ${t('exp_installments')})</td>
     <td style="text-align:right;color:#92400e;">${tD}</td>
     <td style="text-align:right;color:#1e40af;">${tV}</td>
     <td style="text-align:right;">${tK}</td>
     <td style="text-align:right;">${tJ}</td>
     <td style="text-align:right;color:#b91c1c;">${sh}</td>
-    <td style="text-align:center;">${p}% परतफेड</td>
+    <td style="text-align:center;">${p}% ${t('exp_repayment')}</td>
   </tr>
 </table></body></html>`;
-  downloadExcel(html, m.nav+'_तपशील.xls');
+  downloadExcel(html, m.nav+'_'+t('exp_file_details')+'.xls');
 }
 
 /* ── सर्व सभासद PDF ── */
@@ -2016,7 +2182,7 @@ function exportPDF(){
 
   const tableRows=rows.map(({m,s},i)=>{
     const p=pct(m.vatap-s.shillak,m.vatap);
-    const status=s.status==='done'?'फेडले':s.status==='warn'?'विलंब':'नियमित';
+    const status=s.status==='done'?t('exp_paid_off'):s.status==='warn'?t('exp_delayed'):t('opt_regular');
     const bg=i%2===0?'':'background:#f8f9fc;';
     return `<tr>
       <td style="text-align:center;${bg}">${m.kram}</td>
@@ -2034,29 +2200,29 @@ function exportPDF(){
   }).join('');
 
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8">${getPDFCss()}</head><body>
-${getOrgHeader('सर्व सभासद — एकत्रित तपशील')}
+${getOrgHeader(t('exp_title_all_summary'))}
 <div class="info-bar">
-  <span>📅 तारीख: <strong>${dateStr}</strong></span>
-  <span>👥 एकूण सभासद: <strong>${rows.length}</strong>${yr?' &nbsp;|&nbsp; वर्ष: '+yr:''}</span>
+  <span>📅 ${t('exp_date')}: <strong>${dateStr}</strong></span>
+  <span>👥 ${t('exp_total_members')}: <strong>${rows.length}</strong>${yr?' &nbsp;|&nbsp; '+t('lbl_year')+': '+yr:''}</span>
 </div>
 <div class="metrics-row">
-  <div class="metric-box" style="background:#eff6ff;border-color:#bfdbfe;"><div class="lbl">कर्ज वाटप</div><div class="val" style="color:#1d4ed8;">${fmt(tV)}</div></div>
-  <div class="metric-box" style="background:#f0fdf4;border-color:#bbf7d0;"><div class="lbl">कर्ज जमा</div><div class="val" style="color:#166534;">${fmt(tK)}</div></div>
-  <div class="metric-box" style="background:#fffbeb;border-color:#fde68a;"><div class="lbl">दंड जमा</div><div class="val" style="color:#92400e;">${fmt(tD)}</div></div>
-  <div class="metric-box" style="background:#fffbeb;border-color:#fde68a;"><div class="lbl">व्याज जमा</div><div class="val" style="color:#92400e;">${fmt(tY)}</div></div>
-  <div class="metric-box" style="background:#fef2f2;border-color:#fecaca;"><div class="lbl">शिल्लक</div><div class="val" style="color:#b91c1c;">${fmt(tS)}</div></div>
+  <div class="metric-box" style="background:#eff6ff;border-color:#bfdbfe;"><div class="lbl">${t('m_loan_disb')}</div><div class="val" style="color:#1d4ed8;">${fmt(tV)}</div></div>
+  <div class="metric-box" style="background:#f0fdf4;border-color:#bbf7d0;"><div class="lbl">${t('m_loan_paid')}</div><div class="val" style="color:#166534;">${fmt(tK)}</div></div>
+  <div class="metric-box" style="background:#fffbeb;border-color:#fde68a;"><div class="lbl">${t('m_dand_paid')}</div><div class="val" style="color:#92400e;">${fmt(tD)}</div></div>
+  <div class="metric-box" style="background:#fffbeb;border-color:#fde68a;"><div class="lbl">${t('m_vyaj_paid')}</div><div class="val" style="color:#92400e;">${fmt(tY)}</div></div>
+  <div class="metric-box" style="background:#fef2f2;border-color:#fecaca;"><div class="lbl">${t('th_shillak')}</div><div class="val" style="color:#b91c1c;">${fmt(tS)}</div></div>
 </div>
 <table>
   <thead><tr>
-    <th>अ.क्र.</th><th>नाव</th><th>मोबाईल</th>
-    <th style="text-align:right">कर्ज वाटप</th><th style="text-align:right">कर्ज जमा</th>
-    <th style="text-align:right">दंड</th><th style="text-align:right">व्याज</th>
-    <th style="text-align:right">एकूण जमा</th><th style="text-align:right">शिल्लक</th>
-    <th>%</th><th>स्थिती</th>
+    <th>${t('th_sr_no')}</th><th>${t('lbl_name')}</th><th>${t('th_mobile_short')}</th>
+    <th style="text-align:right">${t('m_loan_disb')}</th><th style="text-align:right">${t('m_loan_paid')}</th>
+    <th style="text-align:right">${t('th_dand')}</th><th style="text-align:right">${t('th_vyaj')}</th>
+    <th style="text-align:right">${t('m_total_paid')}</th><th style="text-align:right">${t('th_shillak')}</th>
+    <th>%</th><th>${t('lbl_status')}</th>
   </tr></thead>
   <tbody>${tableRows}</tbody>
   <tfoot><tr>
-    <td colspan="3">एकूण (${rows.length} सभासद)</td>
+    <td colspan="3">${t('exp_total')} (${rows.length} ${t('exp_members_word')})</td>
     <td style="text-align:right;">${fmt(tV)}</td>
     <td style="text-align:right;color:#166534;">${fmt(tK)}</td>
     <td style="text-align:right;color:#92400e;">${fmt(tD)}</td>
@@ -2067,7 +2233,7 @@ ${getOrgHeader('सर्व सभासद — एकत्रित तपश
   </tr></tfoot>
 </table>
 </body></html>`;
-  downloadPDF(html, 'Patpedhi_Sarv_Tapshil.pdf');
+  downloadPDF(html, 'Patpedhi_'+t('exp_file_all')+'.pdf');
 }
 
 /* ── सर्व सभासद Excel ── */
@@ -2088,7 +2254,7 @@ function exportExcel(){
 
   const tableRows=rows.map(({m,s},i)=>{
     const p=pct(m.vatap-s.shillak,m.vatap);
-    const status=s.status==='done'?'कर्ज फेडले':s.status==='warn'?'विलंब आहे':'नियमित';
+    const status=s.status==='done'?t('opt_paid_off'):s.status==='warn'?t('opt_delayed'):t('opt_regular');
     const statusColor=s.status==='warn'?'#92400e':'#166534';
     const bg=i%2===0?'#ffffff':'#f8f9fc';
     return `<tr style="background:${bg}">
@@ -2109,7 +2275,7 @@ function exportExcel(){
   const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
 <head><meta charset="UTF-8">
 <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
-<x:Name>सारांश</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>
+<x:Name>${t('exp_worksheet_summary')}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>
 </x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
 <style>
   body{font-family:'Tiro Devanagari Marathi',serif;color:#1e293b;}
@@ -2121,22 +2287,22 @@ function exportExcel(){
   .sum td{font-size:11px;padding:6px 10px;}
 </style></head><body>
 <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
-  <tr><td colspan="11" class="hdr">अबगुलवाडी नवतरुण ग्रामविकास मंडळ — पतपेढी</td></tr>
-  <tr><td colspan="11" class="sub">साकुर्डे (अबगुलवाडी), ता. दापोली, जि. रत्नागिरी | मुंबई – ४००००२</td></tr>
-  <tr><td colspan="11" class="sub" style="font-size:13px;font-weight:bold;color:#e2b65a;">सर्व सभासद — एकत्रित तपशील | ${dateStr} | एकूण: ${rows.length} सभासद${yr?' | वर्ष: '+yr:''}</td></tr>
+  <tr><td colspan="11" class="hdr">${t('exp_org_name')}</td></tr>
+  <tr><td colspan="11" class="sub">${t('exp_org_address_short')}</td></tr>
+  <tr><td colspan="11" class="sub" style="font-size:13px;font-weight:bold;color:#e2b65a;">${t('exp_title_all_summary')} | ${dateStr} | ${t('exp_total')}: ${rows.length} ${t('exp_members_word')}${yr?' | '+t('lbl_year')+': '+yr:''}</td></tr>
   <tr><td colspan="11" style="padding:5px;"></td></tr>
   <tr class="sum">
-    <td colspan="2" style="background:#dbeafe;font-weight:bold;">कर्ज वाटप</td><td style="background:#dbeafe;color:#1d4ed8;font-weight:bold;text-align:right;">${fmt(tV)}</td>
-    <td style="background:#dcfce7;font-weight:bold;">कर्ज जमा</td><td style="background:#dcfce7;color:#166534;font-weight:bold;text-align:right;">${fmt(tK)}</td>
-    <td style="background:#fef3c7;font-weight:bold;">दंड</td><td style="background:#fef3c7;color:#92400e;font-weight:bold;text-align:right;">${fmt(tD)}</td>
-    <td style="background:#fef3c7;font-weight:bold;">व्याज</td><td style="background:#fef3c7;color:#1e40af;font-weight:bold;text-align:right;">${fmt(tY)}</td>
-    <td style="background:#f0fdf4;font-weight:bold;">एकूण जमा</td><td style="background:#f0fdf4;color:#166534;font-weight:bold;text-align:right;">${fmt(tJ)}</td>
+    <td colspan="2" style="background:#dbeafe;font-weight:bold;">${t('m_loan_disb')}</td><td style="background:#dbeafe;color:#1d4ed8;font-weight:bold;text-align:right;">${fmt(tV)}</td>
+    <td style="background:#dcfce7;font-weight:bold;">${t('m_loan_paid')}</td><td style="background:#dcfce7;color:#166534;font-weight:bold;text-align:right;">${fmt(tK)}</td>
+    <td style="background:#fef3c7;font-weight:bold;">${t('th_dand')}</td><td style="background:#fef3c7;color:#92400e;font-weight:bold;text-align:right;">${fmt(tD)}</td>
+    <td style="background:#fef3c7;font-weight:bold;">${t('th_vyaj')}</td><td style="background:#fef3c7;color:#1e40af;font-weight:bold;text-align:right;">${fmt(tY)}</td>
+    <td style="background:#f0fdf4;font-weight:bold;">${t('m_total_paid')}</td><td style="background:#f0fdf4;color:#166534;font-weight:bold;text-align:right;">${fmt(tJ)}</td>
   </tr>
   <tr><td colspan="11" style="padding:5px;"></td></tr>
-  <tr><th>अ.क्र.</th><th>नाव</th><th>मोबाईल</th><th>कर्ज वाटप</th><th>कर्ज जमा</th><th>दंड</th><th>व्याज</th><th>एकूण जमा</th><th>शिल्लक</th><th>%</th><th>स्थिती</th></tr>
+  <tr><th>${t('th_sr_no')}</th><th>${t('lbl_name')}</th><th>${t('th_mobile_short')}</th><th>${t('m_loan_disb')}</th><th>${t('m_loan_paid')}</th><th>${t('th_dand')}</th><th>${t('th_vyaj')}</th><th>${t('m_total_paid')}</th><th>${t('th_shillak')}</th><th>%</th><th>${t('lbl_status')}</th></tr>
   ${tableRows}
   <tr class="tot">
-    <td colspan="3" style="text-align:center;">एकूण (${rows.length} सभासद)</td>
+    <td colspan="3" style="text-align:center;">${t('exp_total')} (${rows.length} ${t('exp_members_word')})</td>
     <td style="text-align:right;">${tV}</td>
     <td style="text-align:right;color:#166534;">${tK}</td>
     <td style="text-align:right;color:#92400e;">${tD}</td>
@@ -2146,7 +2312,7 @@ function exportExcel(){
     <td></td><td></td>
   </tr>
 </table></body></html>`;
-  downloadExcel(html, 'Patpedhi_Sarv_Tapshil.xls');
+  downloadExcel(html, 'Patpedhi_'+t('exp_file_all')+'.xls');
 }
 
 
@@ -2194,7 +2360,7 @@ function exportTxnExcel(){
   const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
 <head><meta charset="UTF-8">
 <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
-<x:Name>व्यवहार तपशील</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>
+<x:Name>${t('exp_worksheet_txn')}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions>
 </x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
 <style>
   body{font-family:'Tiro Devanagari Marathi',serif;color:#1e293b;}
@@ -2205,14 +2371,14 @@ function exportTxnExcel(){
   .tot td{background:#fef3c7;font-weight:bold;border:1px solid #d97706;}
 </style></head><body>
 <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
-  <tr><td colspan="8" class="hdr">अबगुलवाडी नवतरुण ग्रामविकास मंडळ — पतपेढी</td></tr>
-  <tr><td colspan="8" class="sub">साकुर्डे (अबगुलवाडी), ता. दापोली, जि. रत्नागिरी | मुंबई – ४००००२</td></tr>
-  <tr><td colspan="8" class="sub" style="font-size:13px;font-weight:bold;color:#e2b65a;">व्यवहार तपशील | ${dateStr}${yr?' | वर्ष: '+yr:''}${mo?' | महिना: '+mo:''}</td></tr>
+  <tr><td colspan="8" class="hdr">${t('exp_org_name')}</td></tr>
+  <tr><td colspan="8" class="sub">${t('exp_org_address_short')}</td></tr>
+  <tr><td colspan="8" class="sub" style="font-size:13px;font-weight:bold;color:#e2b65a;">${t('exp_title_txn')} | ${dateStr}${yr?' | '+t('lbl_year')+': '+yr:''}${mo?' | '+t('lbl_month')+': '+mo:''}</td></tr>
   <tr><td colspan="8" style="padding:5px;"></td></tr>
-  <tr><th>अ.क्र.</th><th>दिनांक</th><th>सभासद नाव</th><th>कर्ज वाटप</th><th>हप्ता</th><th>दंड</th><th>व्याज</th><th>जमा</th></tr>
+  <tr><th>${t('th_sr_no')}</th><th>${t('th_date')}</th><th>${t('lbl_member_name')}</th><th>${t('m_loan_disb')}</th><th>${t('th_hapta')}</th><th>${t('th_dand')}</th><th>${t('th_vyaj')}</th><th>${t('th_jama')}</th></tr>
   ${tableRows}
   <tr class="tot">
-    <td colspan="3" style="text-align:center;">एकूण (${txns.length} व्यवहार)</td>
+    <td colspan="3" style="text-align:center;">${t('exp_total')} (${txns.length} ${t('exp_transactions_word')})</td>
     <td style="text-align:right;">${tVatap}</td>
     <td style="text-align:right;">${tHapta}</td>
     <td style="text-align:right;">${tDand}</td>
@@ -2220,7 +2386,7 @@ function exportTxnExcel(){
     <td style="text-align:right;">${tJama}</td>
   </tr>
 </table></body></html>`;
-  downloadExcel(html, 'Patpedhi_Vyavahar_Tapshil.xls');
+  downloadExcel(html, 'Patpedhi_'+t('exp_file_txn')+'.xls');
 }
 
 function haptaSearch(){
@@ -2380,7 +2546,7 @@ function clearHaptaRows(){
 }
 
 async function saveHapta(){
-  if(haptaSelectedIdx<0){toast('कृपया आधी सभासद निवडा.','warn');return;}
+  if(haptaSelectedIdx<0){toast(t('msg_select_member_first'),'warn');return;}
   const newHapte=[];
   let missingHapta=false;
   document.querySelectorAll('#h-body tr').forEach(r=>{
@@ -2400,14 +2566,14 @@ async function saveHapta(){
       jama:parseFloat(i[6]?.value)||0
     });
   });
-  if(missingHapta){toast('कृपया प्रत्येक ओळीत हप्ता रक्कम भरा — हप्त्याशिवाय नोंद जतन होणार नाही.','warn');return;}
-  if(!newHapte.length){toast('कृपया किमान एक हप्ता भरा.','warn');return;}
+  if(missingHapta){toast(t('msg_enter_hapta_each_row'),'warn');return;}
+  if(!newHapte.length){toast(t('msg_enter_at_least_one_hapta'),'warn');return;}
   const m = members[haptaSelectedIdx];
   const updatedHapte = [...m.hapte, ...newHapte];
   const {error} = await sb.from('sabhasad').update({hapte:updatedHapte}).eq('id',m.id);
-  if(error){toast('जतन करताना त्रुटी: '+error.message,'warn');return;}
+  if(error){toast(t('msg_save_error')+error.message,'warn');return;}
   m.hapte = updatedHapte;
-  toast('✓ '+m.nav+' यांचे '+newHapte.length+' हप्ते जतन झाले!');
+  toast('✓ '+m.nav+' '+t('msg_your')+' '+newHapte.length+' '+t('exp_installments')+' '+t('msg_saved_bang'));
   clearHaptaRows();
   calcHapta();
 }
@@ -2425,14 +2591,17 @@ document.addEventListener('click', function(e){
 function renderHome(){
   // Date
   const now = new Date();
-  const days = ['रविवार','सोमवार','मंगळवार','बुधवार','गुरुवार','शुक्रवार','शनिवार'];
-  const months = ['जानेवारी','फेब्रुवारी','मार्च','एप्रिल','मे','जून','जुलै','ऑगस्ट','सप्टेंबर','ऑक्टोबर','नोव्हेंबर','डिसेंबर'];
+  const lang = getLanguage();
+  const days = lang==='en' ? ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'] : ['रविवार','सोमवार','मंगळवार','बुधवार','गुरुवार','शुक्रवार','शनिवार'];
+  const months = lang==='en' ? ['January','February','March','April','May','June','July','August','September','October','November','December'] : ['जानेवारी','फेब्रुवारी','मार्च','एप्रिल','मे','जून','जुलै','ऑगस्ट','सप्टेंबर','ऑक्टोबर','नोव्हेंबर','डिसेंबर'];
   const dateEl = document.getElementById('home-date');
   if(dateEl) dateEl.textContent = days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
 
   // Greeting
   const hr = now.getHours();
-  const greet = hr < 12 ? 'सुप्रभात! 🌅' : hr < 17 ? 'नमस्कार! 🙏' : 'शुभ संध्याकाळ! 🌆';
+  const greet = lang==='en'
+    ? (hr < 12 ? 'Good morning! 🌅' : hr < 17 ? 'Hello! 🙏' : 'Good evening! 🌆')
+    : (hr < 12 ? 'सुप्रभात! 🌅' : hr < 17 ? 'नमस्कार! 🙏' : 'शुभ संध्याकाळ! 🌆');
   const greetEl = document.getElementById('home-greeting');
   if(greetEl) greetEl.textContent = greet;
 
@@ -2584,16 +2753,16 @@ async function doLogin(){
     if(!error && data && data.length){
       const req = data[0];
       if(req.status==='pending'){
-        err.textContent='⏳ तुमची नोंदणी विनंती अजून प्रलंबित आहे. अ‍ॅडमिनने approve केल्यावर लॉगिन करता येईल.';
+        err.textContent='⏳ '+t('msg_reg_pending');
         return;
       }
       if(req.status==='rejected'){
-        err.textContent='❌ तुमची विनंती नाकारली गेली आहे. अधिक माहितीसाठी कार्यालयाशी संपर्क साधा.';
+        err.textContent='❌ '+t('msg_request_rejected_contact');
         return;
       }
       // approved
       const {data: mdata, error: merror} = await sb.from('sabhasad').select('*').eq('id',req.sabhasad_id).single();
-      if(merror || !mdata){err.textContent='❌ सभासद माहिती सापडली नाही. कार्यालयाशी संपर्क साधा.';return;}
+      if(merror || !mdata){err.textContent='❌ '+t('msg_member_info_not_found');return;}
       currentMemberSabhasadId = mdata.id;
       sessionStorage.setItem('pp_member_auth','true');
       sessionStorage.setItem('pp_member_id', String(mdata.id));
@@ -2603,7 +2772,7 @@ async function doLogin(){
       return;
     }
   }
-  err.textContent='❌ चुकीचे युजरनेम/मोबाईल किंवा पासवर्ड';
+  err.textContent='❌ '+t('msg_wrong_credentials');
   document.getElementById('login-pass').value='';
   document.getElementById('login-pass').focus();
 }
@@ -2615,11 +2784,11 @@ function doForgot(){
   const suc=document.getElementById('forgot-success');
   const creds=getCreds();
   err.textContent=''; suc.textContent='';
-  if(u!==creds.user){err.textContent='❌ युजरनेम सापडले नाही';return;}
-  if(a!=='2015'){err.textContent='❌ चुकीचे उत्तर';return;}
+  if(u!==creds.user){err.textContent='❌ '+t('msg_username_not_found');return;}
+  if(a!=='2015'){err.textContent='❌ '+t('msg_wrong_answer');return;}
   // Reset to default password
   localStorage.setItem('pp_pass','patpedhi@2025');
-  suc.textContent='✅ पासवर्ड रिसेट झाला! नवीन पासवर्ड: patpedhi@2025';
+  suc.textContent='✅ '+t('msg_password_reset')+' patpedhi@2025';
   setTimeout(()=>showSection('sec-login'),3000);
 }
 
@@ -2632,11 +2801,11 @@ function doChangePass(){
   const suc=document.getElementById('cp-success');
   const creds=getCreds();
   err.textContent=''; suc.textContent='';
-  if(u!==creds.user||oldP!==creds.pass){err.textContent='❌ चुकीचे युजरनेम किंवा जुना पासवर्ड';return;}
-  if(newP.length<6){err.textContent='❌ पासवर्ड किमान ६ अक्षरांचा असावा';return;}
-  if(newP!==conf){err.textContent='❌ नवीन पासवर्ड जुळत नाही';return;}
+  if(u!==creds.user||oldP!==creds.pass){err.textContent='❌ '+t('msg_wrong_username_or_old_pass');return;}
+  if(newP.length<6){err.textContent='❌ '+t('msg_pass_min6');return;}
+  if(newP!==conf){err.textContent='❌ '+t('msg_new_pass_mismatch');return;}
   localStorage.setItem('pp_pass',newP);
-  suc.textContent='✅ पासवर्ड यशस्वीरित्या बदलला!';
+  suc.textContent='✅ '+t('msg_pass_changed');
   document.getElementById('cp-old').value='';
   document.getElementById('cp-new').value='';
   document.getElementById('cp-confirm').value='';
@@ -2651,13 +2820,13 @@ async function doMemberRegister(){
   const err=document.getElementById('reg-error');
   const suc=document.getElementById('reg-success');
   err.textContent=''; suc.textContent='';
-  if(!nav){err.textContent='❌ कृपया पूर्ण नाव भरा';return;}
-  if(!/^\d{10}$/.test(mobile)){err.textContent='❌ कृपया योग्य १० अंकी मोबाईल नंबर भरा';return;}
-  if(pass.length<6){err.textContent='❌ पासवर्ड किमान ६ अक्षरांचा असावा';return;}
-  if(pass!==conf){err.textContent='❌ पासवर्ड जुळत नाही';return;}
+  if(!nav){err.textContent='❌ '+t('msg_enter_full_name');return;}
+  if(!/^\d{10}$/.test(mobile)){err.textContent='❌ '+t('msg_enter_valid_mobile');return;}
+  if(pass.length<6){err.textContent='❌ '+t('msg_pass_min6');return;}
+  if(pass!==conf){err.textContent='❌ '+t('msg_pass_mismatch');return;}
   const {error} = await sb.from('member_requests').insert({nav,mobile,password:pass,status:'pending'});
-  if(error){err.textContent='❌ त्रुटी: '+error.message;return;}
-  suc.textContent='✅ नोंदणी विनंती पाठवली! अ‍ॅडमिनने approve केल्यावर तुम्ही लॉगिन करू शकाल.';
+  if(error){err.textContent='❌ '+t('err_prefix')+error.message;return;}
+  suc.textContent='✅ '+t('msg_reg_request_sent');
   document.getElementById('reg-nav').value='';
   document.getElementById('reg-mobile').value='';
   document.getElementById('reg-pass').value='';
@@ -2727,7 +2896,7 @@ function renderMemberDashboard(m){
   document.getElementById('md-name').textContent = m.nav;
   const sideNameEl = document.getElementById('md-side-name');
   if(sideNameEl) sideNameEl.textContent = m.nav;
-  document.getElementById('md-welcome-msg').textContent = 'नमस्कार, ' + m.nav + '! 🙏';
+  document.getElementById('md-welcome-msg').textContent = (getLanguage()==='en' ? 'Hello, ' : 'नमस्कार, ') + m.nav + '! 🙏';
   document.getElementById('md-status-notice').style.display='none';
   document.getElementById('md-approved-content').style.display='block';
   document.getElementById('md-home-summary').style.display='grid';
@@ -2832,7 +3001,7 @@ function togglePasswordEditMode(){
 function onMemberPhotoSelected(event){
   const file = event.target.files[0];
   if(!file) return;
-  if(file.size > 5*1024*1024){ toast('फोटो ५ MB पेक्षा लहान असावा','warn'); return; }
+  if(file.size > 5*1024*1024){ toast(t('msg_photo_size'),'warn'); return; }
   const reader = new FileReader();
   reader.onload = function(e){
     const img = new Image();
@@ -2862,15 +3031,15 @@ async function saveMemberProfile(){
   let newMobile = null;
   if(isEditingMobile){
     newMobile = mobileInput.value.trim();
-    if(!/^\d{10}$/.test(newMobile)){msg.style.color='#dc2626';msg.textContent='❌ योग्य १० अंकी मोबाईल नंबर भरा';return;}
+    if(!/^\d{10}$/.test(newMobile)){msg.style.color='#dc2626';msg.textContent='❌ '+t('msg_valid_mobile');return;}
     updatePayload.mobile = newMobile;
   }
   if(pendingMemberPhoto) updatePayload.photo = pendingMemberPhoto;
-  if(Object.keys(updatePayload).length===0){msg.style.color='#dc2626';msg.textContent='❌ काहीही बदल केलेला नाही';return;}
+  if(Object.keys(updatePayload).length===0){msg.style.color='#dc2626';msg.textContent='❌ '+t('msg_no_changes');return;}
   const {error} = await sb.from('sabhasad').update(updatePayload).eq('id',currentMemberSabhasadId);
-  if(error){msg.style.color='#dc2626';msg.textContent='❌ त्रुटी: '+error.message;return;}
+  if(error){msg.style.color='#dc2626';msg.textContent='❌ '+t('err_prefix')+error.message;return;}
   msg.style.color='#16a34a';
-  msg.textContent='✅ प्रोफाईल अद्यतन झालं!';
+  msg.textContent='✅ '+t('msg_profile_updated');
   if(pendingMemberPhoto){
     setMemberAvatarDisplay('md-avatar','md-avatar-placeholder', pendingMemberPhoto);
     if(document.getElementById('md-side-avatar')) setMemberAvatarDisplay('md-side-avatar','md-side-avatar-placeholder', pendingMemberPhoto);
@@ -2889,12 +3058,12 @@ async function saveMemberPassword(){
   const confirmPass = document.getElementById('md-newpass-confirm').value;
   const msg = document.getElementById('md-pass-msg');
   msg.textContent='';
-  if(newPass.length<6){msg.style.color='#dc2626';msg.textContent='❌ पासवर्ड किमान ६ अक्षरांचा असावा';return;}
-  if(newPass!==confirmPass){msg.style.color='#dc2626';msg.textContent='❌ पासवर्ड जुळत नाही';return;}
+  if(newPass.length<6){msg.style.color='#dc2626';msg.textContent='❌ '+t('msg_pass_min6');return;}
+  if(newPass!==confirmPass){msg.style.color='#dc2626';msg.textContent='❌ '+t('msg_pass_mismatch');return;}
   const {error} = await sb.from('member_requests').update({password:newPass}).eq('sabhasad_id',currentMemberSabhasadId).eq('status','approved');
-  if(error){msg.style.color='#dc2626';msg.textContent='❌ त्रुटी: '+error.message;return;}
+  if(error){msg.style.color='#dc2626';msg.textContent='❌ '+t('err_prefix')+error.message;return;}
   msg.style.color='#16a34a';
-  msg.textContent='✅ पासवर्ड बदलला!';
+  msg.textContent='✅ '+t('msg_pass_changed_short');
   document.getElementById('md-newpass').value='';
   document.getElementById('md-newpass-confirm').value='';
 }
@@ -3035,8 +3204,8 @@ async function confirmApprove(sabhasadId){
   const m = members.find(x=>x.id===sabhasadId);
   if(!confirm(`"${req.nav}" ची विनंती "${m.nav}" (अ.क्र. ${m.kram}) शी लिंक करून approve करायची आहे का?`)) return;
   const {error} = await sb.from('member_requests').update({status:'approved', sabhasad_id:sabhasadId}).eq('id', currentApproveReqId);
-  if(error){ toast('त्रुटी: '+error.message,'warn'); return; }
-  toast('✓ '+req.nav+' ची विनंती मंजूर झाली!');
+  if(error){ toast(t('err_prefix')+error.message,'warn'); return; }
+  toast('✓ '+req.nav+' '+t('msg_request_approved'));
   closeApproveModal();
   loadMemberRequests();
 }
@@ -3052,11 +3221,11 @@ async function addAsNewMemberAndApprove(){
   const {data, error} = await sb.from('sabhasad').insert({
     kram, nav:req.nav, mobile:req.mobile, vatap:0, date:today, hapte:[], karjtype:'', guarantor:''
   }).select().single();
-  if(error){ toast('सभासद जोडताना त्रुटी: '+error.message,'warn'); return; }
+  if(error){ toast(t('msg_add_member_error')+error.message,'warn'); return; }
   members.push({id:data.id, kram, nav:req.nav, mobile:req.mobile, vatap:0, date:today, hapte:[], karjtype:'', guarantor:'', photo:null});
   const {error:updErr} = await sb.from('member_requests').update({status:'approved', sabhasad_id:data.id}).eq('id', currentApproveReqId);
-  if(updErr){ toast('त्रुटी: '+updErr.message,'warn'); return; }
-  toast('✓ '+req.nav+' नवीन सभासद (अ.क्र. '+kram+') म्हणून जोडले व विनंती मंजूर झाली!');
+  if(updErr){ toast(t('err_prefix')+updErr.message,'warn'); return; }
+  toast('✓ '+req.nav+' '+t('msg_added_as_new_member_pre')+kram+t('msg_added_as_new_member_post'));
   closeApproveModal();
   loadMemberRequests();
 }
@@ -3065,8 +3234,8 @@ async function rejectRequest(requestId){
   const req = memberRequests.find(r=>r.id===requestId);
   if(!confirm(`"${req.nav}" ची विनंती नाकारायची आहे का?`)) return;
   const {error} = await sb.from('member_requests').update({status:'rejected'}).eq('id', requestId);
-  if(error){ toast('त्रुटी: '+error.message,'warn'); return; }
-  toast('🗑 विनंती नाकारली.','warn');
+  if(error){ toast(t('err_prefix')+error.message,'warn'); return; }
+  toast('🗑 '+t('msg_request_rejected_toast'),'warn');
   loadMemberRequests();
 }
 
@@ -3094,12 +3263,12 @@ async function saveEditRequest(){
   const password = document.getElementById('edit-req-password').value;
   const err = document.getElementById('edit-req-error');
   err.textContent='';
-  if(!nav){err.textContent='❌ कृपया नाव भरा';return;}
-  if(!/^\d{10}$/.test(mobile)){err.textContent='❌ योग्य १० अंकी मोबाईल नंबर भरा';return;}
-  if(!password){err.textContent='❌ कृपया पासवर्ड भरा';return;}
+  if(!nav){err.textContent='❌ '+t('msg_enter_name');return;}
+  if(!/^\d{10}$/.test(mobile)){err.textContent='❌ '+t('msg_valid_mobile');return;}
+  if(!password){err.textContent='❌ '+t('msg_enter_password');return;}
   const {error} = await sb.from('member_requests').update({nav,mobile,password}).eq('id',currentEditReqId);
-  if(error){err.textContent='❌ त्रुटी: '+error.message;return;}
-  toast('✓ विनंती अद्यतन झाली!');
+  if(error){err.textContent='❌ '+t('err_prefix')+error.message;return;}
+  toast('✓ '+t('msg_request_updated'));
   closeEditRequestModal();
   loadMemberRequests();
 }
@@ -3108,8 +3277,8 @@ async function deleteRequest(requestId){
   const req = memberRequests.find(r=>r.id===requestId);
   if(!confirm(`"${req.nav}" ची विनंती कायमची काढायची आहे का?`)) return;
   const {error} = await sb.from('member_requests').delete().eq('id', requestId);
-  if(error){ toast('त्रुटी: '+error.message,'warn'); return; }
-  toast('🗑 विनंती काढली.','warn');
+  if(error){ toast(t('err_prefix')+error.message,'warn'); return; }
+  toast('🗑 '+t('msg_request_deleted'),'warn');
   loadMemberRequests();
 }
 
@@ -3160,25 +3329,25 @@ window.addEventListener('beforeinstallprompt', (e) => {
 window.addEventListener('appinstalled', () => {
   const installBtn = document.getElementById('pwa-install-btn');
   if(installBtn) installBtn.style.display = 'none';
-  toast('✅ App यशस्वीरित्या Install झाले!');
+  toast('✅ '+t('msg_app_installed'));
 });
 
 function installPWA(){
   if(deferredPrompt){
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then(choice => {
-      if(choice.outcome === 'accepted') toast('✅ App Install होत आहे...');
+      if(choice.outcome === 'accepted') toast('✅ '+t('msg_app_installing'));
       deferredPrompt = null;
     });
   } else {
     // Manual instructions
     const ua = navigator.userAgent;
     if(/android/i.test(ua)){
-      toast('Chrome menu → "Add to Home Screen" वर click करा');
+      toast(t('msg_chrome_install_hint'));
     } else if(/iphone|ipad/i.test(ua)){
-      toast('Safari → Share button → "Add to Home Screen" वर click करा');
+      toast(t('msg_safari_install_hint'));
     } else {
-      toast('Browser address bar मधील Install icon वर click करा');
+      toast(t('msg_browser_install_hint'));
     }
   }
 }
