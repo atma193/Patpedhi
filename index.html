@@ -43,7 +43,64 @@
   --gold:#c47d0a;
 }
 html{font-size:15px}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;transition:background .2s,color .2s}
+
+/* DARK MODE */
+body.dark-mode{
+  --bg:#12151c;
+  --bg2:#1a1f2b;
+  --bg3:#232937;
+  --border:#323b4d;
+  --border2:#414c63;
+  --text:#e8ecf4;
+  --text2:#b4bdd0;
+  --text3:#8892a8;
+}
+body.dark-mode .metric-card,
+body.dark-mode .tbl-wrap,
+body.dark-mode .s-card,
+body.dark-mode table,
+body.dark-mode .login-field input,
+body.dark-mode select,
+body.dark-mode input[type="text"],
+body.dark-mode input[type="number"],
+body.dark-mode input[type="password"],
+body.dark-mode input[type="tel"],
+body.dark-mode input[type="month"],
+body.dark-mode input[type="date"]{background:var(--bg2)!important;color:var(--text)!important;border-color:var(--border)!important}
+body.dark-mode thead th{background:var(--bg3)!important;color:var(--text2)!important;border-color:var(--border)!important}
+body.dark-mode tbody td{border-color:var(--border)!important;color:var(--text)!important}
+body.dark-mode tbody tr:nth-child(even) td{background:rgba(255,255,255,.02)!important}
+body.dark-mode .card{background:var(--bg2)!important}
+body.dark-mode .card-head{background:var(--bg3)!important;border-color:var(--border)!important}
+body.dark-mode .top-header{background:var(--bg2)!important;border-color:var(--border)!important}
+body.dark-mode .mobile-topbar{background:var(--bg2)!important;border-color:var(--border)!important}
+body.dark-mode .dropdown-content{background:var(--bg2)!important;border-color:var(--border)!important}
+body.dark-mode .dropdown-content a{color:var(--text)!important}
+body.dark-mode #admin-popup{background:#1a2540!important}
+/* Common inline light backgrounds used across dynamically-rendered content */
+body.dark-mode [style*="background:#fff"],
+body.dark-mode [style*="background: #fff"],
+body.dark-mode [style*="background:#f8fafc"],
+body.dark-mode [style*="background:#f0f4fb"],
+body.dark-mode [style*="background:#f0f2f7"],
+body.dark-mode [style*="background:#f1f5f9"],
+body.dark-mode [style*="background:#eff6ff"],
+body.dark-mode [style*="background:#f0fdf4"],
+body.dark-mode [style*="background:#fffbeb"],
+body.dark-mode [style*="background:#fef2f2"],
+body.dark-mode [style*="background:#fdf6e3"],
+body.dark-mode [style*="background:#f4f6fb"],
+body.dark-mode [style*="background:rgba(255,255,255"]{
+  background:var(--bg2)!important;
+}
+body.dark-mode [style*="color:#1e293b"],
+body.dark-mode [style*="color:#0e1320"],
+body.dark-mode [style*="color:#64748b"],
+body.dark-mode [style*="color:var(--text)"]{color:var(--text)!important}
+body.dark-mode .member-content [style*="background:#fff"]{color:var(--text)!important}
+body.dark-mode #member-dashboard .member-content{color:var(--text)}
+body.dark-mode .member-content input:not([type="range"]){background:var(--bg2)!important;color:var(--text)!important;border-color:var(--border)!important}
 
 /* SIDEBAR */
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:230px;background:#0f172a;border-right:1px solid #c8860a;display:flex;flex-direction:column;z-index:100;overflow-y:auto}
@@ -279,7 +336,7 @@ table td input:focus{background:rgba(79,127,255,.08);border-radius:4px}
   .main{margin-left:0;padding:16px 12px 78px}
   .two-col-grid{grid-template-columns:1fr!important}
   #admin-popup{bottom:auto!important;top:56px!important;left:auto!important;right:10px!important}
-  #member-dashboard .md-mobile-tabs{display:none}
+  #member-dashboard .md-mobile-tabs{display:none!important}
   #member-dashboard .member-content{padding-bottom:78px}
 }
 @media(max-width:600px){
@@ -521,9 +578,13 @@ window.addEventListener('DOMContentLoaded', function(){
       </button>
     </div>
     <div class="member-sidebar-footer">
-      <button class="member-sidebar-logout" onclick="toggleLanguage()" style="margin-bottom:10px;">
+      <button class="member-sidebar-logout" onclick="toggleLanguage()" style="margin-bottom:8px;">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l4-7 4 7m-8-3h8"/></svg>
         <span id="lang-toggle-label-member">English</span>
+      </button>
+      <button class="member-sidebar-logout" onclick="toggleDarkMode()" style="margin-bottom:10px;">
+        <span class="dark-toggle-icon">🌙</span>
+        <span data-i18n="btn_dark_mode">Dark Mode</span>
       </button>
       <div style="display:flex;justify-content:center;">
         <button onclick="memberLogout()" title="लॉगआउट" style="width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;">
@@ -549,6 +610,9 @@ window.addEventListener('DOMContentLoaded', function(){
       <button onclick="toggleLanguage()" title="Language" style="background:#f1f3f6;border:1px solid #e2e5ea;color:#5a6272;height:38px;padding:0 10px;border-radius:19px;cursor:pointer;display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l4-7 4 7m-8-3h8"/></svg>
         <span id="lang-toggle-label-member-mobile">EN</span>
+      </button>
+      <button onclick="toggleDarkMode()" title="Dark Mode" style="background:none;border:none;color:#fff;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;font-size:17px;">
+        <span class="dark-toggle-icon">🌙</span>
       </button>
       <button onclick="memberLogout()" title="लॉगआउट" style="background:none;border:none;color:#fff;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;">
         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><path d="M12 3v8"/><path d="M18.4 6.6a8 8 0 11-12.77 0"/></svg>
@@ -756,6 +820,10 @@ window.addEventListener('DOMContentLoaded', function(){
       <span data-i18n="nav_requests">सभासद विनंत्या</span>
       <span id="req-badge-sidebar" style="display:none;position:absolute;top:6px;right:10px;background:#e05252;color:#fff;font-size:10px;font-weight:700;border-radius:10px;padding:1px 6px;min-width:16px;text-align:center;"></span>
     </button>
+    <button class="nav-item" data-page="reports" onclick="goPage('reports',this)">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 17V8h2v9H9zm4 0V4h2v13h-2zm-8 0v-5h2v5H5z"/><path d="M3 20h18"/></svg>
+      <span data-i18n="nav_reports">अहवाल</span>
+    </button>
   </nav>
   <div style="padding:10px 10px 0;position:relative;">
   <!-- Admin Popup Button -->
@@ -778,16 +846,22 @@ window.addEventListener('DOMContentLoaded', function(){
     <span id="lang-toggle-label">English</span>
   </button>
 
-  <!-- Data Backup -->
-  <button id="backup-btn" onclick="backupData()" style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13px;color:#e2b65a;border:1px solid rgba(226,182,90,.25);background:rgba(226,182,90,.06);width:100%;text-align:left;margin-top:8px;transition:all .18s;">
-    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15V3m0 12l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
-    <span data-i18n="btn_backup">डेटा Backup घ्या</span>
+  <!-- Dark Mode Toggle -->
+  <button id="dark-toggle-btn" onclick="toggleDarkMode()" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13px;color:#c4b5fd;border:1px solid rgba(196,181,253,.25);background:rgba(196,181,253,.06);width:100%;text-align:center;margin-top:8px;transition:all .18s;">
+    <span class="dark-toggle-icon">🌙</span>
+    <span data-i18n="btn_dark_mode">Dark Mode</span>
   </button>
 
   <!-- Settings -->
   <button id="settings-btn" onclick="openSettingsModal()" style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13px;color:#cbd5e1;border:1px solid rgba(203,213,225,.2);background:rgba(203,213,225,.05);width:100%;text-align:left;margin-top:8px;transition:all .18s;">
     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 8.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
     <span data-i18n="txt_settings">सेटिंग्ज</span>
+  </button>
+
+  <!-- Admin Management (superadmin only) -->
+  <button id="admins-btn" class="superadmin-only" onclick="openAdminsModal()" style="display:none;align-items:center;gap:9px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13px;color:#f0abfc;border:1px solid rgba(240,171,252,.25);background:rgba(240,171,252,.06);width:100%;text-align:left;margin-top:8px;transition:all .18s;">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 100-8 4 4 0 000 8zm6 3.13a4 4 0 010 7.75"/></svg>
+    <span data-i18n="txt_admin_mgmt">प्रशासक व्यवस्थापन</span>
   </button>
 </div>
 <div class="sidebar-footer"><span data-i18n="txt_footer_branch">मुंबई शाखा</span> &nbsp;•&nbsp; <span data-i18n="txt_footer_dept">पतपेढी विभाग</span></div>
@@ -808,13 +882,21 @@ window.addEventListener('DOMContentLoaded', function(){
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
       पासवर्ड बदला
     </button>
-    <button onclick="backupData();closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
-      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15V3m0 12l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
-      <span data-i18n="btn_backup">डेटा Backup घ्या</span>
+    <button onclick="goPage('reports');closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 17V8h2v9H9zm4 0V4h2v13h-2zm-8 0v-5h2v5H5z"/><path d="M3 20h18"/></svg>
+      <span data-i18n="nav_reports">अहवाल</span>
     </button>
     <button onclick="openSettingsModal();closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 8.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       <span data-i18n="txt_settings">सेटिंग्ज</span>
+    </button>
+    <button class="superadmin-only" onclick="openAdminsModal();closeAdminPopup();" style="display:none;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 100-8 4 4 0 000 8zm6 3.13a4 4 0 010 7.75"/></svg>
+      <span data-i18n="txt_admin_mgmt">प्रशासक व्यवस्थापन</span>
+    </button>
+    <button onclick="toggleDarkMode()" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
+      <span class="dark-toggle-icon" style="font-size:15px;">🌙</span>
+      <span data-i18n="btn_dark_mode">Dark Mode</span>
     </button>
     <button onclick="doLogout()" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f87171;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(248,113,113,.08)'" onmouseout="this.style.background='none'">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
@@ -1212,9 +1294,9 @@ window.addEventListener('DOMContentLoaded', function(){
       <div class="page-title" data-i18n="txt_all_details">सर्व तपशील</div>
       <div class="page-sub" style="margin-bottom:0" data-i18n="txt_summary_sub">सर्व सभासदांचा एकत्रित आढावा — वर्ष, महिना किंवा स्थितीनुसार फिल्टर करा</div>
     </div>
-    <div style="display:flex;gap:8px;align-items:flex-start;">
-      <button class="btn btn-ghost" onclick="exportAGMReport()" style="border-color:#8a6d1f;color:#8a6d1f;">
-        📊 <span data-i18n="btn_agm_report">AGM वार्षिक अहवाल</span>
+    <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;">
+      <button id="export-selected-btn" class="btn btn-ghost" onclick="exportSelectedRows()" style="display:none;border-color:var(--accent,#3a6fd8);color:var(--accent,#3a6fd8);">
+        ☑️ <span data-i18n="btn_export_selected">निवडलेले एक्सपोर्ट करा</span> (<span id="export-selected-count">0</span>)
       </button>
       <div class="download-dropdown">
 
@@ -1273,18 +1355,20 @@ window.addEventListener('DOMContentLoaded', function(){
   <div class="metrics-row" id="sum-metrics"></div>
 
   <div class="card">
+    <div style="padding:8px 16px;font-size:11px;color:var(--text3);border-bottom:1px solid var(--border);" data-i18n="txt_multisort_hint">टीप: अनेक स्तंभांनुसार क्रमवारी लावण्यासाठी Shift दाबून column वर क्लिक करा</div>
     <div class="tbl-wrap" style="border:none">
       <table>
         <thead><tr>
-          <th onclick="sortBy('kram')"><span data-i18n="th_sr_no">अ.क्र.</span> <span id="si-kram">↕</span></th>
-          <th onclick="sortBy('nav')"><span data-i18n="lbl_name">नाव</span> <span id="si-nav">↕</span></th>
+          <th style="width:32px;text-align:center;"><input type="checkbox" id="sum-select-all" onchange="toggleSelectAll(this)"></th>
+          <th onclick="sortBy('kram',event)"><span data-i18n="th_sr_no">अ.क्र.</span> <span id="si-kram">↕</span></th>
+          <th onclick="sortBy('nav',event)"><span data-i18n="lbl_name">नाव</span> <span id="si-nav">↕</span></th>
           <th data-i18n="lbl_mobile">मोबाईल नंबर</th>
-          <th onclick="sortBy('vatap')"><span data-i18n="m_loan_disb">कर्ज वाटप</span> <span id="si-vatap">↕</span></th>
-          <th onclick="sortBy('karj')"><span data-i18n="m_loan_paid">कर्ज जमा</span> <span id="si-karj">↕</span></th>
-          <th onclick="sortBy('dand')"><span data-i18n="th_dand">दंड</span> <span id="si-dand">↕</span></th>
-          <th onclick="sortBy('vyaj')"><span data-i18n="th_vyaj">व्याज</span> <span id="si-vyaj">↕</span></th>
-          <th onclick="sortBy('jama')"><span data-i18n="m_total_paid">एकूण जमा</span> <span id="si-jama">↕</span></th>
-          <th onclick="sortBy('shillak')"><span data-i18n="th_shillak">शिल्लक</span> <span id="si-shillak">↕</span></th>
+          <th onclick="sortBy('vatap',event)"><span data-i18n="m_loan_disb">कर्ज वाटप</span> <span id="si-vatap">↕</span></th>
+          <th onclick="sortBy('karj',event)"><span data-i18n="m_loan_paid">कर्ज जमा</span> <span id="si-karj">↕</span></th>
+          <th onclick="sortBy('dand',event)"><span data-i18n="th_dand">दंड</span> <span id="si-dand">↕</span></th>
+          <th onclick="sortBy('vyaj',event)"><span data-i18n="th_vyaj">व्याज</span> <span id="si-vyaj">↕</span></th>
+          <th onclick="sortBy('jama',event)"><span data-i18n="m_total_paid">एकूण जमा</span> <span id="si-jama">↕</span></th>
+          <th onclick="sortBy('shillak',event)"><span data-i18n="th_shillak">शिल्लक</span> <span id="si-shillak">↕</span></th>
           <th data-i18n="th_repay_pct">परतफेड %</th>
           <th data-i18n="lbl_status">स्थिती</th>
           <th data-i18n="th_action">क्रिया</th>
@@ -1294,43 +1378,6 @@ window.addEventListener('DOMContentLoaded', function(){
       </table>
       <div id="sum-empty" class="empty" style="display:none">
         <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:.3;margin-bottom:8px"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0l-8-4-8 4"/></svg>
-        <br><span data-i18n="txt_no_records">कोणतीही नोंद सापडली नाही</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:22px">
-    <div class="card-body" style="padding-bottom:0">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
-        <div>
-          <div class="sec-label" style="margin-bottom:2px">📋 <span data-i18n="txt_txn_details">व्यवहार तपशील — तारीखनिहाय (Tally साठी)</span></div>
-          <div style="font-size:12px;color:var(--text2);margin-bottom:10px" data-i18n="txt_txn_details_sub">प्रत्येक कर्ज वाटप व हप्ता जमा व्यवहार, तारीखनिहाय — वरचे वर्ष/महिना फिल्टर इथेही लागू होतात</div>
-        </div>
-        <div class="download-dropdown">
-          <button class="btn btn-ghost">📥 <span data-i18n="btn_download">डाउनलोड</span> ▼</button>
-          <div class="dropdown-content">
-            <a href="#" onclick="exportTxnExcel()">📊 <span data-i18n="btn_excel_download">Excel डाउनलोड</span></a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="tbl-wrap" style="border:none">
-      <table>
-        <thead><tr>
-          <th data-i18n="th_sr_no">अ.क्र.</th>
-          <th data-i18n="th_date">दिनांक</th>
-          <th data-i18n="lbl_member_name">सभासद नाव</th>
-          <th><span data-i18n="m_loan_disb">कर्ज वाटप</span> (₹)</th>
-          <th><span data-i18n="th_hapta">हप्ता</span> (₹)</th>
-          <th><span data-i18n="th_dand">दंड</span> (₹)</th>
-          <th><span data-i18n="th_vyaj">व्याज</span> (₹)</th>
-          <th><span data-i18n="th_jama">जमा</span> (₹)</th>
-        </tr></thead>
-        <tbody id="txn-body"></tbody>
-        <tfoot id="txn-foot"></tfoot>
-      </table>
-      <div id="txn-empty" class="empty" style="display:none">
-        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:.3;margin-bottom:8px"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
         <br><span data-i18n="txt_no_records">कोणतीही नोंद सापडली नाही</span>
       </div>
     </div>
@@ -1360,6 +1407,117 @@ window.addEventListener('DOMContentLoaded', function(){
       <div id="req-empty" class="empty" style="display:none">
         <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:.3;margin-bottom:8px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
         <br><span data-i18n="txt_no_requests">कोणतीही विनंती सापडली नाही</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REPORTS HUB PAGE -->
+<div id="page-reports" class="page">
+  <div class="page-header">
+    <div class="page-title">📊 <span data-i18n="nav_reports">अहवाल</span></div>
+    <div class="page-sub" data-i18n="txt_reports_sub">सर्व अहवाल एका ठिकाणी</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">
+
+    <!-- 1. सभासद विनंत्या -->
+    <div class="card">
+      <div class="card-head"><span class="card-head-title">👥 <span data-i18n="nav_requests">सभासद विनंत्या</span></span></div>
+      <div class="card-body" style="padding:16px 18px;">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:14px;line-height:1.6;" data-i18n="txt_report_requests_desc">सभासदांनी केलेल्या नोंदणी विनंत्या पहा व approve/reject करा.</div>
+        <button class="btn btn-primary" style="width:100%;" onclick="goPage('requests')">
+          <span data-i18n="txt_view_requests">विनंत्या पहा</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. Data Backup -->
+    <div class="card">
+      <div class="card-head"><span class="card-head-title">💾 <span data-i18n="btn_backup">डेटा Backup घ्या</span></span></div>
+      <div class="card-body" style="padding:16px 18px;">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:14px;line-height:1.6;" data-i18n="txt_report_backup_desc">सर्व सभासद व विनंत्यांचा संपूर्ण डेटा JSON फाईलमध्ये डाउनलोड करा.</div>
+        <button class="btn btn-primary" style="width:100%;" onclick="backupData()">
+          <span data-i18n="btn_backup">डेटा Backup घ्या</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 3. AGM Report -->
+    <div class="card">
+      <div class="card-head"><span class="card-head-title">📋 <span data-i18n="btn_agm_report">AGM वार्षिक अहवाल</span></span></div>
+      <div class="card-body" style="padding:16px 18px;">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.6;" data-i18n="txt_report_agm_desc">निवडलेल्या वर्षाचा संपूर्ण वार्षिक अहवाल (उत्पन्न, वसुली, सभासदनिहाय तपशील).</div>
+        <div class="fg" style="margin-bottom:10px;">
+          <label data-i18n="lbl_year">वर्ष</label>
+          <select id="rep-agm-year"></select>
+        </div>
+        <button class="btn btn-primary" style="width:100%;" onclick="runAGMReportFromReports()">
+          <span data-i18n="btn_generate">तयार करा</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 4. Outstanding List -->
+    <div class="card">
+      <div class="card-head"><span class="card-head-title">⚠️ <span data-i18n="txt_outstanding_list">थकबाकीदार यादी</span></span></div>
+      <div class="card-body" style="padding:16px 18px;">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:14px;line-height:1.6;" data-i18n="txt_report_outstanding_desc">सर्व थकबाकीदार सभासदांची संपूर्ण यादी — हप्ता/दंड/व्याज ब्रेकडाउनसह.</div>
+        <button class="btn btn-primary" style="width:100%;" onclick="exportOutstandingList()">
+          <span data-i18n="btn_generate">तयार करा</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 5. तारीखनिहाय व्यवहार तपशील (full table) -->
+  <div class="card" style="margin-top:16px">
+    <div class="card-body" style="padding-bottom:0">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <div class="sec-label" style="margin-bottom:2px">📋 <span data-i18n="txt_txn_details">व्यवहार तपशील — तारीखनिहाय (Tally साठी)</span></div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:10px" data-i18n="txt_txn_details_sub2">प्रत्येक कर्ज वाटप व हप्ता जमा व्यवहार, तारीखनिहाय — खालील वर्ष/महिना फिल्टर वापरा</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;">
+          <div class="fg" style="margin-bottom:0;">
+            <label data-i18n="lbl_year">वर्ष</label>
+            <select id="rep-txn-year" onchange="renderTxnDetail()" style="height:36px"><option value="" data-i18n="opt_all_years">सर्व वर्षे</option></select>
+          </div>
+          <div class="fg" style="margin-bottom:0;">
+            <label data-i18n="lbl_month">महिना</label>
+            <select id="rep-txn-month" onchange="renderTxnDetail()" style="height:36px">
+              <option value="" data-i18n="opt_all_months">सर्व महिने</option>
+              <option value="01" data-i18n="mo_01">जानेवारी</option><option value="02" data-i18n="mo_02">फेब्रुवारी</option>
+              <option value="03" data-i18n="mo_03">मार्च</option><option value="04" data-i18n="mo_04">एप्रिल</option>
+              <option value="05" data-i18n="mo_05">मे</option><option value="06" data-i18n="mo_06">जून</option>
+              <option value="07" data-i18n="mo_07">जुलै</option><option value="08" data-i18n="mo_08">ऑगस्ट</option>
+              <option value="09" data-i18n="mo_09">सप्टेंबर</option><option value="10" data-i18n="mo_10">ऑक्टोबर</option>
+              <option value="11" data-i18n="mo_11">नोव्हेंबर</option><option value="12" data-i18n="mo_12">डिसेंबर</option>
+            </select>
+          </div>
+          <button class="btn btn-ghost" onclick="exportTxnExcel()" style="height:36px">📊 <span data-i18n="btn_excel_download">Excel डाउनलोड</span></button>
+        </div>
+      </div>
+    </div>
+    <div class="tbl-wrap" style="border:none">
+      <table>
+        <thead><tr>
+          <th data-i18n="th_sr_no">अ.क्र.</th>
+          <th data-i18n="th_date">दिनांक</th>
+          <th data-i18n="lbl_member_name">सभासद नाव</th>
+          <th><span data-i18n="m_loan_disb">कर्ज वाटप</span> (₹)</th>
+          <th><span data-i18n="th_hapta">हप्ता</span> (₹)</th>
+          <th><span data-i18n="th_dand">दंड</span> (₹)</th>
+          <th><span data-i18n="th_vyaj">व्याज</span> (₹)</th>
+          <th><span data-i18n="th_jama">जमा</span> (₹)</th>
+        </tr></thead>
+        <tbody id="txn-body"></tbody>
+        <tfoot id="txn-foot"></tfoot>
+      </table>
+      <div id="txn-empty" class="empty" style="display:none">
+        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:.3;margin-bottom:8px"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <br><span data-i18n="txt_no_records">कोणतीही नोंद सापडली नाही</span>
       </div>
     </div>
   </div>
@@ -1424,6 +1582,42 @@ window.addEventListener('DOMContentLoaded', function(){
       <button class="btn" onclick="saveSettings()" style="flex:1;background:var(--accent,#3a6fd8);color:#fff;" data-i18n="btn_save">जतन करा</button>
     </div>
     <div class="login-success" id="settings-success" style="margin-top:8px;"></div>
+  </div>
+</div>
+
+<!-- Admin Management Modal -->
+<div id="admins-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9997;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;width:92%;max-width:480px;padding:20px;max-height:85vh;overflow-y:auto;">
+    <div style="font-size:15px;font-weight:700;margin-bottom:4px;">👥 <span data-i18n="txt_admin_mgmt">प्रशासक व्यवस्थापन</span></div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:14px;" data-i18n="txt_admin_mgmt_sub">नवीन admin जोडा किंवा काढा — फक्त superadmin ला हे बदलता येईल</div>
+
+    <div id="admins-list" style="margin-bottom:16px;"></div>
+
+    <div style="border-top:1px solid var(--border);padding-top:14px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;" data-i18n="txt_add_new_admin">नवीन प्रशासक जोडा</div>
+      <div class="login-field">
+        <label data-i18n="lbl_username">युजरनेम</label>
+        <input type="text" id="new-admin-username" placeholder="username" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
+      </div>
+      <div class="login-field">
+        <label data-i18n="lbl_create_pass">पासवर्ड तयार करा</label>
+        <input type="text" id="new-admin-password" placeholder="किमान ६ अक्षरे" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
+      </div>
+      <div class="login-field">
+        <label data-i18n="lbl_admin_role">भूमिका (Role)</label>
+        <select id="new-admin-role" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
+          <option value="admin" data-i18n="txt_role_admin">Admin (सर्वसाधारण)</option>
+          <option value="superadmin" data-i18n="txt_role_superadmin">Superadmin (पूर्ण अधिकार)</option>
+        </select>
+      </div>
+      <button class="btn" onclick="addAdmin()" style="width:100%;background:var(--accent,#3a6fd8);color:#fff;">
+        <span data-i18n="btn_add_admin">प्रशासक जोडा</span>
+      </button>
+      <div class="login-error" id="admins-error" style="margin-top:8px;"></div>
+      <div class="login-success" id="admins-success" style="margin-top:8px;"></div>
+    </div>
+
+    <button class="btn btn-ghost" onclick="closeAdminsModal()" style="width:100%;margin-top:14px;" data-i18n="btn_close">बंद करा</button>
   </div>
 </div>
 
@@ -1631,7 +1825,28 @@ const translations = {
     txt_duesoon_line:"या महिन्याचा हप्ता अजून भरलेला नाही. कृपया लवकरात लवकर भरा 🙏",
     txt_notif_title:"हप्ता स्मरणपत्र — पतपेढी", txt_notif_body:"{name}, या महिन्याचा हप्ता अजून भरलेला नाही.",
     txt_recovery_trend:"महिन्यागणिक वसुली ट्रेंड", txt_top_defaulters:"सर्वाधिक थकबाकीदार",
-    txt_no_defaulters:"सध्या कोणीही थकबाकीदार नाही 🎉", txt_no_chart_data:"अजून हप्त्यांची नोंद नाही"
+    txt_no_defaulters:"सध्या कोणीही थकबाकीदार नाही 🎉", txt_no_chart_data:"अजून हप्त्यांची नोंद नाही",
+    btn_dark_mode:"डार्क मोड",
+    txt_admin_mgmt:"प्रशासक व्यवस्थापन", txt_admin_mgmt_sub:"नवीन admin जोडा किंवा काढा — फक्त superadmin ला हे बदलता येईल",
+    txt_add_new_admin:"नवीन प्रशासक जोडा", lbl_admin_role:"भूमिका (Role)",
+    txt_role_admin:"Admin (सर्वसाधारण)", txt_role_superadmin:"Superadmin (पूर्ण अधिकार)",
+    btn_add_admin:"प्रशासक जोडा", btn_close:"बंद करा", txt_loading:"लोड होत आहे...",
+    txt_no_admins_yet:"अजून कोणतेही प्रशासक जोडलेले नाहीत", txt_you:"तुम्ही", btn_delete:"काढा",
+    msg_enter_username:"कृपया युजरनेम भरा", msg_admin_added:"प्रशासक जोडला गेला!",
+    msg_admin_deleted:"प्रशासक काढला!", txt_confirm_delete_admin:"तुम्हाला खात्री आहे की तुम्ही \"{name}\" ला प्रशासक यादीतून काढू इच्छिता?",
+    btn_export_selected:"निवडलेले एक्सपोर्ट करा", txt_multisort_hint:"टीप: अनेक स्तंभांनुसार क्रमवारी लावण्यासाठी Shift दाबून column वर क्लिक करा",
+    exp_file_selected:"Nivadlele_Sabhasad",
+    nav_reports:"अहवाल", txt_reports_sub:"सर्व अहवाल एका ठिकाणी",
+    txt_report_requests_desc:"सभासदांनी केलेल्या नोंदणी विनंत्या पहा व approve/reject करा.",
+    txt_view_requests:"विनंत्या पहा",
+    txt_report_backup_desc:"सर्व सभासद व विनंत्यांचा संपूर्ण डेटा JSON फाईलमध्ये डाउनलोड करा.",
+    txt_report_agm_desc:"निवडलेल्या वर्षाचा संपूर्ण वार्षिक अहवाल (उत्पन्न, वसुली, सभासदनिहाय तपशील).",
+    btn_generate:"तयार करा",
+    txt_outstanding_list:"थकबाकीदार यादी", txt_report_outstanding_desc:"सर्व थकबाकीदार सभासदांची संपूर्ण यादी — हप्ता/दंड/व्याज ब्रेकडाउनसह.",
+    txt_report_txn_desc:"प्रत्येक कर्ज वाटप व हप्ता जमा व्यवहार, तारीखनिहाय.",
+    txt_total_defaulters:"एकूण थकबाकीदार",
+    txt_outstanding_disclaimer:"टीप: ही रक्कम अंदाजे आहे, सध्याच्या तारखेनुसार गणित केलेली. अंतिम रक्कम हप्ता भरताना कार्यालयात निश्चित होईल.",
+    txt_txn_details_sub2:"प्रत्येक कर्ज वाटप व हप्ता जमा व्यवहार, तारीखनिहाय — खालील वर्ष/महिना फिल्टर वापरा"
   },
   en: {
     lbl_mobile:"Mobile Number", ph_mobile:"Enter mobile number",
@@ -1780,7 +1995,28 @@ const translations = {
     txt_duesoon_line:"This month's installment hasn't been paid yet. Please pay as soon as possible 🙏",
     txt_notif_title:"Installment Reminder — Credit Society", txt_notif_body:"{name}, this month's installment hasn't been paid yet.",
     txt_recovery_trend:"Monthly Recovery Trend", txt_top_defaulters:"Top Defaulters",
-    txt_no_defaulters:"No defaulters right now 🎉", txt_no_chart_data:"No installment records yet"
+    txt_no_defaulters:"No defaulters right now 🎉", txt_no_chart_data:"No installment records yet",
+    btn_dark_mode:"Dark Mode",
+    txt_admin_mgmt:"Admin Management", txt_admin_mgmt_sub:"Add or remove admins — only superadmins can change this",
+    txt_add_new_admin:"Add New Admin", lbl_admin_role:"Role",
+    txt_role_admin:"Admin (Standard)", txt_role_superadmin:"Superadmin (Full Access)",
+    btn_add_admin:"Add Admin", btn_close:"Close", txt_loading:"Loading...",
+    txt_no_admins_yet:"No admins added yet", txt_you:"You", btn_delete:"Delete",
+    msg_enter_username:"Please enter a username", msg_admin_added:"Admin added!",
+    msg_admin_deleted:"Admin deleted!", txt_confirm_delete_admin:"Are you sure you want to remove \"{name}\" from admins?",
+    btn_export_selected:"Export Selected", txt_multisort_hint:"Tip: hold Shift and click column headers to sort by multiple columns",
+    exp_file_selected:"Selected_Members",
+    nav_reports:"Reports", txt_reports_sub:"All reports in one place",
+    txt_report_requests_desc:"View and approve/reject registration requests submitted by members.",
+    txt_view_requests:"View Requests",
+    txt_report_backup_desc:"Download the complete data of all members and requests as a JSON file.",
+    txt_report_agm_desc:"Full annual report for the selected year (income, recovery, member-wise detail).",
+    btn_generate:"Generate",
+    txt_outstanding_list:"Outstanding List", txt_report_outstanding_desc:"Complete list of all outstanding members — with installment/penalty/interest breakdown.",
+    txt_report_txn_desc:"Every loan disbursement and installment payment transaction, date-wise.",
+    txt_total_defaulters:"Total Defaulters",
+    txt_outstanding_disclaimer:"Note: These amounts are estimates calculated as of today's date. The final amount will be confirmed at the office when paid.",
+    txt_txn_details_sub2:"Every loan disbursement and installment payment transaction, date-wise — use the year/month filters below"
   }
 };
 
@@ -1826,6 +2062,23 @@ function t(key){
 document.addEventListener('DOMContentLoaded', ()=>{ setLanguage(getLanguage()); });
 /* =================== END LANGUAGE / i18n (Phase 1) =================== */
 
+/* ===================== DARK MODE ===================== */
+function getDarkMode(){
+  try{ return localStorage.getItem('appTheme') === 'dark'; }catch(e){ return false; }
+}
+function applyDarkMode(isDark){
+  document.body.classList.toggle('dark-mode', isDark);
+  const icon = isDark ? '☀️' : '🌙';
+  document.querySelectorAll('.dark-toggle-icon').forEach(el=>{ el.textContent = icon; });
+  try{ localStorage.setItem('appTheme', isDark ? 'dark' : 'light'); }catch(e){}
+  try{ if(homeChartInstance){ renderHomeChart(); } }catch(e){}
+}
+function toggleDarkMode(){
+  applyDarkMode(!getDarkMode());
+}
+document.addEventListener('DOMContentLoaded', ()=>{ applyDarkMode(getDarkMode()); });
+/* =================== END DARK MODE =================== */
+
 
 /* --- LOAD FROM SUPABASE --- */
 async function loadMembers(){
@@ -1863,7 +2116,8 @@ try{
   console.warn('member_requests realtime channel setup failed:', e?.message||e);
 }
 
-let rowCount=0,sortCol='kram',sortAsc=true,currentIdx=-1;
+let rowCount=0,sortCriteria=[{col:'kram',dir:1}],currentIdx=-1;
+let selectedMemberIds=new Set();
 
 const fmt=n=>'₹'+Math.round(n).toLocaleString('en-IN');
 const pct=(a,b)=>b>0?Math.round(a/b*100):0;
@@ -1885,6 +2139,7 @@ function goPage(id,btn,skipHistory){
   if(id==='summary'){populateYears();renderSum();}
   if(id==='search') doSearch();
   if(id==='requests') loadMemberRequests();
+  if(id==='reports') renderReportsPage();
   closeSidebar();
   if(!skipHistory){
     if(history.state && history.state.page===id){
@@ -2174,13 +2429,90 @@ function populateYears(){
   sel.value=cur;
 }
 
+/* ── REPORTS HUB ── */
+function renderReportsPage(){
+  const yrs=new Set();
+  members.forEach(m=>{
+    m.hapte.forEach(h=>{if(h.mahina)yrs.add(h.mahina.slice(0,4));});
+    if(m.date) yrs.add(m.date.slice(0,4));
+  });
+  const sortedYrs=[...yrs].sort().reverse();
+  const curYear=String(new Date().getFullYear());
+  if(!sortedYrs.includes(curYear)) sortedYrs.unshift(curYear);
+
+  const agmSel=document.getElementById('rep-agm-year');
+  const agmCur=agmSel.value;
+  agmSel.innerHTML=sortedYrs.map(y=>`<option value="${y}">${y}</option>`).join('');
+  agmSel.value = agmCur || curYear;
+
+  const txnSel=document.getElementById('rep-txn-year');
+  const txnCur=txnSel.value;
+  txnSel.innerHTML='<option value="" data-i18n="opt_all_years">'+t('opt_all_years')+'</option>'+sortedYrs.map(y=>`<option value="${y}">${y}</option>`).join('');
+  txnSel.value = txnCur || '';
+
+  renderTxnDetail();
+}
+
+function runAGMReportFromReports(){
+  const yr = document.getElementById('rep-agm-year').value;
+  const yrSel = document.getElementById('f-yr');
+  if(yrSel) yrSel.value = yr;
+  exportAGMReport();
+}
+
+function exportOutstandingList(){
+  const defaulters = members
+    .map(m=>({m, overdue:computeMemberOverdue(m)}))
+    .filter(d=>d.overdue)
+    .sort((a,b)=>b.overdue.months - a.overdue.months);
+
+  const now = new Date();
+  const dateStr = fmtDate(now.toISOString().slice(0,10));
+  let tPending=0,tDand=0,tVyaj=0,tShillak=0;
+  const rows = defaulters.map(({m,overdue})=>{
+    tPending+=overdue.estPendingAmt; tDand+=overdue.estDand; tVyaj+=overdue.estVyaj; tShillak+=overdue.shillak;
+    return `<tr>
+      <td>${m.kram}</td>
+      <td>${m.nav}</td>
+      <td>${m.mobile||'—'}</td>
+      <td style="text-align:right">${overdue.months}</td>
+      <td style="text-align:right">${fmt(overdue.estPendingAmt)}</td>
+      <td style="text-align:right">${fmt(overdue.estDand)}</td>
+      <td style="text-align:right">${fmt(overdue.estVyaj)}</td>
+      <td style="text-align:right;font-weight:700;color:#b91c1c;">${fmt(overdue.shillak)}</td>
+    </tr>`;
+  }).join('');
+
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8">${getPDFCss()}</head><body>
+  ${getOrgHeader(t('txt_outstanding_list'))}
+  <div class="info-bar">
+    <span>${t('exp_print')}: <strong>${dateStr}</strong></span>
+    <span>${t('txt_total_defaulters')}: <strong>${defaulters.length}</strong></span>
+  </div>
+  <table>
+    <thead><tr>
+      <th>${t('th_sr_no')}</th><th>${t('lbl_name')}</th><th>${t('th_mobile_short')}</th>
+      <th>${t('txt_months_overdue')}</th><th>${t('th_hapta')} (₹)</th><th>${t('th_dand')} (₹)</th><th>${t('th_vyaj')} (₹)</th><th>${t('th_shillak')} (₹)</th>
+    </tr></thead>
+    <tbody>${rows || `<tr><td colspan="8" style="text-align:center;padding:16px;color:#94a3b8;">${t('txt_no_defaulters')}</td></tr>`}</tbody>
+    <tfoot><tr>
+      <td colspan="4">${t('exp_total')}</td>
+      <td style="text-align:right">${fmt(tPending)}</td>
+      <td style="text-align:right">${fmt(tDand)}</td>
+      <td style="text-align:right">${fmt(tVyaj)}</td>
+      <td style="text-align:right">${fmt(tShillak)}</td>
+    </tr></tfoot>
+  </table>
+  <div style="font-size:10px;color:#94a3b8;margin-top:10px;">${t('txt_outstanding_disclaimer')}</div>
+  </body></html>`;
+  downloadPDF(html, t('txt_outstanding_list')+'_'+dateStr+'.pdf', 'landscape');
+}
+
 function renderTxnDetail(){
-  const nameF=(document.getElementById('f-name').value||'').trim().toLowerCase();
-  const yr=document.getElementById('f-yr').value;
-  const mo=document.getElementById('f-mo').value;
+  const yr=document.getElementById('rep-txn-year').value;
+  const mo=document.getElementById('rep-txn-month').value;
   const txns=[];
   members.forEach(m=>{
-    if(nameF && !m.nav.toLowerCase().includes(nameF)) return;
     if(m.date){
       const y=m.date.slice(0,4), mm=m.date.slice(5,7);
       if((!yr||y===yr)&&(!mo||mm===mo)){
@@ -2235,10 +2567,13 @@ function renderSum(){
     <div class="metric-card green"><div class="metric-label" data-i18n="m_total_paid">एकूण जमा</div><div class="metric-value">${fmt(tJ)}</div></div>
     <div class="metric-card red"><div class="metric-label">एकूण शिल्लक</div><div class="metric-value">${fmt(tS)}</div></div>`;
   rows.sort((a,b)=>{
-    let va,vb;
     const map={kram:[a.m.kram,b.m.kram],nav:[a.m.nav,b.m.nav],vatap:[a.m.vatap,b.m.vatap],karj:[a.s.karj,b.s.karj],dand:[a.s.dand,b.s.dand],vyaj:[a.s.vyaj,b.s.vyaj],jama:[a.s.jama,b.s.jama],shillak:[a.s.shillak,b.s.shillak]};
-    [va,vb]=map[sortCol]||[a.m.kram,b.m.kram];
-    return va<vb?(sortAsc?-1:1):va>vb?(sortAsc?1:-1):0;
+    for(const crit of sortCriteria){
+      const [va,vb]=map[crit.col]||[a.m.kram,b.m.kram];
+      if(va<vb) return -1*crit.dir;
+      if(va>vb) return 1*crit.dir;
+    }
+    return 0;
   });
   if(!rows.length){document.getElementById('sum-body').innerHTML='';document.getElementById('sum-foot').innerHTML='';document.getElementById('sum-empty').style.display='block';renderTxnDetail();return;}
   document.getElementById('sum-empty').style.display='none';
@@ -2247,16 +2582,68 @@ function renderSum(){
     const badge=s.status==='done'?'<span class="badge badge-green">'+t('opt_paid_off')+'</span>':s.status==='warn'?'<span class="badge badge-amber">'+t('opt_delayed')+'</span>':'<span class="badge badge-green">'+t('opt_regular')+'</span>';
     const overdue=computeMemberOverdue(m);
     const overdueTag=overdue?`<span style="font-size:9px;color:#fff;background:#dc2626;font-weight:700;margin-left:6px;padding:2px 6px;border-radius:8px;white-space:nowrap;">⚠️ ${overdue.months} ${t('txt_months_overdue_short')}</span>`:'';
-    return `<tr><td>${m.kram}</td><td style="font-weight:600">${m.nav}${overdueTag}</td><td>${m.mobile||'-'}</td><td>${fmt(m.vatap)}</td><td>${fmt(s.karj)}</td><td>${fmt(s.dand)}</td><td>${fmt(s.vyaj)}</td><td>${fmt(s.jama)}</td><td style="color:var(--red)">${fmt(s.shillak)}</td><td style="min-width:90px"><div style="font-size:11px;color:var(--text2);margin-bottom:3px">${p}%</div><div class="progress"><div class="progress-fill" style="width:${Math.min(100,p)}%"></div></div></td><td>${badge}</td><td style="white-space:nowrap"><button class="btn-icon" title="पहा" onclick="openDrawer(${members.indexOf(m)})">👁</button> <button class="btn-icon" title="संपादन" onclick="editMember(${members.indexOf(m)})" style="color:var(--accent)">✏️</button></td></tr>`;
+    return `<tr><td style="text-align:center;"><input type="checkbox" class="sum-row-check" data-kram="${m.kram}" ${selectedMemberIds.has(m.kram)?'checked':''} onchange="toggleRowSelect(${m.kram},this)"></td><td>${m.kram}</td><td style="font-weight:600">${m.nav}${overdueTag}</td><td>${m.mobile||'-'}</td><td>${fmt(m.vatap)}</td><td>${fmt(s.karj)}</td><td>${fmt(s.dand)}</td><td>${fmt(s.vyaj)}</td><td>${fmt(s.jama)}</td><td style="color:var(--red)">${fmt(s.shillak)}</td><td style="min-width:90px"><div style="font-size:11px;color:var(--text2);margin-bottom:3px">${p}%</div><div class="progress"><div class="progress-fill" style="width:${Math.min(100,p)}%"></div></div></td><td>${badge}</td><td style="white-space:nowrap"><button class="btn-icon" title="पहा" onclick="openDrawer(${members.indexOf(m)})">👁</button> <button class="btn-icon" title="संपादन" onclick="editMember(${members.indexOf(m)})" style="color:var(--accent)">✏️</button></td></tr>`;
   }).join('');
-  document.getElementById('sum-foot').innerHTML=`<td colspan="3">${t('exp_total')} (${rows.length})</td><td>${fmt(tV)}</td><td>${fmt(tK)}</td><td>${fmt(tD)}</td><td>${fmt(tY)}</td><td>${fmt(tJ)}</td><td style="color:var(--red)">${fmt(tS)}</td><td colspan="4"></td>`;
-  renderTxnDetail();
+  document.getElementById('sum-foot').innerHTML=`<td></td><td colspan="3">${t('exp_total')} (${rows.length})</td><td>${fmt(tV)}</td><td>${fmt(tK)}</td><td>${fmt(tD)}</td><td>${fmt(tY)}</td><td>${fmt(tJ)}</td><td style="color:var(--red)">${fmt(tS)}</td><td colspan="4"></td>`;
+  updateSelectedCount();
 }
 
-function sortBy(col){
-  if(sortCol===col)sortAsc=!sortAsc;else{sortCol=col;sortAsc=true;}
+function toggleSelectAll(checkbox){
+  document.querySelectorAll('.sum-row-check').forEach(cb=>{
+    const kram = parseInt(cb.dataset.kram);
+    cb.checked = checkbox.checked;
+    if(checkbox.checked) selectedMemberIds.add(kram); else selectedMemberIds.delete(kram);
+  });
+  updateSelectedCount();
+}
+
+function toggleRowSelect(kram, checkbox){
+  if(checkbox.checked) selectedMemberIds.add(kram); else selectedMemberIds.delete(kram);
+  updateSelectedCount();
+}
+
+function updateSelectedCount(){
+  const btn = document.getElementById('export-selected-btn');
+  const countEl = document.getElementById('export-selected-count');
+  if(!btn || !countEl) return;
+  countEl.textContent = selectedMemberIds.size;
+  btn.style.display = selectedMemberIds.size>0 ? 'inline-flex' : 'none';
+  const selectAllCb = document.getElementById('sum-select-all');
+  if(selectAllCb){
+    const total = document.querySelectorAll('.sum-row-check').length;
+    selectAllCb.checked = total>0 && selectedMemberIds.size>=total;
+  }
+}
+
+function exportSelectedRows(){
+  if(!selectedMemberIds.size) return;
+  const yr=document.getElementById('f-yr').value;
+  const mo=document.getElementById('f-mo').value;
+  const selectedMembers = members.filter(m=>selectedMemberIds.has(m.kram));
+  exportExcel(selectedMembers);
+}
+
+function sortBy(col, event){
+  const isShift = event && event.shiftKey;
+  const existingIdx = sortCriteria.findIndex(c=>c.col===col);
+  if(isShift){
+    if(existingIdx>=0){
+      sortCriteria[existingIdx].dir *= -1;
+    } else {
+      sortCriteria.push({col, dir:1});
+    }
+  } else {
+    if(existingIdx===0 && sortCriteria.length===1){
+      sortCriteria[0].dir *= -1;
+    } else {
+      sortCriteria = [{col, dir:1}];
+    }
+  }
   document.querySelectorAll('[id^="si-"]').forEach(e=>e.textContent='↕');
-  document.getElementById('si-'+col).textContent=sortAsc?'↑':'↓';
+  sortCriteria.forEach((crit,i)=>{
+    const el = document.getElementById('si-'+crit.col);
+    if(el) el.textContent = (crit.dir===1?'↑':'↓') + (sortCriteria.length>1 ? (i+1) : '');
+  });
   renderSum();
 }
 function clearF(){document.getElementById('f-name').value='';document.getElementById('f-yr').value='';document.getElementById('f-mo').value='';document.getElementById('f-st').value='';document.getElementById('f-outstanding').checked=false;renderSum();}
@@ -2373,6 +2760,82 @@ function saveSettings(){
   toast('✓ '+t('msg_settings_saved'));
   updateVyajRateLabels();
   setTimeout(closeSettingsModal, 900);
+}
+
+/* ── ADMIN MANAGEMENT (Multi-admin) ── */
+async function openAdminsModal(){
+  document.getElementById('admins-error').textContent = '';
+  document.getElementById('admins-success').textContent = '';
+  document.getElementById('new-admin-username').value = '';
+  document.getElementById('new-admin-password').value = '';
+  document.getElementById('admins-modal-overlay').style.display = 'flex';
+  await loadAdminsList();
+}
+function closeAdminsModal(){
+  document.getElementById('admins-modal-overlay').style.display = 'none';
+}
+
+async function loadAdminsList(){
+  const listEl = document.getElementById('admins-list');
+  listEl.innerHTML = '<div style="text-align:center;padding:16px;color:var(--text3);font-size:12px;">'+t('txt_loading')+'</div>';
+  try{
+    const {data, error} = await sb.from('admins').select('*').order('created_at',{ascending:true});
+    if(error) throw error;
+    const currentUsername = sessionStorage.getItem('pp_admin_username');
+    if(!data || !data.length){
+      listEl.innerHTML = '<div style="text-align:center;padding:16px;color:var(--text3);font-size:12px;">'+t('txt_no_admins_yet')+'</div>';
+      return;
+    }
+    listEl.innerHTML = data.map(a=>{
+      const isSelf = a.username === currentUsername;
+      const roleLabel = a.role==='superadmin' ? t('txt_role_superadmin') : t('txt_role_admin');
+      const roleColor = a.role==='superadmin' ? '#8a6d1f' : '#3d4a66';
+      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">
+        <div>
+          <div style="font-size:13px;font-weight:600;">${a.username}${isSelf?' <span style="font-size:10px;color:var(--accent);">('+t('txt_you')+')</span>':''}</div>
+          <div style="font-size:11px;color:${roleColor};margin-top:2px;">${roleLabel}</div>
+        </div>
+        ${isSelf ? '' : `<button onclick="deleteAdmin(${a.id},'${a.username.replace(/'/g,"\\'")}')" style="background:none;border:none;color:#dc2626;cursor:pointer;padding:4px;" title="${t('btn_delete')}">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M4 7h16"/></svg>
+        </button>`}
+      </div>`;
+    }).join('');
+  }catch(error){
+    listEl.innerHTML = '<div style="text-align:center;padding:16px;color:#dc2626;font-size:12px;">'+t('err_prefix')+error.message+'</div>';
+  }
+}
+
+async function addAdmin(){
+  const username = document.getElementById('new-admin-username').value.trim();
+  const password = document.getElementById('new-admin-password').value;
+  const role = document.getElementById('new-admin-role').value;
+  const err = document.getElementById('admins-error');
+  const suc = document.getElementById('admins-success');
+  err.textContent=''; suc.textContent='';
+  if(!username){ err.textContent = '❌ '+t('msg_enter_username'); return; }
+  if(password.length<6){ err.textContent = '❌ '+t('msg_pass_min6'); return; }
+  try{
+    const {error} = await sb.from('admins').insert({username, password, role});
+    if(error) throw error;
+    suc.textContent = '✅ '+t('msg_admin_added');
+    document.getElementById('new-admin-username').value = '';
+    document.getElementById('new-admin-password').value = '';
+    await loadAdminsList();
+  }catch(error){
+    err.textContent = '❌ '+t('err_prefix')+error.message;
+  }
+}
+
+async function deleteAdmin(id, username){
+  if(!confirm(t('txt_confirm_delete_admin').replace('{name}', username))) return;
+  try{
+    const {error} = await sb.from('admins').delete().eq('id',id);
+    if(error) throw error;
+    toast('✓ '+t('msg_admin_deleted'));
+    await loadAdminsList();
+  }catch(error){
+    toast(t('err_prefix')+error.message,'warn');
+  }
 }
 
 /* ── हप्ता पावती (Receipt) ── */
@@ -2797,12 +3260,13 @@ ${getOrgHeader(t('exp_title_all_summary'))}
 }
 
 /* ── सर्व सभासद Excel ── */
-function exportExcel(){
+function exportExcel(memberSubset){
   const yr=document.getElementById('f-yr').value;
   const mo=document.getElementById('f-mo').value;
   const st=document.getElementById('f-st').value;
-  let rows=members.map(m=>({m,s:getStats(m,yr,mo)}));
-  if(st) rows=rows.filter(r=>r.s.status===st);
+  const sourceMembers = memberSubset || members;
+  let rows=sourceMembers.map(m=>({m,s:getStats(m,yr,mo)}));
+  if(!memberSubset && st) rows=rows.filter(r=>r.s.status===st);
   const now=new Date();
   const dateStr=now.toLocaleDateString('mr-IN',{day:'2-digit',month:'long',year:'numeric'});
   const tV=rows.reduce((s,r)=>s+r.m.vatap,0);
@@ -2872,18 +3336,16 @@ function exportExcel(){
     <td></td><td></td>
   </tr>
 </table></body></html>`;
-  downloadExcel(html, 'Patpedhi_'+t('exp_file_all')+'.xls');
+  downloadExcel(html, 'Patpedhi_'+(memberSubset ? t('exp_file_selected') : t('exp_file_all'))+'.xls');
 }
 
 
 
 function exportTxnExcel(){
-  const nameF=(document.getElementById('f-name').value||'').trim().toLowerCase();
-  const yr=document.getElementById('f-yr').value;
-  const mo=document.getElementById('f-mo').value;
+  const yr=document.getElementById('rep-txn-year').value;
+  const mo=document.getElementById('rep-txn-month').value;
   const txns=[];
   members.forEach(m=>{
-    if(nameF && !m.nav.toLowerCase().includes(nameF)) return;
     if(m.date){
       const y=m.date.slice(0,4), mm=m.date.slice(5,7);
       if((!yr||y===yr)&&(!mo||mm===mo)){
@@ -3385,6 +3847,9 @@ function renderHomeChart(){
   });
 
   if(homeChartInstance) homeChartInstance.destroy();
+  const isDark = document.body.classList.contains('dark-mode');
+  const gridColor = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)';
+  const tickColor = isDark ? '#b4bdd0' : '#3d4a66';
   homeChartInstance = new Chart(canvas.getContext('2d'), {
     type: 'bar',
     data: {
@@ -3397,10 +3862,10 @@ function renderHomeChart(){
     },
     options: {
       responsive: true,
-      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, color: tickColor } } },
       scales: {
-        x: { stacked: true },
-        y: { stacked: true, beginAtZero: true }
+        x: { stacked: true, ticks:{color:tickColor}, grid:{color:gridColor} },
+        y: { stacked: true, beginAtZero: true, ticks:{color:tickColor}, grid:{color:gridColor} }
       }
     }
   });
@@ -3446,23 +3911,50 @@ function checkLogin(){
   }
   if(sessionStorage.getItem('pp_auth')==='true'){
     overlay.style.display='none';
+    const savedUser = sessionStorage.getItem('pp_admin_username');
+    const savedRole = sessionStorage.getItem('pp_admin_role');
+    if(savedUser){ applyAdminSession({username:savedUser, role:savedRole||'admin'}); }
   } else {
     sessionStorage.removeItem('pp_auth');
     overlay.style.display='flex';
   }
 }
 
+function applyAdminSession(admin){
+  const unEl=document.getElementById('sidebar-username');
+  if(unEl) unEl.textContent='👤 '+admin.username;
+  const isSuper = admin.role==='superadmin';
+  document.querySelectorAll('.superadmin-only').forEach(el=>{ el.style.display = isSuper ? 'flex' : 'none'; });
+}
+
 async function doLogin(){
   const u=document.getElementById('login-user').value.trim();
   const p=document.getElementById('login-pass').value;
   const err=document.getElementById('login-error');
-  const creds=getCreds();
   err.textContent='';
+
+  // Try admins table first (multi-admin)
+  try{
+    const {data, error} = await sb.from('admins').select('*').eq('username',u).eq('password',p).limit(1);
+    if(!error && data && data.length){
+      const admin = data[0];
+      sessionStorage.setItem('pp_auth','true');
+      sessionStorage.setItem('pp_admin_id', String(admin.id));
+      sessionStorage.setItem('pp_admin_username', admin.username);
+      sessionStorage.setItem('pp_admin_role', admin.role);
+      applyAdminSession(admin);
+      document.getElementById('login-overlay').style.display='none';
+      return;
+    }
+  }catch(e){ /* admins table may not exist yet — fall through */ }
+
+  // Legacy fallback (single hardcoded admin — works until admins table is set up)
+  const creds=getCreds();
   if(u===creds.user && p===creds.pass){
     sessionStorage.setItem('pp_auth','true');
-    // show logged in user name in sidebar
-    const unEl=document.getElementById('sidebar-username');
-    if(unEl) unEl.textContent='👤 '+u;
+    sessionStorage.setItem('pp_admin_username', u);
+    sessionStorage.setItem('pp_admin_role', 'superadmin');
+    applyAdminSession({username:u, role:'superadmin'});
     document.getElementById('login-overlay').style.display='none';
     return;
   }
@@ -3496,39 +3988,70 @@ async function doLogin(){
   document.getElementById('login-pass').focus();
 }
 
-function doForgot(){
+async function doForgot(){
   const u=document.getElementById('forgot-user').value.trim();
   const a=document.getElementById('forgot-answer').value.trim();
   const err=document.getElementById('forgot-error');
   const suc=document.getElementById('forgot-success');
-  const creds=getCreds();
   err.textContent=''; suc.textContent='';
-  if(u!==creds.user){err.textContent='❌ '+t('msg_username_not_found');return;}
   if(a!=='2015'){err.textContent='❌ '+t('msg_wrong_answer');return;}
-  // Reset to default password
+
+  try{
+    const {data} = await sb.from('admins').select('*').eq('username',u).limit(1);
+    if(data && data.length){
+      const {error:updErr} = await sb.from('admins').update({password:'patpedhi@2025'}).eq('id',data[0].id);
+      if(!updErr){
+        suc.textContent='✅ '+t('msg_password_reset')+' patpedhi@2025';
+        setTimeout(()=>showSection('sec-login'),3000);
+        return;
+      }
+    }
+  }catch(e){ /* admins table may not exist yet — fall through */ }
+
+  const creds=getCreds();
+  if(u!==creds.user){err.textContent='❌ '+t('msg_username_not_found');return;}
   localStorage.setItem('pp_pass','patpedhi@2025');
   suc.textContent='✅ '+t('msg_password_reset')+' patpedhi@2025';
   setTimeout(()=>showSection('sec-login'),3000);
 }
 
-function doChangePass(){
+async function doChangePass(){
   const u=document.getElementById('cp-user').value.trim();
   const oldP=document.getElementById('cp-old').value;
   const newP=document.getElementById('cp-new').value;
   const conf=document.getElementById('cp-confirm').value;
   const err=document.getElementById('cp-error');
   const suc=document.getElementById('cp-success');
-  const creds=getCreds();
   err.textContent=''; suc.textContent='';
-  if(u!==creds.user||oldP!==creds.pass){err.textContent='❌ '+t('msg_wrong_username_or_old_pass');return;}
   if(newP.length<6){err.textContent='❌ '+t('msg_pass_min6');return;}
   if(newP!==conf){err.textContent='❌ '+t('msg_new_pass_mismatch');return;}
-  localStorage.setItem('pp_pass',newP);
-  suc.textContent='✅ '+t('msg_pass_changed');
-  document.getElementById('cp-old').value='';
-  document.getElementById('cp-new').value='';
-  document.getElementById('cp-confirm').value='';
-  setTimeout(()=>showSection('sec-login'),2500);
+
+  try{
+    const {data} = await sb.from('admins').select('*').eq('username',u).eq('password',oldP).limit(1);
+    if(data && data.length){
+      const {error:updErr} = await sb.from('admins').update({password:newP}).eq('id',data[0].id);
+      if(!updErr){
+        suc.textContent='✅ '+t('msg_pass_changed');
+        document.getElementById('cp-old').value='';
+        document.getElementById('cp-new').value='';
+        document.getElementById('cp-confirm').value='';
+        setTimeout(()=>showSection('sec-login'),2500);
+        return;
+      }
+    }
+  }catch(e){ /* admins table may not exist yet — fall through */ }
+
+  const creds=getCreds();
+  if(u===creds.user && oldP===creds.pass){
+    localStorage.setItem('pp_pass',newP);
+    suc.textContent='✅ '+t('msg_pass_changed');
+    document.getElementById('cp-old').value='';
+    document.getElementById('cp-new').value='';
+    document.getElementById('cp-confirm').value='';
+    setTimeout(()=>showSection('sec-login'),2500);
+    return;
+  }
+  err.textContent='❌ '+t('msg_wrong_username_or_old_pass');
 }
 
 async function doMemberRegister(){
@@ -3878,8 +4401,9 @@ function openChangePassModal(){
   document.getElementById('login-overlay').style.display='flex';
   showSection('sec-changepass');
   // pre-fill username
+  const sessionUser = sessionStorage.getItem('pp_admin_username');
   const creds=getCreds();
-  document.getElementById('cp-user').value=creds.user;
+  document.getElementById('cp-user').value = sessionUser || creds.user;
 }
 
 // Check on page load
