@@ -97,15 +97,29 @@ body.dark-mode [style*="background:#fffbeb"],
 body.dark-mode [style*="background:#fef2f2"],
 body.dark-mode [style*="background:#fdf6e3"],
 body.dark-mode [style*="background:#f4f6fb"],
+body.dark-mode [style*="background:#f8f9fc"],
 body.dark-mode [style*="background:rgba(255,255,255"]{
   background:var(--bg2)!important;
 }
 body.dark-mode [style*="color:#1e293b"],
 body.dark-mode [style*="color:#0e1320"],
 body.dark-mode [style*="color:#64748b"],
+body.dark-mode [style*="color:#94a3b8"],
+body.dark-mode [style*="color:#334155"],
+body.dark-mode [style*="color:#475569"],
 body.dark-mode [style*="color:var(--text)"]{color:var(--text)!important}
+body.dark-mode [style*="color:#7f1d1d"],
+body.dark-mode [style*="color:#b91c1c"]{color:#fca5a5!important}
+body.dark-mode [style*="color:#78350f"],
+body.dark-mode [style*="color:#92400e"],
+body.dark-mode [style*="color:#8a6d1f"]{color:#fbbf24!important}
 body.dark-mode .member-content [style*="background:#fff"]{color:var(--text)!important}
 body.dark-mode #member-dashboard .member-content{color:var(--text)}
+body.dark-mode #md-mobile-display,
+body.dark-mode #md-profile-name,
+body.dark-mode #md-name,
+body.dark-mode #md-side-name,
+body.dark-mode #md-welcome-msg{color:var(--text)!important}
 body.dark-mode .member-content input:not([type="range"]){background:var(--bg2)!important;color:var(--text)!important;border-color:var(--border)!important}
 
 /* SIDEBAR */
@@ -1537,20 +1551,27 @@ window.addEventListener('DOMContentLoaded', function(){
 <div id="settings-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9997;align-items:center;justify-content:center;">
   <div style="background:#fff;border-radius:14px;width:90%;max-width:380px;padding:20px;">
     <div style="font-size:15px;font-weight:700;margin-bottom:4px;">⚙️ <span data-i18n="txt_settings">सेटिंग्ज</span></div>
-    <div style="font-size:12px;color:var(--text2);margin-bottom:14px;" data-i18n="txt_settings_sub">व्याजदर व दंडदर बदला — नवीन हप्ता calculations साठी लागू होईल</div>
-    <div class="login-field">
-      <label data-i18n="lbl_interest_rate">व्याजदर (% दर महिना)</label>
-      <input type="number" id="settings-interest-rate" step="0.01" min="0" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
+
+    <div data-perm="edit_rates" data-perm-display="block" style="display:none;">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:14px;" data-i18n="txt_settings_sub">व्याजदर व दंडदर बदला — नवीन हप्ता calculations साठी लागू होईल</div>
+      <div class="login-field">
+        <label data-i18n="lbl_interest_rate">व्याजदर (% दर महिना)</label>
+        <input type="number" id="settings-interest-rate" step="0.01" min="0" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
+      </div>
+      <div class="login-field">
+        <label data-i18n="lbl_penalty_rate">दंडदर (₹ दर महिना)</label>
+        <input type="number" id="settings-penalty-rate" step="1" min="0" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
+      </div>
+      <div class="login-field">
+        <label data-i18n="lbl_reminder_day">हप्ता स्मरणपत्र दिवस (महिन्याची तारीख)</label>
+        <input type="number" id="settings-reminder-day" step="1" min="1" max="28" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
+      </div>
+      <div style="font-size:11px;color:var(--text3);background:#f8fafc;border-radius:8px;padding:8px 10px;margin-top:2px;" data-i18n="txt_settings_note">टीप: हा बदल फक्त नवीन हप्ता नोंदींच्या auto-calculation साठी लागू होतो. आधीच्या नोंदी बदलणार नाहीत.</div>
+      <button class="btn" onclick="saveSettings()" style="width:100%;background:var(--accent,#3a6fd8);color:#fff;margin-top:12px;" data-i18n="btn_save">जतन करा</button>
+      <div class="login-success" id="settings-success" style="margin-top:8px;"></div>
     </div>
-    <div class="login-field">
-      <label data-i18n="lbl_penalty_rate">दंडदर (₹ दर महिना)</label>
-      <input type="number" id="settings-penalty-rate" step="1" min="0" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
-    </div>
-    <div class="login-field">
-      <label data-i18n="lbl_reminder_day">हप्ता स्मरणपत्र दिवस (महिन्याची तारीख)</label>
-      <input type="number" id="settings-reminder-day" step="1" min="1" max="28" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
-    </div>
-    <div style="font-size:11px;color:var(--text3);background:#f8fafc;border-radius:8px;padding:8px 10px;margin-top:2px;" data-i18n="txt_settings_note">टीप: हा बदल फक्त नवीन हप्ता नोंदींच्या auto-calculation साठी लागू होतो. आधीच्या नोंदी बदलणार नाहीत.</div>
+
+    <div id="settings-rate-restricted-note" style="font-size:12px;color:var(--text2);background:#f8fafc;border-radius:8px;padding:10px 12px;margin-bottom:2px;line-height:1.6;" data-i18n="txt_rate_restricted">व्याजदर/दंडदर सेटिंग्ज बदलण्याचा अधिकार फक्त Superadmin ला आहे.</div>
 
     <div style="border-top:1px solid var(--border);margin-top:16px;padding-top:14px;display:flex;flex-direction:column;gap:8px;">
       <button onclick="closeSettingsModal();openChangePassModal();" style="display:flex;align-items:center;justify-content:space-between;gap:9px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13px;color:var(--text);border:1px solid var(--border);background:none;width:100%;text-align:left;">
@@ -1578,11 +1599,7 @@ window.addEventListener('DOMContentLoaded', function(){
       </button>
     </div>
 
-    <div style="display:flex;gap:8px;margin-top:14px;">
-      <button class="btn btn-ghost" onclick="closeSettingsModal()" style="flex:1;" data-i18n="btn_cancel">रद्द करा</button>
-      <button class="btn" onclick="saveSettings()" style="flex:1;background:var(--accent,#3a6fd8);color:#fff;" data-i18n="btn_save">जतन करा</button>
-    </div>
-    <div class="login-success" id="settings-success" style="margin-top:8px;"></div>
+    <button class="btn btn-ghost" onclick="closeSettingsModal()" style="width:100%;margin-top:14px;" data-i18n="btn_close">बंद करा</button>
   </div>
 </div>
 
@@ -1606,10 +1623,19 @@ window.addEventListener('DOMContentLoaded', function(){
       </div>
       <div class="login-field">
         <label data-i18n="lbl_admin_role">भूमिका (Role)</label>
-        <select id="new-admin-role" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
+        <select id="new-admin-role" onchange="toggleNewAdminPermsVisibility()" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
           <option value="admin" data-i18n="txt_role_admin">Admin (सर्वसाधारण)</option>
           <option value="superadmin" data-i18n="txt_role_superadmin">Superadmin (पूर्ण अधिकार)</option>
         </select>
+      </div>
+      <div id="new-admin-perms" style="margin-bottom:14px;border:1px solid var(--border);border-radius:8px;padding:10px 12px;">
+        <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:6px;" data-i18n="txt_access_allocation">अधिकार वाटप (Access Allocation)</div>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:6px;cursor:pointer;">
+          <input type="checkbox" id="new-admin-perm-rates"> <span data-i18n="txt_perm_edit_rates">व्याजदर/दंडदर बदलण्याची परवानगी</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;">
+          <input type="checkbox" id="new-admin-perm-delete"> <span data-i18n="txt_perm_delete_members">सभासद नोंद काढण्याची परवानगी</span>
+        </label>
       </div>
       <button class="btn" onclick="addAdmin()" style="width:100%;background:var(--accent,#3a6fd8);color:#fff;">
         <span data-i18n="btn_add_admin">प्रशासक जोडा</span>
@@ -1685,7 +1711,7 @@ window.addEventListener('DOMContentLoaded', function(){
             <a href="#" onclick="exportMemberPDF(currentIdx)">📄 <span data-i18n="btn_pdf_download">PDF डाउनलोड</span></a>
           </div>
         </div>
-        <button class="btn btn-ghost" id="dr-del-btn" style="border-color:var(--red);color:var(--red)" onclick="">
+        <button class="btn btn-ghost" id="dr-del-btn" data-perm="delete_members" style="display:none;border-color:var(--red);color:var(--red)" onclick="">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
           <span data-i18n="btn_delete_record">नोंद काढा</span>
         </button>
@@ -1875,7 +1901,13 @@ const translations = {
     txt_total_defaulters:"एकूण थकबाकीदार",
     txt_outstanding_disclaimer:"टीप: ही रक्कम अंदाजे आहे, सध्याच्या तारखेनुसार गणित केलेली. अंतिम रक्कम हप्ता भरताना कार्यालयात निश्चित होईल.",
     txt_txn_details_sub2:"प्रत्येक कर्ज वाटप व हप्ता जमा व्यवहार, तारीखनिहाय — खालील वर्ष/महिना फिल्टर वापरा",
-    txt_on:"चालू", txt_off:"बंद", txt_language:"भाषा"
+    txt_on:"चालू", txt_off:"बंद", txt_language:"भाषा",
+    txt_rate_restricted:"व्याजदर/दंडदर सेटिंग्ज बदलण्याचा अधिकार फक्त Superadmin ला आहे.",
+    msg_superadmin_only:"हे काम करण्याचा अधिकार फक्त Superadmin ला आहे.",
+    txt_access_allocation:"अधिकार वाटप (Access Allocation)",
+    txt_perm_edit_rates:"व्याजदर/दंडदर बदलण्याची परवानगी",
+    txt_perm_delete_members:"सभासद नोंद काढण्याची परवानगी",
+    txt_perm_all_included:"Superadmin ला सर्व अधिकार आपोआप मिळतात"
   },
   en: {
     lbl_mobile:"Mobile Number", ph_mobile:"Enter mobile number",
@@ -2046,7 +2078,13 @@ const translations = {
     txt_total_defaulters:"Total Defaulters",
     txt_outstanding_disclaimer:"Note: These amounts are estimates calculated as of today's date. The final amount will be confirmed at the office when paid.",
     txt_txn_details_sub2:"Every loan disbursement and installment payment transaction, date-wise — use the year/month filters below",
-    txt_on:"On", txt_off:"Off", txt_language:"Language"
+    txt_on:"On", txt_off:"Off", txt_language:"Language",
+    txt_rate_restricted:"Only a Superadmin can change interest/penalty rate settings.",
+    msg_superadmin_only:"Only a Superadmin is allowed to do this.",
+    txt_access_allocation:"Access Allocation",
+    txt_perm_edit_rates:"Permission to change interest/penalty rates",
+    txt_perm_delete_members:"Permission to delete member records",
+    txt_perm_all_included:"Superadmin automatically has all permissions"
   }
 };
 
@@ -2701,6 +2739,10 @@ function clearF(){document.getElementById('f-name').value='';document.getElement
 
 /* --- DELETE MEMBER --- */
 async function deleteMember(idx){
+  if(!hasPermission('delete_members')){
+    toast(t('msg_superadmin_only'),'warn');
+    return;
+  }
   const m=members[idx];
   if(!confirm('"'+m.nav+'" यांची नोंद कायमची काढायची आहे का?')) return;
   const {error} = await sb.from('sabhasad').delete().eq('id',m.id);
@@ -2788,12 +2830,19 @@ function openSettingsModal(){
   document.getElementById('settings-success').textContent = '';
   const statusEl = document.getElementById('settings-dark-status');
   if(statusEl) statusEl.textContent = getDarkMode() ? t('txt_on') : t('txt_off');
+  const canEditRates = hasPermission('edit_rates');
+  const restrictedNote = document.getElementById('settings-rate-restricted-note');
+  if(restrictedNote) restrictedNote.style.display = canEditRates ? 'none' : 'block';
   document.getElementById('settings-modal-overlay').style.display = 'flex';
 }
 function closeSettingsModal(){
   document.getElementById('settings-modal-overlay').style.display = 'none';
 }
 function saveSettings(){
+  if(!hasPermission('edit_rates')){
+    toast(t('txt_rate_restricted'),'warn');
+    return;
+  }
   const interestPct = parseFloat(document.getElementById('settings-interest-rate').value);
   const penaltyAmt = parseFloat(document.getElementById('settings-penalty-rate').value);
   const reminderDay = parseInt(document.getElementById('settings-reminder-day').value);
@@ -2821,8 +2870,16 @@ async function openAdminsModal(){
   document.getElementById('admins-success').textContent = '';
   document.getElementById('new-admin-username').value = '';
   document.getElementById('new-admin-password').value = '';
+  document.getElementById('new-admin-role').value = 'admin';
+  document.getElementById('new-admin-perm-rates').checked = false;
+  document.getElementById('new-admin-perm-delete').checked = false;
+  toggleNewAdminPermsVisibility();
   document.getElementById('admins-modal-overlay').style.display = 'flex';
   await loadAdminsList();
+}
+function toggleNewAdminPermsVisibility(){
+  const role = document.getElementById('new-admin-role').value;
+  document.getElementById('new-admin-perms').style.display = role==='superadmin' ? 'none' : 'block';
 }
 function closeAdminsModal(){
   document.getElementById('admins-modal-overlay').style.display = 'none';
@@ -2841,16 +2898,30 @@ async function loadAdminsList(){
     }
     listEl.innerHTML = data.map(a=>{
       const isSelf = a.username === currentUsername;
-      const roleLabel = a.role==='superadmin' ? t('txt_role_superadmin') : t('txt_role_admin');
-      const roleColor = a.role==='superadmin' ? '#8a6d1f' : '#3d4a66';
-      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">
-        <div>
-          <div style="font-size:13px;font-weight:600;">${a.username}${isSelf?' <span style="font-size:10px;color:var(--accent);">('+t('txt_you')+')</span>':''}</div>
-          <div style="font-size:11px;color:${roleColor};margin-top:2px;">${roleLabel}</div>
+      const isSuper = a.role==='superadmin';
+      const roleLabel = isSuper ? t('txt_role_superadmin') : t('txt_role_admin');
+      const roleColor = isSuper ? '#8a6d1f' : '#3d4a66';
+      const perms = a.permissions||[];
+      const permsUI = isSuper ? `<div style="font-size:10px;color:var(--text3);margin-top:6px;">${t('txt_perm_all_included')}</div>` : `
+        <div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);">
+          <label style="display:flex;align-items:center;gap:7px;font-size:11px;margin-bottom:5px;cursor:pointer;">
+            <input type="checkbox" onchange="updateAdminPermission(${a.id},'edit_rates',this.checked)" ${perms.includes('edit_rates')?'checked':''}> <span data-i18n="txt_perm_edit_rates">व्याजदर/दंडदर बदलण्याची परवानगी</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:7px;font-size:11px;cursor:pointer;">
+            <input type="checkbox" onchange="updateAdminPermission(${a.id},'delete_members',this.checked)" ${perms.includes('delete_members')?'checked':''}> <span data-i18n="txt_perm_delete_members">सभासद नोंद काढण्याची परवानगी</span>
+          </label>
+        </div>`;
+      return `<div style="padding:9px 12px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:13px;font-weight:600;">${a.username}${isSelf?' <span style="font-size:10px;color:var(--accent);">('+t('txt_you')+')</span>':''}</div>
+            <div style="font-size:11px;color:${roleColor};margin-top:2px;">${roleLabel}</div>
+          </div>
+          ${isSelf ? '' : `<button onclick="deleteAdmin(${a.id},'${a.username.replace(/'/g,"\\'")}')" style="background:none;border:none;color:#dc2626;cursor:pointer;padding:4px;" title="${t('btn_delete')}">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M4 7h16"/></svg>
+          </button>`}
         </div>
-        ${isSelf ? '' : `<button onclick="deleteAdmin(${a.id},'${a.username.replace(/'/g,"\\'")}')" style="background:none;border:none;color:#dc2626;cursor:pointer;padding:4px;" title="${t('btn_delete')}">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M4 7h16"/></svg>
-        </button>`}
+        ${permsUI}
       </div>`;
     }).join('');
   }catch(error){
@@ -2858,21 +2929,42 @@ async function loadAdminsList(){
   }
 }
 
+async function updateAdminPermission(id, perm, checked){
+  try{
+    const {data} = await sb.from('admins').select('permissions').eq('id',id).single();
+    let perms = (data && data.permissions) || [];
+    if(checked && !perms.includes(perm)) perms.push(perm);
+    if(!checked) perms = perms.filter(p=>p!==perm);
+    const {error} = await sb.from('admins').update({permissions:perms}).eq('id',id);
+    if(error) throw error;
+    toast('✓ '+t('msg_settings_saved'));
+  }catch(error){
+    toast(t('err_prefix')+error.message,'warn');
+    await loadAdminsList();
+  }
+}
+
 async function addAdmin(){
   const username = document.getElementById('new-admin-username').value.trim();
   const password = document.getElementById('new-admin-password').value;
   const role = document.getElementById('new-admin-role').value;
+  const permissions = role==='superadmin' ? [] : [
+    ...(document.getElementById('new-admin-perm-rates').checked ? ['edit_rates'] : []),
+    ...(document.getElementById('new-admin-perm-delete').checked ? ['delete_members'] : [])
+  ];
   const err = document.getElementById('admins-error');
   const suc = document.getElementById('admins-success');
   err.textContent=''; suc.textContent='';
   if(!username){ err.textContent = '❌ '+t('msg_enter_username'); return; }
   if(password.length<6){ err.textContent = '❌ '+t('msg_pass_min6'); return; }
   try{
-    const {error} = await sb.from('admins').insert({username, password, role});
+    const {error} = await sb.from('admins').insert({username, password, role, permissions});
     if(error) throw error;
     suc.textContent = '✅ '+t('msg_admin_added');
     document.getElementById('new-admin-username').value = '';
     document.getElementById('new-admin-password').value = '';
+    document.getElementById('new-admin-perm-rates').checked = false;
+    document.getElementById('new-admin-perm-delete').checked = false;
     await loadAdminsList();
   }catch(error){
     err.textContent = '❌ '+t('err_prefix')+error.message;
@@ -3966,7 +4058,9 @@ function checkLogin(){
     overlay.style.display='none';
     const savedUser = sessionStorage.getItem('pp_admin_username');
     const savedRole = sessionStorage.getItem('pp_admin_role');
-    if(savedUser){ applyAdminSession({username:savedUser, role:savedRole||'admin'}); }
+    let savedPerms=[];
+    try{ savedPerms = JSON.parse(sessionStorage.getItem('pp_admin_permissions')||'[]'); }catch(e){}
+    if(savedUser){ applyAdminSession({username:savedUser, role:savedRole||'admin', permissions:savedPerms}); }
   } else {
     sessionStorage.removeItem('pp_auth');
     overlay.style.display='flex';
@@ -3978,6 +4072,22 @@ function applyAdminSession(admin){
   if(unEl) unEl.textContent='👤 '+admin.username;
   const isSuper = admin.role==='superadmin';
   document.querySelectorAll('.superadmin-only').forEach(el=>{ el.style.display = isSuper ? 'flex' : 'none'; });
+
+  const perms = isSuper ? ['edit_rates','delete_members'] : (admin.permissions||[]);
+  try{ sessionStorage.setItem('pp_admin_permissions', JSON.stringify(perms)); }catch(e){}
+  document.querySelectorAll('[data-perm]').forEach(el=>{
+    const perm = el.getAttribute('data-perm');
+    const allowed = isSuper || perms.includes(perm);
+    el.style.display = allowed ? (el.dataset.permDisplay||'flex') : 'none';
+  });
+}
+
+function hasPermission(perm){
+  if(sessionStorage.getItem('pp_admin_role')==='superadmin') return true;
+  try{
+    const perms = JSON.parse(sessionStorage.getItem('pp_admin_permissions')||'[]');
+    return perms.includes(perm);
+  }catch(e){ return false; }
 }
 
 async function doLogin(){
