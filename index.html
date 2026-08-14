@@ -1697,8 +1697,11 @@ window.addEventListener('DOMContentLoaded', function(){
         <label style="display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:6px;cursor:pointer;">
           <input type="checkbox" id="new-admin-perm-rates"> <span data-i18n="txt_perm_edit_rates">व्याजदर/दंडदर बदलण्याची परवानगी</span>
         </label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;">
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:6px;cursor:pointer;">
           <input type="checkbox" id="new-admin-perm-delete"> <span data-i18n="txt_perm_delete_members">सभासद नोंद काढण्याची परवानगी</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;">
+          <input type="checkbox" id="new-admin-perm-blacklist"> <span data-i18n="txt_perm_blacklist_members">सभासद Blacklist/Terminate करण्याची परवानगी</span>
         </label>
       </div>
       <button class="btn" onclick="addAdmin()" style="width:100%;background:var(--accent,#3a6fd8);color:#fff;">
@@ -1739,6 +1742,36 @@ window.addEventListener('DOMContentLoaded', function(){
   </div>
 </div>
 
+<!-- Blacklist Member Modal -->
+<div id="blacklist-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9997;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;width:90%;max-width:380px;padding:20px;">
+    <div style="font-size:15px;font-weight:700;margin-bottom:4px;color:#b91c1c;">🚫 <span data-i18n="txt_blacklist_title">सभासद Blacklist/Terminate करा</span></div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:14px;" id="blacklist-member-name"></div>
+
+    <div class="login-field">
+      <label data-i18n="lbl_blacklist_reason">कारण (आवश्यक)</label>
+      <textarea id="blacklist-reason" rows="3" placeholder="उदा. वारंवार हप्ता चुकवला, गैरवर्तन..." style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;"></textarea>
+    </div>
+    <div class="login-field">
+      <label data-i18n="lbl_blacklist_duration">कालावधी</label>
+      <select id="blacklist-duration-type" onchange="toggleBlacklistDateField()" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
+        <option value="permanent" data-i18n="opt_permanent">कायमस्वरूपी</option>
+        <option value="until" data-i18n="opt_until_date">विशिष्ट तारखेपर्यंत</option>
+      </select>
+    </div>
+    <div class="login-field" id="blacklist-until-wrap" style="display:none;">
+      <label data-i18n="lbl_blacklist_until">तारखेपर्यंत</label>
+      <input type="date" id="blacklist-until-date" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:14px;">
+      <button class="btn btn-ghost" onclick="closeBlacklistModal()" style="flex:1;" data-i18n="btn_cancel">रद्द करा</button>
+      <button class="btn" onclick="confirmBlacklistMember()" style="flex:1;background:#b91c1c;color:#fff;" data-i18n="btn_confirm_blacklist">Blacklist करा</button>
+    </div>
+    <div class="login-error" id="blacklist-error" style="margin-top:8px;"></div>
+  </div>
+</div>
+
 </main>
 
 <!-- MEMBER DETAIL DRAWER -->
@@ -1755,6 +1788,7 @@ window.addEventListener('DOMContentLoaded', function(){
       <div id="dr-metrics" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px"></div>
       <div id="dr-overdue-box" style="display:none;margin-bottom:16px"></div>
       <div id="dr-history-box" style="display:none;margin-bottom:16px"></div>
+      <div id="dr-blacklist-box" style="display:none;margin-bottom:16px"></div>
       <div class="sec-label" data-i18n="txt_hapta_history">हप्ता इतिहास</div>
       <div class="tbl-wrap">
         <table>
@@ -1776,6 +1810,14 @@ window.addEventListener('DOMContentLoaded', function(){
             <a href="#" onclick="exportMemberPDF(currentIdx)">📄 <span data-i18n="btn_pdf_download">PDF डाउनलोड</span></a>
           </div>
         </div>
+        <button class="btn btn-ghost" id="dr-blacklist-btn" data-perm="blacklist_members" style="display:none;border-color:#b91c1c;color:#b91c1c;" onclick="openBlacklistModal(currentIdx)">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/></svg>
+          <span data-i18n="btn_blacklist">Blacklist करा</span>
+        </button>
+        <button class="btn btn-ghost" id="dr-reactivate-btn" data-perm="blacklist_members" style="display:none;border-color:#166534;color:#166534;" onclick="reactivateMember(currentIdx)">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+          <span data-i18n="btn_reactivate">पूर्ववत करा</span>
+        </button>
         <button class="btn btn-ghost" id="dr-del-btn" data-perm="delete_members" style="display:none;border-color:var(--red);color:var(--red)" onclick="">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
           <span data-i18n="btn_delete_record">नोंद काढा</span>
@@ -1990,7 +2032,20 @@ const translations = {
     btn_approve:"मंजूर करा", btn_reject:"नाकारा",
     msg_loan_request_approved:"विनंती मंजूर झाली! आता कर्ज नोंदणी पूर्ण करा.",
     msg_loan_request_rejected:"विनंती नाकारली.",
-    txt_confirm_reject_loan_req:"ही कर्ज विनंती नाकारायची आहे का?"
+    txt_confirm_reject_loan_req:"ही कर्ज विनंती नाकारायची आहे का?",
+    txt_perm_blacklist_members:"सभासद Blacklist/Terminate करण्याची परवानगी",
+    txt_blacklist_title:"सभासद Blacklist/Terminate करा", lbl_blacklist_reason:"कारण",
+    lbl_blacklist_duration:"कालावधी", opt_permanent:"कायमस्वरूपी", opt_until_date:"विशिष्ट तारखेपर्यंत",
+    lbl_blacklist_until:"तारखेपर्यंत", btn_confirm_blacklist:"Blacklist करा",
+    btn_blacklist:"Blacklist करा", btn_reactivate:"पूर्ववत करा",
+    msg_enter_blacklist_reason:"कृपया कारण भरा", msg_select_until_date:"कृपया तारीख निवडा",
+    msg_member_blacklisted:"सभासद Blacklist केला गेला!", msg_member_reactivated:"सभासद पूर्ववत सक्रिय झाला!",
+    txt_confirm_reactivate:"\"{name}\" यांना पूर्ववत सक्रिय करायचं आहे का?",
+    txt_member_blacklisted:"हा सभासद Blacklisted आहे", txt_blacklisted_badge:"Blacklisted",
+    txt_member_blacklisted_notice:"तुमचं खातं सध्या ब्लॉक केलेलं आहे. नवीन कर्ज विनंती पाठवता येणार नाही. अधिक माहितीसाठी कार्यालयाशी संपर्क साधा.",
+    txt_loan_req_approved:"तुमची कर्ज विनंती ({amt}) मंजूर झाली आहे! लवकरच कर्ज नोंदणी होईल.",
+    txt_loan_req_rejected:"तुमची कर्ज विनंती ({amt}) नाकारली गेली आहे.",
+    lbl_admin_note:"अ‍ॅडमिनची टीप"
   },
   en: {
     lbl_mobile:"Mobile Number", ph_mobile:"Enter mobile number",
@@ -2185,7 +2240,20 @@ const translations = {
     btn_approve:"Approve", btn_reject:"Reject",
     msg_loan_request_approved:"Request approved! Now complete the loan entry.",
     msg_loan_request_rejected:"Request rejected.",
-    txt_confirm_reject_loan_req:"Are you sure you want to reject this loan request?"
+    txt_confirm_reject_loan_req:"Are you sure you want to reject this loan request?",
+    txt_perm_blacklist_members:"Permission to Blacklist/Terminate members",
+    txt_blacklist_title:"Blacklist/Terminate Member", lbl_blacklist_reason:"Reason",
+    lbl_blacklist_duration:"Duration", opt_permanent:"Permanent", opt_until_date:"Until a specific date",
+    lbl_blacklist_until:"Until", btn_confirm_blacklist:"Blacklist",
+    btn_blacklist:"Blacklist", btn_reactivate:"Reactivate",
+    msg_enter_blacklist_reason:"Please enter a reason", msg_select_until_date:"Please select a date",
+    msg_member_blacklisted:"Member has been blacklisted!", msg_member_reactivated:"Member reactivated!",
+    txt_confirm_reactivate:"Reactivate \"{name}\"?",
+    txt_member_blacklisted:"This member is blacklisted", txt_blacklisted_badge:"Blacklisted",
+    txt_member_blacklisted_notice:"Your account is currently blocked. You cannot send a new loan request. Please contact the office for more information.",
+    txt_loan_req_approved:"Your loan request ({amt}) has been approved! The loan will be registered soon.",
+    txt_loan_req_rejected:"Your loan request ({amt}) has been rejected.",
+    lbl_admin_note:"Admin note"
   }
 };
 
@@ -2515,9 +2583,10 @@ function doSearch(){
     const badge=sh<=0?'<span class="badge badge-green">'+t('opt_paid_off')+'</span>':late?'<span class="badge badge-amber">'+t('opt_delayed')+'</span>':'<span class="badge badge-green">'+t('opt_regular')+'</span>';
     const overdue=computeMemberOverdue(m);
     const overdueTag=overdue?`<span style="font-size:10px;color:#fff;background:#dc2626;font-weight:700;margin-left:7px;padding:2px 7px;border-radius:8px;white-space:nowrap;">⚠️ ${overdue.months} ${t('txt_months_overdue')}</span>`:'';
+    const blacklistTag=isBlacklisted(m)?`<span style="font-size:10px;color:#fff;background:#450a0a;font-weight:700;margin-left:7px;padding:2px 7px;border-radius:8px;white-space:nowrap;">🚫 ${t('txt_blacklisted_badge')}</span>`:'';
     const overdueLine=overdue?`<div style="font-size:11px;color:#b91c1c;margin-top:4px;background:#fef2f2;border:1px solid #fecaca;border-radius:7px;padding:5px 8px;">⚠️ ${t('txt_thakit_estimate')}: ${t('th_hapta')} ${fmt(overdue.estPendingAmt)} &nbsp;|&nbsp; ${t('th_dand')} ${fmt(overdue.estDand)} &nbsp;|&nbsp; ${t('th_vyaj')} ${fmt(overdue.estVyaj)}</div>`:'';
     const div=document.createElement('div');div.className='s-card';
-    div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;"><div style="font-weight:600;font-size:14px;color:var(--text)"><span style="font-size:12px;font-weight:500;color:var(--text3);margin-right:6px;">${t('th_sr_no')} ${m.kram}</span>${m.nav}${overdueTag}</div>${badge}</div><div style="font-size:12px;color:var(--text2);margin-bottom:7px;">${m.mobile ? '📱 '+m.mobile+' &nbsp;|&nbsp; ' : ''}${t('exp_loan_short')}: ${fmt(m.vatap)} &nbsp;|&nbsp; ${t('th_shillak')}: ${fmt(sh)} &nbsp;|&nbsp; ${t('exp_repayment')}: ${p}%</div><div class="progress"><div class="progress-fill" style="width:${Math.min(100,p)}%"></div></div>${overdueLine}`;
+    div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;"><div style="font-weight:600;font-size:14px;color:var(--text)"><span style="font-size:12px;font-weight:500;color:var(--text3);margin-right:6px;">${t('th_sr_no')} ${m.kram}</span>${m.nav}${overdueTag}${blacklistTag}</div>${badge}</div><div style="font-size:12px;color:var(--text2);margin-bottom:7px;">${m.mobile ? '📱 '+m.mobile+' &nbsp;|&nbsp; ' : ''}${t('exp_loan_short')}: ${fmt(m.vatap)} &nbsp;|&nbsp; ${t('th_shillak')}: ${fmt(sh)} &nbsp;|&nbsp; ${t('exp_repayment')}: ${p}%</div><div class="progress"><div class="progress-fill" style="width:${Math.min(100,p)}%"></div></div>${overdueLine}`;
     div.onclick=()=>openDrawer(members.indexOf(m));
     res.appendChild(div);
   });
@@ -2572,6 +2641,27 @@ function openDrawer(idx){
     historyBox.style.display='none';
     historyBox.innerHTML='';
   }
+
+  const blacklistBox = document.getElementById('dr-blacklist-box');
+  const blBtn = document.getElementById('dr-blacklist-btn');
+  const reBtn = document.getElementById('dr-reactivate-btn');
+  if(isBlacklisted(m)){
+    blacklistBox.style.display='block';
+    const untilTxt = m.blacklist_until ? (t('lbl_blacklist_until')+': '+fmtDate(m.blacklist_until)) : t('opt_permanent');
+    blacklistBox.innerHTML=`<div style="background:#450a0a;border:1px solid #7f1d1d;border-radius:12px;padding:12px 14px;color:#fecaca;">
+      <div style="font-size:13px;font-weight:700;">🚫 ${t('txt_member_blacklisted')}</div>
+      <div style="font-size:12px;margin-top:6px;line-height:1.6;">${t('lbl_blacklist_reason')}: ${m.blacklist_reason||'—'}<br>${untilTxt}</div>
+    </div>`;
+    if(blBtn) blBtn.dataset.permDisplay='none';
+    if(reBtn) reBtn.dataset.permDisplay='flex';
+  } else {
+    blacklistBox.style.display='none';
+    blacklistBox.innerHTML='';
+    if(blBtn) blBtn.dataset.permDisplay='flex';
+    if(reBtn) reBtn.dataset.permDisplay='none';
+  }
+  if(blBtn) blBtn.style.display = (hasPermission('blacklist_members') && blBtn.dataset.permDisplay!=='none') ? 'flex' : 'none';
+  if(reBtn) reBtn.style.display = (hasPermission('blacklist_members') && reBtn.dataset.permDisplay!=='none') ? 'flex' : 'none';
   let run=m.vatap;
   document.getElementById('dr-body').innerHTML=m.hapte.map((h,hIdx)=>{
     run-=h.hapta;
@@ -2851,7 +2941,8 @@ function renderSum(){
     const badge=s.status==='done'?'<span class="badge badge-green">'+t('opt_paid_off')+'</span>':s.status==='warn'?'<span class="badge badge-amber">'+t('opt_delayed')+'</span>':'<span class="badge badge-green">'+t('opt_regular')+'</span>';
     const overdue=computeMemberOverdue(m);
     const overdueTag=overdue?`<span style="font-size:9px;color:#fff;background:#dc2626;font-weight:700;margin-left:6px;padding:2px 6px;border-radius:8px;white-space:nowrap;">⚠️ ${overdue.months} ${t('txt_months_overdue_short')}</span>`:'';
-    return `<tr><td style="text-align:center;"><input type="checkbox" class="sum-row-check" data-kram="${m.kram}" ${selectedMemberIds.has(m.kram)?'checked':''} onchange="toggleRowSelect(${m.kram},this)"></td><td>${m.kram}</td><td style="font-weight:600">${m.nav}${overdueTag}</td><td>${m.mobile||'-'}</td><td>${fmt(m.vatap)}</td><td>${fmt(s.karj)}</td><td>${fmt(s.dand)}</td><td>${fmt(s.vyaj)}</td><td>${fmt(s.jama)}</td><td style="color:var(--red)">${fmt(s.shillak)}</td><td style="min-width:90px"><div style="font-size:11px;color:var(--text2);margin-bottom:3px">${p}%</div><div class="progress"><div class="progress-fill" style="width:${Math.min(100,p)}%"></div></div></td><td>${badge}</td><td style="white-space:nowrap"><button class="btn-icon" title="पहा" onclick="openDrawer(${members.indexOf(m)})">👁</button> <button class="btn-icon" title="संपादन" onclick="editMember(${members.indexOf(m)})" style="color:var(--accent)">✏️</button></td></tr>`;
+    const blacklistTag=isBlacklisted(m)?`<span style="font-size:9px;color:#fff;background:#450a0a;font-weight:700;margin-left:6px;padding:2px 6px;border-radius:8px;white-space:nowrap;">🚫 ${t('txt_blacklisted_badge')}</span>`:'';
+    return `<tr><td style="text-align:center;"><input type="checkbox" class="sum-row-check" data-kram="${m.kram}" ${selectedMemberIds.has(m.kram)?'checked':''} onchange="toggleRowSelect(${m.kram},this)"></td><td>${m.kram}</td><td style="font-weight:600">${m.nav}${overdueTag}${blacklistTag}</td><td>${m.mobile||'-'}</td><td>${fmt(m.vatap)}</td><td>${fmt(s.karj)}</td><td>${fmt(s.dand)}</td><td>${fmt(s.vyaj)}</td><td>${fmt(s.jama)}</td><td style="color:var(--red)">${fmt(s.shillak)}</td><td style="min-width:90px"><div style="font-size:11px;color:var(--text2);margin-bottom:3px">${p}%</div><div class="progress"><div class="progress-fill" style="width:${Math.min(100,p)}%"></div></div></td><td>${badge}</td><td style="white-space:nowrap"><button class="btn-icon" title="पहा" onclick="openDrawer(${members.indexOf(m)})">👁</button> <button class="btn-icon" title="संपादन" onclick="editMember(${members.indexOf(m)})" style="color:var(--accent)">✏️</button></td></tr>`;
   }).join('');
   document.getElementById('sum-foot').innerHTML=`<td></td><td colspan="3">${t('exp_total')} (${rows.length})</td><td>${fmt(tV)}</td><td>${fmt(tK)}</td><td>${fmt(tD)}</td><td>${fmt(tY)}</td><td>${fmt(tJ)}</td><td style="color:var(--red)">${fmt(tS)}</td><td colspan="4"></td>`;
   updateSelectedCount();
@@ -2918,6 +3009,78 @@ function sortBy(col, event){
 function clearF(){document.getElementById('f-name').value='';document.getElementById('f-yr').value='';document.getElementById('f-mo').value='';document.getElementById('f-st').value='';document.getElementById('f-outstanding').checked=false;renderSum();}
 
 /* --- DELETE MEMBER --- */
+let blacklistTargetIdx = null;
+
+function openBlacklistModal(idx){
+  if(!hasPermission('blacklist_members')){ toast(t('msg_superadmin_only'),'warn'); return; }
+  blacklistTargetIdx = idx;
+  const m = members[idx];
+  document.getElementById('blacklist-member-name').textContent = t('th_sr_no')+' '+m.kram+' — '+m.nav;
+  document.getElementById('blacklist-reason').value = '';
+  document.getElementById('blacklist-duration-type').value = 'permanent';
+  document.getElementById('blacklist-until-date').value = '';
+  document.getElementById('blacklist-error').textContent = '';
+  toggleBlacklistDateField();
+  document.getElementById('blacklist-modal-overlay').style.display = 'flex';
+}
+function closeBlacklistModal(){
+  document.getElementById('blacklist-modal-overlay').style.display = 'none';
+}
+function toggleBlacklistDateField(){
+  const type = document.getElementById('blacklist-duration-type').value;
+  document.getElementById('blacklist-until-wrap').style.display = type==='until' ? 'block' : 'none';
+}
+
+async function confirmBlacklistMember(){
+  const idx = blacklistTargetIdx;
+  if(idx===null || !members[idx]) return;
+  const reason = document.getElementById('blacklist-reason').value.trim();
+  const durationType = document.getElementById('blacklist-duration-type').value;
+  const untilDate = document.getElementById('blacklist-until-date').value;
+  const err = document.getElementById('blacklist-error');
+  err.textContent = '';
+  if(!reason){ err.textContent = '❌ '+t('msg_enter_blacklist_reason'); return; }
+  if(durationType==='until' && !untilDate){ err.textContent = '❌ '+t('msg_select_until_date'); return; }
+
+  const m = members[idx];
+  const payload = {
+    blacklist_status: 'blacklisted',
+    blacklist_reason: reason,
+    blacklist_until: durationType==='until' ? untilDate : null,
+    blacklisted_at: new Date().toISOString(),
+    blacklisted_by: sessionStorage.getItem('pp_admin_username')||''
+  };
+  try{
+    const {error} = await sb.from('sabhasad').update(payload).eq('id',m.id);
+    if(error) throw error;
+    Object.assign(m, payload);
+    toast('🚫 '+t('msg_member_blacklisted'));
+    closeBlacklistModal();
+    openDrawer(idx);
+    renderSum(); doSearch();
+  }catch(error){
+    err.textContent = '❌ '+t('err_prefix')+error.message;
+  }
+}
+
+async function reactivateMember(idx){
+  if(!hasPermission('blacklist_members')){ toast(t('msg_superadmin_only'),'warn'); return; }
+  const m = members[idx];
+  if(!m) return;
+  if(!confirm(t('txt_confirm_reactivate').replace('{name}', m.nav))) return;
+  const payload = { blacklist_status:'active', blacklist_reason:null, blacklist_until:null };
+  try{
+    const {error} = await sb.from('sabhasad').update(payload).eq('id',m.id);
+    if(error) throw error;
+    Object.assign(m, payload);
+    toast('✓ '+t('msg_member_reactivated'));
+    openDrawer(idx);
+    renderSum(); doSearch();
+  }catch(error){
+    toast(t('err_prefix')+error.message,'warn');
+  }
+}
+
 async function deleteMember(idx){
   if(!hasPermission('delete_members')){
     toast(t('msg_superadmin_only'),'warn');
@@ -3055,6 +3218,7 @@ async function openAdminsModal(){
   document.getElementById('new-admin-role').value = 'admin';
   document.getElementById('new-admin-perm-rates').checked = false;
   document.getElementById('new-admin-perm-delete').checked = false;
+  document.getElementById('new-admin-perm-blacklist').checked = false;
   toggleNewAdminPermsVisibility();
   document.getElementById('admins-modal-overlay').style.display = 'flex';
   await loadAdminsList();
@@ -3089,8 +3253,11 @@ async function loadAdminsList(){
           <label style="display:flex;align-items:center;gap:7px;font-size:11px;margin-bottom:5px;cursor:pointer;">
             <input type="checkbox" onchange="updateAdminPermission(${a.id},'edit_rates',this.checked)" ${perms.includes('edit_rates')?'checked':''}> <span data-i18n="txt_perm_edit_rates">व्याजदर/दंडदर बदलण्याची परवानगी</span>
           </label>
-          <label style="display:flex;align-items:center;gap:7px;font-size:11px;cursor:pointer;">
+          <label style="display:flex;align-items:center;gap:7px;font-size:11px;margin-bottom:5px;cursor:pointer;">
             <input type="checkbox" onchange="updateAdminPermission(${a.id},'delete_members',this.checked)" ${perms.includes('delete_members')?'checked':''}> <span data-i18n="txt_perm_delete_members">सभासद नोंद काढण्याची परवानगी</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:7px;font-size:11px;cursor:pointer;">
+            <input type="checkbox" onchange="updateAdminPermission(${a.id},'blacklist_members',this.checked)" ${perms.includes('blacklist_members')?'checked':''}> <span data-i18n="txt_perm_blacklist_members">सभासद Blacklist/Terminate करण्याची परवानगी</span>
           </label>
         </div>`;
       return `<div style="padding:9px 12px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">
@@ -3132,7 +3299,8 @@ async function addAdmin(){
   const role = document.getElementById('new-admin-role').value;
   const permissions = role==='superadmin' ? [] : [
     ...(document.getElementById('new-admin-perm-rates').checked ? ['edit_rates'] : []),
-    ...(document.getElementById('new-admin-perm-delete').checked ? ['delete_members'] : [])
+    ...(document.getElementById('new-admin-perm-delete').checked ? ['delete_members'] : []),
+    ...(document.getElementById('new-admin-perm-blacklist').checked ? ['blacklist_members'] : [])
   ];
   const err = document.getElementById('admins-error');
   const suc = document.getElementById('admins-success');
@@ -3147,6 +3315,7 @@ async function addAdmin(){
     document.getElementById('new-admin-password').value = '';
     document.getElementById('new-admin-perm-rates').checked = false;
     document.getElementById('new-admin-perm-delete').checked = false;
+    document.getElementById('new-admin-perm-blacklist').checked = false;
     await loadAdminsList();
   }catch(error){
     err.textContent = '❌ '+t('err_prefix')+error.message;
@@ -4301,6 +4470,15 @@ function hasPermission(perm){
   }catch(e){ return false; }
 }
 
+function isBlacklisted(m){
+  if(!m || m.blacklist_status!=='blacklisted') return false;
+  if(m.blacklist_until){
+    const today = new Date().toISOString().slice(0,10);
+    if(m.blacklist_until < today) return false; // duration expired
+  }
+  return true;
+}
+
 async function doLogin(){
   const u=document.getElementById('login-user').value.trim();
   const p=document.getElementById('login-pass').value;
@@ -4495,22 +4673,52 @@ async function checkLoanRequestStatus(m){
   const statusBox = document.getElementById('md-loan-req-status');
   const formWrap = document.getElementById('md-loan-req-form-wrap');
   if(!statusBox || !formWrap) return;
+
+  if(isBlacklisted(m)){
+    statusBox.style.display='block';
+    statusBox.style.background='#450a0a';
+    statusBox.style.border='1px solid #7f1d1d';
+    statusBox.style.color='#fecaca';
+    const untilTxt = m.blacklist_until ? (t('lbl_blacklist_until')+': '+fmtDate(m.blacklist_until)) : t('opt_permanent');
+    statusBox.innerHTML = '🚫 <b>'+t('txt_member_blacklisted_notice')+'</b><br>'+untilTxt+(m.blacklist_reason ? ('<br>'+t('lbl_blacklist_reason')+': '+m.blacklist_reason) : '');
+    formWrap.style.display='none';
+    return;
+  }
+
   try{
     const {data, error} = await sb.from('loan_requests').select('*').eq('sabhasad_id', m.id).order('created_at',{ascending:false}).limit(1);
     if(error) throw error;
     const req = data && data[0];
-    if(!req || req.status!=='pending'){
+    if(!req){
       statusBox.style.display='none';
       formWrap.style.display='block';
       return;
     }
-    // Pending request exists — show status, hide form
-    statusBox.style.display='block';
-    statusBox.style.background='#fffbeb';
-    statusBox.style.border='1px solid #fde68a';
-    statusBox.style.color='#78350f';
-    statusBox.innerHTML = '⏳ ' + t('txt_loan_req_pending').replace('{amt}', fmt(req.requested_amount));
-    formWrap.style.display='none';
+    if(req.status==='pending'){
+      statusBox.style.display='block';
+      statusBox.style.background='#fffbeb';
+      statusBox.style.border='1px solid #fde68a';
+      statusBox.style.color='#78350f';
+      statusBox.innerHTML = '⏳ ' + t('txt_loan_req_pending').replace('{amt}', fmt(req.requested_amount));
+      formWrap.style.display='none';
+    } else if(req.status==='approved'){
+      statusBox.style.display='block';
+      statusBox.style.background='#f0fdf4';
+      statusBox.style.border='1px solid #bbf7d0';
+      statusBox.style.color='#166534';
+      statusBox.innerHTML = '✅ ' + t('txt_loan_req_approved').replace('{amt}', fmt(req.requested_amount));
+      formWrap.style.display='block';
+    } else if(req.status==='rejected'){
+      statusBox.style.display='block';
+      statusBox.style.background='#fef2f2';
+      statusBox.style.border='1px solid #fecaca';
+      statusBox.style.color='#b91c1c';
+      statusBox.innerHTML = '❌ ' + t('txt_loan_req_rejected').replace('{amt}', fmt(req.requested_amount)) + (req.admin_note ? ('<br><span style="font-size:11px;">'+t('lbl_admin_note')+': '+req.admin_note+'</span>') : '');
+      formWrap.style.display='block';
+    } else {
+      statusBox.style.display='none';
+      formWrap.style.display='block';
+    }
   }catch(e){
     // loan_requests table may not exist yet — fail silently, just show the form
     statusBox.style.display='none';
@@ -4523,9 +4731,10 @@ async function submitLoanRequest(){
   const purpose = document.getElementById('md-loan-req-purpose').value.trim();
   const err = document.getElementById('md-loan-req-error');
   err.textContent='';
+  const m = members.find(x=>x.id===currentMemberSabhasadId) || {nav:'', mobile:''};
+  if(isBlacklisted(m)){ err.textContent='❌ '+t('txt_member_blacklisted_notice'); return; }
   if(!amount || amount<=0){ err.textContent='❌ '+t('msg_enter_valid_amount'); return; }
 
-  const m = members.find(x=>x.id===currentMemberSabhasadId) || {nav:'', mobile:''};
   try{
     const {error} = await sb.from('loan_requests').insert({
       sabhasad_id: currentMemberSabhasadId,
