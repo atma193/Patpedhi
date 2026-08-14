@@ -596,6 +596,10 @@ window.addEventListener('DOMContentLoaded', function(){
         <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 4h6a2 2 0 012 2v14l-5-3-5 3V6a2 2 0 012-2z"/></svg>
         <span data-i18n="nav_details">तपशील</span>
       </button>
+      <button id="md-side-loanreq" class="nav-item" onclick="goMemberPage('loanreq')">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg>
+        <span data-i18n="nav_loanreq">कर्ज विनंती</span>
+      </button>
     </div>
     <div class="member-sidebar-footer">
       <button class="member-sidebar-logout" onclick="openMemberSettingsModal()" style="margin-bottom:10px;">
@@ -667,9 +671,11 @@ window.addEventListener('DOMContentLoaded', function(){
           <div id="md-home-shillak" style="font-size:18px;font-weight:700;color:#dc2626;"></div>
         </div>
       </div>
+    </div>
 
-      <!-- Loan Request Section -->
-      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:16px;margin-top:16px;">
+    <!-- PAGE: LOAN REQUEST -->
+    <div id="md-page-loanreq" style="display:none;">
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:16px;">
         <div id="md-loan-req-status" style="display:none;margin-bottom:12px;padding:10px 12px;border-radius:10px;font-size:12px;line-height:1.6;"></div>
         <div id="md-loan-req-form-wrap">
           <div style="font-size:13px;font-weight:700;color:#1a2540;margin-bottom:4px;">🏦 <span data-i18n="txt_loan_request_title">नवीन कर्जासाठी विनंती</span></div>
@@ -677,6 +683,17 @@ window.addEventListener('DOMContentLoaded', function(){
           <div class="login-field">
             <label data-i18n="lbl_requested_amount">हवी असलेली रक्कम (₹)</label>
             <input type="number" id="md-loan-req-amount" placeholder="25000" min="1">
+          </div>
+          <div class="login-field">
+            <label data-i18n="lbl_loan_for">कर्ज कोणासाठी?</label>
+            <select id="md-loan-req-karjtype" onchange="toggleMdLoanReqGuarantor()" style="width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;">
+              <option value="swataha" data-i18n="opt_self">स्वतःसाठी</option>
+              <option value="etar" data-i18n="opt_other">इतरांसाठी</option>
+            </select>
+          </div>
+          <div class="login-field" id="md-loan-req-guarantor-wrap" style="display:none;">
+            <label data-i18n="lbl_other_person_name">इतर व्यक्तीचे नाव</label>
+            <input type="text" id="md-loan-req-guarantor" placeholder="व्यक्तीचे पूर्ण नाव लिहा">
           </div>
           <div class="login-field">
             <label data-i18n="lbl_loan_purpose">कारण (ऐच्छिक)</label>
@@ -796,6 +813,10 @@ window.addEventListener('DOMContentLoaded', function(){
     <button id="md-bottom-details" class="bottom-nav-item" onclick="goMemberPage('details')">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 4h6a2 2 0 012 2v14l-5-3-5 3V6a2 2 0 012-2z"/></svg>
       <span data-i18n="nav_details">तपशील</span>
+    </button>
+    <button id="md-bottom-loanreq" class="bottom-nav-item" onclick="goMemberPage('loanreq')">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg>
+      <span data-i18n="nav_loanreq">कर्ज विनंती</span>
     </button>
   </nav>
 </div>
@@ -1441,6 +1462,7 @@ window.addEventListener('DOMContentLoaded', function(){
           <th data-i18n="lbl_name">नाव</th>
           <th data-i18n="th_mobile_short">मोबाईल</th>
           <th data-i18n="lbl_requested_amount">मागितलेली रक्कम</th>
+          <th data-i18n="lbl_loan_for">कर्ज कोणासाठी?</th>
           <th data-i18n="lbl_loan_purpose">कारण</th>
           <th data-i18n="lbl_status">स्थिती</th>
           <th data-i18n="th_action">क्रिया</th>
@@ -1855,7 +1877,7 @@ const translations = {
     lbl_create_pass:"पासवर्ड तयार करा", ph_min6:"किमान ६ अक्षरे", lbl_pass_confirm:"पासवर्ड पुन्हा टाका",
     btn_send_reg_request:"नोंदणी विनंती पाठवा", txt_login_sub:"पतपेढी व्यवस्थापन",
     nav_home:"मुख्यपृष्ठ", nav_entry:"सभासद नोंदणी", nav_hapta:"हप्ता नोंदणी", nav_search:"सभासद तपशील",
-    nav_summary:"पूर्ण तपशील", nav_requests:"सभासद विनंत्या", nav_details:"तपशील",
+    nav_summary:"पूर्ण तपशील", nav_requests:"सभासद विनंत्या", nav_details:"तपशील", nav_loanreq:"कर्ज विनंती",
     btn_install_app:"App Install करा", txt_footer_branch:"मुंबई शाखा", txt_footer_dept:"पतपेढी विभाग",
     txt_member_panel:"सभासद पॅनल", btn_logout:"लॉगआउट",
     txt_total_summary:"एकूण सारांश", txt_recent_members:"अलीकडील सभासद", txt_view_all:"सर्व पहा →",
@@ -2024,6 +2046,7 @@ const translations = {
     txt_loan_request_title:"नवीन कर्जासाठी विनंती", txt_loan_request_sub:"कर्जाची रक्कम व कारण भरा — तुमची विनंती अ‍ॅडमिनकडे मंजुरीसाठी जाईल",
     lbl_requested_amount:"हवी असलेली रक्कम (₹)", lbl_loan_purpose:"कारण (ऐच्छिक)",
     btn_send_loan_request:"विनंती पाठवा", msg_enter_valid_amount:"कृपया योग्य रक्कम भरा",
+    msg_enter_guarantor_name:"कृपया इतर व्यक्तीचे नाव भरा",
     msg_loan_request_sent:"कर्ज विनंती पाठवली! अ‍ॅडमिनकडून मंजुरीची वाट पाहा.",
     txt_loan_req_pending:"तुमची कर्ज विनंती ({amt}) सध्या प्रलंबित आहे. अ‍ॅडमिनने मंजूर केल्यावर तुम्हाला कर्ज मिळेल.",
     txt_signup_requests:"नोंदणी विनंत्या", txt_loan_requests:"कर्ज विनंत्या",
@@ -2045,7 +2068,8 @@ const translations = {
     txt_member_blacklisted_notice:"तुमचं खातं सध्या ब्लॉक केलेलं आहे. नवीन कर्ज विनंती पाठवता येणार नाही. अधिक माहितीसाठी कार्यालयाशी संपर्क साधा.",
     txt_loan_req_approved:"तुमची कर्ज विनंती ({amt}) मंजूर झाली आहे! लवकरच कर्ज नोंदणी होईल.",
     txt_loan_req_rejected:"तुमची कर्ज विनंती ({amt}) नाकारली गेली आहे.",
-    lbl_admin_note:"अ‍ॅडमिनची टीप"
+    lbl_admin_note:"अ‍ॅडमिनची टीप",
+    txt_loan_req_outstanding:"तुमचं आधीचं कर्ज अजून पूर्ण फेडलेलं नाही (सध्याची शिल्लक: {amt}). कर्ज पूर्णपणे फेडल्यानंतरच नवीन कर्जासाठी विनंती करता येईल."
   },
   en: {
     lbl_mobile:"Mobile Number", ph_mobile:"Enter mobile number",
@@ -2063,7 +2087,7 @@ const translations = {
     lbl_create_pass:"Create password", ph_min6:"Minimum 6 characters", lbl_pass_confirm:"Re-enter password",
     btn_send_reg_request:"Send registration request", txt_login_sub:"Society Management",
     nav_home:"Home", nav_entry:"Member Registration", nav_hapta:"Installment Entry", nav_search:"Member Details",
-    nav_summary:"Full Details", nav_requests:"Member Requests", nav_details:"Details",
+    nav_summary:"Full Details", nav_requests:"Member Requests", nav_details:"Details", nav_loanreq:"Loan Request",
     btn_install_app:"Install App", txt_footer_branch:"Mumbai Branch", txt_footer_dept:"Credit Society Dept",
     txt_member_panel:"Member Panel", btn_logout:"Logout",
     txt_total_summary:"Total Summary", txt_recent_members:"Recent Members", txt_view_all:"View all →",
@@ -2232,6 +2256,7 @@ const translations = {
     txt_loan_request_title:"Request a New Loan", txt_loan_request_sub:"Enter the loan amount and reason — your request will go to the admin for approval",
     lbl_requested_amount:"Amount Needed (₹)", lbl_loan_purpose:"Reason (optional)",
     btn_send_loan_request:"Send Request", msg_enter_valid_amount:"Please enter a valid amount",
+    msg_enter_guarantor_name:"Please enter the other person's name",
     msg_loan_request_sent:"Loan request sent! Please wait for admin approval.",
     txt_loan_req_pending:"Your loan request ({amt}) is currently pending. You'll receive the loan once approved by admin.",
     txt_signup_requests:"Signup Requests", txt_loan_requests:"Loan Requests",
@@ -2253,7 +2278,8 @@ const translations = {
     txt_member_blacklisted_notice:"Your account is currently blocked. You cannot send a new loan request. Please contact the office for more information.",
     txt_loan_req_approved:"Your loan request ({amt}) has been approved! The loan will be registered soon.",
     txt_loan_req_rejected:"Your loan request ({amt}) has been rejected.",
-    lbl_admin_note:"Admin note"
+    lbl_admin_note:"Admin note",
+    txt_loan_req_outstanding:"Your previous loan hasn't been fully repaid yet (current balance: {amt}). You can request a new loan only after fully repaying it."
   }
 };
 
@@ -4636,6 +4662,7 @@ function goMemberPage(id){
   const homeBtn = document.getElementById('md-nav-home');
   const detailsBtn = document.getElementById('md-nav-details');
   document.getElementById('md-page-home').style.display = id==='home' ? 'block' : 'none';
+  document.getElementById('md-page-loanreq').style.display = id==='loanreq' ? 'block' : 'none';
   document.getElementById('md-page-details').style.display = id==='details' ? 'block' : 'none';
   document.getElementById('md-page-profile').style.display = id==='profile' ? 'block' : 'none';
   homeBtn.style.color = id==='home' ? 'var(--accent,#3a6fd8)' : '#94a3b8';
@@ -4646,17 +4673,26 @@ function goMemberPage(id){
   // Sync desktop sidebar nav highlight
   const sideHome = document.getElementById('md-side-home');
   const sideDetails = document.getElementById('md-side-details');
+  const sideLoanreq = document.getElementById('md-side-loanreq');
   if(sideHome && sideDetails){
     sideHome.classList.toggle('active', id==='home');
     sideDetails.classList.toggle('active', id==='details');
   }
+  if(sideLoanreq) sideLoanreq.classList.toggle('active', id==='loanreq');
 
   // Sync mobile bottom nav highlight
   const bottomHome = document.getElementById('md-bottom-home');
   const bottomDetails = document.getElementById('md-bottom-details');
+  const bottomLoanreq = document.getElementById('md-bottom-loanreq');
   if(bottomHome && bottomDetails){
     bottomHome.classList.toggle('active', id==='home');
     bottomDetails.classList.toggle('active', id==='details');
+  }
+  if(bottomLoanreq) bottomLoanreq.classList.toggle('active', id==='loanreq');
+
+  if(id==='loanreq'){
+    const m = members.find(x=>x.id===currentMemberSabhasadId);
+    if(m) checkLoanRequestStatus(m);
   }
 }
 
@@ -4681,6 +4717,18 @@ async function checkLoanRequestStatus(m){
     statusBox.style.color='#fecaca';
     const untilTxt = m.blacklist_until ? (t('lbl_blacklist_until')+': '+fmtDate(m.blacklist_until)) : t('opt_permanent');
     statusBox.innerHTML = '🚫 <b>'+t('txt_member_blacklisted_notice')+'</b><br>'+untilTxt+(m.blacklist_reason ? ('<br>'+t('lbl_blacklist_reason')+': '+m.blacklist_reason) : '');
+    formWrap.style.display='none';
+    return;
+  }
+
+  const paidTotal = (m.hapte||[]).reduce((s,h)=>s+(h.hapta||0),0);
+  const shillak = Math.max(0,(m.vatap||0)-paidTotal);
+  if(shillak>0){
+    statusBox.style.display='block';
+    statusBox.style.background='#eff6ff';
+    statusBox.style.border='1px solid #bfdbfe';
+    statusBox.style.color='#1e40af';
+    statusBox.innerHTML = 'ℹ️ ' + t('txt_loan_req_outstanding').replace('{amt}', fmt(shillak));
     formWrap.style.display='none';
     return;
   }
@@ -4728,12 +4776,18 @@ async function checkLoanRequestStatus(m){
 
 async function submitLoanRequest(){
   const amount = parseFloat(document.getElementById('md-loan-req-amount').value);
+  const karjtype = document.getElementById('md-loan-req-karjtype').value;
+  const guarantor = document.getElementById('md-loan-req-guarantor').value.trim();
   const purpose = document.getElementById('md-loan-req-purpose').value.trim();
   const err = document.getElementById('md-loan-req-error');
   err.textContent='';
   const m = members.find(x=>x.id===currentMemberSabhasadId) || {nav:'', mobile:''};
   if(isBlacklisted(m)){ err.textContent='❌ '+t('txt_member_blacklisted_notice'); return; }
+  const paidTotal = (m.hapte||[]).reduce((s,h)=>s+(h.hapta||0),0);
+  const shillak = Math.max(0,(m.vatap||0)-paidTotal);
+  if(shillak>0){ err.textContent='❌ '+t('txt_loan_req_outstanding').replace('{amt}', fmt(shillak)); return; }
   if(!amount || amount<=0){ err.textContent='❌ '+t('msg_enter_valid_amount'); return; }
+  if(karjtype==='etar' && !guarantor){ err.textContent='❌ '+t('msg_enter_guarantor_name'); return; }
 
   try{
     const {error} = await sb.from('loan_requests').insert({
@@ -4741,17 +4795,27 @@ async function submitLoanRequest(){
       member_name: m.nav,
       mobile: m.mobile,
       requested_amount: amount,
+      karjtype: karjtype,
+      guarantor: karjtype==='etar' ? guarantor : null,
       purpose: purpose || null,
       status: 'pending'
     });
     if(error) throw error;
     toast('✓ '+t('msg_loan_request_sent'));
     document.getElementById('md-loan-req-amount').value='';
+    document.getElementById('md-loan-req-karjtype').value='swataha';
+    document.getElementById('md-loan-req-guarantor').value='';
+    toggleMdLoanReqGuarantor();
     document.getElementById('md-loan-req-purpose').value='';
     checkLoanRequestStatus(m);
   }catch(error){
     err.textContent='❌ '+t('err_prefix')+error.message;
   }
+}
+
+function toggleMdLoanReqGuarantor(){
+  const type = document.getElementById('md-loan-req-karjtype').value;
+  document.getElementById('md-loan-req-guarantor-wrap').style.display = type==='etar' ? 'block' : 'none';
 }
 
 function notifyMemberDueSoon(m){
@@ -5128,6 +5192,7 @@ function renderLoanRequests(){
       <td style="font-weight:600">${r.member_name}</td>
       <td>${r.mobile||'—'}</td>
       <td style="font-weight:600;color:var(--accent,#3a6fd8)">${fmt(r.requested_amount)}</td>
+      <td style="font-size:11px;color:var(--text2);">${r.karjtype==='etar' ? (t('opt_other')+' — '+(r.guarantor||'—')) : t('opt_self')}</td>
       <td style="font-size:11px;color:var(--text2);max-width:180px;">${r.purpose||'—'}</td>
       <td style="${statusColor[r.status]||''}">${statusLabel[r.status]||r.status}</td>
       <td style="white-space:nowrap">${actions}</td>
@@ -5148,6 +5213,15 @@ async function approveLoanRequest(id){
     if(idx>=0){
       editMember(idx);
       document.getElementById('e-vatap').value = req.requested_amount;
+      const karjtypeSel = document.getElementById('e-karjtype');
+      if(karjtypeSel && req.karjtype){
+        karjtypeSel.value = req.karjtype;
+        toggleGuarantor();
+        if(req.karjtype==='etar' && req.guarantor){
+          const guarantorEl = document.getElementById('e-guarantor');
+          if(guarantorEl) guarantorEl.value = req.guarantor;
+        }
+      }
     }
   }catch(error){
     toast(t('err_prefix')+error.message,'warn');
