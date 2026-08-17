@@ -1535,6 +1535,17 @@ window.addEventListener('DOMContentLoaded', function(){
       </div>
     </div>
 
+    <!-- 5. Activity Log (superadmin only) -->
+    <div class="card superadmin-only" data-display="block" style="display:none;">
+      <div class="card-head"><span class="card-head-title">📝 <span data-i18n="txt_activity_log">क्रियाकलाप नोंद (Activity Log)</span></span></div>
+      <div class="card-body" style="padding:16px 18px;">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:14px;line-height:1.6;" data-i18n="txt_report_audit_desc">कोणत्या admin ने कधी काय बदल केला — दर, admin व्यवस्थापन, सभासद हटवणे/blacklist इ.</div>
+        <button class="btn btn-primary" style="width:100%;" onclick="openAuditLogModal()">
+          <span data-i18n="txt_view_activity_log">नोंद पहा</span>
+        </button>
+      </div>
+    </div>
+
   </div>
 
   <!-- 5. तारीखनिहाय व्यवहार तपशील (full table) -->
@@ -1631,7 +1642,7 @@ window.addEventListener('DOMContentLoaded', function(){
     <div style="font-size:15px;font-weight:700;margin-bottom:4px;">⚙️ <span data-i18n="txt_settings">सेटिंग्ज</span></div>
 
     <div data-perm="edit_rates" data-perm-display="block" style="display:none;">
-      <div style="font-size:12px;color:var(--text2);margin-bottom:14px;" data-i18n="txt_settings_sub">व्याजदर व दंडदर बदला — नवीन हप्ता calculations साठी लागू होईल</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:14px;" data-i18n="txt_settings_sub">व्याजदर व दंडदर बदला — सर्व admin devices वर लागू होईल</div>
       <div class="login-field">
         <label data-i18n="lbl_interest_rate">व्याजदर (% दर महिना)</label>
         <input type="number" id="settings-interest-rate" step="0.01" min="0" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
@@ -1791,6 +1802,41 @@ window.addEventListener('DOMContentLoaded', function(){
       <button class="btn" onclick="confirmBlacklistMember()" style="flex:1;background:#b91c1c;color:#fff;" data-i18n="btn_confirm_blacklist">Blacklist करा</button>
     </div>
     <div class="login-error" id="blacklist-error" style="margin-top:8px;"></div>
+  </div>
+</div>
+
+<!-- Approve Loan Request Modal -->
+<div id="approve-loan-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9997;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;width:90%;max-width:380px;padding:20px;">
+    <div style="font-size:15px;font-weight:700;margin-bottom:4px;color:#166534;">✅ <span data-i18n="txt_approve_loan_title">कर्ज विनंती मंजूर करा</span></div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:14px;" id="approve-loan-member-name"></div>
+
+    <div style="background:#f8fafc;border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--text2);">
+      <span data-i18n="txt_requested_amount_label">सभासदाने मागितलेली रक्कम</span>:
+      <span style="font-weight:700;color:var(--text);" id="approve-loan-requested-amount"></span>
+    </div>
+
+    <div class="login-field">
+      <label data-i18n="lbl_approved_amount">मंजूर रक्कम (₹) — बदलता येईल</label>
+      <input type="number" id="approve-loan-amount" min="1" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-weight:600;">
+    </div>
+    <div style="font-size:11px;color:var(--text3);background:#fffbeb;border-radius:8px;padding:8px 10px;margin-bottom:2px;" data-i18n="txt_approve_amount_hint">टीप: सभासदाने मागितलेल्यापेक्षा कमी/जास्त रक्कम मंजूर करू शकता — हे सभासदाला पुढच्या पेजवर तसं दिसेल.</div>
+
+    <div style="display:flex;gap:8px;margin-top:14px;">
+      <button class="btn btn-ghost" onclick="closeApproveLoanModal()" style="flex:1;" data-i18n="btn_cancel">रद्द करा</button>
+      <button class="btn" onclick="confirmApproveLoanRequest()" style="flex:1;background:#166534;color:#fff;" data-i18n="btn_confirm_approve">मंजूर करा</button>
+    </div>
+    <div class="login-error" id="approve-loan-error" style="margin-top:8px;"></div>
+  </div>
+</div>
+
+<!-- Audit Log Modal -->
+<div id="audit-log-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9997;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;width:94%;max-width:600px;max-height:82vh;padding:20px;display:flex;flex-direction:column;">
+    <div style="font-size:15px;font-weight:700;margin-bottom:4px;">📝 <span data-i18n="txt_activity_log">क्रियाकलाप नोंद (Activity Log)</span></div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:12px;" data-i18n="txt_audit_log_sub">अलीकडील १०० नोंदी दाखवल्या आहेत, नवीन आधी</div>
+    <div id="audit-log-list" style="overflow-y:auto;flex:1;border:1px solid var(--border);border-radius:8px;"></div>
+    <button class="btn btn-ghost" onclick="closeAuditLogModal()" style="width:100%;margin-top:14px;" data-i18n="btn_close">बंद करा</button>
   </div>
 </div>
 
@@ -1988,7 +2034,7 @@ const translations = {
     txt_bulk_already_entered:"या महिन्याची नोंद आधीच आहे",
     txt_bulk_select_month:"कृपया आधी महिना निवडा.",
     txt_bulk_saved_suffix:"सभासदांचे हप्ते जतन झाले!",
-    txt_settings:"सेटिंग्ज", txt_settings_sub:"व्याजदर व दंडदर बदला — नवीन हप्ता calculations साठी लागू होईल",
+    txt_settings:"सेटिंग्ज", txt_settings_sub:"व्याजदर व दंडदर बदला — सर्व admin devices वर लागू होईल",
     lbl_interest_rate:"व्याजदर (% दर महिना)", lbl_penalty_rate:"दंडदर (₹ दर महिना)",
     lbl_reminder_day:"हप्ता स्मरणपत्र दिवस (महिन्याची तारीख)",
     txt_settings_note:"टीप: हा बदल फक्त नवीन हप्ता नोंदींच्या auto-calculation साठी लागू होतो. आधीच्या नोंदी बदलणार नाहीत.",
@@ -2069,7 +2115,20 @@ const translations = {
     txt_loan_req_approved:"तुमची कर्ज विनंती ({amt}) मंजूर झाली आहे! लवकरच कर्ज नोंदणी होईल.",
     txt_loan_req_rejected:"तुमची कर्ज विनंती ({amt}) नाकारली गेली आहे.",
     lbl_admin_note:"अ‍ॅडमिनची टीप",
-    txt_loan_req_outstanding:"तुमचं आधीचं कर्ज अजून पूर्ण फेडलेलं नाही (सध्याची शिल्लक: {amt}). कर्ज पूर्णपणे फेडल्यानंतरच नवीन कर्जासाठी विनंती करता येईल."
+    txt_loan_req_outstanding:"तुमचं आधीचं कर्ज अजून पूर्ण फेडलेलं नाही (सध्याची शिल्लक: {amt}). कर्ज पूर्णपणे फेडल्यानंतरच नवीन कर्जासाठी विनंती करता येईल.",
+    txt_activity_log:"क्रियाकलाप नोंद (Activity Log)", txt_report_audit_desc:"कोणत्या admin ने कधी काय बदल केला — दर, admin व्यवस्थापन, सभासद हटवणे/blacklist इ.",
+    txt_view_activity_log:"नोंद पहा", txt_audit_log_sub:"अलीकडील १०० नोंदी दाखवल्या आहेत, नवीन आधी",
+    txt_no_audit_log:"अजून कोणतीही नोंद नाही",
+    txt_action_rate_change:"व्याजदर/दंडदर बदलले", txt_action_admin_add:"नवीन प्रशासक जोडला",
+    txt_action_admin_delete:"प्रशासक काढला", txt_action_admin_permission_change:"प्रशासकाचे अधिकार बदलले",
+    txt_action_member_delete:"सभासद नोंद काढली", txt_action_member_blacklist:"सभासद Blacklist केला",
+    txt_action_member_reactivate:"सभासद पूर्ववत सक्रिय केला", txt_action_loan_approve:"कर्ज विनंती मंजूर केली",
+    txt_action_loan_reject:"कर्ज विनंती नाकारली", txt_action_new_cycle:"नवीन कर्ज चक्र सुरू केलं",
+    txt_action_password_change:"पासवर्ड बदलला",
+    txt_approve_loan_title:"कर्ज विनंती मंजूर करा", txt_requested_amount_label:"सभासदाने मागितलेली रक्कम",
+    lbl_approved_amount:"मंजूर रक्कम (₹) — बदलता येईल",
+    txt_approve_amount_hint:"टीप: सभासदाने मागितलेल्यापेक्षा कमी/जास्त रक्कम मंजूर करू शकता — हे सभासदाला पुढच्या पेजवर तसं दिसेल.",
+    btn_confirm_approve:"मंजूर करा"
   },
   en: {
     lbl_mobile:"Mobile Number", ph_mobile:"Enter mobile number",
@@ -2198,7 +2257,7 @@ const translations = {
     txt_bulk_already_entered:"Already entered for this month",
     txt_bulk_select_month:"Please select a month first.",
     txt_bulk_saved_suffix:"members' installments saved!",
-    txt_settings:"Settings", txt_settings_sub:"Change interest and penalty rates — applies to new installment calculations",
+    txt_settings:"Settings", txt_settings_sub:"Change interest and penalty rates — applies across all admin devices",
     lbl_interest_rate:"Interest Rate (% per month)", lbl_penalty_rate:"Penalty Rate (₹ per month)",
     lbl_reminder_day:"Installment Reminder Day (day of month)",
     txt_settings_note:"Note: This only affects auto-calculation for new installment entries. Existing records won't change.",
@@ -2279,7 +2338,20 @@ const translations = {
     txt_loan_req_approved:"Your loan request ({amt}) has been approved! The loan will be registered soon.",
     txt_loan_req_rejected:"Your loan request ({amt}) has been rejected.",
     lbl_admin_note:"Admin note",
-    txt_loan_req_outstanding:"Your previous loan hasn't been fully repaid yet (current balance: {amt}). You can request a new loan only after fully repaying it."
+    txt_loan_req_outstanding:"Your previous loan hasn't been fully repaid yet (current balance: {amt}). You can request a new loan only after fully repaying it.",
+    txt_activity_log:"Activity Log", txt_report_audit_desc:"Which admin made what change, and when — rate changes, admin management, member deletion/blacklist, etc.",
+    txt_view_activity_log:"View Log", txt_audit_log_sub:"Showing the most recent 100 entries, newest first",
+    txt_no_audit_log:"No activity recorded yet",
+    txt_action_rate_change:"Rates changed", txt_action_admin_add:"New admin added",
+    txt_action_admin_delete:"Admin removed", txt_action_admin_permission_change:"Admin permissions changed",
+    txt_action_member_delete:"Member record deleted", txt_action_member_blacklist:"Member blacklisted",
+    txt_action_member_reactivate:"Member reactivated", txt_action_loan_approve:"Loan request approved",
+    txt_action_loan_reject:"Loan request rejected", txt_action_new_cycle:"New loan cycle started",
+    txt_action_password_change:"Password changed",
+    txt_approve_loan_title:"Approve Loan Request", txt_requested_amount_label:"Amount requested by member",
+    lbl_approved_amount:"Approved Amount (₹) — can be changed",
+    txt_approve_amount_hint:"Note: You can approve a lower/higher amount than requested — the member will see this on their next page.",
+    btn_confirm_approve:"Approve"
   }
 };
 
@@ -2370,7 +2442,7 @@ function closeMemberSettingsModal(){
 async function loadMembers(){
   const {data,error} = await sb.from('sabhasad').select('*').order('kram',{ascending:true});
   if(error){ toast(t('msg_data_load_error')+error.message,'warn'); return; }
-  members = (data||[]).map(r=>({id:r.id,kram:r.kram,nav:r.nav,mobile:r.mobile,vatap:r.vatap,date:r.date,hapte:r.hapte||[],karjtype:r.karjtype,guarantor:r.guarantor,photo:r.photo||null}));
+  members = (data||[]).map(r=>({id:r.id,kram:r.kram,nav:r.nav,mobile:r.mobile,vatap:r.vatap,date:r.date,hapte:r.hapte||[],karjtype:r.karjtype,guarantor:r.guarantor,photo:r.photo||null,loan_history:r.loan_history||[],blacklist_status:r.blacklist_status||'active',blacklist_reason:r.blacklist_reason||null,blacklist_until:r.blacklist_until||null,blacklisted_at:r.blacklisted_at||null,blacklisted_by:r.blacklisted_by||null}));
   renderHome();
   if(document.getElementById('page-search')?.classList.contains('active')) doSearch();
   if(document.getElementById('page-summary')?.classList.contains('active')) renderSum();
@@ -2437,8 +2509,13 @@ function goPage(id,btn,skipHistory){
 }
 
 window.addEventListener('popstate', function(e){
-  const id = (e.state && e.state.page) || 'home';
-  goPage(id, null, true);
+  if(sessionStorage.getItem('pp_member_auth')==='true'){
+    const id = (e.state && e.state.mpage) || 'home';
+    goMemberPage(id, true);
+  } else {
+    const id = (e.state && e.state.page) || 'home';
+    goPage(id, null, true);
+  }
 });
 
 function toggleSidebar(){
@@ -2764,6 +2841,7 @@ async function startNewLoanCycle(){
     m.hapte = [];
     m.vatap = 0;
     m.date = null;
+    logActivity('new_loan_cycle', m.nav, 'जुनं कर्ज बंद: ₹'+closedCycle.vatap);
     toast('✓ '+t('msg_new_cycle_started'));
 
     document.getElementById('e-vatap').value='';
@@ -3080,6 +3158,7 @@ async function confirmBlacklistMember(){
     const {error} = await sb.from('sabhasad').update(payload).eq('id',m.id);
     if(error) throw error;
     Object.assign(m, payload);
+    logActivity('member_blacklist', m.nav, 'कारण: '+reason+', कालावधी: '+(durationType==='until'?untilDate:'कायमस्वरूपी'));
     toast('🚫 '+t('msg_member_blacklisted'));
     closeBlacklistModal();
     openDrawer(idx);
@@ -3099,6 +3178,7 @@ async function reactivateMember(idx){
     const {error} = await sb.from('sabhasad').update(payload).eq('id',m.id);
     if(error) throw error;
     Object.assign(m, payload);
+    logActivity('member_reactivate', m.nav, null);
     toast('✓ '+t('msg_member_reactivated'));
     openDrawer(idx);
     renderSum(); doSearch();
@@ -3116,6 +3196,7 @@ async function deleteMember(idx){
   if(!confirm('"'+m.nav+'" यांची नोंद कायमची काढायची आहे का?')) return;
   const {error} = await sb.from('sabhasad').delete().eq('id',m.id);
   if(error){toast(t('msg_delete_error')+error.message,'warn');return;}
+  logActivity('member_delete', m.nav, 'अ.क्र. '+m.kram+', कर्ज: ₹'+m.vatap);
   members.splice(idx,1);
   toast('🗑 '+m.nav+' '+t('msg_record_deleted'),'warn');
   renderSum();doSearch();
@@ -3176,13 +3257,35 @@ function downloadExcel(htmlContent, filename){
 }
 
 /* ── SETTINGS (व्याजदर / दंडदर) ── */
+let appSettingsCache = { interest_rate: null, penalty_rate: null, reminder_day: null, loaded: false };
+
+async function loadAppSettings(){
+  try{
+    const {data, error} = await sb.from('app_settings').select('*').eq('id',1).single();
+    if(error) throw error;
+    if(data){
+      appSettingsCache.interest_rate = data.interest_rate;
+      appSettingsCache.penalty_rate = data.penalty_rate;
+      appSettingsCache.reminder_day = data.reminder_day;
+      appSettingsCache.loaded = true;
+      updateVyajRateLabels();
+    }
+  }catch(e){
+    // app_settings table may not exist yet — fall back to localStorage/defaults
+    console.warn('loadAppSettings failed, using local fallback:', e?.message||e);
+  }
+}
+
 function getInterestRate(){
+  if(appSettingsCache.loaded && appSettingsCache.interest_rate!==null) return appSettingsCache.interest_rate;
   try{ const v = parseFloat(localStorage.getItem('pp_interest_rate')); return isNaN(v) ? 0.02 : v; }catch(e){ return 0.02; }
 }
 function getPenaltyRate(){
+  if(appSettingsCache.loaded && appSettingsCache.penalty_rate!==null) return appSettingsCache.penalty_rate;
   try{ const v = parseFloat(localStorage.getItem('pp_penalty_rate')); return isNaN(v) ? 20 : v; }catch(e){ return 20; }
 }
 function getReminderDay(){
+  if(appSettingsCache.loaded && appSettingsCache.reminder_day!==null) return appSettingsCache.reminder_day;
   try{ const v = parseInt(localStorage.getItem('pp_reminder_day')); return isNaN(v) ? 20 : v; }catch(e){ return 20; }
 }
 function updateVyajRateLabels(){
@@ -3209,7 +3312,7 @@ function openSettingsModal(){
 function closeSettingsModal(){
   document.getElementById('settings-modal-overlay').style.display = 'none';
 }
-function saveSettings(){
+async function saveSettings(){
   if(!hasPermission('edit_rates')){
     toast(t('txt_rate_restricted'),'warn');
     return;
@@ -3223,11 +3326,31 @@ function saveSettings(){
     suc.textContent = '❌ ' + t('msg_invalid_rate');
     return;
   }
+  const newInterestRate = interestPct/100;
   try{
-    localStorage.setItem('pp_interest_rate', (interestPct/100).toString());
-    localStorage.setItem('pp_penalty_rate', penaltyAmt.toString());
-    localStorage.setItem('pp_reminder_day', reminderDay.toString());
-  }catch(e){}
+    const {error} = await sb.from('app_settings').upsert({
+      id: 1,
+      interest_rate: newInterestRate,
+      penalty_rate: penaltyAmt,
+      reminder_day: reminderDay,
+      updated_at: new Date().toISOString(),
+      updated_by: sessionStorage.getItem('pp_admin_username')||''
+    });
+    if(error) throw error;
+    appSettingsCache.interest_rate = newInterestRate;
+    appSettingsCache.penalty_rate = penaltyAmt;
+    appSettingsCache.reminder_day = reminderDay;
+    appSettingsCache.loaded = true;
+  }catch(e){
+    // app_settings table may not exist yet — fall back to localStorage only (this device)
+    console.warn('saveSettings DB write failed, using local fallback:', e?.message||e);
+    try{
+      localStorage.setItem('pp_interest_rate', newInterestRate.toString());
+      localStorage.setItem('pp_penalty_rate', penaltyAmt.toString());
+      localStorage.setItem('pp_reminder_day', reminderDay.toString());
+    }catch(e2){}
+  }
+  logActivity('rate_change', null, 'व्याजदर: '+interestPct+'%, दंडदर: ₹'+penaltyAmt+', स्मरणपत्र दिवस: '+reminderDay);
   suc.style.color = '#16a34a';
   suc.textContent = '✅ ' + t('msg_settings_saved');
   toast('✓ '+t('msg_settings_saved'));
@@ -3306,12 +3429,13 @@ async function loadAdminsList(){
 
 async function updateAdminPermission(id, perm, checked){
   try{
-    const {data} = await sb.from('admins').select('permissions').eq('id',id).single();
+    const {data} = await sb.from('admins').select('username,permissions').eq('id',id).single();
     let perms = (data && data.permissions) || [];
     if(checked && !perms.includes(perm)) perms.push(perm);
     if(!checked) perms = perms.filter(p=>p!==perm);
     const {error} = await sb.from('admins').update({permissions:perms}).eq('id',id);
     if(error) throw error;
+    logActivity('admin_permission_change', data?.username, perm+' → '+(checked?'दिली':'काढली'));
     toast('✓ '+t('msg_settings_saved'));
   }catch(error){
     toast(t('err_prefix')+error.message,'warn');
@@ -3336,6 +3460,7 @@ async function addAdmin(){
   try{
     const {error} = await sb.from('admins').insert({username, password, role, permissions});
     if(error) throw error;
+    logActivity('admin_add', username, 'भूमिका: '+role+(permissions.length?', अधिकार: '+permissions.join(', '):''));
     suc.textContent = '✅ '+t('msg_admin_added');
     document.getElementById('new-admin-username').value = '';
     document.getElementById('new-admin-password').value = '';
@@ -3353,6 +3478,7 @@ async function deleteAdmin(id, username){
   try{
     const {error} = await sb.from('admins').delete().eq('id',id);
     if(error) throw error;
+    logActivity('admin_delete', username, null);
     toast('✓ '+t('msg_admin_deleted'));
     await loadAdminsList();
   }catch(error){
@@ -4451,6 +4577,13 @@ function checkLogin(){
           currentMemberSabhasadId = data.id;
           renderMemberDashboard(data);
           document.getElementById('member-dashboard').style.display='block';
+          const validMemberPages = ['home','details','loanreq','profile'];
+          const hashPage = (location.hash||'').replace('#','');
+          if(hashPage && validMemberPages.includes(hashPage)){
+            goMemberPage(hashPage, true);
+          } else {
+            goMemberPage('home', true);
+          }
         } else {
           memberLogout();
         }
@@ -4477,7 +4610,7 @@ function applyAdminSession(admin){
   const unEl=document.getElementById('sidebar-username');
   if(unEl) unEl.textContent='👤 '+admin.username;
   const isSuper = admin.role==='superadmin';
-  document.querySelectorAll('.superadmin-only').forEach(el=>{ el.style.display = isSuper ? 'flex' : 'none'; });
+  document.querySelectorAll('.superadmin-only').forEach(el=>{ el.style.display = isSuper ? (el.dataset.display||'flex') : 'none'; });
 
   const perms = isSuper ? ['edit_rates','delete_members'] : (admin.permissions||[]);
   try{ sessionStorage.setItem('pp_admin_permissions', JSON.stringify(perms)); }catch(e){}
@@ -4486,6 +4619,72 @@ function applyAdminSession(admin){
     const allowed = isSuper || perms.includes(perm);
     el.style.display = allowed ? (el.dataset.permDisplay||'flex') : 'none';
   });
+}
+
+async function logActivity(actionType, targetName, details){
+  try{
+    await sb.from('audit_log').insert({
+      admin_username: sessionStorage.getItem('pp_admin_username')||'Admin',
+      admin_role: sessionStorage.getItem('pp_admin_role')||'admin',
+      action_type: actionType,
+      target_name: targetName||null,
+      details: details||null
+    });
+  }catch(e){
+    // audit_log table may not exist yet — fail silently, never block the actual action
+    console.warn('logActivity failed:', e?.message||e);
+  }
+}
+
+async function openAuditLogModal(){
+  if(sessionStorage.getItem('pp_admin_role')!=='superadmin'){ toast(t('msg_superadmin_only'),'warn'); return; }
+  document.getElementById('audit-log-modal-overlay').style.display = 'flex';
+  const listEl = document.getElementById('audit-log-list');
+  listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px;">'+t('txt_loading')+'</div>';
+  try{
+    const {data, error} = await sb.from('audit_log').select('*').order('created_at',{ascending:false}).limit(100);
+    if(error) throw error;
+    if(!data || !data.length){
+      listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px;">'+t('txt_no_audit_log')+'</div>';
+      return;
+    }
+    const actionLabels = {
+      rate_change: t('txt_action_rate_change'),
+      admin_add: t('txt_action_admin_add'),
+      admin_delete: t('txt_action_admin_delete'),
+      admin_permission_change: t('txt_action_admin_permission_change'),
+      member_delete: t('txt_action_member_delete'),
+      member_blacklist: t('txt_action_member_blacklist'),
+      member_reactivate: t('txt_action_member_reactivate'),
+      loan_request_approve: t('txt_action_loan_approve'),
+      loan_request_reject: t('txt_action_loan_reject'),
+      new_loan_cycle: t('txt_action_new_cycle'),
+      password_change: t('txt_action_password_change')
+    };
+    const actionIcons = {
+      rate_change:'💰', admin_add:'➕', admin_delete:'🗑', admin_permission_change:'🔑',
+      member_delete:'🗑', member_blacklist:'🚫', member_reactivate:'✅',
+      loan_request_approve:'✅', loan_request_reject:'❌', new_loan_cycle:'🔄', password_change:'🔒'
+    };
+    listEl.innerHTML = data.map(l=>{
+      const dt = l.created_at ? new Date(l.created_at) : null;
+      const dtStr = dt ? fmtDate(dt.toISOString().slice(0,10))+' '+dt.toTimeString().slice(0,5) : '—';
+      const label = actionLabels[l.action_type] || l.action_type;
+      const icon = actionIcons[l.action_type] || '📌';
+      return `<div style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-weight:600;color:var(--text);">${icon} ${label}${l.target_name ? ' — '+l.target_name : ''}</div>
+          <div style="font-size:10px;color:var(--text3);white-space:nowrap;">${dtStr}</div>
+        </div>
+        <div style="color:var(--text2);margin-top:3px;">👤 ${l.admin_username} (${l.admin_role||'admin'})${l.details ? '<br>'+l.details : ''}</div>
+      </div>`;
+    }).join('');
+  }catch(error){
+    listEl.innerHTML = '<div style="text-align:center;padding:20px;color:#dc2626;font-size:12px;">'+t('err_prefix')+error.message+'</div>';
+  }
+}
+function closeAuditLogModal(){
+  document.getElementById('audit-log-modal-overlay').style.display = 'none';
 }
 
 function hasPermission(perm){
@@ -4558,6 +4757,7 @@ async function doLogin(){
       document.getElementById('login-overlay').style.display='none';
       renderMemberDashboard(mdata);
       document.getElementById('member-dashboard').style.display='block';
+      goMemberPage('home', true);
       return;
     }
   }
@@ -4609,6 +4809,7 @@ async function doChangePass(){
     if(data && data.length){
       const {error:updErr} = await sb.from('admins').update({password:newP}).eq('id',data[0].id);
       if(!updErr){
+        logActivity('password_change', u, null);
         suc.textContent='✅ '+t('msg_pass_changed');
         document.getElementById('cp-old').value='';
         document.getElementById('cp-new').value='';
@@ -4658,7 +4859,7 @@ let currentMemberSabhasadId = null;
 
 let pendingMemberPhoto = null;
 
-function goMemberPage(id){
+function goMemberPage(id, skipHistory){
   const homeBtn = document.getElementById('md-nav-home');
   const detailsBtn = document.getElementById('md-nav-details');
   document.getElementById('md-page-home').style.display = id==='home' ? 'block' : 'none';
@@ -4693,6 +4894,14 @@ function goMemberPage(id){
   if(id==='loanreq'){
     const m = members.find(x=>x.id===currentMemberSabhasadId);
     if(m) checkLoanRequestStatus(m);
+  }
+
+  if(!skipHistory){
+    if(history.state && history.state.mpage===id){
+      // already on this page in history, do nothing extra
+    } else {
+      try{ history.pushState({mpage:id}, '', '#'+id); }catch(e){}
+    }
   }
 }
 
@@ -4754,7 +4963,7 @@ async function checkLoanRequestStatus(m){
       statusBox.style.background='#f0fdf4';
       statusBox.style.border='1px solid #bbf7d0';
       statusBox.style.color='#166534';
-      statusBox.innerHTML = '✅ ' + t('txt_loan_req_approved').replace('{amt}', fmt(req.requested_amount));
+      statusBox.innerHTML = '✅ ' + t('txt_loan_req_approved').replace('{amt}', fmt(req.approved_amount!=null ? req.approved_amount : req.requested_amount));
       formWrap.style.display='block';
     } else if(req.status==='rejected'){
       statusBox.style.display='block';
@@ -4928,7 +5137,6 @@ function renderMemberDashboard(m){
   setMemberAvatarDisplay('md-avatar','md-avatar-placeholder', m.photo);
   setMemberAvatarDisplay('md-photo-preview','md-photo-placeholder', m.photo);
   if(document.getElementById('md-side-avatar')) setMemberAvatarDisplay('md-side-avatar','md-side-avatar-placeholder', m.photo);
-  goMemberPage('home');
   const tbody = document.getElementById('md-hapta-body');
   if(!hapte.length){
     tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:16px;color:#94a3b8;">'+t('txt_no_record')+'</td></tr>';
@@ -5181,17 +5389,20 @@ function renderLoanRequests(){
     const dt = r.created_at ? fmtDate(r.created_at.slice(0,10)) : '—';
     let actions = '';
     if(r.status==='pending'){
-      actions = `<button class="btn-icon" title="${t('btn_approve')}" onclick="approveLoanRequest(${r.id})" style="color:var(--green,#16a34a)">✅</button>
+      actions = `<button class="btn-icon" title="${t('btn_approve')}" onclick="openApproveLoanModal(${r.id})" style="color:var(--green,#16a34a)">✅</button>
         <button class="btn-icon" title="${t('btn_reject')}" onclick="rejectLoanRequest(${r.id})" style="color:var(--red,#dc2626)">❌</button>`;
     } else {
       actions = `<span style="font-size:11px;color:var(--text3);">—</span>`;
     }
+    const amountCell = (r.status==='approved' && r.approved_amount!=null && r.approved_amount!==r.requested_amount)
+      ? `<span style="text-decoration:line-through;color:var(--text3);font-size:11px;">${fmt(r.requested_amount)}</span><br><span style="font-weight:700;color:var(--green,#16a34a);">${fmt(r.approved_amount)}</span>`
+      : fmt(r.requested_amount);
     return `<tr>
       <td>${i+1}</td>
       <td style="font-size:11px">${dt}</td>
       <td style="font-weight:600">${r.member_name}</td>
       <td>${r.mobile||'—'}</td>
-      <td style="font-weight:600;color:var(--accent,#3a6fd8)">${fmt(r.requested_amount)}</td>
+      <td style="font-weight:600;color:var(--accent,#3a6fd8)">${amountCell}</td>
       <td style="font-size:11px;color:var(--text2);">${r.karjtype==='etar' ? (t('opt_other')+' — '+(r.guarantor||'—')) : t('opt_self')}</td>
       <td style="font-size:11px;color:var(--text2);max-width:180px;">${r.purpose||'—'}</td>
       <td style="${statusColor[r.status]||''}">${statusLabel[r.status]||r.status}</td>
@@ -5200,19 +5411,44 @@ function renderLoanRequests(){
   }).join('');
 }
 
-async function approveLoanRequest(id){
+let approveLoanTargetId = null;
+
+function openApproveLoanModal(id){
   const req = loanRequests.find(r=>r.id===id);
   if(!req) return;
+  approveLoanTargetId = id;
+  document.getElementById('approve-loan-member-name').textContent = req.member_name + (req.mobile ? ' ('+req.mobile+')' : '');
+  document.getElementById('approve-loan-requested-amount').textContent = fmt(req.requested_amount);
+  document.getElementById('approve-loan-amount').value = req.requested_amount;
+  document.getElementById('approve-loan-error').textContent = '';
+  document.getElementById('approve-loan-modal-overlay').style.display = 'flex';
+}
+function closeApproveLoanModal(){
+  document.getElementById('approve-loan-modal-overlay').style.display = 'none';
+}
+
+async function confirmApproveLoanRequest(){
+  const id = approveLoanTargetId;
+  const req = loanRequests.find(r=>r.id===id);
+  if(!req) return;
+  const approvedAmount = parseFloat(document.getElementById('approve-loan-amount').value);
+  const err = document.getElementById('approve-loan-error');
+  err.textContent = '';
+  if(!approvedAmount || approvedAmount<=0){ err.textContent = '❌ '+t('msg_enter_valid_amount'); return; }
+
   try{
-    const {error} = await sb.from('loan_requests').update({status:'approved'}).eq('id',id);
+    const {error} = await sb.from('loan_requests').update({status:'approved', approved_amount:approvedAmount}).eq('id',id);
     if(error) throw error;
+    const amtNote = approvedAmount===req.requested_amount ? ('₹'+approvedAmount) : ('मागितलेली ₹'+req.requested_amount+' → मंजूर ₹'+approvedAmount);
+    logActivity('loan_request_approve', req.member_name, amtNote);
     toast('✓ '+t('msg_loan_request_approved'));
+    closeApproveLoanModal();
     await loadLoanRequests();
-    // Navigate admin to Entry page with this member loaded and amount pre-filled
+    // Navigate admin to Entry page with this member loaded and approved amount pre-filled
     const idx = members.findIndex(m=>m.id===req.sabhasad_id);
     if(idx>=0){
       editMember(idx);
-      document.getElementById('e-vatap').value = req.requested_amount;
+      document.getElementById('e-vatap').value = approvedAmount;
       const karjtypeSel = document.getElementById('e-karjtype');
       if(karjtypeSel && req.karjtype){
         karjtypeSel.value = req.karjtype;
@@ -5224,15 +5460,17 @@ async function approveLoanRequest(id){
       }
     }
   }catch(error){
-    toast(t('err_prefix')+error.message,'warn');
+    err.textContent = '❌ '+t('err_prefix')+error.message;
   }
 }
 
 async function rejectLoanRequest(id){
   if(!confirm(t('txt_confirm_reject_loan_req'))) return;
+  const req = loanRequests.find(r=>r.id===id);
   try{
     const {error} = await sb.from('loan_requests').update({status:'rejected'}).eq('id',id);
     if(error) throw error;
+    logActivity('loan_request_reject', req?.member_name, req?'₹'+req.requested_amount:null);
     toast('🗑 '+t('msg_loan_request_rejected'),'warn');
     await loadLoanRequests();
   }catch(error){
@@ -5383,10 +5621,11 @@ async function deleteRequest(requestId){
 
 window.addEventListener('DOMContentLoaded', function(){
   checkLogin();
+  loadAppSettings();
   loadMembers();
   loadMemberRequests();
   // Restore last-open page after refresh (instead of always jumping to home)
-  const validPages = ['home','entry','hapta','search','summary','requests'];
+  const validPages = ['home','entry','hapta','search','summary','requests','reports'];
   const hashPage = (location.hash||'').replace('#','');
   if(hashPage && validPages.includes(hashPage) && hashPage!=='home'){
     try{
