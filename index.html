@@ -733,11 +733,16 @@ window.addEventListener('DOMContentLoaded', function(){
       </div>
 
       <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
-        <div style="padding:11px 16px;background:#fdf6e3;font-size:12px;font-weight:700;color:#8a6d1f;" data-i18n="txt_hapta_history_date">हप्ता इतिहास (दिनांकानुसार)</div>
+        <div style="padding:11px 16px;background:#fdf6e3;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+          <span style="font-size:12px;font-weight:700;color:#8a6d1f;" data-i18n="txt_hapta_history_date">हप्ता इतिहास (दिनांकानुसार)</span>
+          <button onclick="downloadMyStatement()" style="background:#8a6d1f;color:#fff;border:none;border-radius:7px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;">
+            📄 <span data-i18n="btn_download_statement">Statement डाउनलोड करा</span>
+          </button>
+        </div>
         <div style="overflow-x:auto;">
           <table style="width:100%;border-collapse:collapse;font-size:12px;">
             <thead><tr style="background:#f8f9fc;">
-              <th style="padding:8px;text-align:left;" data-i18n="lbl_month">महिना</th><th style="padding:8px;" data-i18n="th_date">दिनांक</th><th style="padding:8px;" data-i18n="th_delay">विलंब</th><th style="padding:8px;" data-i18n="th_dand">दंड</th><th style="padding:8px;" data-i18n="th_vyaj">व्याज</th><th style="padding:8px;" data-i18n="th_hapta">हप्ता</th><th style="padding:8px;" data-i18n="th_shillak">शिल्लक</th><th style="padding:8px;" data-i18n="lbl_status">स्थिती</th>
+              <th style="padding:8px;text-align:left;" data-i18n="lbl_month">महिना</th><th style="padding:8px;" data-i18n="th_date">दिनांक</th><th style="padding:8px;" data-i18n="th_delay">विलंब</th><th style="padding:8px;" data-i18n="th_dand">दंड</th><th style="padding:8px;" data-i18n="th_vyaj">व्याज</th><th style="padding:8px;" data-i18n="th_hapta">हप्ता</th><th style="padding:8px;" data-i18n="th_shillak">शिल्लक</th><th style="padding:8px;" data-i18n="lbl_status">स्थिती</th><th style="padding:8px;"></th>
             </tr></thead>
             <tbody id="md-hapta-body"></tbody>
           </table>
@@ -862,10 +867,6 @@ window.addEventListener('DOMContentLoaded', function(){
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
       <span data-i18n="nav_hapta">हप्ता नोंदणी</span>
     </button>
-    <button class="nav-item" data-page="search" onclick="goPage('search',this)">
-      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <span data-i18n="nav_search">सभासद तपशील</span>
-    </button>
     <button class="nav-item" data-page="summary" onclick="goPage('summary',this)">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
       <span data-i18n="nav_summary">पूर्ण तपशील</span>
@@ -878,6 +879,10 @@ window.addEventListener('DOMContentLoaded', function(){
     <button class="nav-item" data-page="reports" onclick="goPage('reports',this)">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 17V8h2v9H9zm4 0V4h2v13h-2zm-8 0v-5h2v5H5z"/><path d="M3 20h18"/></svg>
       <span data-i18n="nav_reports">अहवाल</span>
+    </button>
+    <button class="nav-item" data-page="ledger" onclick="goPage('ledger',this)">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M9 7h7M9 11h7"/></svg>
+      <span data-i18n="nav_ledger">लेजर बुक</span>
     </button>
   </nav>
   <div style="padding:10px 10px 0;position:relative;">
@@ -919,6 +924,10 @@ window.addEventListener('DOMContentLoaded', function(){
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 17V8h2v9H9zm4 0V4h2v13h-2zm-8 0v-5h2v5H5z"/><path d="M3 20h18"/></svg>
       <span data-i18n="nav_reports">अहवाल</span>
     </button>
+    <button onclick="goPage('ledger');closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M9 7h7M9 11h7"/></svg>
+      <span data-i18n="nav_ledger">लेजर बुक</span>
+    </button>
     <button onclick="openSettingsModal();closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 8.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       <span data-i18n="txt_settings">सेटिंग्ज</span>
@@ -941,10 +950,6 @@ window.addEventListener('DOMContentLoaded', function(){
   <button class="bottom-nav-item" data-page="hapta" onclick="goPage('hapta',this)">
     <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
     <span data-i18n="nav_hapta_short">हप्ता</span>
-  </button>
-  <button class="bottom-nav-item" data-page="search" onclick="goPage('search',this)">
-    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-    <span data-i18n="nav_details">तपशील</span>
   </button>
   <button class="bottom-nav-item" data-page="summary" onclick="goPage('summary',this)">
     <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
@@ -1022,7 +1027,7 @@ window.addEventListener('DOMContentLoaded', function(){
     <div style="background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;">
       <div style="padding:11px 16px;border-bottom:1px solid var(--border);background:var(--gold-pale);display:flex;align-items:center;justify-content:space-between;">
         <span style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;">👥 <span data-i18n="txt_recent_members">अलीकडील सभासद</span></span>
-        <button onclick="document.querySelectorAll('.nav-item')[3].click()" style="font-size:11px;color:var(--gold);background:none;border:none;cursor:pointer;font-weight:600;"><span data-i18n="txt_view_all">सर्व पहा →</span></button>
+        <button onclick="goPage('summary')" style="font-size:11px;color:var(--gold);background:none;border:none;cursor:pointer;font-weight:600;"><span data-i18n="txt_view_all">सर्व पहा →</span></button>
       </div>
       <div id="home-recent" style="padding:6px 0;"></div>
     </div>
@@ -1056,24 +1061,24 @@ window.addEventListener('DOMContentLoaded', function(){
   <!-- Quick Actions -->
   <div style="font-size:10px;font-weight:600;color:#64748b;letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px;">⚡ <span data-i18n="txt_quick_actions">त्वरित कार्य</span></div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:11px;">
-    <button onclick="document.querySelectorAll('.nav-item')[1].click()" class="quick-btn" style="background:linear-gradient(135deg,#b91c1c,#9b1a1a);">
+    <button onclick="goPage('entry')" class="quick-btn" style="background:linear-gradient(135deg,#b91c1c,#9b1a1a);">
       <div style="font-size:22px;margin-bottom:6px;">📝</div>
       <div style="font-size:13px;font-weight:600;" data-i18n="nav_entry">सभासद नोंदणी</div>
       <div style="font-size:11px;opacity:.75;margin-top:3px;" data-i18n="txt_add_new_member">नवीन सभासद जोडा</div>
     </button>
-    <button onclick="document.querySelectorAll('.nav-item')[2].click()" class="quick-btn" style="background:linear-gradient(135deg,#166534,#14532d);">
+    <button onclick="goPage('hapta')" class="quick-btn" style="background:linear-gradient(135deg,#166534,#14532d);">
       <div style="font-size:22px;margin-bottom:6px;">💰</div>
       <div style="font-size:13px;font-weight:600;" data-i18n="nav_hapta">हप्ता नोंदणी</div>
       <div style="font-size:11px;opacity:.75;margin-top:3px;" data-i18n="btn_add_hapta">हप्ता जोडा</div>
     </button>
-    <button onclick="document.querySelectorAll('.nav-item')[3].click()" class="quick-btn" style="background:linear-gradient(135deg,#1e40af,#1e3a8a);">
+    <button onclick="goPage('summary')" class="quick-btn" style="background:linear-gradient(135deg,#1e40af,#1e3a8a);">
       <div style="font-size:22px;margin-bottom:6px;">🔍</div>
-      <div style="font-size:13px;font-weight:600;" data-i18n="nav_search">सभासद तपशील</div>
+      <div style="font-size:13px;font-weight:600;" data-i18n="nav_summary">सर्व सभासद तपशील</div>
       <div style="font-size:11px;opacity:.75;margin-top:3px;" data-i18n="txt_search_info">माहिती शोधा</div>
     </button>
-    <button onclick="document.querySelectorAll('.nav-item')[4].click()" class="quick-btn" style="background:linear-gradient(135deg,#92400e,#78350f);">
-      <div style="font-size:22px;margin-bottom:6px;">📊</div>
-      <div style="font-size:13px;font-weight:600;" data-i18n="nav_summary">पूर्ण तपशील</div>
+    <button onclick="goPage('ledger')" class="quick-btn" style="background:linear-gradient(135deg,#92400e,#78350f);">
+      <div style="font-size:22px;margin-bottom:6px;">📒</div>
+      <div style="font-size:13px;font-weight:600;" data-i18n="nav_ledger">लेजर बुक</div>
       <div style="font-size:11px;opacity:.75;margin-top:3px;" data-i18n="txt_view_all_summary">सर्व सारांश पहा</div>
     </button>
   </div>
@@ -1318,7 +1323,7 @@ window.addEventListener('DOMContentLoaded', function(){
 <div id="page-summary" class="page">
   <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:4px">
     <div>
-      <div class="page-title" data-i18n="txt_all_details">सर्व तपशील</div>
+      <div class="page-title" data-i18n="txt_all_details">सर्व सभासद तपशील</div>
       <div class="page-sub" style="margin-bottom:0" data-i18n="txt_summary_sub">सर्व सभासदांचा एकत्रित आढावा — वर्ष, महिना किंवा स्थितीनुसार फिल्टर करा</div>
     </div>
     <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;">
@@ -1598,6 +1603,71 @@ window.addEventListener('DOMContentLoaded', function(){
         <br><span data-i18n="txt_no_records">कोणतीही नोंद सापडली नाही</span>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- LEDGER BOOK PAGE -->
+<div id="page-ledger" class="page">
+  <div class="page-header">
+    <div class="page-title">📒 <span data-i18n="nav_ledger">लेजर बुक</span></div>
+    <div class="page-sub" data-i18n="txt_ledger_sub">सभासदाचं कर्ज खातं — Debit/Credit स्वरूपात, तारीखनिहाय</div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;overflow:visible;">
+    <div class="card-body" style="padding:14px 18px;overflow:visible;">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;">
+        <div class="fg" style="flex:1;min-width:220px;position:relative;margin-bottom:0;">
+          <label data-i18n="lbl_name_or_no">सभासदाचे नाव किंवा अ. क्र. लिहा</label>
+          <input type="text" id="ledger-search" placeholder="नाव टाइप करा..." data-i18n-ph="ph_type_name" oninput="ledgerSearch()" autocomplete="off">
+          <div id="ledger-dropdown" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--white);border:1px solid var(--border2);border-radius:8px;z-index:500;max-height:220px;overflow-y:auto;box-shadow:0 6px 20px rgba(0,0,0,0.18);margin-top:3px;"></div>
+        </div>
+        <div class="fg" style="margin-bottom:0;">
+          <label data-i18n="txt_from_date">तारखेपासून</label>
+          <input type="date" id="ledger-from-date" onchange="renderLedger()" style="height:38px">
+        </div>
+        <div class="fg" style="margin-bottom:0;">
+          <label data-i18n="txt_to_date">तारखेपर्यंत</label>
+          <input type="date" id="ledger-to-date" onchange="renderLedger()" style="height:38px">
+        </div>
+        <button class="btn btn-ghost" onclick="clearLedgerFilters()" style="height:38px" data-i18n="btn_clear">साफ करा</button>
+      </div>
+      <div id="ledger-selected-info" style="display:none;margin-top:12px;padding:10px 14px;background:var(--gold-pale);border-radius:8px;border:1px solid var(--border2);align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-weight:600;font-size:14px;" id="ledger-sel-name"></div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px;" id="ledger-sel-detail"></div>
+        </div>
+        <button onclick="clearLedgerSelection()" class="btn btn-ghost" style="padding:5px 12px;font-size:12px;">✕ <span data-i18n="btn_change">बदला</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="ledger-content" style="display:none">
+    <div class="card">
+      <div class="card-body" style="padding-bottom:0">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
+          <div class="sec-label" style="margin-bottom:2px" data-i18n="txt_ledger_entries">खातेवही नोंदी</div>
+          <button class="btn btn-ghost" onclick="exportLedgerPDF()">📄 <span data-i18n="btn_pdf_download">PDF डाउनलोड</span></button>
+        </div>
+      </div>
+      <div class="tbl-wrap" style="border:none">
+        <table>
+          <thead><tr>
+            <th data-i18n="th_date">दिनांक</th>
+            <th data-i18n="txt_particulars">तपशील (Particulars)</th>
+            <th style="text-align:right" data-i18n="txt_debit">नावे (Dr.)</th>
+            <th style="text-align:right" data-i18n="txt_credit">जमा (Cr.)</th>
+            <th style="text-align:right" data-i18n="txt_balance">शिल्लक</th>
+          </tr></thead>
+          <tbody id="ledger-body"></tbody>
+          <tfoot id="ledger-foot"></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="ledger-empty-state" style="text-align:center;padding:40px 20px;color:var(--text3);">
+    <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:.3;margin-bottom:10px"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+    <div style="font-size:13px;" data-i18n="txt_ledger_select_prompt">वरून सभासद निवडा — त्याचं संपूर्ण खातेवही (ledger) इथे दिसेल</div>
   </div>
 </div>
 
@@ -1945,7 +2015,7 @@ const translations = {
     txt_new_hapta:"नवीन हप्ता जोडा", btn_save_hapta:"हप्ता जतन करा",
     txt_search_sub:"नाव किंवा अ. क्र. टाकून सभासदाचे कर्ज तपशील पहा", lbl_no_or_name:"अ. क्र. किंवा नाव टाका",
     ph_no_or_name:"अ. क्र. किंवा नाव लिहा...",
-    txt_all_details:"सर्व तपशील", txt_summary_sub:"सर्व सभासदांचा एकत्रित आढावा — वर्ष, महिना किंवा स्थितीनुसार फिल्टर करा",
+    txt_all_details:"सर्व सभासद तपशील", txt_summary_sub:"सर्व सभासदांचा एकत्रित आढावा — वर्ष, महिना किंवा स्थितीनुसार फिल्टर करा",
     btn_download:"डाउनलोड", btn_excel_download:"Excel डाउनलोड", btn_pdf_download:"PDF डाउनलोड",
     lbl_name:"नाव", ph_member_name:"सभासद नाव...", lbl_year:"वर्ष", opt_all_years:"सर्व वर्षे",
     lbl_month:"महिना", opt_all_months:"सर्व महिने",
@@ -2129,7 +2199,15 @@ const translations = {
     txt_approve_loan_title:"कर्ज विनंती मंजूर करा", txt_requested_amount_label:"सभासदाने मागितलेली रक्कम",
     lbl_approved_amount:"मंजूर रक्कम (₹) — बदलता येईल",
     txt_approve_amount_hint:"टीप: सभासदाने मागितलेल्यापेक्षा कमी/जास्त रक्कम मंजूर करू शकता — हे सभासदाला पुढच्या पेजवर तसं दिसेल.",
-    btn_confirm_approve:"मंजूर करा"
+    btn_confirm_approve:"मंजूर करा",
+    nav_ledger:"लेजर बुक", txt_ledger_sub:"सभासदाचं कर्ज खातं — Debit/Credit स्वरूपात, तारीखनिहाय",
+    txt_from_date:"तारखेपासून", txt_to_date:"तारखेपर्यंत",
+    txt_ledger_entries:"खातेवही नोंदी", txt_particulars:"तपशील (Particulars)",
+    txt_debit:"नावे (Dr.)", txt_credit:"जमा (Cr.)", txt_balance:"शिल्लक",
+    txt_ledger_select_prompt:"वरून सभासद निवडा — त्याचं संपूर्ण खातेवही (ledger) इथे दिसेल",
+    txt_ledger_loan_disb:"कर्ज वाटप", txt_ledger_charged:"आकारले", txt_ledger_installment_paid:"हप्ता जमा",
+    txt_ledger_opening_balance:"सुरुवातीची शिल्लक (Opening Balance)", txt_ledger_closing_balance:"अंतिम शिल्लक (Closing Balance)",
+    btn_download_statement:"Statement डाउनलोड करा"
   },
   en: {
     lbl_mobile:"Mobile Number", ph_mobile:"Enter mobile number",
@@ -2168,7 +2246,7 @@ const translations = {
     txt_new_hapta:"Add New Installment", btn_save_hapta:"Save Installment",
     txt_search_sub:"Enter name or serial no. to view a member's loan details", lbl_no_or_name:"Enter serial no. or name",
     ph_no_or_name:"Enter serial no. or name...",
-    txt_all_details:"Full Details", txt_summary_sub:"Combined overview of all members — filter by year, month or status",
+    txt_all_details:"All Member Details", txt_summary_sub:"Combined overview of all members — filter by year, month or status",
     btn_download:"Download", btn_excel_download:"Download Excel", btn_pdf_download:"Download PDF",
     lbl_name:"Name", ph_member_name:"Member name...", lbl_year:"Year", opt_all_years:"All years",
     lbl_month:"Month", opt_all_months:"All months",
@@ -2352,7 +2430,15 @@ const translations = {
     txt_approve_loan_title:"Approve Loan Request", txt_requested_amount_label:"Amount requested by member",
     lbl_approved_amount:"Approved Amount (₹) — can be changed",
     txt_approve_amount_hint:"Note: You can approve a lower/higher amount than requested — the member will see this on their next page.",
-    btn_confirm_approve:"Approve"
+    btn_confirm_approve:"Approve",
+    nav_ledger:"Ledger Book", txt_ledger_sub:"Member's loan account — Debit/Credit format, date-wise",
+    txt_from_date:"From Date", txt_to_date:"To Date",
+    txt_ledger_entries:"Ledger Entries", txt_particulars:"Particulars",
+    txt_debit:"Debit (Dr.)", txt_credit:"Credit (Cr.)", txt_balance:"Balance",
+    txt_ledger_select_prompt:"Select a member above — their full ledger will appear here",
+    txt_ledger_loan_disb:"Loan Disbursed", txt_ledger_charged:"Charged", txt_ledger_installment_paid:"Installment Paid",
+    txt_ledger_opening_balance:"Opening Balance", txt_ledger_closing_balance:"Closing Balance",
+    btn_download_statement:"Download Statement"
   }
 };
 
@@ -2860,6 +2946,180 @@ function getAllHapte(m){
   let all=[...(m.hapte||[])];
   (m.loan_history||[]).forEach(cyc=>{ all=all.concat(cyc.hapte||[]); });
   return all;
+}
+
+/* ── LEDGER BOOK ── */
+let ledgerSelectedIdx = -1;
+
+function ledgerSearch(){
+  const q = (document.getElementById('ledger-search').value || '').trim().toLowerCase();
+  const dd = document.getElementById('ledger-dropdown');
+  if(!q){ dd.style.display='none'; return; }
+
+  const results = members.filter(m =>
+    m.nav.toLowerCase().includes(q) || String(m.kram).includes(q)
+  );
+
+  if(!results.length){
+    dd.innerHTML='<div style="padding:10px 14px;font-size:13px;color:var(--text3);">'+t('txt_no_one_found')+'</div>';
+    dd.style.display='block';
+    return;
+  }
+
+  dd.innerHTML = results.map(m => {
+    const sh = Math.max(0, m.vatap - m.hapte.reduce((s,h)=>s+h.hapta,0));
+    return `<div onclick="selectLedgerMember(${members.indexOf(m)})" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .12s;"
+      onmouseover="this.style.background='var(--gold-pale)'" onmouseout="this.style.background=''">
+      <div style="font-weight:600;font-size:13px;">${t('th_sr_no')} ${m.kram} — ${m.nav}</div>
+      <div style="font-size:11px;color:var(--text2);margin-top:2px;">
+        ${m.mobile ? '📱 '+m.mobile+' &nbsp;|&nbsp; ' : ''}${t('exp_loan_short')}: ${fmt(m.vatap)} &nbsp;|&nbsp; ${t('th_shillak')}: ${fmt(sh)}
+      </div>
+    </div>`;
+  }).join('');
+  dd.style.display='block';
+}
+
+function selectLedgerMember(idx){
+  ledgerSelectedIdx = idx;
+  const m = members[idx];
+  document.getElementById('ledger-dropdown').style.display='none';
+  document.getElementById('ledger-search').value = t('th_sr_no')+' '+m.kram+' — '+m.nav;
+
+  const info = document.getElementById('ledger-selected-info');
+  info.style.display='flex';
+  document.getElementById('ledger-sel-name').textContent = t('th_sr_no')+' '+m.kram+' — '+m.nav;
+  document.getElementById('ledger-sel-detail').textContent = m.mobile ? '📱 '+m.mobile : '';
+
+  renderLedger();
+}
+
+function clearLedgerSelection(){
+  ledgerSelectedIdx = -1;
+  document.getElementById('ledger-search').value='';
+  document.getElementById('ledger-selected-info').style.display='none';
+  document.getElementById('ledger-content').style.display='none';
+  document.getElementById('ledger-empty-state').style.display='block';
+}
+
+function clearLedgerFilters(){
+  document.getElementById('ledger-from-date').value='';
+  document.getElementById('ledger-to-date').value='';
+  clearLedgerSelection();
+}
+
+function buildLedgerEntries(m, fromDate, toDate){
+  const entries = [];
+  // Loan disbursements (all closed cycles + current)
+  (m.loan_history||[]).forEach(cyc=>{
+    if(cyc.date) entries.push({date:cyc.date, particulars:t('txt_ledger_loan_disb')+' (चक्र)', debit:cyc.vatap||0, credit:0});
+    (cyc.hapte||[]).forEach(h=>{
+      if(!h.dinank) return;
+      if(h.dand) entries.push({date:h.dinank, particulars:t('th_dand')+' '+t('txt_ledger_charged'), debit:h.dand, credit:0});
+      if(h.vyaj) entries.push({date:h.dinank, particulars:t('th_vyaj')+' '+t('txt_ledger_charged'), debit:h.vyaj, credit:0});
+      if(h.hapta) entries.push({date:h.dinank, particulars:t('txt_ledger_installment_paid')+(h.mahina?' ('+h.mahina+')':''), debit:0, credit:h.hapta});
+    });
+  });
+  if(m.date) entries.push({date:m.date, particulars:t('txt_ledger_loan_disb'), debit:m.vatap||0, credit:0});
+  (m.hapte||[]).forEach(h=>{
+    if(!h.dinank) return;
+    if(h.dand) entries.push({date:h.dinank, particulars:t('th_dand')+' '+t('txt_ledger_charged'), debit:h.dand, credit:0});
+    if(h.vyaj) entries.push({date:h.dinank, particulars:t('th_vyaj')+' '+t('txt_ledger_charged'), debit:h.vyaj, credit:0});
+    if(h.hapta) entries.push({date:h.dinank, particulars:t('txt_ledger_installment_paid')+(h.mahina?' ('+h.mahina+')':''), debit:0, credit:h.hapta});
+  });
+
+  entries.sort((a,b)=> a.date<b.date?-1 : a.date>b.date?1 : 0);
+
+  // Compute opening balance (sum of entries before fromDate) then filter to range
+  let openingBalance = 0;
+  const filtered = [];
+  entries.forEach(e=>{
+    if(fromDate && e.date < fromDate){ openingBalance += e.debit - e.credit; return; }
+    if(toDate && e.date > toDate) return;
+    filtered.push(e);
+  });
+
+  let running = openingBalance;
+  const rows = filtered.map(e=>{
+    running += e.debit - e.credit;
+    return {...e, balance: running};
+  });
+
+  return {openingBalance, rows, closingBalance: running};
+}
+
+function renderLedger(){
+  if(ledgerSelectedIdx<0) return;
+  const m = members[ledgerSelectedIdx];
+  const fromDate = document.getElementById('ledger-from-date').value;
+  const toDate = document.getElementById('ledger-to-date').value;
+
+  const {openingBalance, rows, closingBalance} = buildLedgerEntries(m, fromDate, toDate);
+
+  document.getElementById('ledger-content').style.display='block';
+  document.getElementById('ledger-empty-state').style.display='none';
+
+  const tbody = document.getElementById('ledger-body');
+  const openingRow = (fromDate) ? `<tr style="background:var(--gold-pale);font-weight:600;">
+    <td>${fmtDate(fromDate)}</td><td>${t('txt_ledger_opening_balance')}</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">${fmt(openingBalance)}</td>
+  </tr>` : '';
+
+  tbody.innerHTML = openingRow + (rows.length ? rows.map(r=>`<tr>
+    <td>${fmtDate(r.date)}</td>
+    <td>${r.particulars}</td>
+    <td style="text-align:right">${r.debit ? fmt(r.debit) : '—'}</td>
+    <td style="text-align:right">${r.credit ? fmt(r.credit) : '—'}</td>
+    <td style="text-align:right;font-weight:600;">${fmt(r.balance)}</td>
+  </tr>`).join('') : `<tr><td colspan="5" style="text-align:center;padding:16px;color:var(--text3);">${t('txt_no_records')}</td></tr>`);
+
+  const tDebit = rows.reduce((s,r)=>s+r.debit,0);
+  const tCredit = rows.reduce((s,r)=>s+r.credit,0);
+  document.getElementById('ledger-foot').innerHTML = `<tr>
+    <td colspan="2">${t('txt_ledger_closing_balance')}</td>
+    <td style="text-align:right">${fmt(tDebit)}</td>
+    <td style="text-align:right">${fmt(tCredit)}</td>
+    <td style="text-align:right;font-weight:700;color:var(--red);">${fmt(closingBalance)}</td>
+  </tr>`;
+}
+
+function exportLedgerPDF(){
+  if(ledgerSelectedIdx<0) return;
+  const m = members[ledgerSelectedIdx];
+  const fromDate = document.getElementById('ledger-from-date').value;
+  const toDate = document.getElementById('ledger-to-date').value;
+  const {openingBalance, rows, closingBalance} = buildLedgerEntries(m, fromDate, toDate);
+  const now = new Date();
+  const dateStr = fmtDate(now.toISOString().slice(0,10));
+
+  const openingRow = fromDate ? `<tr style="background:#fdf6e3;font-weight:700;">
+    <td>${fmtDate(fromDate)}</td><td>${t('txt_ledger_opening_balance')}</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">${fmt(openingBalance)}</td>
+  </tr>` : '';
+  const rowsHtml = rows.map(r=>`<tr>
+    <td>${fmtDate(r.date)}</td><td>${r.particulars}</td>
+    <td style="text-align:right">${r.debit?fmt(r.debit):'—'}</td>
+    <td style="text-align:right">${r.credit?fmt(r.credit):'—'}</td>
+    <td style="text-align:right">${fmt(r.balance)}</td>
+  </tr>`).join('');
+  const tDebit = rows.reduce((s,r)=>s+r.debit,0);
+  const tCredit = rows.reduce((s,r)=>s+r.credit,0);
+
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8">${getPDFCss()}</head><body>
+  ${getOrgHeader(t('nav_ledger'))}
+  <div class="info-bar">
+    <strong>${t('th_sr_no')} ${m.kram} — ${m.nav}</strong>
+    <span>${t('exp_print')}: ${dateStr}${fromDate?(' | '+t('txt_from_date')+': '+fmtDate(fromDate)):''}${toDate?(' | '+t('txt_to_date')+': '+fmtDate(toDate)):''}</span>
+  </div>
+  <table>
+    <thead><tr><th>${t('th_date')}</th><th>${t('txt_particulars')}</th><th style="text-align:right">${t('txt_debit')}</th><th style="text-align:right">${t('txt_credit')}</th><th style="text-align:right">${t('txt_balance')}</th></tr></thead>
+    <tbody>${openingRow}${rowsHtml}</tbody>
+    <tfoot><tr>
+      <td colspan="2">${t('txt_ledger_closing_balance')}</td>
+      <td style="text-align:right">${fmt(tDebit)}</td>
+      <td style="text-align:right">${fmt(tCredit)}</td>
+      <td style="text-align:right;font-weight:700;">${fmt(closingBalance)}</td>
+    </tr></tfoot>
+  </table>
+  </body></html>`;
+  downloadPDF(html, m.nav+'_Ledger.pdf', 'portrait');
 }
 
 function getStats(m,yr,mo){
@@ -5140,7 +5400,7 @@ function renderMemberDashboard(m){
   if(document.getElementById('md-side-avatar')) setMemberAvatarDisplay('md-side-avatar','md-side-avatar-placeholder', m.photo);
   const tbody = document.getElementById('md-hapta-body');
   if(!hapte.length){
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:16px;color:#94a3b8;">'+t('txt_no_record')+'</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:16px;color:#94a3b8;">'+t('txt_no_record')+'</td></tr>';
   } else {
     const sortedHapte = [...hapte].sort((a,b)=>{
       const da=a.dinank||''; const db=b.dinank||'';
@@ -5149,11 +5409,30 @@ function renderMemberDashboard(m){
     let run = m.vatap||0;
     tbody.innerHTML = sortedHapte.map(h=>{
       run -= (h.hapta||0);
-      const st = h.vilamb===0 ? '<span class="badge badge-green" style="font-size:10px">वेळेवर</span>' : (h.vilamb<=1 ? '<span class="badge badge-amber" style="font-size:10px">थोडा विलंब</span>' : '<span class="badge badge-amber" style="font-size:10px">विलंब</span>');
-      return `<tr style="border-top:1px solid #f0f0f0;"><td style="padding:8px;">${h.mahina||'—'}</td><td style="padding:8px;text-align:center;">${fmtDate(h.dinank)}</td><td style="padding:8px;text-align:center;">${h.vilamb||0}</td><td style="padding:8px;text-align:right;">${fmt(h.dand||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.vyaj||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.hapta||0)}</td><td style="padding:8px;text-align:right;color:#dc2626;">${fmt(Math.max(0,run))}</td><td style="padding:8px;text-align:center;">${st}</td></tr>`;
+      const st = h.vilamb===0 ? '<span class="badge badge-green" style="font-size:10px">'+t('exp_on_time')+'</span>' : (h.vilamb<=1 ? '<span class="badge badge-amber" style="font-size:10px">'+t('exp_slight_delay')+'</span>' : '<span class="badge badge-amber" style="font-size:10px">'+t('exp_delayed')+'</span>');
+      const origIdx = m.hapte.indexOf(h);
+      return `<tr style="border-top:1px solid #f0f0f0;"><td style="padding:8px;">${h.mahina||'—'}</td><td style="padding:8px;text-align:center;">${fmtDate(h.dinank)}</td><td style="padding:8px;text-align:center;">${h.vilamb||0}</td><td style="padding:8px;text-align:right;">${fmt(h.dand||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.vyaj||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.hapta||0)}</td><td style="padding:8px;text-align:right;color:#dc2626;">${fmt(Math.max(0,run))}</td><td style="padding:8px;text-align:center;">${st}</td><td style="padding:8px;text-align:center;">${origIdx>=0 ? `<button onclick="downloadMyReceipt(${origIdx})" title="${t('txt_reprint_receipt')}" style="background:none;border:none;cursor:pointer;font-size:14px;">🧾</button>` : ''}</td></tr>`;
     }).join('');
   }
 }
+
+function downloadMyReceipt(hapteIdx){
+  const m = members.find(x=>x.id===currentMemberSabhasadId);
+  if(!m || !m.hapte[hapteIdx]) return;
+  generateHaptaReceipt(m, [m.hapte[hapteIdx]]);
+}
+
+function downloadMyStatement(){
+  const m = members.find(x=>x.id===currentMemberSabhasadId);
+  if(!m) return;
+  ledgerSelectedIdx = members.indexOf(m);
+  const fromEl = document.getElementById('ledger-from-date');
+  const toEl = document.getElementById('ledger-to-date');
+  if(fromEl) fromEl.value = '';
+  if(toEl) toEl.value = '';
+  exportLedgerPDF();
+}
+
 
 function setMemberAvatarDisplay(imgId, placeholderId, photoUrl){
   const img = document.getElementById(imgId);
@@ -5626,7 +5905,7 @@ window.addEventListener('DOMContentLoaded', function(){
   loadMembers();
   loadMemberRequests();
   // Restore last-open page after refresh (instead of always jumping to home)
-  const validPages = ['home','entry','hapta','search','summary','requests','reports'];
+  const validPages = ['home','entry','hapta','summary','requests','reports','ledger'];
   const hashPage = (location.hash||'').replace('#','');
   if(hashPage && validPages.includes(hashPage) && hashPage!=='home'){
     try{
