@@ -2227,7 +2227,9 @@ const translations = {
     txt_ledger_loan_disb:"कर्ज वाटप", txt_ledger_charged:"आकारले", txt_ledger_installment_paid:"हप्ता जमा",
     txt_ledger_opening_balance:"सुरुवातीची शिल्लक (Opening Balance)", txt_ledger_closing_balance:"अंतिम शिल्लक (Closing Balance)",
     btn_download_statement:"Statement डाउनलोड करा",
-    txt_receipt_preview:"पावती पहा", btn_download_pdf:"PDF डाउनलोड करा"
+    txt_receipt_preview:"पावती पहा", btn_download_pdf:"PDF डाउनलोड करा",
+    msg_mobile_already_registered:"हा मोबाईल नंबर आधीच नोंदणीकृत आहे. कृपया 'प्रवेश करा' वापरून लॉगिन करा (नोंदणी करण्याची गरज नाही).",
+    msg_mobile_request_pending:"या मोबाईल नंबरची नोंदणी विनंती आधीच पाठवली गेली आहे व सध्या प्रलंबित आहे. कृपया अ‍ॅडमिनने approve करण्याची वाट पाहा."
   },
   en: {
     lbl_mobile:"Mobile Number", ph_mobile:"Enter mobile number",
@@ -2459,7 +2461,9 @@ const translations = {
     txt_ledger_loan_disb:"Loan Disbursed", txt_ledger_charged:"Charged", txt_ledger_installment_paid:"Installment Paid",
     txt_ledger_opening_balance:"Opening Balance", txt_ledger_closing_balance:"Closing Balance",
     btn_download_statement:"Download Statement",
-    txt_receipt_preview:"View Receipt", btn_download_pdf:"Download PDF"
+    txt_receipt_preview:"View Receipt", btn_download_pdf:"Download PDF",
+    msg_mobile_already_registered:"This mobile number is already registered. Please use 'Login' instead (no need to register again).",
+    msg_mobile_request_pending:"A registration request for this mobile number has already been sent and is pending. Please wait for admin approval."
   }
 };
 
@@ -2750,15 +2754,18 @@ async function saveEntry(){
   if(missingHapta){toast(t('msg_enter_hapta_each_row'),'warn');return;}
   const karjtype = document.getElementById('e-karjtype').value;
   const guarantor = karjtype === 'etar' ? document.getElementById('e-guarantor').value.trim() : '';
-  // Check if editing existing member
-  const editIdx = parseInt(document.getElementById('e-nav').dataset.editIdx);
-  if(!isNaN(editIdx) && editIdx >= 0 && members[editIdx]) {
-    const existing = members[editIdx];
+  // Check if editing existing member — look up by stable id (not array position,
+  // which can shift if data changes elsewhere via realtime sync while the form is open)
+  const editId = document.getElementById('e-nav').dataset.editId;
+  const existing = editId ? members.find(m => String(m.id) === String(editId)) : null;
+  if(existing) {
     const {error} = await sb.from('sabhasad').update({nav,mobile,vatap,date,hapte,karjtype,guarantor}).eq('id',existing.id);
     if(error){toast(t('msg_save_error')+error.message,'warn');return;}
-    members[editIdx] = {id:existing.id,kram:existing.kram,nav,mobile,vatap,date,hapte,karjtype,guarantor,loan_history:existing.loan_history||[]};
+    const liveIdx = members.findIndex(m => m.id === existing.id);
+    if(liveIdx>=0) members[liveIdx] = {id:existing.id,kram:existing.kram,nav,mobile,vatap,date,hapte,karjtype,guarantor,loan_history:existing.loan_history||[]};
     const kd=document.getElementById('e-kram-display');
     if(kd)kd.textContent=existing.kram;
+    document.getElementById('e-nav').dataset.editId='';
     document.getElementById('e-nav').dataset.editIdx='';
     toast('✓ '+t('th_sr_no')+' '+existing.kram+' — '+nav+' '+t('msg_record_updated'));
   } else {
@@ -2776,6 +2783,7 @@ async function saveEntry(){
 function resetEntry(){
   ['e-nav','e-mobile','e-vatap','e-date'].forEach(id=>document.getElementById(id).value='');
 document.getElementById('e-nav').dataset.editIdx='';
+document.getElementById('e-nav').dataset.editId='';
 const kd2=document.getElementById('e-kram-display');if(kd2)kd2.textContent='';
   const ncb=document.getElementById('e-newcycle-box');if(ncb)ncb.style.display='none';
   document.getElementById('e-body').innerHTML='';rowCount=0;calcE();
@@ -2901,7 +2909,9 @@ function editMember(idx){
   // store kram for update
   const kd=document.getElementById('e-kram-display');
   if(kd) kd.textContent=m.kram;
-  // mark as editing
+  // mark as editing — use the member's stable database id, not the array position,
+  // since array positions can shift if data changes elsewhere (realtime sync) while this form is open
+  document.getElementById('e-nav').dataset.editId=m.id;
   document.getElementById('e-nav').dataset.editIdx=idx;
   document.getElementById('e-nav').value=m.nav;
   document.getElementById('e-mobile').value=m.mobile||'';
@@ -2927,9 +2937,9 @@ function editMember(idx){
 }
 
 async function startNewLoanCycle(){
-  const idx = parseInt(document.getElementById('e-nav').dataset.editIdx);
-  if(isNaN(idx) || idx<0 || !members[idx]) return;
-  const m = members[idx];
+  const editId = document.getElementById('e-nav').dataset.editId;
+  const m = editId ? members.find(x => String(x.id) === String(editId)) : null;
+  if(!m) return;
   if(!confirm(t('txt_confirm_new_cycle').replace('{name}', m.nav))) return;
 
   const closedCycle = {
@@ -5152,6 +5162,37 @@ async function doMemberRegister(){
   if(!/^\d{10}$/.test(mobile)){err.textContent='❌ '+t('msg_enter_valid_mobile');return;}
   if(pass.length<6){err.textContent='❌ '+t('msg_pass_min6');return;}
   if(pass!==conf){err.textContent='❌ '+t('msg_pass_mismatch');return;}
+
+  // Check for any existing request with this mobile number first, to avoid confusing
+  // duplicate-key database errors and give the member a clear, actionable message.
+  try{
+    const {data: existingReqs} = await sb.from('member_requests').select('*').eq('mobile', mobile).order('created_at',{ascending:false});
+    const approved = (existingReqs||[]).find(r=>r.status==='approved');
+    const pending = (existingReqs||[]).find(r=>r.status==='pending');
+    if(approved){
+      err.textContent='❌ '+t('msg_mobile_already_registered');
+      return;
+    }
+    if(pending){
+      err.textContent='❌ '+t('msg_mobile_request_pending');
+      return;
+    }
+    // If a previous request exists but was rejected, update it back to pending
+    // instead of inserting a fresh duplicate row.
+    const rejected = (existingReqs||[]).find(r=>r.status==='rejected');
+    if(rejected){
+      const {error:updErr} = await sb.from('member_requests').update({nav,password:pass,status:'pending'}).eq('id',rejected.id);
+      if(updErr){err.textContent='❌ '+t('err_prefix')+updErr.message;return;}
+      suc.textContent='✅ '+t('msg_reg_request_sent');
+      document.getElementById('reg-nav').value='';
+      document.getElementById('reg-mobile').value='';
+      document.getElementById('reg-pass').value='';
+      document.getElementById('reg-confirm').value='';
+      setTimeout(()=>showSection('sec-login'),3000);
+      return;
+    }
+  }catch(e){ /* lookup failed — fall through and try the insert anyway */ }
+
   const {error} = await sb.from('member_requests').insert({nav,mobile,password:pass,status:'pending'});
   if(error){err.textContent='❌ '+t('err_prefix')+error.message;return;}
   suc.textContent='✅ '+t('msg_reg_request_sent');
