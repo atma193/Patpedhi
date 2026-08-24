@@ -884,6 +884,10 @@ window.addEventListener('DOMContentLoaded', function(){
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M9 7h7M9 11h7"/></svg>
       <span data-i18n="nav_ledger">लेजर बुक</span>
     </button>
+    <button class="nav-item" data-page="funds" onclick="goPage('funds',this)">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      <span data-i18n="nav_funds">फंड व्यवस्थापन</span>
+    </button>
   </nav>
   <div style="padding:10px 10px 0;position:relative;">
   <!-- Admin Popup Button -->
@@ -927,6 +931,10 @@ window.addEventListener('DOMContentLoaded', function(){
     <button onclick="goPage('ledger');closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M9 7h7M9 11h7"/></svg>
       <span data-i18n="nav_ledger">लेजर बुक</span>
+    </button>
+    <button onclick="goPage('funds');closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      <span data-i18n="nav_funds">फंड व्यवस्थापन</span>
     </button>
     <button onclick="openSettingsModal();closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 8.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
@@ -1671,6 +1679,87 @@ window.addEventListener('DOMContentLoaded', function(){
   </div>
 </div>
 
+<!-- FUND MANAGEMENT PAGE -->
+<div id="page-funds" class="page">
+  <div class="page-header">
+    <div class="page-title">💵 <span data-i18n="nav_funds">फंड व्यवस्थापन</span></div>
+    <div class="page-sub" data-i18n="txt_funds_sub">बाह्य निधी, परतफेड व खर्च — Debit/Credit स्वरूपात</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:11px;margin-bottom:20px;">
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;border-left:3px solid #16a34a;">
+      <div style="font-size:11px;color:#64748b;" data-i18n="txt_fund_total_in">एकूण घेतलेला निधी</div>
+      <div id="fund-total-in" style="font-size:18px;font-weight:700;color:#16a34a;">₹0</div>
+    </div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;border-left:3px solid #d97706;">
+      <div style="font-size:11px;color:#64748b;" data-i18n="txt_fund_total_return">एकूण परत केलेला निधी</div>
+      <div id="fund-total-return" style="font-size:18px;font-weight:700;color:#d97706;">₹0</div>
+    </div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;border-left:3px solid #dc2626;">
+      <div style="font-size:11px;color:#64748b;" data-i18n="txt_fund_total_expense">एकूण खर्च</div>
+      <div id="fund-total-expense" style="font-size:18px;font-weight:700;color:#dc2626;">₹0</div>
+    </div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;border-left:3px solid #3a6fd8;">
+      <div style="font-size:11px;color:#64748b;" data-i18n="txt_fund_net_outstanding">सध्याची बाकी (परत करायची)</div>
+      <div id="fund-net-outstanding" style="font-size:18px;font-weight:700;color:#3a6fd8;">₹0</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-head"><span class="card-head-title">➕ <span data-i18n="txt_fund_new_entry">नवीन नोंद</span></span></div>
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="fg"><label data-i18n="th_date">दिनांक</label><input type="date" id="fund-date"></div>
+        <div class="fg">
+          <label data-i18n="txt_fund_type">प्रकार</label>
+          <select id="fund-type" onchange="toggleFundDescLabel()">
+            <option value="fund_in" data-i18n="opt_fund_in">बाह्य निधी घेतला (Fund In)</option>
+            <option value="fund_return" data-i18n="opt_fund_return">निधी परत केला (Fund Return)</option>
+            <option value="expense" data-i18n="opt_expense">खर्च (Expense)</option>
+          </select>
+        </div>
+        <div class="fg"><label id="fund-desc-label" data-i18n="txt_fund_source_desc">स्रोत वर्णन (कोणाकडून/कशासाठी)</label><input type="text" id="fund-description" placeholder="उदा. राम पाटील यांच्याकडून कर्ज"></div>
+        <div class="fg"><label data-i18n="txt_fund_amount">रक्कम (₹)</label><input type="number" id="fund-amount" placeholder="10000"></div>
+      </div>
+      <div class="fg"><label data-i18n="txt_fund_notes">टीप (ऐच्छिक)</label><input type="text" id="fund-notes" placeholder="अतिरिक्त तपशील..."></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="saveFundEntry()">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+          <span data-i18n="btn_save">जतन करा</span>
+        </button>
+      </div>
+      <div class="login-error" id="fund-error" style="margin-top:8px;"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body" style="padding-bottom:0">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div class="sec-label" style="margin-bottom:2px" data-i18n="txt_fund_ledger">फंड खातेवही</div>
+        <button class="btn btn-ghost" onclick="exportFundLedgerPDF()">📄 <span data-i18n="btn_pdf_download">PDF डाउनलोड</span></button>
+      </div>
+    </div>
+    <div class="tbl-wrap" style="border:none">
+      <table>
+        <thead><tr>
+          <th data-i18n="th_date">दिनांक</th>
+          <th data-i18n="txt_particulars">तपशील (Particulars)</th>
+          <th style="text-align:right" data-i18n="txt_debit">नावे (Dr.)</th>
+          <th style="text-align:right" data-i18n="txt_credit">जमा (Cr.)</th>
+          <th style="text-align:right" data-i18n="txt_balance">शिल्लक</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="fund-ledger-body"></tbody>
+        <tfoot id="fund-ledger-foot"></tfoot>
+      </table>
+      <div id="fund-ledger-empty" class="empty" style="display:none">
+        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:.3;margin-bottom:8px"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        <br><span data-i18n="txt_no_records">कोणतीही नोंद सापडली नाही</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Approve Modal -->
 <div id="approve-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9997;align-items:center;justify-content:center;">
   <div style="background:#fff;border-radius:14px;width:90%;max-width:420px;max-height:80vh;overflow:auto;padding:20px;">
@@ -2229,7 +2318,17 @@ const translations = {
     btn_download_statement:"Statement डाउनलोड करा",
     txt_receipt_preview:"पावती पहा", btn_download_pdf:"PDF डाउनलोड करा",
     msg_mobile_already_registered:"हा मोबाईल नंबर आधीच नोंदणीकृत आहे. कृपया 'प्रवेश करा' वापरून लॉगिन करा (नोंदणी करण्याची गरज नाही).",
-    msg_mobile_request_pending:"या मोबाईल नंबरची नोंदणी विनंती आधीच पाठवली गेली आहे व सध्या प्रलंबित आहे. कृपया अ‍ॅडमिनने approve करण्याची वाट पाहा."
+    msg_mobile_request_pending:"या मोबाईल नंबरची नोंदणी विनंती आधीच पाठवली गेली आहे व सध्या प्रलंबित आहे. कृपया अ‍ॅडमिनने approve करण्याची वाट पाहा.",
+    nav_funds:"फंड व्यवस्थापन", txt_funds_sub:"बाह्य निधी, परतफेड व खर्च — Debit/Credit स्वरूपात",
+    txt_fund_total_in:"एकूण घेतलेला निधी", txt_fund_total_return:"एकूण परत केलेला निधी",
+    txt_fund_total_expense:"एकूण खर्च", txt_fund_net_outstanding:"सध्याची बाकी (परत करायची)",
+    txt_fund_new_entry:"नवीन नोंद", txt_fund_type:"प्रकार",
+    opt_fund_in:"बाह्य निधी घेतला (Fund In)", opt_fund_return:"निधी परत केला (Fund Return)", opt_expense:"खर्च (Expense)",
+    txt_fund_source_desc:"स्रोत वर्णन (कोणाकडून/कशासाठी)", txt_fund_expense_desc:"खर्चाचं वर्णन (कशासाठी खर्च झाला)",
+    txt_fund_amount:"रक्कम (₹)", txt_fund_notes:"टीप (ऐच्छिक)", txt_fund_ledger:"फंड खातेवही",
+    msg_select_date:"कृपया दिनांक निवडा", msg_enter_description:"कृपया वर्णन भरा",
+    msg_fund_entry_saved:"नोंद जतन झाली!", msg_fund_entry_deleted:"नोंद काढली!",
+    txt_confirm_delete_fund_entry:"ही नोंद कायमची काढायची आहे का?"
   },
   en: {
     lbl_mobile:"Mobile Number", ph_mobile:"Enter mobile number",
@@ -2463,7 +2562,17 @@ const translations = {
     btn_download_statement:"Download Statement",
     txt_receipt_preview:"View Receipt", btn_download_pdf:"Download PDF",
     msg_mobile_already_registered:"This mobile number is already registered. Please use 'Login' instead (no need to register again).",
-    msg_mobile_request_pending:"A registration request for this mobile number has already been sent and is pending. Please wait for admin approval."
+    msg_mobile_request_pending:"A registration request for this mobile number has already been sent and is pending. Please wait for admin approval.",
+    nav_funds:"Fund Management", txt_funds_sub:"External funds, repayments & expenses — Debit/Credit format",
+    txt_fund_total_in:"Total Fund Received", txt_fund_total_return:"Total Fund Returned",
+    txt_fund_total_expense:"Total Expenses", txt_fund_net_outstanding:"Currently Owed (to repay)",
+    txt_fund_new_entry:"New Entry", txt_fund_type:"Type",
+    opt_fund_in:"Fund Received (Fund In)", opt_fund_return:"Fund Returned", opt_expense:"Expense",
+    txt_fund_source_desc:"Source description (from whom/for what)", txt_fund_expense_desc:"Expense description (what it was for)",
+    txt_fund_amount:"Amount (₹)", txt_fund_notes:"Notes (optional)", txt_fund_ledger:"Fund Ledger",
+    msg_select_date:"Please select a date", msg_enter_description:"Please enter a description",
+    msg_fund_entry_saved:"Entry saved!", msg_fund_entry_deleted:"Entry deleted!",
+    txt_confirm_delete_fund_entry:"Delete this entry permanently?"
   }
 };
 
@@ -2610,6 +2719,11 @@ function goPage(id,btn,skipHistory){
   if(id==='search') doSearch();
   if(id==='requests'){ loadMemberRequests(); loadLoanRequests(); }
   if(id==='reports') renderReportsPage();
+  if(id==='funds'){
+    const dateEl = document.getElementById('fund-date');
+    if(dateEl && !dateEl.value) dateEl.value = new Date().toISOString().slice(0,10);
+    loadFundTransactions();
+  }
   closeSidebar();
   if(!skipHistory){
     if(history.state && history.state.page===id){
@@ -3151,6 +3265,157 @@ function exportLedgerPDF(){
   </table>
   </body></html>`;
   downloadPDF(html, m.nav+'_Ledger.pdf', 'portrait');
+}
+
+/* ── FUND MANAGEMENT (बाह्य निधी / परतफेड / खर्च) ── */
+let fundTransactions = [];
+
+async function loadFundTransactions(){
+  try{
+    const {data, error} = await sb.from('fund_transactions').select('*').order('txn_date',{ascending:true}).order('created_at',{ascending:true});
+    if(error) throw error;
+    fundTransactions = data || [];
+    renderFundLedger();
+  }catch(e){
+    console.warn('loadFundTransactions failed:', e?.message||e);
+    const body = document.getElementById('fund-ledger-body');
+    if(body) body.innerHTML = '';
+    const empty = document.getElementById('fund-ledger-empty');
+    if(empty){ empty.style.display='block'; empty.querySelector('span').textContent = t('err_prefix')+(e?.message||''); }
+  }
+}
+
+function toggleFundDescLabel(){
+  const type = document.getElementById('fund-type').value;
+  const label = document.getElementById('fund-desc-label');
+  if(type==='expense') label.textContent = t('txt_fund_expense_desc');
+  else label.textContent = t('txt_fund_source_desc');
+}
+
+async function saveFundEntry(){
+  const date = document.getElementById('fund-date').value;
+  const type = document.getElementById('fund-type').value;
+  const description = document.getElementById('fund-description').value.trim();
+  const amount = parseFloat(document.getElementById('fund-amount').value);
+  const notes = document.getElementById('fund-notes').value.trim();
+  const err = document.getElementById('fund-error');
+  err.textContent = '';
+  if(!date){ err.textContent = '❌ '+t('msg_select_date'); return; }
+  if(!description){ err.textContent = '❌ '+t('msg_enter_description'); return; }
+  if(!amount || amount<=0){ err.textContent = '❌ '+t('msg_enter_valid_amount'); return; }
+
+  try{
+    const {error} = await sb.from('fund_transactions').insert({
+      txn_date: date, type, description, amount, notes: notes||null,
+      created_by: sessionStorage.getItem('pp_admin_username')||''
+    });
+    if(error) throw error;
+    logActivity('fund_entry', description, type+': ₹'+amount);
+    toast('✓ '+t('msg_fund_entry_saved'));
+    document.getElementById('fund-description').value='';
+    document.getElementById('fund-amount').value='';
+    document.getElementById('fund-notes').value='';
+    await loadFundTransactions();
+  }catch(error){
+    err.textContent = '❌ '+t('err_prefix')+error.message;
+  }
+}
+
+async function deleteFundEntry(id){
+  if(sessionStorage.getItem('pp_admin_role')!=='superadmin'){ toast(t('msg_superadmin_only'),'warn'); return; }
+  if(!confirm(t('txt_confirm_delete_fund_entry'))) return;
+  try{
+    const {error} = await sb.from('fund_transactions').delete().eq('id',id);
+    if(error) throw error;
+    toast('🗑 '+t('msg_fund_entry_deleted'),'warn');
+    await loadFundTransactions();
+  }catch(error){
+    toast(t('err_prefix')+error.message,'warn');
+  }
+}
+
+function buildFundLedgerRows(){
+  const sorted = [...fundTransactions].sort((a,b)=> a.txn_date<b.txn_date?-1 : a.txn_date>b.txn_date?1 : 0);
+  const typeLabels = { fund_in: t('opt_fund_in'), fund_return: t('opt_fund_return'), expense: t('opt_expense') };
+  let running = 0;
+  const rows = sorted.map(f=>{
+    const debit = (f.type==='fund_return' || f.type==='expense') ? f.amount : 0;
+    const credit = (f.type==='fund_in') ? f.amount : 0;
+    running += credit - debit;
+    return { id:f.id, date:f.txn_date, particulars: (typeLabels[f.type]||f.type)+' — '+f.description+(f.notes?(' ('+f.notes+')'):''), debit, credit, balance: running, type:f.type };
+  });
+  return { rows, closingBalance: running };
+}
+
+function renderFundLedger(){
+  const { rows, closingBalance } = buildFundLedgerRows();
+  const tbody = document.getElementById('fund-ledger-body');
+  const empty = document.getElementById('fund-ledger-empty');
+
+  if(!rows.length){
+    tbody.innerHTML = '';
+    if(empty){ empty.style.display='block'; const sp=empty.querySelector('span'); if(sp) sp.textContent = t('txt_no_records'); }
+  } else {
+    if(empty) empty.style.display='none';
+    tbody.innerHTML = rows.map(r=>`<tr>
+      <td>${fmtDate(r.date)}</td>
+      <td>${r.particulars}</td>
+      <td style="text-align:right">${r.debit ? fmt(r.debit) : '—'}</td>
+      <td style="text-align:right">${r.credit ? fmt(r.credit) : '—'}</td>
+      <td style="text-align:right;font-weight:600;">${fmt(r.balance)}</td>
+      <td style="text-align:center;"><button class="btn-icon" onclick="deleteFundEntry(${r.id})" title="${t('btn_delete')}" style="color:var(--red)">🗑</button></td>
+    </tr>`).join('');
+  }
+
+  const tDebit = rows.reduce((s,r)=>s+r.debit,0);
+  const tCredit = rows.reduce((s,r)=>s+r.credit,0);
+  document.getElementById('fund-ledger-foot').innerHTML = rows.length ? `<tr>
+    <td colspan="2">${t('txt_ledger_closing_balance')}</td>
+    <td style="text-align:right">${fmt(tDebit)}</td>
+    <td style="text-align:right">${fmt(tCredit)}</td>
+    <td style="text-align:right;font-weight:700;color:var(--accent);">${fmt(closingBalance)}</td>
+    <td></td>
+  </tr>` : '';
+
+  // Summary cards
+  const totalIn = fundTransactions.filter(f=>f.type==='fund_in').reduce((s,f)=>s+f.amount,0);
+  const totalReturn = fundTransactions.filter(f=>f.type==='fund_return').reduce((s,f)=>s+f.amount,0);
+  const totalExpense = fundTransactions.filter(f=>f.type==='expense').reduce((s,f)=>s+f.amount,0);
+  const netOutstanding = totalIn - totalReturn;
+  document.getElementById('fund-total-in').textContent = fmt(totalIn);
+  document.getElementById('fund-total-return').textContent = fmt(totalReturn);
+  document.getElementById('fund-total-expense').textContent = fmt(totalExpense);
+  document.getElementById('fund-net-outstanding').textContent = fmt(Math.max(0,netOutstanding));
+}
+
+function exportFundLedgerPDF(){
+  const { rows, closingBalance } = buildFundLedgerRows();
+  const now = new Date();
+  const dateStr = fmtDate(now.toISOString().slice(0,10));
+  const rowsHtml = rows.map(r=>`<tr>
+    <td>${fmtDate(r.date)}</td><td>${r.particulars}</td>
+    <td style="text-align:right">${r.debit?fmt(r.debit):'—'}</td>
+    <td style="text-align:right">${r.credit?fmt(r.credit):'—'}</td>
+    <td style="text-align:right">${fmt(r.balance)}</td>
+  </tr>`).join('');
+  const tDebit = rows.reduce((s,r)=>s+r.debit,0);
+  const tCredit = rows.reduce((s,r)=>s+r.credit,0);
+
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8">${getPDFCss()}</head><body>
+  ${getOrgHeader(t('nav_funds'))}
+  <div class="info-bar"><strong>${t('exp_print')}: ${dateStr}</strong></div>
+  <table>
+    <thead><tr><th>${t('th_date')}</th><th>${t('txt_particulars')}</th><th style="text-align:right">${t('txt_debit')}</th><th style="text-align:right">${t('txt_credit')}</th><th style="text-align:right">${t('txt_balance')}</th></tr></thead>
+    <tbody>${rowsHtml || `<tr><td colspan="5" style="text-align:center;">${t('txt_no_records')}</td></tr>`}</tbody>
+    <tfoot><tr>
+      <td colspan="2">${t('txt_ledger_closing_balance')}</td>
+      <td style="text-align:right">${fmt(tDebit)}</td>
+      <td style="text-align:right">${fmt(tCredit)}</td>
+      <td style="text-align:right;font-weight:700;">${fmt(closingBalance)}</td>
+    </tr></tfoot>
+  </table>
+  </body></html>`;
+  showPdfPreview(html, t('nav_funds')+'_'+dateStr+'.pdf', 'portrait');
 }
 
 function getStats(m,yr,mo){
@@ -5992,7 +6257,7 @@ window.addEventListener('DOMContentLoaded', function(){
   loadMembers();
   loadMemberRequests();
   // Restore last-open page after refresh (instead of always jumping to home)
-  const validPages = ['home','entry','hapta','summary','requests','reports','ledger'];
+  const validPages = ['home','entry','hapta','summary','requests','reports','ledger','funds'];
   const hashPage = (location.hash||'').replace('#','');
   if(hashPage && validPages.includes(hashPage) && hashPage!=='home'){
     try{
