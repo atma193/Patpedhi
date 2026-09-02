@@ -4913,7 +4913,10 @@ function autoCalcHaptaRow(el){
   });
   const shillak=Math.max(0,m.vatap-alreadyPaid-kBefore);
   const dand=vilamb*getPenaltyRate();
-  const vyaj=parseFloat((shillak*getInterestRate()*vilamb).toFixed(2));
+  // व्याज दरमहा लागू होतो — विलंब नसला तरी किमान एका महिन्याचं व्याज धरलं जातं;
+  // विलंब असल्यास त्या जास्त महिन्यांचं व्याज आपोआप जास्त धरलं जाईल.
+  const vyajMonths=Math.max(1,vilamb);
+  const vyaj=parseFloat((shillak*getInterestRate()*vyajMonths).toFixed(2));
   if(inputs[3]) inputs[3].value=dand>0?dand:'';
   if(inputs[4]) inputs[4].value=vyaj>0?vyaj:'';
   calcJamaRow(tr);
