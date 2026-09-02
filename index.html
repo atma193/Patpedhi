@@ -863,6 +863,10 @@ window.addEventListener('DOMContentLoaded', function(){
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
       <span data-i18n="nav_entry">सभासद नोंदणी</span>
     </button>
+    <button class="nav-item" data-page="loan" onclick="goPage('loan',this)">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      <span data-i18n="nav_loan">कर्ज वाटप</span>
+    </button>
     <button class="nav-item" data-page="hapta" onclick="goPage('hapta',this)">
       <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
       <span data-i18n="nav_hapta">हप्ता नोंदणी</span>
@@ -1074,6 +1078,11 @@ window.addEventListener('DOMContentLoaded', function(){
       <div style="font-size:13px;font-weight:600;" data-i18n="nav_entry">सभासद नोंदणी</div>
       <div style="font-size:11px;opacity:.75;margin-top:3px;" data-i18n="txt_add_new_member">नवीन सभासद जोडा</div>
     </button>
+    <button onclick="goPage('loan')" class="quick-btn" style="background:linear-gradient(135deg,#92400e,#78350f);">
+      <div style="font-size:22px;margin-bottom:6px;">💵</div>
+      <div style="font-size:13px;font-weight:600;" data-i18n="nav_loan">कर्ज वाटप</div>
+      <div style="font-size:11px;opacity:.75;margin-top:3px;" data-i18n="txt_give_loan">सभासदाला कर्ज द्या</div>
+    </button>
     <button onclick="goPage('hapta')" class="quick-btn" style="background:linear-gradient(135deg,#166534,#14532d);">
       <div style="font-size:22px;margin-bottom:6px;">💰</div>
       <div style="font-size:13px;font-weight:600;" data-i18n="nav_hapta">हप्ता नोंदणी</div>
@@ -1103,55 +1112,9 @@ window.addEventListener('DOMContentLoaded', function(){
       <span class="card-head-title" data-i18n="txt_member_info">सभासद माहिती</span>
     </div>
     <div class="card-body">
-      <div id="e-newcycle-box" style="display:none;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 14px;margin-bottom:16px;">
-        <div style="font-size:12px;color:#92400e;line-height:1.6;margin-bottom:8px;" data-i18n="txt_newcycle_notice">या सभासदाने आधीचं कर्ज पूर्ण फेडलं आहे. नवीन कर्ज द्यायचं असल्यास आधी नवीन कर्ज चक्र सुरू करा — जुना हप्ता इतिहास सुरक्षित राहील आणि नवीन हिशोब वेगळा सुरू होईल.</div>
-        <button class="btn btn-ghost" style="border-color:#92400e;color:#92400e;" onclick="startNewLoanCycle()">
-          <span data-i18n="btn_start_new_cycle">🔄 नवीन कर्ज चक्र सुरू करा</span>
-        </button>
-      </div>
       <div class="form-grid">
-        
-        <div class="fg"><label data-i18n="lbl_loan_date">कर्ज वाटप दिनांक</label><input type="date" id="e-date"></div>
         <div class="fg"><label data-i18n="lbl_member_name">सभासदाचे नाव</label><input type="text" id="e-nav" placeholder="पूर्ण नाव लिहा"></div>
-          <div class="fg"><label data-i18n="lbl_mobile">मोबाईल नंबर</label><input type="text" id="e-mobile" placeholder="9876543210" maxlength="10"></div>
-        <div class="fg"><label data-i18n="lbl_total_loan">एकूण कर्ज वाटप (₹)</label><input type="number" id="e-vatap" placeholder="25000" oninput="calcE()"></div>
-      <div class="fg">
-        <label data-i18n="lbl_loan_for">कर्ज कोणासाठी?</label>
-        <select id="e-karjtype" onchange="toggleGuarantor()">
-          <option value="swataha" data-i18n="opt_self">स्वतःसाठी</option>
-          <option value="etar" data-i18n="opt_other">इतरांसाठी</option>
-        </select>
-      </div>
-      <div class="fg" id="e-guarantor-fg" style="display:none;">
-        <label data-i18n="lbl_other_person_name">इतर व्यक्तीचे नाव</label>
-        <input type="text" id="e-guarantor" placeholder="व्यक्तीचे पूर्ण नाव लिहा" data-i18n-ph="ph_full_name_person">
-      </div>
-      
-      </div>
-
-      <div class="sec-label" data-i18n="txt_hapta_entries">हप्ता नोंदी</div>
-      <div class="tbl-wrap">
-        <table style="min-width:700px">
-          <thead><tr>
-            <th style="min-width:130px" data-i18n="th_installment_month">हप्त्याचा महिना</th><th style="min-width:110px" data-i18n="th_date">दिनांक</th><th style="min-width:100px" data-i18n="th_delay_months">विलंब (महिने)</th>
-            <th style="min-width:100px"><span data-i18n="th_dand">दंड</span> (₹) <span style="color:var(--amber);font-size:9px">●auto</span></th><th style="min-width:120px"><span class="vyaj-rate-label" data-i18n="th_vyaj2">व्याज @२%</span> (₹) <span style="color:var(--accent);font-size:9px">●auto</span></th><th style="min-width:90px"><span data-i18n="th_hapta">हप्ता</span> (₹) <span style="color:#e05252;font-size:11px">*</span></th><th style="min-width:90px"><span data-i18n="th_jama">जमा</span> (₹) <span style="color:var(--gold,#d4a017);font-size:9px">●auto</span></th><th style="min-width:36px"></th>
-          </tr></thead>
-          <tbody id="e-body"></tbody>
-        </table>
-      </div>
-      <button class="btn btn-ghost" style="margin-top:10px;font-size:12px" onclick="addRow()">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-        <span data-i18n="btn_add_hapta">हप्ता जोडा</span>
-      </button>
-
-      <div class="sec-label" data-i18n="txt_total_details">एकूण तपशील</div>
-      <div class="metrics-row" style="margin-bottom:0">
-        <div class="metric-card blue"><div class="metric-label" data-i18n="m_loan_disb">कर्ज वाटप</div><div class="metric-value" id="m-vatap">₹0</div></div>
-        <div class="metric-card green"><div class="metric-label" data-i18n="m_loan_paid">कर्ज जमा</div><div class="metric-value" id="m-karj">₹0</div></div>
-        <div class="metric-card amber"><div class="metric-label" data-i18n="m_dand_paid">दंड जमा</div><div class="metric-value" id="m-dand">₹0</div></div>
-      <div class="metric-card amber"><div class="metric-label" data-i18n="m_vyaj_paid">व्याज जमा</div><div class="metric-value" id="m-vyaj">₹0</div></div>
-        <div class="metric-card green"><div class="metric-label" data-i18n="m_total_paid">एकूण जमा</div><div class="metric-value" id="m-jama">₹0</div></div>
-        <div class="metric-card red"><div class="metric-label" data-i18n="m_balance_loan">शिल्लक कर्ज</div><div class="metric-value" id="m-shillak">₹0</div></div>
+        <div class="fg"><label data-i18n="lbl_mobile">मोबाईल नंबर</label><input type="text" id="e-mobile" placeholder="9876543210" maxlength="10"></div>
       </div>
 
       <div class="btn-row">
@@ -1160,6 +1123,102 @@ window.addEventListener('DOMContentLoaded', function(){
           <span data-i18n="btn_save">जतन करा</span>
         </button>
         <button class="btn btn-ghost" onclick="resetEntry()" data-i18n="btn_reset">रिसेट</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOAN DISBURSEMENT PAGE -->
+<div id="page-loan" class="page">
+  <div style="margin-bottom:14px;">
+    <div class="page-title" data-i18n="nav_loan">कर्ज वाटप</div>
+    <div class="page-sub" data-i18n="txt_loan_sub">सभासद निवडा आणि कर्ज वाटप करा</div>
+  </div>
+
+  <!-- Member search -->
+  <div class="card" style="margin-bottom:14px;overflow:visible;">
+    <div class="card-head"><span class="card-head-title" data-i18n="txt_select_member">सभासद निवडा</span></div>
+    <div class="card-body" style="padding:14px 18px;overflow:visible;">
+      <div class="fg" style="max-width:420px;position:relative;">
+        <label data-i18n="lbl_name_or_no">सभासदाचे नाव किंवा अ. क्र. लिहा</label>
+        <input type="text" id="loan-search" placeholder="नाव टाइप करा..." data-i18n-ph="ph_type_name"
+          oninput="loanSearch()" autocomplete="off" style="font-size:14px;">
+        <div id="loan-dropdown" style="display:none;position:absolute;top:100%;left:0;right:0;
+          background:var(--white);border:1px solid var(--border2);border-radius:8px;
+          z-index:500;max-height:220px;overflow-y:auto;
+          box-shadow:0 6px 20px rgba(0,0,0,0.18);margin-top:3px;"></div>
+      </div>
+      <!-- Selected member info -->
+      <div id="loan-selected-info" style="display:none;margin-top:10px;padding:10px 14px;
+        background:var(--gold-pale);border-radius:8px;border:1px solid var(--border2);
+        align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-weight:600;font-size:14px;" id="loan-sel-name"></div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px;" id="loan-sel-detail"></div>
+        </div>
+        <button onclick="clearLoanSel()" class="btn btn-ghost" style="padding:5px 12px;font-size:12px;">✕ <span data-i18n="btn_change">बदला</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loan form - shown after member selected -->
+  <div id="loan-form" style="display:none">
+    <div class="card">
+      <div class="card-body">
+        <div id="e-newcycle-box" style="display:none;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 14px;margin-bottom:16px;">
+          <div style="font-size:12px;color:#92400e;line-height:1.6;margin-bottom:8px;" data-i18n="txt_newcycle_notice">या सभासदाने आधीचं कर्ज पूर्ण फेडलं आहे. नवीन कर्ज द्यायचं असल्यास आधी नवीन कर्ज चक्र सुरू करा — जुना हप्ता इतिहास सुरक्षित राहील आणि नवीन हिशोब वेगळा सुरू होईल.</div>
+          <button class="btn btn-ghost" style="border-color:#92400e;color:#92400e;" onclick="startNewLoanCycle()">
+            <span data-i18n="btn_start_new_cycle">🔄 नवीन कर्ज चक्र सुरू करा</span>
+          </button>
+        </div>
+        <div class="form-grid">
+          <div class="fg"><label data-i18n="lbl_loan_date">कर्ज वाटप दिनांक</label><input type="date" id="e-date"></div>
+          <div class="fg"><label data-i18n="lbl_total_loan">एकूण कर्ज वाटप (₹)</label><input type="number" id="e-vatap" placeholder="25000" oninput="calcE()"></div>
+          <div class="fg">
+            <label data-i18n="lbl_loan_for">कर्ज कोणासाठी?</label>
+            <select id="e-karjtype" onchange="toggleGuarantor()">
+              <option value="swataha" data-i18n="opt_self">स्वतःसाठी</option>
+              <option value="etar" data-i18n="opt_other">इतरांसाठी</option>
+            </select>
+          </div>
+          <div class="fg" id="e-guarantor-fg" style="display:none;">
+            <label data-i18n="lbl_other_person_name">इतर व्यक्तीचे नाव</label>
+            <input type="text" id="e-guarantor" placeholder="व्यक्तीचे पूर्ण नाव लिहा" data-i18n-ph="ph_full_name_person">
+          </div>
+        </div>
+
+        <div class="sec-label" data-i18n="txt_hapta_entries">हप्ता नोंदी</div>
+        <div class="tbl-wrap">
+          <table style="min-width:700px">
+            <thead><tr>
+              <th style="min-width:130px" data-i18n="th_installment_month">हप्त्याचा महिना</th><th style="min-width:110px" data-i18n="th_date">दिनांक</th><th style="min-width:100px" data-i18n="th_delay_months">विलंब (महिने)</th>
+              <th style="min-width:100px"><span data-i18n="th_dand">दंड</span> (₹) <span style="color:var(--amber);font-size:9px">●auto</span></th><th style="min-width:120px"><span class="vyaj-rate-label" data-i18n="th_vyaj2">व्याज @२%</span> (₹) <span style="color:var(--accent);font-size:9px">●auto</span></th><th style="min-width:90px"><span data-i18n="th_hapta">हप्ता</span> (₹) <span style="color:#e05252;font-size:11px">*</span></th><th style="min-width:90px"><span data-i18n="th_jama">जमा</span> (₹) <span style="color:var(--gold,#d4a017);font-size:9px">●auto</span></th><th style="min-width:36px"></th>
+            </tr></thead>
+            <tbody id="e-body"></tbody>
+          </table>
+        </div>
+        <button class="btn btn-ghost" style="margin-top:10px;font-size:12px" onclick="addRow()">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          <span data-i18n="btn_add_hapta">हप्ता जोडा</span>
+        </button>
+
+        <div class="sec-label" data-i18n="txt_total_details">एकूण तपशील</div>
+        <div class="metrics-row" style="margin-bottom:0">
+          <div class="metric-card blue"><div class="metric-label" data-i18n="m_loan_disb">कर्ज वाटप</div><div class="metric-value" id="m-vatap">₹0</div></div>
+          <div class="metric-card green"><div class="metric-label" data-i18n="m_loan_paid">कर्ज जमा</div><div class="metric-value" id="m-karj">₹0</div></div>
+          <div class="metric-card amber"><div class="metric-label" data-i18n="m_dand_paid">दंड जमा</div><div class="metric-value" id="m-dand">₹0</div></div>
+        <div class="metric-card amber"><div class="metric-label" data-i18n="m_vyaj_paid">व्याज जमा</div><div class="metric-value" id="m-vyaj">₹0</div></div>
+          <div class="metric-card green"><div class="metric-label" data-i18n="m_total_paid">एकूण जमा</div><div class="metric-value" id="m-jama">₹0</div></div>
+          <div class="metric-card red"><div class="metric-label" data-i18n="m_balance_loan">शिल्लक कर्ज</div><div class="metric-value" id="m-shillak">₹0</div></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="saveLoanDisbursement()">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+            <span data-i18n="btn_save">जतन करा</span>
+          </button>
+          <button class="btn btn-ghost" onclick="clearLoanSel()" data-i18n="btn_reset">रिसेट</button>
+        </div>
       </div>
     </div>
   </div>
@@ -2101,7 +2160,7 @@ const translations = {
     lbl_full_name:"पूर्ण नाव", ph_full_name:"तुमचं पूर्ण नाव", ph_mobile10:"१० अंकी मोबाईल नंबर",
     lbl_create_pass:"पासवर्ड तयार करा", ph_min6:"किमान ६ अक्षरे", lbl_pass_confirm:"पासवर्ड पुन्हा टाका",
     btn_send_reg_request:"नोंदणी विनंती पाठवा", txt_login_sub:"पतपेढी व्यवस्थापन",
-    nav_home:"मुख्यपृष्ठ", nav_entry:"सभासद नोंदणी", nav_hapta:"हप्ता नोंदणी", nav_search:"सभासद तपशील",
+    nav_home:"मुख्यपृष्ठ", nav_entry:"सभासद नोंदणी", nav_loan:"कर्ज वाटप", txt_loan_sub:"सभासद निवडा आणि कर्ज वाटप करा", txt_give_loan:"सभासदाला कर्ज द्या", nav_hapta:"हप्ता नोंदणी", nav_search:"सभासद तपशील",
     nav_summary:"पूर्ण तपशील", nav_requests:"सभासद विनंत्या", nav_details:"तपशील", nav_loanreq:"कर्ज विनंती",
     btn_install_app:"App Install करा", txt_footer_branch:"मुंबई शाखा", txt_footer_dept:"पतपेढी विभाग",
     txt_member_panel:"सभासद पॅनल", btn_logout:"लॉगआउट",
@@ -2345,7 +2404,7 @@ const translations = {
     lbl_full_name:"Full name", ph_full_name:"Your full name", ph_mobile10:"10-digit mobile number",
     lbl_create_pass:"Create password", ph_min6:"Minimum 6 characters", lbl_pass_confirm:"Re-enter password",
     btn_send_reg_request:"Send registration request", txt_login_sub:"Society Management",
-    nav_home:"Home", nav_entry:"Member Registration", nav_hapta:"Installment Entry", nav_search:"Member Details",
+    nav_home:"Home", nav_entry:"Member Registration", nav_loan:"Loan Disbursement", txt_loan_sub:"Select a member and disburse a loan", txt_give_loan:"Give a member a loan", nav_hapta:"Installment Entry", nav_search:"Member Details",
     nav_summary:"Full Details", nav_requests:"Member Requests", nav_details:"Details", nav_loanreq:"Loan Request",
     btn_install_app:"Install App", txt_footer_branch:"Mumbai Branch", txt_footer_dept:"Credit Society Dept",
     txt_member_panel:"Member Panel", btn_logout:"Logout",
@@ -2847,60 +2906,35 @@ function toggleGuarantor(){
 async function saveEntry(){
   const nav=document.getElementById('e-nav').value.trim();
   const mobile=document.getElementById('e-mobile').value.trim();
-  const vatap=parseFloat(document.getElementById('e-vatap').value)||0;
-  const date=document.getElementById('e-date').value;
   if(!nav){toast(t('msg_enter_member_name'),'warn');return;}
-  if(!vatap){toast(t('msg_enter_loan_amount'),'warn');return;}
-  const hapte=[];
-  let missingHapta=false;
-  document.querySelectorAll('#e-body tr').forEach(r=>{
-    const i=r.querySelectorAll('input');
-    const monthVal=i[0]?.value;
-    const dateVal=i[1]?.value;
-    const dand=parseFloat(i[3]?.value)||0;
-    const vyaj=parseFloat(i[4]?.value)||0;
-    const hapta=parseFloat(i[5]?.value)||0;
-    const hasAnyData = monthVal||dateVal||dand>0||vyaj>0||hapta>0;
-    if(!hasAnyData) return;
-    if(hapta<=0){ missingHapta=true; return; }
-    hapte.push({mahina:monthVal,dinank:dateVal,vilamb:parseFloat(i[2]?.value)||0,dand,vyaj,hapta,jama:parseFloat(i[6]?.value)||0});
-  });
-  if(missingHapta){toast(t('msg_enter_hapta_each_row'),'warn');return;}
-  const karjtype = document.getElementById('e-karjtype').value;
-  const guarantor = karjtype === 'etar' ? document.getElementById('e-guarantor').value.trim() : '';
   // Check if editing existing member — look up by stable id (not array position,
   // which can shift if data changes elsewhere via realtime sync while the form is open)
   const editId = document.getElementById('e-nav').dataset.editId;
   const existing = editId ? members.find(m => String(m.id) === String(editId)) : null;
   if(existing) {
-    const {error} = await sb.from('sabhasad').update({nav,mobile,vatap,date,hapte,karjtype,guarantor}).eq('id',existing.id);
+    const {error} = await sb.from('sabhasad').update({nav,mobile}).eq('id',existing.id);
     if(error){toast(t('msg_save_error')+error.message,'warn');return;}
     const liveIdx = members.findIndex(m => m.id === existing.id);
-    if(liveIdx>=0) members[liveIdx] = {id:existing.id,kram:existing.kram,nav,mobile,vatap,date,hapte,karjtype,guarantor,loan_history:existing.loan_history||[]};
-    const kd=document.getElementById('e-kram-display');
-    if(kd)kd.textContent=existing.kram;
+    if(liveIdx>=0){ members[liveIdx].nav = nav; members[liveIdx].mobile = mobile; }
     document.getElementById('e-nav').dataset.editId='';
     document.getElementById('e-nav').dataset.editIdx='';
     toast('✓ '+t('th_sr_no')+' '+existing.kram+' — '+nav+' '+t('msg_record_updated'));
   } else {
     const maxKram = members.length > 0 ? Math.max(...members.map(m=>m.kram)) : 0;
     const kram = maxKram + 1;
-    const {data,error} = await sb.from('sabhasad').insert({kram,nav,mobile,vatap,date,hapte,karjtype,guarantor}).select().single();
+    const {data,error} = await sb.from('sabhasad').insert({kram,nav,mobile,vatap:0,date:null,hapte:[],karjtype:'swataha',guarantor:''}).select().single();
     if(error){toast(t('msg_save_error')+error.message,'warn');return;}
-    members.push({id:data.id,kram,nav,mobile,vatap,date,hapte,karjtype,guarantor});
-    const kd=document.getElementById('e-kram-display');
-    if(kd)kd.textContent=kram;
+    members.push({id:data.id,kram,nav,mobile,vatap:0,date:null,hapte:[],karjtype:'swataha',guarantor:'',loan_history:[]});
     toast('✓ '+t('th_sr_no')+' '+kram+' — '+nav+' '+t('msg_record_saved'));
   }
+  resetEntry();
 }
 
 function resetEntry(){
-  ['e-nav','e-mobile','e-vatap','e-date'].forEach(id=>document.getElementById(id).value='');
-document.getElementById('e-nav').dataset.editIdx='';
-document.getElementById('e-nav').dataset.editId='';
-const kd2=document.getElementById('e-kram-display');if(kd2)kd2.textContent='';
-  const ncb=document.getElementById('e-newcycle-box');if(ncb)ncb.style.display='none';
-  document.getElementById('e-body').innerHTML='';rowCount=0;calcE();
+  document.getElementById('e-nav').value='';
+  document.getElementById('e-mobile').value='';
+  document.getElementById('e-nav').dataset.editIdx='';
+  document.getElementById('e-nav').dataset.editId='';
 }
 
 /* --- SEARCH --- */
@@ -3020,17 +3054,65 @@ function closeDrawer(e){
 
 function editMember(idx){
   const m=members[idx];
-  // store kram for update
-  const kd=document.getElementById('e-kram-display');
-  if(kd) kd.textContent=m.kram;
   // mark as editing — use the member's stable database id, not the array position,
   // since array positions can shift if data changes elsewhere (realtime sync) while this form is open
   document.getElementById('e-nav').dataset.editId=m.id;
   document.getElementById('e-nav').dataset.editIdx=idx;
   document.getElementById('e-nav').value=m.nav;
   document.getElementById('e-mobile').value=m.mobile||'';
-  document.getElementById('e-vatap').value=m.vatap;
-  document.getElementById('e-date').value=m.date;
+  closeDrawer();
+  goPage('entry',document.querySelectorAll('.nav-item')[1]);
+}
+
+/* --- LOAN DISBURSEMENT (separate from Member Registration) --- */
+let loanSelectedIdx = -1;
+
+function loanSearch(){
+  const q = (document.getElementById('loan-search').value || '').trim().toLowerCase();
+  const dd = document.getElementById('loan-dropdown');
+  if(!q){ dd.style.display='none'; return; }
+
+  const results = members.filter(m =>
+    m.nav.toLowerCase().includes(q) || String(m.kram).includes(q)
+  );
+
+  if(!results.length){
+    dd.innerHTML='<div style="padding:10px 14px;font-size:13px;color:var(--text3);">'+t('txt_no_one_found')+'</div>';
+    dd.style.display='block';
+    return;
+  }
+
+  dd.innerHTML = results.map(m => {
+    const sh = Math.max(0, m.vatap - m.hapte.reduce((s,h)=>s+h.hapta,0));
+    return `<div onclick="selectLoanMember(${members.indexOf(m)})" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .12s;"
+      onmouseover="this.style.background='var(--gold-pale)'" onmouseout="this.style.background=''">
+      <div style="font-weight:600;font-size:13px;">${t('th_sr_no')} ${m.kram} — ${m.nav}</div>
+      <div style="font-size:11px;color:var(--text2);margin-top:2px;">
+        ${m.mobile ? '📱 '+m.mobile+' &nbsp;|&nbsp; ' : ''}कर्ज: ${fmt(m.vatap)} &nbsp;|&nbsp; शिल्लक: ${fmt(sh)}
+      </div>
+    </div>`;
+  }).join('');
+  dd.style.display='block';
+}
+
+function selectLoanMember(idx){
+  loanSelectedIdx = idx;
+  const m = members[idx];
+
+  document.getElementById('loan-dropdown').style.display='none';
+  document.getElementById('loan-search').value = 'अ.क्र. '+m.kram+' — '+m.nav;
+
+  const info = document.getElementById('loan-selected-info');
+  info.style.display='flex';
+  document.getElementById('loan-sel-name').textContent = 'अ.क्र. '+m.kram+' — '+m.nav;
+  document.getElementById('loan-sel-detail').textContent = m.mobile ? '📱 '+m.mobile : '';
+
+  // Pre-fill this member's current loan details (if any) for review/correction
+  document.getElementById('e-vatap').value = m.vatap || '';
+  document.getElementById('e-date').value = m.date || '';
+  document.getElementById('e-karjtype').value = m.karjtype || 'swataha';
+  toggleGuarantor();
+  document.getElementById('e-guarantor').value = m.guarantor || '';
 
   // Show "start new loan cycle" notice if this member's current loan is fully repaid
   const paidTotal = m.hapte.reduce((s,h)=>s+(h.hapta||0),0);
@@ -3046,13 +3128,61 @@ function editMember(idx){
     document.getElementById('e-body').appendChild(tr);
   });
   calcE();
-  closeDrawer();
-  goPage('entry',document.querySelectorAll('.nav-item')[1]);
+
+  document.getElementById('loan-form').style.display='block';
+}
+
+function clearLoanSel(){
+  loanSelectedIdx=-1;
+  document.getElementById('loan-search').value='';
+  document.getElementById('loan-selected-info').style.display='none';
+  document.getElementById('loan-form').style.display='none';
+  document.getElementById('e-vatap').value='';
+  document.getElementById('e-date').value='';
+  document.getElementById('e-karjtype').value='swataha';
+  document.getElementById('e-guarantor').value='';
+  toggleGuarantor();
+  document.getElementById('e-body').innerHTML=''; rowCount=0;
+  document.getElementById('e-newcycle-box').style.display='none';
+}
+
+async function saveLoanDisbursement(){
+  if(loanSelectedIdx<0){ toast(t('msg_select_member_first'),'warn'); return; }
+  const m = members[loanSelectedIdx];
+  const vatap=parseFloat(document.getElementById('e-vatap').value)||0;
+  const date=document.getElementById('e-date').value;
+  if(!vatap){toast(t('msg_enter_loan_amount'),'warn');return;}
+  const hapte=[];
+  let missingHapta=false;
+  document.querySelectorAll('#e-body tr').forEach(r=>{
+    const i=r.querySelectorAll('input');
+    const monthVal=i[0]?.value;
+    const dateVal=i[1]?.value;
+    const dand=parseFloat(i[3]?.value)||0;
+    const vyaj=parseFloat(i[4]?.value)||0;
+    const hapta=parseFloat(i[5]?.value)||0;
+    const hasAnyData = monthVal||dateVal||dand>0||vyaj>0||hapta>0;
+    if(!hasAnyData) return;
+    if(hapta<=0){ missingHapta=true; return; }
+    hapte.push({mahina:monthVal,dinank:dateVal,vilamb:parseFloat(i[2]?.value)||0,dand,vyaj,hapta,jama:parseFloat(i[6]?.value)||0});
+  });
+  if(missingHapta){toast(t('msg_enter_hapta_each_row'),'warn');return;}
+  const karjtype = document.getElementById('e-karjtype').value;
+  const guarantor = karjtype === 'etar' ? document.getElementById('e-guarantor').value.trim() : '';
+
+  const {error} = await sb.from('sabhasad').update({vatap,date,hapte,karjtype,guarantor}).eq('id',m.id);
+  if(error){toast(t('msg_save_error')+error.message,'warn');return;}
+  const liveIdx = members.findIndex(x => x.id === m.id);
+  if(liveIdx>=0){
+    members[liveIdx].vatap=vatap; members[liveIdx].date=date; members[liveIdx].hapte=hapte;
+    members[liveIdx].karjtype=karjtype; members[liveIdx].guarantor=guarantor;
+  }
+  toast('✓ '+t('th_sr_no')+' '+m.kram+' — '+m.nav+' '+t('msg_record_updated'));
+  clearLoanSel();
 }
 
 async function startNewLoanCycle(){
-  const editId = document.getElementById('e-nav').dataset.editId;
-  const m = editId ? members.find(x => String(x.id) === String(editId)) : null;
+  const m = loanSelectedIdx>=0 ? members[loanSelectedIdx] : null;
   if(!m) return;
   if(!confirm(t('txt_confirm_new_cycle').replace('{name}', m.nav))) return;
 
@@ -3264,7 +3394,7 @@ function exportLedgerPDF(){
     </tr></tfoot>
   </table>
   </body></html>`;
-  downloadPDF(html, m.nav+'_Ledger.pdf', 'portrait');
+  showPdfPreview(html, m.nav+'_Ledger.pdf', 'portrait');
 }
 
 /* ── FUND MANAGEMENT (बाह्य निधी / परतफेड / खर्च) ── */
@@ -3517,7 +3647,7 @@ function exportOutstandingList(){
   </table>
   <div style="font-size:10px;color:#94a3b8;margin-top:10px;">${t('txt_outstanding_disclaimer')}</div>
   </body></html>`;
-  downloadPDF(html, t('txt_outstanding_list')+'_'+dateStr+'.pdf', 'landscape');
+  showPdfPreview(html, t('txt_outstanding_list')+'_'+dateStr+'.pdf', 'landscape');
 }
 
 function renderTxnDetail(){
@@ -3811,8 +3941,11 @@ function downloadPDF(htmlContent, filename, orientation){
   const el = document.createElement('div');
   el.innerHTML = htmlContent;
   el.style.position = 'fixed';
-  el.style.left = '-99999px';
+  el.style.left = '0';
   el.style.top = '0';
+  el.style.opacity = '0';
+  el.style.pointerEvents = 'none';
+  el.style.zIndex = '-1';
   document.body.appendChild(el);
   html2pdf().set({
     filename: filename,
@@ -4256,7 +4389,7 @@ function exportAGMReport(){
     <div class="sign-line">${t('txt_agm_treasurer')}</div>
   </div>
   </body></html>`;
-  downloadPDF(html, t('txt_agm_title')+'_'+yr+'.pdf', 'landscape');
+  showPdfPreview(html, t('txt_agm_title')+'_'+yr+'.pdf', 'landscape');
 }
 
 async function backupData(){
@@ -4361,7 +4494,7 @@ ${getOrgHeader(t('exp_title_member_detail'))}
 </table>
 ${historySection}
 </body></html>`;
-  downloadPDF(html, m.nav+'_'+t('exp_file_details')+'.pdf');
+  showPdfPreview(html, m.nav+'_'+t('exp_file_details')+'.pdf', 'landscape');
 }
 
 /* ── सभासद Excel ── */
@@ -4507,7 +4640,7 @@ ${getOrgHeader(t('exp_title_all_summary'))}
   </tr></tfoot>
 </table>
 </body></html>`;
-  downloadPDF(html, 'Patpedhi_'+t('exp_file_all')+'.pdf');
+  showPdfPreview(html, 'Patpedhi_'+t('exp_file_all')+'.pdf', 'landscape');
 }
 
 /* ── सर्व सभासद Excel ── */
@@ -6076,10 +6209,11 @@ async function confirmApproveLoanRequest(){
     toast('✓ '+t('msg_loan_request_approved'));
     closeApproveLoanModal();
     await loadLoanRequests();
-    // Navigate admin to Entry page with this member loaded and approved amount pre-filled
+    // Navigate admin to the Loan Disbursement page with this member loaded and approved amount pre-filled
     const idx = members.findIndex(m=>m.id===req.sabhasad_id);
     if(idx>=0){
-      editMember(idx);
+      goPage('loan');
+      selectLoanMember(idx);
       document.getElementById('e-vatap').value = approvedAmount;
       const karjtypeSel = document.getElementById('e-karjtype');
       if(karjtypeSel && req.karjtype){
@@ -6090,6 +6224,7 @@ async function confirmApproveLoanRequest(){
           if(guarantorEl) guarantorEl.value = req.guarantor;
         }
       }
+      calcE();
     }
   }catch(error){
     err.textContent = '❌ '+t('err_prefix')+error.message;
