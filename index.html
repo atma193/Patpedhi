@@ -1115,6 +1115,11 @@ window.addEventListener('DOMContentLoaded', function(){
       <div class="form-grid">
         <div class="fg"><label data-i18n="lbl_member_name">सभासदाचे नाव</label><input type="text" id="e-nav" placeholder="पूर्ण नाव लिहा"></div>
         <div class="fg"><label data-i18n="lbl_mobile">मोबाईल नंबर</label><input type="text" id="e-mobile" placeholder="9876543210" maxlength="10"></div>
+        <div class="fg">
+          <label data-i18n="lbl_password">पासवर्ड (Password)</label>
+          <input type="text" id="e-password" placeholder="किमान ६ अक्षरे" data-i18n-ph="ph_min6" autocomplete="off">
+          <div style="font-size:11px;color:var(--text3);margin-top:3px;" data-i18n="txt_password_optional_hint">रिकामे ठेवल्यास सभासदाला सध्या लॉगिन मिळणार नाही — तो नंतर स्वतः नोंदणी करू शकतो.</div>
+        </div>
       </div>
 
       <div class="btn-row">
@@ -2156,7 +2161,7 @@ const translations = {
     hdr_changepass:"पासवर्ड बदला", lbl_username:"युजरनेम", lbl_cur_pass:"सध्याचा पासवर्ड",
     ph_cur_pass:"सध्याचा पासवर्ड", lbl_new_pass:"नवीन पासवर्ड", ph_new_pass:"नवीन पासवर्ड (किमान ६ अक्षरे)",
     lbl_new_pass_confirm:"नवीन पासवर्ड पुन्हा टाका", ph_retype:"पुन्हा टाका", btn_changepass:"पासवर्ड बदला",
-    hdr_register:"सभासद नोंदणी", txt_register_note:"नाव, मोबाईल व पासवर्ड भरा — अ‍ॅडमिनने approve केल्यावर तुम्ही लॉगिन करू शकाल.",
+    hdr_register:"सभासद नोंदणी", txt_register_note:"नाव, मोबाईल व पासवर्ड भरा — अ‍ॅडमिनने approve केल्यावर तुम्ही लॉगिन करू शकाल.", txt_password_optional_hint:"रिकामे ठेवल्यास सभासदाला सध्या लॉगिन मिळणार नाही — तो नंतर स्वतः नोंदणी करू शकतो.",
     lbl_full_name:"पूर्ण नाव", ph_full_name:"तुमचं पूर्ण नाव", ph_mobile10:"१० अंकी मोबाईल नंबर",
     lbl_create_pass:"पासवर्ड तयार करा", ph_min6:"किमान ६ अक्षरे", lbl_pass_confirm:"पासवर्ड पुन्हा टाका",
     btn_send_reg_request:"नोंदणी विनंती पाठवा", txt_login_sub:"पतपेढी व्यवस्थापन",
@@ -2400,7 +2405,7 @@ const translations = {
     hdr_changepass:"Change Password", lbl_username:"Username", lbl_cur_pass:"Current password",
     ph_cur_pass:"Current password", lbl_new_pass:"New password", ph_new_pass:"New password (min 6 characters)",
     lbl_new_pass_confirm:"Re-enter new password", ph_retype:"Re-enter", btn_changepass:"Change password",
-    hdr_register:"Member Registration", txt_register_note:"Fill your name, mobile and password — you can login once approved by admin.",
+    hdr_register:"Member Registration", txt_register_note:"Fill your name, mobile and password — you can login once approved by admin.", txt_password_optional_hint:"Leave blank if this member shouldn't get login access yet — they can self-register later.",
     lbl_full_name:"Full name", ph_full_name:"Your full name", ph_mobile10:"10-digit mobile number",
     lbl_create_pass:"Create password", ph_min6:"Minimum 6 characters", lbl_pass_confirm:"Re-enter password",
     btn_send_reg_request:"Send registration request", txt_login_sub:"Society Management",
@@ -2906,7 +2911,9 @@ function toggleGuarantor(){
 async function saveEntry(){
   const nav=document.getElementById('e-nav').value.trim();
   const mobile=document.getElementById('e-mobile').value.trim();
+  const password=document.getElementById('e-password').value;
   if(!nav){toast(t('msg_enter_member_name'),'warn');return;}
+  if(password && password.length<6){toast(t('msg_pass_min6'),'warn');return;}
   // Check if editing existing member — look up by stable id (not array position,
   // which can shift if data changes elsewhere via realtime sync while the form is open)
   const editId = document.getElementById('e-nav').dataset.editId;
@@ -2916,6 +2923,17 @@ async function saveEntry(){
     if(error){toast(t('msg_save_error')+error.message,'warn');return;}
     const liveIdx = members.findIndex(m => m.id === existing.id);
     if(liveIdx>=0){ members[liveIdx].nav = nav; members[liveIdx].mobile = mobile; }
+    // If admin typed a password while editing, create or update this member's login
+    if(password){
+      try{
+        const {data: existingReq} = await sb.from('member_requests').select('*').eq('sabhasad_id', existing.id).eq('status','approved').limit(1);
+        if(existingReq && existingReq.length){
+          await sb.from('member_requests').update({password,nav,mobile}).eq('id', existingReq[0].id);
+        } else {
+          await sb.from('member_requests').insert({nav,mobile,password,status:'approved',sabhasad_id:existing.id});
+        }
+      }catch(e){ toast(t('err_prefix')+e.message,'warn'); }
+    }
     document.getElementById('e-nav').dataset.editId='';
     document.getElementById('e-nav').dataset.editIdx='';
     toast('✓ '+t('th_sr_no')+' '+existing.kram+' — '+nav+' '+t('msg_record_updated'));
@@ -2925,6 +2943,11 @@ async function saveEntry(){
     const {data,error} = await sb.from('sabhasad').insert({kram,nav,mobile,vatap:0,date:null,hapte:[],karjtype:'swataha',guarantor:''}).select().single();
     if(error){toast(t('msg_save_error')+error.message,'warn');return;}
     members.push({id:data.id,kram,nav,mobile,vatap:0,date:null,hapte:[],karjtype:'swataha',guarantor:'',loan_history:[]});
+    // Create an approved login for this member right away, if admin set a password
+    if(password){
+      const {error:reqErr} = await sb.from('member_requests').insert({nav,mobile,password,status:'approved',sabhasad_id:data.id});
+      if(reqErr){ toast(t('err_prefix')+reqErr.message,'warn'); }
+    }
     toast('✓ '+t('th_sr_no')+' '+kram+' — '+nav+' '+t('msg_record_saved'));
   }
   resetEntry();
@@ -2933,6 +2956,7 @@ async function saveEntry(){
 function resetEntry(){
   document.getElementById('e-nav').value='';
   document.getElementById('e-mobile').value='';
+  document.getElementById('e-password').value='';
   document.getElementById('e-nav').dataset.editIdx='';
   document.getElementById('e-nav').dataset.editId='';
 }
@@ -3060,6 +3084,7 @@ function editMember(idx){
   document.getElementById('e-nav').dataset.editIdx=idx;
   document.getElementById('e-nav').value=m.nav;
   document.getElementById('e-mobile').value=m.mobile||'';
+  document.getElementById('e-password').value='';
   closeDrawer();
   goPage('entry',document.querySelectorAll('.nav-item')[1]);
 }
