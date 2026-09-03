@@ -894,25 +894,26 @@ window.addEventListener('DOMContentLoaded', function(){
     </button>
   </nav>
   <div style="padding:10px 10px 0;position:relative;">
-  <!-- Admin Popup Button -->
-  <button data-admin-toggle onclick="toggleAdminPopup()" style="display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13px;color:#e2b65a;border:1px solid rgba(212,160,23,.25);background:rgba(212,160,23,.08);width:100%;text-align:left;transition:all .18s;position:relative;">
-    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-    <span id="sidebar-username" style="font-size:12px;font-weight:600;">Admin</span>
-    <span id="req-badge-sidebtn" style="display:none;background:#e05252;color:#fff;font-size:10px;font-weight:700;border-radius:10px;padding:1px 6px;min-width:16px;text-align:center;margin-left:auto;"></span>
-    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-left:4px;"><path d="M19 9l-7 7-7-7"/></svg>
-  </button>
-
   <!-- PWA Install Button -->
-  <button id="pwa-install-btn" onclick="installPWA()" style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13px;color:#4ade80;border:1px solid rgba(74,222,128,.2);background:rgba(74,222,128,.06);width:100%;text-align:left;margin-top:4px;transition:all .18s;">
+  <button id="pwa-install-btn" onclick="installPWA()" style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13px;color:#4ade80;border:1px solid rgba(74,222,128,.2);background:rgba(74,222,128,.06);width:100%;text-align:left;transition:all .18s;">
     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
     <span data-i18n="btn_install_app">App Install करा</span>
   </button>
 
-  <!-- Settings -->
-  <button id="settings-btn" onclick="openSettingsModal()" style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13px;color:#cbd5e1;border:1px solid rgba(203,213,225,.2);background:rgba(203,213,225,.05);width:100%;text-align:left;margin-top:8px;transition:all .18s;">
-    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 8.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-    <span data-i18n="txt_settings">सेटिंग्ज</span>
-  </button>
+  <!-- Admin / Settings / Sign out — icon-only row -->
+  <div style="display:flex;gap:8px;margin-top:8px;">
+    <button data-admin-toggle onclick="toggleAdminPopup()" title="Admin" style="flex:1;display:flex;align-items:center;justify-content:center;padding:10px;border-radius:10px;cursor:pointer;color:#e2b65a;border:1px solid rgba(212,160,23,.25);background:rgba(212,160,23,.08);position:relative;transition:all .18s;">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      <span id="sidebar-username" style="display:none;">Admin</span>
+      <span id="req-badge-sidebtn" style="display:none;position:absolute;top:2px;right:2px;background:#e05252;color:#fff;font-size:9px;font-weight:700;border-radius:8px;padding:1px 5px;min-width:14px;text-align:center;"></span>
+    </button>
+    <button id="settings-btn" onclick="openSettingsModal()" title="सेटिंग्ज" style="flex:1;display:flex;align-items:center;justify-content:center;padding:10px;border-radius:10px;cursor:pointer;color:#cbd5e1;border:1px solid rgba(203,213,225,.2);background:rgba(203,213,225,.05);transition:all .18s;">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 8.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    </button>
+    <button onclick="doLogout()" title="साइन आउट करा" style="flex:1;display:flex;align-items:center;justify-content:center;padding:10px;border-radius:10px;cursor:pointer;color:#f87171;border:1px solid rgba(248,113,113,.2);background:rgba(248,113,113,.06);transition:all .18s;">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+    </button>
+  </div>
 </div>
 <div class="sidebar-footer"><span data-i18n="txt_footer_branch">मुंबई शाखा</span> &nbsp;•&nbsp; <span data-i18n="txt_footer_dept">पतपेढी विभाग</span></div>
 </aside>
@@ -927,26 +928,6 @@ window.addEventListener('DOMContentLoaded', function(){
         सभासद विनंत्या
       </span>
       <span id="req-badge-popup" style="display:none;background:#e05252;color:#fff;font-size:10px;font-weight:700;border-radius:10px;padding:1px 6px;min-width:16px;text-align:center;"></span>
-    </button>
-    <button onclick="goPage('reports');closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
-      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 17V8h2v9H9zm4 0V4h2v13h-2zm-8 0v-5h2v5H5z"/><path d="M3 20h18"/></svg>
-      <span data-i18n="nav_reports">अहवाल</span>
-    </button>
-    <button onclick="goPage('ledger');closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
-      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M9 7h7M9 11h7"/></svg>
-      <span data-i18n="nav_ledger">लेजर बुक</span>
-    </button>
-    <button onclick="goPage('funds');closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
-      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-      <span data-i18n="nav_funds">फंड व्यवस्थापन</span>
-    </button>
-    <button onclick="openSettingsModal();closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
-      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 8.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-      <span data-i18n="txt_settings">सेटिंग्ज</span>
-    </button>
-    <button onclick="doLogout()" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f87171;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(248,113,113,.08)'" onmouseout="this.style.background='none'">
-      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-      साइन आउट करा
     </button>
   </div>
 
