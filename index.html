@@ -1986,6 +1986,50 @@ window.addEventListener('DOMContentLoaded', function(){
   </div>
 </div>
 
+<!-- Member Profile Modal (admin view — photo, name, mobile, password) -->
+<div id="member-profile-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9997;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:14px;width:100%;max-width:380px;max-height:90vh;overflow-y:auto;padding:24px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+      <div style="font-size:15px;font-weight:700;color:#1a2540;">👤 <span data-i18n="txt_member_profile">सभासद प्रोफाइल</span></div>
+      <button onclick="closeMemberProfileModal()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#64748b;line-height:1;">✕</button>
+    </div>
+
+    <div style="display:flex;justify-content:center;margin-bottom:6px;">
+      <div style="position:relative;width:110px;height:110px;">
+        <img id="mp-photo-preview" src="" style="width:110px;height:110px;border-radius:14px;object-fit:cover;border:2px solid #e2e8f0;display:none;">
+        <div id="mp-photo-placeholder" style="width:110px;height:110px;border-radius:14px;background:#f0f4fb;display:flex;align-items:center;justify-content:center;">
+          <svg width="40" height="40" fill="none" stroke="#94a3b8" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </div>
+        <input type="file" id="mp-photo-input" accept="image/*" onchange="onAdminMemberPhotoSelected(event)" style="display:none;">
+        <button onclick="document.getElementById('mp-photo-input').click()" title="फोटो बदला" style="position:absolute;bottom:-4px;right:-4px;width:30px;height:30px;border-radius:50%;background:var(--accent,#3a6fd8);border:3px solid #fff;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.25);">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:10px;color:#94a3b8;margin-bottom:16px;" data-i18n="txt_photo_hint">JPG/PNG, कमाल ५ MB</div>
+
+    <div style="margin-bottom:14px;">
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:2px;" data-i18n="lbl_member_name">सभासदाचे नाव</div>
+      <input type="text" id="mp-name" style="width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;font-weight:600;box-sizing:border-box;">
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:2px;" data-i18n="lbl_mobile">मोबाईल नंबर</div>
+      <input type="text" id="mp-mobile" maxlength="10" style="width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;font-weight:600;box-sizing:border-box;">
+    </div>
+
+    <div style="margin-bottom:6px;">
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:2px;" data-i18n="lbl_password">पासवर्ड (Password)</div>
+      <input type="text" id="mp-password" placeholder="किमान ६ अक्षरे" data-i18n-ph="ph_min6" autocomplete="off" style="width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;box-sizing:border-box;">
+      <div style="font-size:11px;color:#94a3b8;margin-top:3px;" data-i18n="txt_password_blank_no_change">रिकामे ठेवल्यास पासवर्ड बदलणार नाही.</div>
+    </div>
+
+    <div id="mp-error" style="color:#b91c1c;font-size:12px;margin-top:4px;"></div>
+
+    <button onclick="saveMemberProfileAdmin()" style="width:100%;margin-top:14px;padding:11px 16px;background:var(--accent,#3a6fd8);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;" data-i18n="btn_save">जतन करा</button>
+  </div>
+</div>
+
 <!-- Blacklist Member Modal -->
 <div id="blacklist-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9997;align-items:center;justify-content:center;">
   <div style="background:#fff;border-radius:14px;width:90%;max-width:380px;padding:20px;">
@@ -2108,18 +2152,6 @@ window.addEventListener('DOMContentLoaded', function(){
             <a href="#" onclick="exportMemberPDF(currentIdx)">📄 <span data-i18n="btn_pdf_download">PDF डाउनलोड</span></a>
           </div>
         </div>
-        <button class="btn btn-ghost" id="dr-blacklist-btn" data-perm="blacklist_members" style="display:none;border-color:#b91c1c;color:#b91c1c;" onclick="openBlacklistModal(currentIdx)">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/></svg>
-          <span data-i18n="btn_blacklist">Blacklist करा</span>
-        </button>
-        <button class="btn btn-ghost" id="dr-reactivate-btn" data-perm="blacklist_members" style="display:none;border-color:#166534;color:#166534;" onclick="reactivateMember(currentIdx)">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
-          <span data-i18n="btn_reactivate">पूर्ववत करा</span>
-        </button>
-        <button class="btn btn-ghost" id="dr-del-btn" data-perm="delete_members" style="display:none;border-color:var(--red);color:var(--red)" onclick="">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-          <span data-i18n="btn_delete_record">नोंद काढा</span>
-        </button>
       </div>
     </div>
   </div>
@@ -2170,7 +2202,7 @@ const translations = {
     m_total_paid:"एकूण जमा", m_balance_loan:"शिल्लक कर्ज", m_prev_paid:"आधीचे जमा",
     btn_save:"जतन करा", btn_reset:"रिसेट",
     txt_hapta_sub:"सभासद निवडा आणि हप्ता जोडा", txt_select_member:"सभासद निवडा",
-    lbl_name_or_no:"सभासदाचे नाव किंवा अ. क्र. लिहा", ph_type_name:"नाव टाइप करा...", btn_change:"बदला",
+    lbl_name_or_no:"सभासदाचे नाव किंवा अ. क्र. लिहा", ph_type_name:"नाव टाइप करा...", btn_change:"बदला", btn_edit_profile:"नाव/मोबाईल बदला",
     txt_new_hapta:"नवीन हप्ता जोडा", btn_save_hapta:"हप्ता जतन करा",
     txt_search_sub:"नाव किंवा अ. क्र. टाकून सभासदाचे कर्ज तपशील पहा", lbl_no_or_name:"अ. क्र. किंवा नाव टाका",
     ph_no_or_name:"अ. क्र. किंवा नाव लिहा...",
@@ -2194,7 +2226,7 @@ const translations = {
     txt_md_welcome_body:"अबगुलवाडी नवतरुण ग्रामविकास मंडळ पतपेढीमध्ये आपले स्वागत आहे. तुमची कर्ज व हप्त्याची माहिती \"तपशील\" टॅबमध्ये बघता येईल.",
     txt_overdue_notice:"हप्ता विलंब सूचना", txt_total_loan_taken:"एकूण कर्ज घेतले",
     txt_total_dand:"एकूण दंड", txt_total_vyaj:"एकूण व्याज", txt_hapta_history_date:"हप्ता इतिहास (दिनांकानुसार)",
-    txt_my_profile:"माझी प्रोफाईल", txt_photo_hint:"JPG/PNG, कमाल ५ MB",
+    txt_my_profile:"माझी प्रोफाईल", txt_photo_hint:"JPG/PNG, कमाल ५ MB", txt_member_profile:"सभासद प्रोफाइल", txt_password_blank_no_change:"रिकामे ठेवल्यास पासवर्ड बदलणार नाही.",
     exp_pdf_started:"PDF डाउनलोड सुरू झाले!", exp_excel_started:"Excel डाउनलोड सुरू झाले!",
     exp_org_name:"अबगुलवाडी नवतरुण ग्रामविकास मंडळ — पतपेढी",
     exp_org_address_full:"साकुर्डे (अबगुलवाडी), ता. दापोली, जि. रत्नागिरी | ६१, डी.व्ही. रेळे चाळ, मुंबई – ४००००२",
@@ -2417,7 +2449,7 @@ const translations = {
     m_total_paid:"Total Paid", m_balance_loan:"Balance Loan", m_prev_paid:"Previously Paid",
     btn_save:"Save", btn_reset:"Reset",
     txt_hapta_sub:"Select a member and add an installment", txt_select_member:"Select Member",
-    lbl_name_or_no:"Enter member name or serial no.", ph_type_name:"Type name...", btn_change:"Change",
+    lbl_name_or_no:"Enter member name or serial no.", ph_type_name:"Type name...", btn_change:"Change", btn_edit_profile:"Edit name/mobile",
     txt_new_hapta:"Add New Installment", btn_save_hapta:"Save Installment",
     txt_search_sub:"Enter name or serial no. to view a member's loan details", lbl_no_or_name:"Enter serial no. or name",
     ph_no_or_name:"Enter serial no. or name...",
@@ -2441,7 +2473,7 @@ const translations = {
     txt_md_welcome_body:"Welcome to Abgulwadi Navtarun Gramvikas Mandal Credit Society. You can view your loan and installment details in the \"Details\" tab.",
     txt_overdue_notice:"Installment Delay Notice", txt_total_loan_taken:"Total Loan Taken",
     txt_total_dand:"Total Penalty", txt_total_vyaj:"Total Interest", txt_hapta_history_date:"Installment History (Date-wise)",
-    txt_my_profile:"My Profile", txt_photo_hint:"JPG/PNG, max 5 MB",
+    txt_my_profile:"My Profile", txt_photo_hint:"JPG/PNG, max 5 MB", txt_member_profile:"Member Profile", txt_password_blank_no_change:"Leave blank to keep the password unchanged.",
     exp_pdf_started:"PDF download started!", exp_excel_started:"Excel download started!",
     exp_org_name:"Abgulwadi Navtarun Gramvikas Mandal — Credit Society",
     exp_org_address_full:"Sakurde (Abgulwadi), Tal. Dapoli, Dist. Ratnagiri | 61, D.V. Rele Chal, Mumbai – 400002",
@@ -3037,8 +3069,6 @@ function openDrawer(idx){
   }
 
   const blacklistBox = document.getElementById('dr-blacklist-box');
-  const blBtn = document.getElementById('dr-blacklist-btn');
-  const reBtn = document.getElementById('dr-reactivate-btn');
   if(isBlacklisted(m)){
     blacklistBox.style.display='block';
     const untilTxt = m.blacklist_until ? (t('lbl_blacklist_until')+': '+fmtDate(m.blacklist_until)) : t('opt_permanent');
@@ -3046,16 +3076,10 @@ function openDrawer(idx){
       <div style="font-size:13px;font-weight:700;">🚫 ${t('txt_member_blacklisted')}</div>
       <div style="font-size:12px;margin-top:6px;line-height:1.6;">${t('lbl_blacklist_reason')}: ${m.blacklist_reason||'—'}<br>${untilTxt}</div>
     </div>`;
-    if(blBtn) blBtn.dataset.permDisplay='none';
-    if(reBtn) reBtn.dataset.permDisplay='flex';
   } else {
     blacklistBox.style.display='none';
     blacklistBox.innerHTML='';
-    if(blBtn) blBtn.dataset.permDisplay='flex';
-    if(reBtn) reBtn.dataset.permDisplay='none';
   }
-  if(blBtn) blBtn.style.display = (hasPermission('blacklist_members') && blBtn.dataset.permDisplay!=='none') ? 'flex' : 'none';
-  if(reBtn) reBtn.style.display = (hasPermission('blacklist_members') && reBtn.dataset.permDisplay!=='none') ? 'flex' : 'none';
   let run=m.vatap;
   document.getElementById('dr-body').innerHTML=m.hapte.map((h,hIdx)=>{
     run-=h.hapta;
@@ -3063,7 +3087,6 @@ function openDrawer(idx){
     return `<tr><td>${h.mahina||'—'}</td><td style="font-size:11px">${fmtDate(h.dinank)}</td><td>${h.vilamb||0}</td><td>${fmt(h.dand)}</td><td>${fmt(h.vyaj)}</td><td>${fmt(h.hapta)}</td><td style="color:var(--red)">${fmt(Math.max(0,run))}</td><td>${st}</td><td><button class="btn-icon" onclick="reprintReceipt(${idx},${hIdx})" title="${t('txt_reprint_receipt')}">🧾</button></td></tr>`;
   }).join('');
   document.getElementById('dr-edit-btn').onclick=()=>editMember(idx);
-  document.getElementById('dr-del-btn').onclick=()=>{closeDrawer();deleteMember(idx);};
   document.getElementById('drawer-overlay').classList.add('open');
 }
 
@@ -3080,16 +3103,89 @@ function closeDrawer(e){
 }
 
 function editMember(idx){
-  const m=members[idx];
-  // mark as editing — use the member's stable database id, not the array position,
-  // since array positions can shift if data changes elsewhere (realtime sync) while this form is open
-  document.getElementById('e-nav').dataset.editId=m.id;
-  document.getElementById('e-nav').dataset.editIdx=idx;
-  document.getElementById('e-nav').value=m.nav;
-  document.getElementById('e-mobile').value=m.mobile||'';
-  document.getElementById('e-password').value='';
   closeDrawer();
-  goPage('entry',document.querySelectorAll('.nav-item')[1]);
+  goPage('hapta');
+  selectHaptaMember(idx);
+}
+
+let memberProfileTargetIdx = -1;
+let pendingAdminMemberPhoto = null;
+
+function editMemberProfile(idx){
+  if(idx<0) return;
+  memberProfileTargetIdx = idx;
+  pendingAdminMemberPhoto = null;
+  const m = members[idx];
+  document.getElementById('mp-name').value = m.nav;
+  document.getElementById('mp-mobile').value = m.mobile||'';
+  document.getElementById('mp-password').value = '';
+  document.getElementById('mp-error').textContent = '';
+  setMemberAvatarDisplay('mp-photo-preview','mp-photo-placeholder', m.photo);
+  document.getElementById('member-profile-modal-overlay').style.display = 'flex';
+}
+
+function closeMemberProfileModal(){
+  document.getElementById('member-profile-modal-overlay').style.display = 'none';
+  memberProfileTargetIdx = -1;
+  pendingAdminMemberPhoto = null;
+}
+
+function onAdminMemberPhotoSelected(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  if(file.size > 5*1024*1024){ toast(t('msg_photo_size'),'warn'); return; }
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const img = new Image();
+    img.onload = function(){
+      const canvas = document.createElement('canvas');
+      const maxSize = 300;
+      let w = img.width, h = img.height;
+      if(w>h){ if(w>maxSize){ h=Math.round(h*maxSize/w); w=maxSize; } }
+      else { if(h>maxSize){ w=Math.round(w*maxSize/h); h=maxSize; } }
+      canvas.width=w; canvas.height=h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img,0,0,w,h);
+      pendingAdminMemberPhoto = canvas.toDataURL('image/jpeg',0.8);
+      setMemberAvatarDisplay('mp-photo-preview','mp-photo-placeholder', pendingAdminMemberPhoto);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function saveMemberProfileAdmin(){
+  if(memberProfileTargetIdx<0) return;
+  const m = members[memberProfileTargetIdx];
+  const nav = document.getElementById('mp-name').value.trim();
+  const mobile = document.getElementById('mp-mobile').value.trim();
+  const password = document.getElementById('mp-password').value;
+  const errEl = document.getElementById('mp-error');
+  errEl.textContent = '';
+  if(!nav){ errEl.textContent = '❌ '+t('msg_enter_member_name'); return; }
+  if(password && password.length<6){ errEl.textContent = '❌ '+t('msg_pass_min6'); return; }
+
+  const payload = {nav, mobile};
+  if(pendingAdminMemberPhoto) payload.photo = pendingAdminMemberPhoto;
+
+  const {error} = await sb.from('sabhasad').update(payload).eq('id',m.id);
+  if(error){ errEl.textContent = '❌ '+t('err_prefix')+error.message; return; }
+  Object.assign(m, payload);
+
+  if(password){
+    try{
+      const {data: existingReq} = await sb.from('member_requests').select('*').eq('sabhasad_id', m.id).eq('status','approved').limit(1);
+      if(existingReq && existingReq.length){
+        await sb.from('member_requests').update({password,nav,mobile}).eq('id', existingReq[0].id);
+      } else {
+        await sb.from('member_requests').insert({nav,mobile,password,status:'approved',sabhasad_id:m.id});
+      }
+    }catch(e){ errEl.textContent = '❌ '+t('err_prefix')+e.message; return; }
+  }
+
+  toast('✓ '+t('th_sr_no')+' '+m.kram+' — '+nav+' '+t('msg_record_updated'));
+  closeMemberProfileModal();
+  renderSum(); doSearch();
 }
 
 /* --- LOAN DISBURSEMENT (separate from Member Registration) --- */
@@ -3792,13 +3888,27 @@ function renderSum(){
   });
   if(!rows.length){document.getElementById('sum-body').innerHTML='';document.getElementById('sum-foot').innerHTML='';document.getElementById('sum-empty').style.display='block';renderTxnDetail();return;}
   document.getElementById('sum-empty').style.display='none';
+  const canBlacklist = hasPermission('blacklist_members');
+  const canDelete = hasPermission('delete_members');
   document.getElementById('sum-body').innerHTML=rows.map(({m,s})=>{
     const p=pct(m.vatap-s.shillak,m.vatap);
     const badge=s.status==='done'?'<span class="badge badge-green">'+t('opt_paid_off')+'</span>':s.status==='warn'?'<span class="badge badge-amber">'+t('opt_delayed')+'</span>':'<span class="badge badge-green">'+t('opt_regular')+'</span>';
     const overdue=computeMemberOverdue(m);
     const overdueTag=overdue?`<span style="font-size:9px;color:#fff;background:#dc2626;font-weight:700;margin-left:6px;padding:2px 6px;border-radius:8px;white-space:nowrap;">⚠️ ${overdue.months} ${t('txt_months_overdue_short')}</span>`:'';
     const blacklistTag=isBlacklisted(m)?`<span style="font-size:9px;color:#fff;background:#450a0a;font-weight:700;margin-left:6px;padding:2px 6px;border-radius:8px;white-space:nowrap;">🚫 ${t('txt_blacklisted_badge')}</span>`:'';
-    return `<tr><td style="text-align:center;"><input type="checkbox" class="sum-row-check" data-kram="${m.kram}" ${selectedMemberIds.has(m.kram)?'checked':''} onchange="toggleRowSelect(${m.kram},this)"></td><td>${m.kram}</td><td style="font-weight:600">${m.nav}${overdueTag}${blacklistTag}</td><td>${m.mobile||'-'}</td><td>${fmt(m.vatap)}</td><td>${fmt(s.karj)}</td><td>${fmt(s.dand)}</td><td>${fmt(s.vyaj)}</td><td>${fmt(s.jama)}</td><td style="color:var(--red)">${fmt(s.shillak)}</td><td style="min-width:90px"><div style="font-size:11px;color:var(--text2);margin-bottom:3px">${p}%</div><div class="progress"><div class="progress-fill" style="width:${Math.min(100,p)}%"></div></div></td><td>${badge}</td><td style="white-space:nowrap"><button class="btn-icon" title="पहा" onclick="openDrawer(${members.indexOf(m)})">👁</button> <button class="btn-icon" title="संपादन" onclick="editMember(${members.indexOf(m)})" style="color:var(--accent)">✏️</button></td></tr>`;
+    const idx = members.indexOf(m);
+    const blChecked = isBlacklisted(m);
+    const blCheckbox = canBlacklist ? `<label title="${t('btn_blacklist')}" style="display:inline-flex;align-items:center;gap:2px;margin-left:6px;cursor:pointer;font-size:11px;vertical-align:middle;">
+        <input type="checkbox" ${blChecked?'checked':''} onchange="toggleBlacklistFromList(${idx},this)" style="width:14px;height:14px;cursor:pointer;">🚫
+      </label>` : '';
+    const delCheckbox = canDelete ? `<label title="${t('btn_delete_record')}" style="display:inline-flex;align-items:center;gap:2px;margin-left:6px;cursor:pointer;font-size:11px;vertical-align:middle;">
+        <input type="checkbox" onchange="deleteMemberFromList(${idx},this)" style="width:14px;height:14px;cursor:pointer;">🗑️
+      </label>` : '';
+    return `<tr><td style="text-align:center;"><input type="checkbox" class="sum-row-check" data-kram="${m.kram}" ${selectedMemberIds.has(m.kram)?'checked':''} onchange="toggleRowSelect(${m.kram},this)"></td><td>${m.kram}</td><td style="font-weight:600"><span onclick="editMemberProfile(${idx})" style="cursor:pointer;color:var(--accent);text-decoration:underline;text-decoration-color:transparent;" onmouseover="this.style.textDecorationColor='var(--accent)'" onmouseout="this.style.textDecorationColor='transparent'" title="${t('btn_edit_profile')}">${m.nav}</span>${overdueTag}${blacklistTag}</td><td>${m.mobile||'-'}</td><td>${fmt(m.vatap)}</td><td>${fmt(s.karj)}</td><td>${fmt(s.dand)}</td><td>${fmt(s.vyaj)}</td><td>${fmt(s.jama)}</td><td style="color:var(--red)">${fmt(s.shillak)}</td><td style="min-width:90px"><div style="font-size:11px;color:var(--text2);margin-bottom:3px">${p}%</div><div class="progress"><div class="progress-fill" style="width:${Math.min(100,p)}%"></div></div></td><td>${badge}</td><td style="white-space:nowrap">
+      <button class="btn-icon" title="पहा" onclick="openDrawer(${idx})">👁</button>
+      <button class="btn-icon" title="संपादन" onclick="editMember(${idx})" style="color:var(--accent)">✏️</button>
+      ${blCheckbox}${delCheckbox}
+    </td></tr>`;
   }).join('');
   document.getElementById('sum-foot').innerHTML=`<td></td><td colspan="3">${t('exp_total')} (${rows.length})</td><td>${fmt(tV)}</td><td>${fmt(tK)}</td><td>${fmt(tD)}</td><td>${fmt(tY)}</td><td>${fmt(tJ)}</td><td style="color:var(--red)">${fmt(tS)}</td><td colspan="4"></td>`;
   updateSelectedCount();
@@ -3918,6 +4028,27 @@ async function confirmBlacklistMember(){
   }catch(error){
     err.textContent = '❌ '+t('err_prefix')+error.message;
   }
+}
+
+function toggleBlacklistFromList(idx, checkbox){
+  if(!hasPermission('blacklist_members')){ toast(t('msg_superadmin_only'),'warn'); checkbox.checked=!checkbox.checked; return; }
+  const m = members[idx];
+  if(!m) return;
+  if(checkbox.checked){
+    // Revert the visual state until the modal is actually confirmed — renderSum() will
+    // reflect the true state once saved (or leave it unchanged if the admin cancels).
+    checkbox.checked = isBlacklisted(m);
+    openBlacklistModal(idx);
+  } else {
+    checkbox.checked = isBlacklisted(m);
+    reactivateMember(idx);
+  }
+}
+
+function deleteMemberFromList(idx, checkbox){
+  checkbox.checked = false; // row disappears from the list on success; unaffected if cancelled
+  if(!hasPermission('delete_members')){ toast(t('msg_superadmin_only'),'warn'); return; }
+  deleteMember(idx);
 }
 
 async function reactivateMember(idx){
@@ -4946,16 +5077,33 @@ function selectHaptaMember(idx){
   document.getElementById('hm-vyaj').textContent = fmt(0);
 
   // Show form. First row is a read-only anchor showing the loan disbursement month/date
-  // and the current outstanding balance — everything below it is a NEW installment.
+  // starting from the full loan amount; then every already-paid installment shows as its
+  // own read-only row with a running balance; new installments are added below all of that.
   document.getElementById('h-form').style.display='block';
   const loanMonth = m.date ? fmtMonthLabel(m.date.slice(0,7)) : '—';
-  document.getElementById('h-body').innerHTML = `<tr id="hapta-anchor-row" style="background:var(--gold-pale);font-weight:700;">
+  let runningBalance = m.vatap;
+  const anchorRow = `<tr id="hapta-anchor-row" class="hapta-fixed-row" style="background:var(--gold-pale);font-weight:700;">
     <td>${loanMonth}</td>
     <td>${fmtDate(m.date)}</td>
     <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
-    <td style="text-align:right;color:var(--red);">${fmt(sh)}</td>
+    <td style="text-align:right;color:var(--red);">${fmt(runningBalance)}</td>
     <td></td>
   </tr>`;
+  const historyRows = m.hapte.map(h=>{
+    runningBalance = Math.max(0, runningBalance - (h.hapta||0));
+    return `<tr class="hapta-fixed-row" style="background:#f8fafc;">
+      <td>${h.mahina||'—'}</td>
+      <td>${fmtDate(h.dinank)}</td>
+      <td>${h.vilamb||0}</td>
+      <td>${fmt(h.dand||0)}</td>
+      <td>${fmt(h.vyaj||0)}</td>
+      <td>${fmt(h.hapta||0)}</td>
+      <td>${fmt(h.jama||0)}</td>
+      <td style="text-align:right;color:var(--red);">${fmt(runningBalance)}</td>
+      <td></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('h-body').innerHTML = anchorRow + historyRows;
   haptaRowCount=0;
   addHaptaRow();
 }
@@ -5061,8 +5209,8 @@ function calcHapta(){
 }
 
 function clearHaptaRows(){
-  const anchor=document.getElementById('hapta-anchor-row');
-  document.getElementById('h-body').innerHTML = anchor ? anchor.outerHTML : '';
+  const fixedRows = document.querySelectorAll('#h-body .hapta-fixed-row');
+  document.getElementById('h-body').innerHTML = Array.from(fixedRows).map(r=>r.outerHTML).join('');
   haptaRowCount=0;
   addHaptaRow();
   calcHapta();
