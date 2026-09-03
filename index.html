@@ -2381,6 +2381,9 @@ const translations = {
     txt_action_member_reactivate:"सभासद पूर्ववत सक्रिय केला", txt_action_loan_approve:"कर्ज विनंती मंजूर केली",
     txt_action_loan_reject:"कर्ज विनंती नाकारली", txt_action_new_cycle:"नवीन कर्ज चक्र सुरू केलं",
     txt_action_password_change:"पासवर्ड बदलला",
+    txt_action_admin_login:"Admin लॉगिन", txt_action_member_login:"सभासद भेट/लॉगिन", txt_action_member_add:"नवीन सभासद नोंदणी",
+    txt_action_member_profile_edit:"सभासद प्रोफाइल बदलली", txt_action_loan_disbursement:"कर्ज वाटप",
+    txt_action_hapta_save:"हप्ता जतन केला", txt_action_member_reg_request:"नोंदणी विनंती पाठवली", txt_action_loan_request_submit:"कर्ज विनंती पाठवली",
     txt_approve_loan_title:"कर्ज विनंती मंजूर करा", txt_requested_amount_label:"सभासदाने मागितलेली रक्कम",
     lbl_approved_amount:"मंजूर रक्कम (₹) — बदलता येईल",
     txt_approve_amount_hint:"टीप: सभासदाने मागितलेल्यापेक्षा कमी/जास्त रक्कम मंजूर करू शकता — हे सभासदाला पुढच्या पेजवर तसं दिसेल.",
@@ -2628,6 +2631,9 @@ const translations = {
     txt_action_member_reactivate:"Member reactivated", txt_action_loan_approve:"Loan request approved",
     txt_action_loan_reject:"Loan request rejected", txt_action_new_cycle:"New loan cycle started",
     txt_action_password_change:"Password changed",
+    txt_action_admin_login:"Admin login", txt_action_member_login:"Member visit/login", txt_action_member_add:"New member registered",
+    txt_action_member_profile_edit:"Member profile edited", txt_action_loan_disbursement:"Loan disbursed",
+    txt_action_hapta_save:"Installment saved", txt_action_member_reg_request:"Registration request sent", txt_action_loan_request_submit:"Loan request sent",
     txt_approve_loan_title:"Approve Loan Request", txt_requested_amount_label:"Amount requested by member",
     lbl_approved_amount:"Approved Amount (₹) — can be changed",
     txt_approve_amount_hint:"Note: You can approve a lower/higher amount than requested — the member will see this on their next page.",
@@ -2962,6 +2968,7 @@ async function saveEntry(){
     }
     document.getElementById('e-nav').dataset.editId='';
     document.getElementById('e-nav').dataset.editIdx='';
+    logActivity('member_profile_edit', nav, 'अ.क्र. '+existing.kram+(password?' (पासवर्डसह)':''));
     toast('✓ '+t('th_sr_no')+' '+existing.kram+' — '+nav+' '+t('msg_record_updated'));
   } else {
     const maxKram = members.length > 0 ? Math.max(...members.map(m=>m.kram)) : 0;
@@ -2974,6 +2981,7 @@ async function saveEntry(){
       const {error:reqErr} = await sb.from('member_requests').insert({nav,mobile,password,status:'approved',sabhasad_id:data.id});
       if(reqErr){ toast(t('err_prefix')+reqErr.message,'warn'); }
     }
+    logActivity('member_add', nav, 'अ.क्र. '+kram);
     toast('✓ '+t('th_sr_no')+' '+kram+' — '+nav+' '+t('msg_record_saved'));
   }
   resetEntry();
@@ -3175,6 +3183,7 @@ async function saveMemberProfileAdmin(){
   }
 
   toast('✓ '+t('th_sr_no')+' '+m.kram+' — '+nav+' '+t('msg_record_updated'));
+  logActivity('member_profile_edit', nav, 'अ.क्र. '+m.kram+(password?' (पासवर्डसह)':'')+(pendingAdminMemberPhoto?' (फोटो बदलला)':''));
   closeMemberProfileModal();
   renderSum(); doSearch();
 }
@@ -3275,6 +3284,7 @@ async function saveLoanDisbursement(){
     members[liveIdx].loan_source=loanSource;
   }
   toast('✓ '+t('th_sr_no')+' '+m.kram+' — '+m.nav+' '+t('msg_record_updated'));
+  logActivity('loan_disbursement', m.nav, '₹'+vatap+' ('+(loanSource==='self'?'विनंतीवरून':'Admin थेट')+')');
   clearLoanSel();
 }
 
@@ -5348,6 +5358,8 @@ async function confirmSaveHapta(m, newHapte){
   const {error} = await sb.from('sabhasad').update({hapte:updatedHapte}).eq('id',m.id);
   if(error){toast(t('msg_save_error')+error.message,'warn');return;}
   m.hapte = updatedHapte;
+  const totalHaptaAmt = newHapte.reduce((s,h)=>s+(h.hapta||0),0);
+  logActivity('hapta_save', m.nav, newHapte.length+' हप्ता, एकूण ₹'+totalHaptaAmt);
   toast('✓ '+m.nav+' '+t('msg_your')+' '+newHapte.length+' '+t('exp_installments')+' '+t('msg_saved_bang'));
   clearHaptaRows();
   calcHapta();
@@ -5584,11 +5596,11 @@ function applyAdminSession(admin){
   });
 }
 
-async function logActivity(actionType, targetName, details){
+async function logActivity(actionType, targetName, details, actorOverride){
   try{
     await sb.from('audit_log').insert({
-      admin_username: sessionStorage.getItem('pp_admin_username')||'Admin',
-      admin_role: sessionStorage.getItem('pp_admin_role')||'admin',
+      admin_username: (actorOverride && actorOverride.username) || sessionStorage.getItem('pp_admin_username')||'Admin',
+      admin_role: (actorOverride && actorOverride.role) || sessionStorage.getItem('pp_admin_role')||'admin',
       action_type: actionType,
       target_name: targetName||null,
       details: details||null
@@ -5622,12 +5634,22 @@ async function openAuditLogModal(){
       loan_request_approve: t('txt_action_loan_approve'),
       loan_request_reject: t('txt_action_loan_reject'),
       new_loan_cycle: t('txt_action_new_cycle'),
-      password_change: t('txt_action_password_change')
+      password_change: t('txt_action_password_change'),
+      admin_login: t('txt_action_admin_login'),
+      member_login: t('txt_action_member_login'),
+      member_add: t('txt_action_member_add'),
+      member_profile_edit: t('txt_action_member_profile_edit'),
+      loan_disbursement: t('txt_action_loan_disbursement'),
+      hapta_save: t('txt_action_hapta_save'),
+      member_registration_request: t('txt_action_member_reg_request'),
+      loan_request_submit: t('txt_action_loan_request_submit')
     };
     const actionIcons = {
       rate_change:'💰', admin_add:'➕', admin_delete:'🗑', admin_permission_change:'🔑',
       member_delete:'🗑', member_blacklist:'🚫', member_reactivate:'✅',
-      loan_request_approve:'✅', loan_request_reject:'❌', new_loan_cycle:'🔄', password_change:'🔒'
+      loan_request_approve:'✅', loan_request_reject:'❌', new_loan_cycle:'🔄', password_change:'🔒',
+      admin_login:'🔑', member_login:'👤', member_add:'➕', member_profile_edit:'✏️',
+      loan_disbursement:'💵', hapta_save:'🧾', member_registration_request:'📝', loan_request_submit:'📨'
     };
     listEl.innerHTML = data.map(l=>{
       const dt = l.created_at ? new Date(l.created_at) : null;
@@ -5683,6 +5705,7 @@ async function doLogin(){
       sessionStorage.setItem('pp_admin_username', admin.username);
       sessionStorage.setItem('pp_admin_role', admin.role);
       applyAdminSession(admin);
+      logActivity('admin_login', admin.username, null, {username:admin.username, role:admin.role});
       document.getElementById('login-overlay').style.display='none';
       return;
     }
@@ -5695,6 +5718,7 @@ async function doLogin(){
     sessionStorage.setItem('pp_admin_username', u);
     sessionStorage.setItem('pp_admin_role', 'superadmin');
     applyAdminSession({username:u, role:'superadmin'});
+    logActivity('admin_login', u, null, {username:u, role:'superadmin'});
     document.getElementById('login-overlay').style.display='none';
     return;
   }
@@ -5717,6 +5741,7 @@ async function doLogin(){
       currentMemberSabhasadId = mdata.id;
       sessionStorage.setItem('pp_member_auth','true');
       sessionStorage.setItem('pp_member_id', String(mdata.id));
+      logActivity('member_login', mdata.nav, null, {username:mdata.nav, role:'member'});
       document.getElementById('login-overlay').style.display='none';
       renderMemberDashboard(mdata);
       document.getElementById('member-dashboard').style.display='block';
@@ -5829,6 +5854,7 @@ async function doMemberRegister(){
     if(rejected){
       const {error:updErr} = await sb.from('member_requests').update({nav,password:pass,status:'pending'}).eq('id',rejected.id);
       if(updErr){err.textContent='❌ '+t('err_prefix')+updErr.message;return;}
+      logActivity('member_registration_request', nav, mobile, {username:nav, role:'member'});
       suc.textContent='✅ '+t('msg_reg_request_sent');
       document.getElementById('reg-nav').value='';
       document.getElementById('reg-mobile').value='';
@@ -5841,6 +5867,7 @@ async function doMemberRegister(){
 
   const {error} = await sb.from('member_requests').insert({nav,mobile,password:pass,status:'pending'});
   if(error){err.textContent='❌ '+t('err_prefix')+error.message;return;}
+  logActivity('member_registration_request', nav, mobile, {username:nav, role:'member'});
   suc.textContent='✅ '+t('msg_reg_request_sent');
   document.getElementById('reg-nav').value='';
   document.getElementById('reg-mobile').value='';
@@ -6004,6 +6031,7 @@ async function submitLoanRequest(){
       status: 'pending'
     });
     if(error) throw error;
+    logActivity('loan_request_submit', m.nav, '₹'+amount, {username:m.nav, role:'member'});
     toast('✓ '+t('msg_loan_request_sent'));
     document.getElementById('md-loan-req-amount').value='';
     document.getElementById('md-loan-req-karjtype').value='swataha';
