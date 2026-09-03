@@ -1451,6 +1451,8 @@ window.addEventListener('DOMContentLoaded', function(){
           <th data-i18n="th_repay_pct">परतफेड %</th>
           <th data-i18n="lbl_status">स्थिती</th>
           <th data-i18n="th_action">क्रिया</th>
+          <th style="text-align:center;" data-i18n="btn_blacklist">Blacklist करा</th>
+          <th style="text-align:center;" data-i18n="btn_delete_record">नोंद काढा</th>
         </tr></thead>
         <tbody id="sum-body"></tbody>
         <tfoot id="sum-foot"></tfoot>
@@ -3898,19 +3900,14 @@ function renderSum(){
     const blacklistTag=isBlacklisted(m)?`<span style="font-size:9px;color:#fff;background:#450a0a;font-weight:700;margin-left:6px;padding:2px 6px;border-radius:8px;white-space:nowrap;">🚫 ${t('txt_blacklisted_badge')}</span>`:'';
     const idx = members.indexOf(m);
     const blChecked = isBlacklisted(m);
-    const blCheckbox = canBlacklist ? `<label title="${t('btn_blacklist')}" style="display:inline-flex;align-items:center;gap:2px;margin-left:6px;cursor:pointer;font-size:11px;vertical-align:middle;">
-        <input type="checkbox" ${blChecked?'checked':''} onchange="toggleBlacklistFromList(${idx},this)" style="width:14px;height:14px;cursor:pointer;">🚫
-      </label>` : '';
-    const delCheckbox = canDelete ? `<label title="${t('btn_delete_record')}" style="display:inline-flex;align-items:center;gap:2px;margin-left:6px;cursor:pointer;font-size:11px;vertical-align:middle;">
-        <input type="checkbox" onchange="deleteMemberFromList(${idx},this)" style="width:14px;height:14px;cursor:pointer;">🗑️
-      </label>` : '';
+    const blCheckbox = canBlacklist ? `<input type="checkbox" title="${t('btn_blacklist')}" ${blChecked?'checked':''} onchange="toggleBlacklistFromList(${idx},this)" style="width:15px;height:15px;cursor:pointer;">` : '';
+    const delCheckbox = canDelete ? `<input type="checkbox" title="${t('btn_delete_record')}" onchange="deleteMemberFromList(${idx},this)" style="width:15px;height:15px;cursor:pointer;">` : '';
     return `<tr><td style="text-align:center;"><input type="checkbox" class="sum-row-check" data-kram="${m.kram}" ${selectedMemberIds.has(m.kram)?'checked':''} onchange="toggleRowSelect(${m.kram},this)"></td><td>${m.kram}</td><td style="font-weight:600"><span onclick="editMemberProfile(${idx})" style="cursor:pointer;color:var(--accent);text-decoration:underline;text-decoration-color:transparent;" onmouseover="this.style.textDecorationColor='var(--accent)'" onmouseout="this.style.textDecorationColor='transparent'" title="${t('btn_edit_profile')}">${m.nav}</span>${overdueTag}${blacklistTag}</td><td>${m.mobile||'-'}</td><td>${fmt(m.vatap)}</td><td>${fmt(s.karj)}</td><td>${fmt(s.dand)}</td><td>${fmt(s.vyaj)}</td><td>${fmt(s.jama)}</td><td style="color:var(--red)">${fmt(s.shillak)}</td><td style="min-width:90px"><div style="font-size:11px;color:var(--text2);margin-bottom:3px">${p}%</div><div class="progress"><div class="progress-fill" style="width:${Math.min(100,p)}%"></div></div></td><td>${badge}</td><td style="white-space:nowrap">
       <button class="btn-icon" title="पहा" onclick="openDrawer(${idx})">👁</button>
       <button class="btn-icon" title="संपादन" onclick="editMember(${idx})" style="color:var(--accent)">✏️</button>
-      ${blCheckbox}${delCheckbox}
-    </td></tr>`;
+    </td><td style="text-align:center;">${blCheckbox}</td><td style="text-align:center;">${delCheckbox}</td></tr>`;
   }).join('');
-  document.getElementById('sum-foot').innerHTML=`<td></td><td colspan="3">${t('exp_total')} (${rows.length})</td><td>${fmt(tV)}</td><td>${fmt(tK)}</td><td>${fmt(tD)}</td><td>${fmt(tY)}</td><td>${fmt(tJ)}</td><td style="color:var(--red)">${fmt(tS)}</td><td colspan="4"></td>`;
+  document.getElementById('sum-foot').innerHTML=`<td></td><td colspan="3">${t('exp_total')} (${rows.length})</td><td>${fmt(tV)}</td><td>${fmt(tK)}</td><td>${fmt(tD)}</td><td>${fmt(tY)}</td><td>${fmt(tJ)}</td><td style="color:var(--red)">${fmt(tS)}</td><td colspan="5"></td>`;
   updateSelectedCount();
 }
 
