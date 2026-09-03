@@ -1589,6 +1589,18 @@ window.addEventListener('DOMContentLoaded', function(){
       </div>
     </div>
 
+    <!-- 4b. Member Registration Source Report -->
+    <div class="card">
+      <div class="card-head"><span class="card-head-title">🧾 <span data-i18n="txt_member_source_report">सभासद नोंदणी अहवाल (Admin/स्वतः)</span></span></div>
+      <div class="card-body" style="padding:16px 18px;">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:14px;line-height:1.6;" data-i18n="txt_report_member_source_desc">प्रत्येक सभासदाची नोंदणी व कर्ज वाटप Admin ने केलं की सभासदाने स्वतःच्या विनंतीवरून — याची यादी.</div>
+        <button class="btn btn-primary" style="width:100%;" onclick="exportMemberSourceReport()">
+          <span data-i18n="btn_generate">तयार करा</span>
+        </button>
+      </div>
+    </div>
+
+
     <!-- 5. Activity Log (superadmin only) -->
     <div class="card superadmin-only" data-display="block" style="display:none;">
       <div class="card-head"><span class="card-head-title">📝 <span data-i18n="txt_activity_log">क्रियाकलाप नोंद (Activity Log)</span></span></div>
@@ -2291,6 +2303,9 @@ const translations = {
     txt_report_agm_desc:"निवडलेल्या वर्षाचा संपूर्ण वार्षिक अहवाल (उत्पन्न, वसुली, सभासदनिहाय तपशील).",
     btn_generate:"तयार करा",
     txt_outstanding_list:"थकबाकीदार यादी", txt_report_outstanding_desc:"सर्व थकबाकीदार सभासदांची संपूर्ण यादी — हप्ता/दंड/व्याज ब्रेकडाउनसह.",
+    txt_member_source_report:"सभासद नोंदणी अहवाल (Admin/स्वतः)", txt_report_member_source_desc:"प्रत्येक सभासदाची नोंदणी Admin ने केली की सभासदाने स्वतः केली — याची यादी.",
+    th_registered_by:"नोंदणी कोणी केली", opt_by_admin:"Admin द्वारे", opt_by_self:"स्वतः नोंदणी", opt_unknown_source:"जुनी नोंद",
+    th_loan_given_by:"कर्ज कोणी दिलं", opt_loan_by_admin:"Admin (थेट)", opt_loan_by_request:"विनंतीवरून (स्वतः)",
     txt_report_txn_desc:"प्रत्येक कर्ज वाटप व हप्ता जमा व्यवहार, तारीखनिहाय.",
     txt_total_defaulters:"एकूण थकबाकीदार",
     txt_outstanding_disclaimer:"टीप: ही रक्कम अंदाजे आहे, सध्याच्या तारखेनुसार गणित केलेली. अंतिम रक्कम हप्ता भरताना कार्यालयात निश्चित होईल.",
@@ -2535,6 +2550,9 @@ const translations = {
     txt_report_agm_desc:"Full annual report for the selected year (income, recovery, member-wise detail).",
     btn_generate:"Generate",
     txt_outstanding_list:"Outstanding List", txt_report_outstanding_desc:"Complete list of all outstanding members — with installment/penalty/interest breakdown.",
+    txt_member_source_report:"Member Registration Report (Admin/Self)", txt_report_member_source_desc:"List of whether each member's registration and loan disbursement was done by Admin or by the member's own request.",
+    th_registered_by:"Registered By", opt_by_admin:"By Admin", opt_by_self:"Self-registered", opt_unknown_source:"Legacy record",
+    th_loan_given_by:"Loan Given By", opt_loan_by_admin:"Admin (direct)", opt_loan_by_request:"Via request (self)",
     txt_report_txn_desc:"Every loan disbursement and installment payment transaction, date-wise.",
     txt_total_defaulters:"Total Defaulters",
     txt_outstanding_disclaimer:"Note: These amounts are estimates calculated as of today's date. The final amount will be confirmed at the office when paid.",
@@ -2916,9 +2934,9 @@ async function saveEntry(){
   } else {
     const maxKram = members.length > 0 ? Math.max(...members.map(m=>m.kram)) : 0;
     const kram = maxKram + 1;
-    const {data,error} = await sb.from('sabhasad').insert({kram,nav,mobile,vatap:0,date:null,hapte:[],karjtype:'swataha',guarantor:''}).select().single();
+    const {data,error} = await sb.from('sabhasad').insert({kram,nav,mobile,vatap:0,date:null,hapte:[],karjtype:'swataha',guarantor:'',created_by:'admin'}).select().single();
     if(error){toast(t('msg_save_error')+error.message,'warn');return;}
-    members.push({id:data.id,kram,nav,mobile,vatap:0,date:null,hapte:[],karjtype:'swataha',guarantor:'',loan_history:[]});
+    members.push({id:data.id,kram,nav,mobile,vatap:0,date:null,hapte:[],karjtype:'swataha',guarantor:'',loan_history:[],created_by:'admin'});
     // Create an approved login for this member right away, if admin set a password
     if(password){
       const {error:reqErr} = await sb.from('member_requests').insert({nav,mobile,password,status:'approved',sabhasad_id:data.id});
@@ -3067,6 +3085,7 @@ function editMember(idx){
 
 /* --- LOAN DISBURSEMENT (separate from Member Registration) --- */
 let loanSelectedIdx = -1;
+let loanOriginIsRequest = false; // true when reached via approving a self-submitted loan request
 
 function loanSearch(){
   const q = (document.getElementById('loan-search').value || '').trim().toLowerCase();
@@ -3098,6 +3117,7 @@ function loanSearch(){
 
 function selectLoanMember(idx){
   loanSelectedIdx = idx;
+  loanOriginIsRequest = false;
   const m = members[idx];
 
   document.getElementById('loan-dropdown').style.display='none';
@@ -3126,6 +3146,7 @@ function selectLoanMember(idx){
 
 function clearLoanSel(){
   loanSelectedIdx=-1;
+  loanOriginIsRequest=false;
   document.getElementById('loan-search').value='';
   document.getElementById('loan-selected-info').style.display='none';
   document.getElementById('loan-form').style.display='none';
@@ -3145,15 +3166,17 @@ async function saveLoanDisbursement(){
   if(!vatap){toast(t('msg_enter_loan_amount'),'warn');return;}
   const karjtype = document.getElementById('e-karjtype').value;
   const guarantor = karjtype === 'etar' ? document.getElementById('e-guarantor').value.trim() : '';
+  const loanSource = loanOriginIsRequest ? 'self' : 'admin';
 
   // Only the loan amount/date/type/guarantor are touched here — installments are
   // entered separately via हप्ता नोंदणी, so the existing hapte array is left untouched.
-  const {error} = await sb.from('sabhasad').update({vatap,date,karjtype,guarantor}).eq('id',m.id);
+  const {error} = await sb.from('sabhasad').update({vatap,date,karjtype,guarantor,loan_source:loanSource}).eq('id',m.id);
   if(error){toast(t('msg_save_error')+error.message,'warn');return;}
   const liveIdx = members.findIndex(x => x.id === m.id);
   if(liveIdx>=0){
     members[liveIdx].vatap=vatap; members[liveIdx].date=date;
     members[liveIdx].karjtype=karjtype; members[liveIdx].guarantor=guarantor;
+    members[liveIdx].loan_source=loanSource;
   }
   toast('✓ '+t('th_sr_no')+' '+m.kram+' — '+m.nav+' '+t('msg_record_updated'));
   clearLoanSel();
@@ -3170,17 +3193,19 @@ async function startNewLoanCycle(){
     hapte: m.hapte,
     karjtype: m.karjtype||'swataha',
     guarantor: m.guarantor||'',
+    loan_source: m.loan_source||null,
     closed_on: new Date().toISOString().slice(0,10)
   };
   const newHistory = [...(m.loan_history||[]), closedCycle];
 
   try{
-    const {error} = await sb.from('sabhasad').update({loan_history:newHistory, hapte:[], vatap:0, date:null}).eq('id',m.id);
+    const {error} = await sb.from('sabhasad').update({loan_history:newHistory, hapte:[], vatap:0, date:null, loan_source:null}).eq('id',m.id);
     if(error) throw error;
     m.loan_history = newHistory;
     m.hapte = [];
     m.vatap = 0;
     m.date = null;
+    m.loan_source = null;
     logActivity('new_loan_cycle', m.nav, 'जुनं कर्ज बंद: ₹'+closedCycle.vatap);
     toast('✓ '+t('msg_new_cycle_started'));
 
@@ -3624,6 +3649,54 @@ function exportOutstandingList(){
   <div style="font-size:10px;color:#94a3b8;margin-top:10px;">${t('txt_outstanding_disclaimer')}</div>
   </body></html>`;
   showPdfPreview(html, t('txt_outstanding_list')+'_'+dateStr+'.pdf', 'landscape');
+}
+
+function exportMemberSourceReport(){
+  const now = new Date();
+  const dateStr = fmtDate(now.toISOString().slice(0,10));
+  const adminCount = members.filter(m=>m.created_by==='admin').length;
+  const selfCount = members.filter(m=>m.created_by==='self').length;
+  const unknownCount = members.length - adminCount - selfCount;
+  const sourceLabel = m => m.created_by==='admin' ? t('opt_by_admin') : m.created_by==='self' ? t('opt_by_self') : t('opt_unknown_source');
+
+  const loanAdminCount = members.filter(m=>m.vatap>0 && m.loan_source==='admin').length;
+  const loanSelfCount = members.filter(m=>m.vatap>0 && m.loan_source==='self').length;
+  const loanSourceLabel = m => {
+    if(!(m.vatap>0)) return '—';
+    if(m.loan_source==='admin') return t('opt_loan_by_admin');
+    if(m.loan_source==='self') return t('opt_loan_by_request');
+    return t('opt_unknown_source');
+  };
+
+  const rows = members.map(m=>`<tr>
+    <td>${m.kram}</td>
+    <td>${m.nav}</td>
+    <td>${m.mobile||'—'}</td>
+    <td>${sourceLabel(m)}</td>
+    <td>${loanSourceLabel(m)}</td>
+  </tr>`).join('');
+
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8">${getPDFCss()}</head><body>
+  ${getOrgHeader(t('txt_member_source_report'))}
+  <div class="info-bar">
+    <span>${t('exp_print')}: <strong>${dateStr}</strong></span>
+    <span>${t('exp_total')}: <strong>${members.length}</strong></span>
+    <span>${t('opt_by_admin')}: <strong>${adminCount}</strong></span>
+    <span>${t('opt_by_self')}: <strong>${selfCount}</strong></span>
+    ${unknownCount>0 ? `<span>${t('opt_unknown_source')}: <strong>${unknownCount}</strong></span>` : ''}
+  </div>
+  <div class="info-bar">
+    <span>${t('opt_loan_by_admin')}: <strong>${loanAdminCount}</strong></span>
+    <span>${t('opt_loan_by_request')}: <strong>${loanSelfCount}</strong></span>
+  </div>
+  <table>
+    <thead><tr>
+      <th>${t('th_sr_no')}</th><th>${t('lbl_name')}</th><th>${t('th_mobile_short')}</th><th>${t('th_registered_by')}</th><th>${t('th_loan_given_by')}</th>
+    </tr></thead>
+    <tbody>${rows || `<tr><td colspan="5" style="text-align:center;padding:16px;color:#94a3b8;">—</td></tr>`}</tbody>
+  </table>
+  </body></html>`;
+  showPdfPreview(html, t('txt_member_source_report')+'_'+dateStr+'.pdf', 'portrait');
 }
 
 function renderTxnDetail(){
@@ -6209,6 +6282,7 @@ async function confirmApproveLoanRequest(){
     if(idx>=0){
       goPage('loan');
       selectLoanMember(idx);
+      loanOriginIsRequest = true; // this disbursement is being made against a member's own loan request
       document.getElementById('e-vatap').value = approvedAmount;
       const karjtypeSel = document.getElementById('e-karjtype');
       if(karjtypeSel && req.karjtype){
@@ -6317,10 +6391,10 @@ async function addAsNewMemberAndApprove(){
   const kram = maxKram + 1;
   const today = new Date().toISOString().slice(0,10);
   const {data, error} = await sb.from('sabhasad').insert({
-    kram, nav:req.nav, mobile:req.mobile, vatap:0, date:today, hapte:[], karjtype:'', guarantor:''
+    kram, nav:req.nav, mobile:req.mobile, vatap:0, date:today, hapte:[], karjtype:'', guarantor:'', created_by:'self'
   }).select().single();
   if(error){ toast(t('msg_add_member_error')+error.message,'warn'); return; }
-  members.push({id:data.id, kram, nav:req.nav, mobile:req.mobile, vatap:0, date:today, hapte:[], karjtype:'', guarantor:'', photo:null});
+  members.push({id:data.id, kram, nav:req.nav, mobile:req.mobile, vatap:0, date:today, hapte:[], karjtype:'', guarantor:'', photo:null, created_by:'self'});
   const {error:updErr} = await sb.from('member_requests').update({status:'approved', sabhasad_id:data.id}).eq('id', currentApproveReqId);
   if(updErr){ toast(t('err_prefix')+updErr.message,'warn'); return; }
   toast('✓ '+req.nav+' '+t('msg_added_as_new_member_pre')+kram+t('msg_added_as_new_member_post'));
