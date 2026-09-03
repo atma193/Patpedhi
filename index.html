@@ -2293,6 +2293,7 @@ const translations = {
     txt_settings_note:"टीप: हा बदल फक्त नवीन हप्ता नोंदींच्या auto-calculation साठी लागू होतो. आधीच्या नोंदी बदलणार नाहीत.",
     msg_invalid_rate:"कृपया योग्य दर भरा (शून्य किंवा त्यापेक्षा जास्त)", msg_settings_saved:"सेटिंग्ज जतन झाल्या!",
     txt_receipt_title:"पावती", txt_receipt_no:"पावती क्र.", txt_receiver_sign:"सही (प्राप्तकर्ता)",
+    th_details:"तपशील", txt_pending_months:"प्रलंबित महिने", txt_total_in_words:"एकूण जमा (अक्षरात)",
     txt_manager_sign:"सही (व्यवस्थापक)", txt_reprint_receipt:"पावती पुन्हा छापा",
     txt_batch_receipt_title:"हप्ता वसुली पत्रक",
     btn_agm_report:"AGM वार्षिक अहवाल", txt_agm_title:"वार्षिक सर्वसाधारण सभा अहवाल",
@@ -2543,6 +2544,7 @@ const translations = {
     txt_settings_note:"Note: This only affects auto-calculation for new installment entries. Existing records won't change.",
     msg_invalid_rate:"Please enter a valid rate (zero or greater)", msg_settings_saved:"Settings saved!",
     txt_receipt_title:"Receipt", txt_receipt_no:"Receipt No.", txt_receiver_sign:"Signature (Receiver)",
+    th_details:"Details", txt_pending_months:"Pending Months", txt_total_in_words:"Total Amount (in words)",
     txt_manager_sign:"Signature (Manager)", txt_reprint_receipt:"Reprint Receipt",
     txt_batch_receipt_title:"Installment Collection Sheet",
     btn_agm_report:"AGM Annual Report", txt_agm_title:"Annual General Meeting Report",
@@ -2796,12 +2798,91 @@ function fmtDate(d){
 
 function fmtMonthLabel(ym){
   if(!ym) return '—';
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const monthsEn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const monthsMr=['जाने','फेब्रु','मार्च','एप्रि','मे','जून','जुलै','ऑग','सप्टें','ऑक्टो','नोव्हें','डिसें'];
+  const months = getLanguage()==='mr' ? monthsMr : monthsEn;
   const parts=ym.split('-');
   if(parts.length<2) return ym;
   const y=parseInt(parts[0],10), mo=parseInt(parts[1],10);
   if(!y||!mo||mo<1||mo>12) return ym;
   return months[mo-1]+'-'+String(y).slice(-2);
+}
+
+function numberToWordsIndian(num){
+  num = Math.round(num);
+  if(num === 0) return 'zero';
+  const ones = ['','one','two','three','four','five','six','seven','eight','nine','ten',
+    'eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+  const tens = ['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+  function twoDigits(n){
+    if(n<20) return ones[n];
+    const t=Math.floor(n/10), o=n%10;
+    return tens[t]+(o?' '+ones[o]:'');
+  }
+  function threeDigits(n){
+    const h=Math.floor(n/100), r=n%100;
+    let s='';
+    if(h) s+=ones[h]+' hundred';
+    if(r) s+=(s?' ':'')+twoDigits(r);
+    return s;
+  }
+  let crore=Math.floor(num/10000000); num%=10000000;
+  let lakh=Math.floor(num/100000); num%=100000;
+  let thousand=Math.floor(num/1000); num%=1000;
+  let hundred=num;
+  const parts=[];
+  if(crore) parts.push(threeDigits(crore)+' crore');
+  if(lakh) parts.push(threeDigits(lakh)+' lakh');
+  if(thousand) parts.push(threeDigits(thousand)+' thousand');
+  if(hundred) parts.push(threeDigits(hundred));
+  return parts.join(' ') || 'zero';
+}
+
+function amountInWordsRupees(amount){
+  const words = numberToWordsIndian(amount);
+  return words.charAt(0).toUpperCase()+words.slice(1)+' rupees only.';
+}
+
+const marathiOnes=['शून्य','एक','दोन','तीन','चार','पाच','सहा','सात','आठ','नऊ','दहा',
+  'अकरा','बारा','तेरा','चौदा','पंधरा','सोळा','सतरा','अठरा','एकोणीस',
+  'वीस','एकवीस','बावीस','तेवीस','चोवीस','पंचवीस','सव्वीस','सत्तावीस','अठ्ठावीस','एकोणतीस',
+  'तीस','एकतीस','बत्तीस','तेहतीस','चौतीस','पस्तीस','छत्तीस','सदतीस','अडतीस','एकोणचाळीस',
+  'चाळीस','एक्केचाळीस','बेचाळीस','त्रेचाळीस','चव्वेचाळीस','पंचेचाळीस','सेहेचाळीस','सत्तेचाळीस','अठ्ठेचाळीस','एकोणपन्नास',
+  'पन्नास','एक्कावन्न','बावन्न','त्रेपन्न','चोपन्न','पंचावन्न','छप्पन्न','सत्तावन्न','अठ्ठावन्न','एकोणसाठ',
+  'साठ','एकसष्ट','बासष्ट','त्रेसष्ट','चौसष्ट','पासष्ट','सहासष्ट','सदुसष्ट','अडुसष्ट','एकोणसत्तर',
+  'सत्तर','एक्काहत्तर','बहात्तर','त्र्याहत्तर','चौर्‍याहत्तर','पंच्याहत्तर','शहात्तर','सत्याहत्तर','अठ्ठ्याहत्तर','एकोणऐंशी',
+  'ऐंशी','एक्क्याऐंशी','ब्याऐंशी','त्र्याऐंशी','चौऱ्याऐंशी','पंच्याऐंशी','शहाऐंशी','सत्त्याऐंशी','अठ्ठ्याऐंशी','एकोणनव्वद',
+  'नव्वद','एक्क्याण्णव','ब्याण्णव','त्र्याण्णव','चौऱ्याण्णव','पंच्याण्णव','शहाण्णव','सत्त्याण्णव','अठ्ठ्याण्णव','नव्याण्णव'];
+const marathiHundreds=['','एकशे','दोनशे','तीनशे','चारशे','पाचशे','सहाशे','सातशे','आठशे','नऊशे'];
+
+function numberToWordsMarathi(num){
+  num = Math.round(num);
+  if(num === 0) return 'शून्य';
+  function threeDigits(n){
+    const h=Math.floor(n/100), r=n%100;
+    const parts=[];
+    if(h) parts.push(marathiHundreds[h]);
+    if(r) parts.push(marathiOnes[r]);
+    return parts.join(' ');
+  }
+  let crore=Math.floor(num/10000000); num%=10000000;
+  let lakh=Math.floor(num/100000); num%=100000;
+  let thousand=Math.floor(num/1000); num%=1000;
+  let hundred=num;
+  const parts=[];
+  if(crore) parts.push(threeDigits(crore)+' कोटी');
+  if(lakh) parts.push(threeDigits(lakh)+' लाख');
+  if(thousand) parts.push(threeDigits(thousand)+' हजार');
+  if(hundred) parts.push(threeDigits(hundred));
+  return parts.join(' ') || 'शून्य';
+}
+
+function amountInWordsRupeesMarathi(amount){
+  return numberToWordsMarathi(amount)+' रुपये फक्त.';
+}
+
+function amountInWords(amount){
+  return getLanguage()==='mr' ? amountInWordsRupeesMarathi(amount) : amountInWordsRupees(amount);
 }
 
 function goPage(id,btn,skipHistory){
@@ -4418,7 +4499,6 @@ function buildHaptaReceiptHtml(m, entries, alreadyIncluded){
   const totalHapta = entries.reduce((s,e)=>s+e.hapta,0);
   const totalDand = entries.reduce((s,e)=>s+e.dand,0);
   const totalVyaj = entries.reduce((s,e)=>s+e.vyaj,0);
-  const totalJama = entries.reduce((s,e)=>s+e.jama,0);
   const paidSoFar = m.hapte.reduce((s,h)=>s+h.hapta,0);
   // alreadyIncluded=true (reprint): m.hapte already has these entries.
   // alreadyIncluded=false (pre-save preview): add them so the balance reflects this payment.
@@ -4428,19 +4508,15 @@ function buildHaptaReceiptHtml(m, entries, alreadyIncluded){
   const receiptNo = 'RC' + now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0') + '-' + String(now.getHours()).padStart(2,'0') + String(now.getMinutes()).padStart(2,'0') + String(now.getSeconds()).padStart(2,'0');
   const dateStr = fmtDate(now.toISOString().slice(0,10));
 
-  const rows = entries.map(e=>`<tr>
-    <td>${e.mahina||'—'}</td>
-    <td style="text-align:right">${fmt(e.hapta)}</td>
-    <td style="text-align:right">${fmt(e.dand)}</td>
-    <td style="text-align:right">${fmt(e.vyaj)}</td>
-    <td style="text-align:right;font-weight:700">${fmt(e.jama)}</td>
-  </tr>`).join('');
+  const monthsLabel = [...new Set(entries.map(e=>e.mahina).filter(Boolean))].map(fmtMonthLabel).join(', ') || '—';
+  const vilambLabel = [...new Set(entries.map(e=>e.vilamb||0))].join(', ');
 
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8">${getPDFCss()}
   <style>
     .receipt-wrap{max-width:480px;margin:0 auto;}
     .receipt-no{display:flex;justify-content:space-between;font-size:11px;color:#475569;margin-bottom:10px;padding:6px 10px;background:#fdf6e3;border-radius:6px;border:1px solid #f0dca0;}
     .member-box{padding:10px 12px;background:#f8f9fc;border:1px solid #e2e8f0;border-radius:6px;margin-bottom:12px;font-size:12px;line-height:1.7;}
+    .loan-row{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
     .sign-row{display:flex;justify-content:space-between;margin-top:36px;font-size:11px;}
     .sign-line{border-top:1px solid #64748b;width:140px;text-align:center;padding-top:4px;}
   </style></head><body>
@@ -4448,24 +4524,24 @@ function buildHaptaReceiptHtml(m, entries, alreadyIncluded){
   ${getOrgHeader(t('txt_receipt_title'))}
   <div class="receipt-no"><span>${t('txt_receipt_no')}: <b>${receiptNo}</b></span><span>${t('exp_date')}: <b>${dateStr}</b></span></div>
   <div class="member-box">
-    <b>${t('th_sr_no')} ${m.kram} — ${m.nav}</b><br>
-    ${m.mobile ? '📱 '+m.mobile+'<br>' : ''}
-    ${t('m_loan_disb')}: ${fmt(m.vatap)}
+    <b>${t('th_sr_no')} ${m.kram} — ${m.nav}</b>${m.mobile ? ' &nbsp;|&nbsp; 📱 '+m.mobile : ''}
+    <div class="loan-row">
+      <b>${t('txt_total_loan_taken')}: ${fmt(m.vatap)}</b>
+      <b>${t('th_installment_month')}: ${monthsLabel}</b>
+    </div>
   </div>
   <table>
-    <thead><tr><th>${t('lbl_month')}</th><th>${t('th_hapta')} (₹)</th><th>${t('th_dand')} (₹)</th><th>${t('th_vyaj')} (₹)</th><th>${t('th_jama')} (₹)</th></tr></thead>
-    <tbody>${rows}</tbody>
-    <tfoot><tr>
-      <td>${t('exp_total')}</td>
-      <td style="text-align:right">${fmt(totalHapta)}</td>
-      <td style="text-align:right">${fmt(totalDand)}</td>
-      <td style="text-align:right">${fmt(totalVyaj)}</td>
-      <td style="text-align:right">${fmt(totalJama)}</td>
-    </tr></tfoot>
+    <thead><tr><th>${t('th_details')}</th><th style="text-align:right">${t('th_jama')} (₹)</th></tr></thead>
+    <tbody>
+      <tr><td>${t('th_hapta')}</td><td style="text-align:right">${totalHapta.toFixed(2)}</td></tr>
+      <tr><td>${t('th_dand')} (${vilambLabel})</td><td style="text-align:right">${totalDand.toFixed(2)}</td></tr>
+      <tr><td>${t('th_vyaj')} (${vilambLabel})</td><td style="text-align:right">${totalVyaj.toFixed(2)}</td></tr>
+    </tbody>
+    <tfoot><tr><td>${t('exp_total')} ${t('th_jama')}</td><td style="text-align:right">${(totalHapta+totalDand+totalVyaj).toFixed(2)}</td></tr></tfoot>
   </table>
-  <div class="metrics-row" style="margin-top:12px;">
-    <div class="metric-box" style="background:#f0fdf4;border-color:#bbf7d0;"><div class="lbl">${t('m_total_paid')}</div><div class="val" style="color:#166534;">${fmt(paidTillNow)}</div></div>
-    <div class="metric-box" style="background:#fef2f2;border-color:#fecaca;"><div class="lbl">${t('th_shillak')}</div><div class="val" style="color:#b91c1c;">${fmt(shillak)}</div></div>
+  <div style="font-size:12px;color:#334155;margin-top:10px;"><b>${t('txt_total_in_words')} : ${amountInWords(totalHapta+totalDand+totalVyaj)}</b></div>
+  <div class="metrics-row" style="margin-top:14px;">
+    <div class="metric-box" style="background:#fef2f2;border-color:#fecaca;width:100%;"><div class="lbl">${t('th_shillak')}</div><div class="val" style="color:#b91c1c;">${fmt(shillak)}</div></div>
   </div>
   <div class="sign-row">
     <div class="sign-line">${t('txt_receiver_sign')}</div>
