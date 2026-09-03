@@ -1245,7 +1245,6 @@ window.addEventListener('DOMContentLoaded', function(){
           <div style="font-weight:600;font-size:14px;" id="h-sel-name"></div>
           <div style="font-size:12px;color:var(--text2);margin-top:2px;" id="h-sel-detail"></div>
         </div>
-        <button onclick="clearHaptaSel()" class="btn btn-ghost" style="padding:5px 12px;font-size:12px;">✕ <span data-i18n="btn_change">बदला</span></button>
       </div>
     </div>
   </div>
@@ -2054,7 +2053,7 @@ window.addEventListener('DOMContentLoaded', function(){
     </div>
     <div style="background:#fff;padding:12px 18px;border-top:1px solid #e2e8f0;display:flex;gap:8px;">
       <button class="btn btn-ghost" onclick="closePdfPreview()" style="flex:1;" data-i18n="btn_close">बंद करा</button>
-      <button class="btn" onclick="confirmDownloadPreviewedPdf()" style="flex:1;background:var(--accent,#3a6fd8);color:#fff;">
+      <button class="btn" id="pdf-preview-confirm-btn" onclick="confirmDownloadPreviewedPdf()" style="flex:1;background:var(--accent,#3a6fd8);color:#fff;">
         📥 <span data-i18n="btn_download_pdf">PDF डाउनलोड करा</span>
       </button>
     </div>
@@ -2371,7 +2370,7 @@ const translations = {
     txt_ledger_loan_disb:"कर्ज वाटप", txt_ledger_charged:"आकारले", txt_ledger_installment_paid:"हप्ता जमा",
     txt_ledger_opening_balance:"सुरुवातीची शिल्लक (Opening Balance)", txt_ledger_closing_balance:"अंतिम शिल्लक (Closing Balance)",
     btn_download_statement:"Statement डाउनलोड करा",
-    txt_receipt_preview:"पावती पहा", btn_download_pdf:"PDF डाउनलोड करा",
+    txt_receipt_preview:"पावती पहा", btn_download_pdf:"PDF डाउनलोड करा", btn_confirm_and_save:"पुष्टी करा आणि जतन करा",
     msg_mobile_already_registered:"हा मोबाईल नंबर आधीच नोंदणीकृत आहे. कृपया 'प्रवेश करा' वापरून लॉगिन करा (नोंदणी करण्याची गरज नाही).",
     msg_mobile_request_pending:"या मोबाईल नंबरची नोंदणी विनंती आधीच पाठवली गेली आहे व सध्या प्रलंबित आहे. कृपया अ‍ॅडमिनने approve करण्याची वाट पाहा.",
     nav_funds:"फंड व्यवस्थापन", txt_funds_sub:"बाह्य निधी, परतफेड व खर्च — Debit/Credit स्वरूपात",
@@ -2618,7 +2617,7 @@ const translations = {
     txt_ledger_loan_disb:"Loan Disbursed", txt_ledger_charged:"Charged", txt_ledger_installment_paid:"Installment Paid",
     txt_ledger_opening_balance:"Opening Balance", txt_ledger_closing_balance:"Closing Balance",
     btn_download_statement:"Download Statement",
-    txt_receipt_preview:"View Receipt", btn_download_pdf:"Download PDF",
+    txt_receipt_preview:"View Receipt", btn_download_pdf:"Download PDF", btn_confirm_and_save:"Confirm & Save",
     msg_mobile_already_registered:"This mobile number is already registered. Please use 'Login' instead (no need to register again).",
     msg_mobile_request_pending:"A registration request for this mobile number has already been sent and is pending. Please wait for admin approval.",
     nav_funds:"Fund Management", txt_funds_sub:"External funds, repayments & expenses — Debit/Credit format",
@@ -2764,6 +2763,16 @@ function fmtDate(d){
   if(parts.length!==3) return d;
   const [y,mo,day]=parts;
   return day+'-'+mo+'-'+y;
+}
+
+function fmtMonthLabel(ym){
+  if(!ym) return '—';
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const parts=ym.split('-');
+  if(parts.length<2) return ym;
+  const y=parseInt(parts[0],10), mo=parseInt(parts[1],10);
+  if(!y||!mo||mo<1||mo>12) return ym;
+  return months[mo-1]+'-'+String(y).slice(-2);
 }
 
 function goPage(id,btn,skipHistory){
@@ -3977,18 +3986,34 @@ function getOrgHeader(title){
 }
 
 let pdfPreviewData = { html: null, filename: null, orientation: null };
+let pdfPreviewOnConfirm = null; // optional: when set, confirm button runs this instead of downloading
 
-function showPdfPreview(html, filename, orientation){
+function showPdfPreview(html, filename, orientation, onConfirm){
   pdfPreviewData = { html, filename, orientation: orientation || 'landscape' };
+  pdfPreviewOnConfirm = onConfirm || null;
   const frame = document.getElementById('pdf-preview-frame');
   frame.srcdoc = html;
+  const btn = document.getElementById('pdf-preview-confirm-btn');
+  if(btn){
+    btn.innerHTML = onConfirm
+      ? '✓ <span>'+t('btn_confirm_and_save')+'</span>'
+      : '📥 <span data-i18n="btn_download_pdf">'+t('btn_download_pdf')+'</span>';
+  }
   document.getElementById('pdf-preview-modal-overlay').style.display = 'flex';
 }
 function closePdfPreview(){
   document.getElementById('pdf-preview-modal-overlay').style.display = 'none';
+  pdfPreviewOnConfirm = null;
 }
 function confirmDownloadPreviewedPdf(){
   if(!pdfPreviewData.html) return;
+  if(pdfPreviewOnConfirm){
+    const cb = pdfPreviewOnConfirm;
+    pdfPreviewOnConfirm = null;
+    document.getElementById('pdf-preview-modal-overlay').style.display = 'none';
+    cb();
+    return;
+  }
   downloadPDF(pdfPreviewData.html, pdfPreviewData.filename, pdfPreviewData.orientation);
   closePdfPreview();
 }
@@ -4258,12 +4283,15 @@ async function deleteAdmin(id, username){
 }
 
 /* ── हप्ता पावती (Receipt) ── */
-function generateHaptaReceipt(m, entries){
+function buildHaptaReceiptHtml(m, entries, alreadyIncluded){
   const totalHapta = entries.reduce((s,e)=>s+e.hapta,0);
   const totalDand = entries.reduce((s,e)=>s+e.dand,0);
   const totalVyaj = entries.reduce((s,e)=>s+e.vyaj,0);
   const totalJama = entries.reduce((s,e)=>s+e.jama,0);
-  const paidTillNow = m.hapte.reduce((s,h)=>s+h.hapta,0);
+  const paidSoFar = m.hapte.reduce((s,h)=>s+h.hapta,0);
+  // alreadyIncluded=true (reprint): m.hapte already has these entries.
+  // alreadyIncluded=false (pre-save preview): add them so the balance reflects this payment.
+  const paidTillNow = alreadyIncluded ? paidSoFar : paidSoFar + totalHapta;
   const shillak = Math.max(0, m.vatap - paidTillNow);
   const now = new Date();
   const receiptNo = 'RC' + now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0') + '-' + String(now.getHours()).padStart(2,'0') + String(now.getMinutes()).padStart(2,'0') + String(now.getSeconds()).padStart(2,'0');
@@ -4314,7 +4342,12 @@ function generateHaptaReceipt(m, entries){
   </div>
   </div>
   </body></html>`;
-  showPdfPreview(html, m.nav+'_'+t('txt_receipt_title')+'_'+receiptNo+'.pdf', 'portrait');
+  return {html, filename: m.nav+'_'+t('txt_receipt_title')+'_'+receiptNo+'.pdf'};
+}
+
+function generateHaptaReceipt(m, entries){
+  const {html, filename} = buildHaptaReceiptHtml(m, entries, true);
+  showPdfPreview(html, filename, 'portrait');
 }
 
 function generateBatchReceiptSheet(monthVal, batch){
@@ -4912,11 +4945,12 @@ function selectHaptaMember(idx){
   document.getElementById('hm-dand').textContent = fmt(0);
   document.getElementById('hm-vyaj').textContent = fmt(0);
 
-  // Show form. First row is a read-only anchor showing the loan disbursement date
+  // Show form. First row is a read-only anchor showing the loan disbursement month/date
   // and the current outstanding balance — everything below it is a NEW installment.
   document.getElementById('h-form').style.display='block';
+  const loanMonth = m.date ? fmtMonthLabel(m.date.slice(0,7)) : '—';
   document.getElementById('h-body').innerHTML = `<tr id="hapta-anchor-row" style="background:var(--gold-pale);font-weight:700;">
-    <td>${t('m_loan_disb')}</td>
+    <td>${loanMonth}</td>
     <td>${fmtDate(m.date)}</td>
     <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
     <td style="text-align:right;color:var(--red);">${fmt(sh)}</td>
@@ -5146,7 +5180,7 @@ async function saveBulkHapta(){
   }
 }
 
-async function saveHapta(){
+function saveHapta(){
   if(haptaSelectedIdx<0){toast(t('msg_select_member_first'),'warn');return;}
   const newHapte=[];
   let missingHapta=false;
@@ -5170,12 +5204,17 @@ async function saveHapta(){
   if(missingHapta){toast(t('msg_enter_hapta_each_row'),'warn');return;}
   if(!newHapte.length){toast(t('msg_enter_at_least_one_hapta'),'warn');return;}
   const m = members[haptaSelectedIdx];
+  // Show the receipt first — actual save only happens if admin confirms from the preview
+  const {html, filename} = buildHaptaReceiptHtml(m, newHapte, false);
+  showPdfPreview(html, filename, 'portrait', ()=>confirmSaveHapta(m, newHapte));
+}
+
+async function confirmSaveHapta(m, newHapte){
   const updatedHapte = [...m.hapte, ...newHapte];
   const {error} = await sb.from('sabhasad').update({hapte:updatedHapte}).eq('id',m.id);
   if(error){toast(t('msg_save_error')+error.message,'warn');return;}
   m.hapte = updatedHapte;
   toast('✓ '+m.nav+' '+t('msg_your')+' '+newHapte.length+' '+t('exp_installments')+' '+t('msg_saved_bang'));
-  generateHaptaReceipt(m, newHapte);
   clearHaptaRows();
   calcHapta();
 }
