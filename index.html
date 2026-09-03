@@ -123,14 +123,14 @@ body.dark-mode #md-welcome-msg{color:var(--text)!important}
 body.dark-mode .member-content input:not([type="range"]){background:var(--bg2)!important;color:var(--text)!important;border-color:var(--border)!important}
 
 /* SIDEBAR */
-.sidebar{position:fixed;left:0;top:0;bottom:0;width:230px;background:#0f172a;border-right:1px solid #c8860a;display:flex;flex-direction:column;z-index:100;overflow:hidden}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:200px;background:#0f172a;border-right:1px solid #c8860a;display:flex;flex-direction:column;z-index:100;overflow:hidden}
 .logo{padding:20px 16px 16px;border-bottom:1px solid rgba(212,160,23,.25);text-align:center;background:linear-gradient(180deg,rgba(212,160,23,.08),transparent)}
 .logo-icon{width:56px;height:56px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center}
 .logo-title{font-family:'Tiro Devanagari Marathi',serif;font-size:14px;line-height:1.5;color:#fdf0e0;font-weight:600;letter-spacing:.01em}
 .logo-sub{font-size:10px;color:var(--text3);margin-top:4px;letter-spacing:.05em}
 .logo-devata{font-family:'Tiro Devanagari Marathi',serif;font-size:11px;color:var(--gold);margin-top:5px;opacity:.8}
 .nav{flex:1;padding:14px 10px;overflow-y:auto;min-height:0}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13px;color:#ffffff;transition:all .18s;border:none;background:none;width:100%;text-align:left;margin-bottom:3px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:10px;cursor:pointer;font-size:12.5px;color:#ffffff;transition:all .18s;border:none;background:none;width:100%;text-align:left;margin-bottom:3px}
 .nav-item svg{width:17px;height:17px;flex-shrink:0;opacity:.7}
 .nav-item:hover{background:rgba(212,160,23,.08);color:#ffffff;}
 .nav-item.active{background:linear-gradient(135deg,rgba(212,160,23,.18),rgba(212,135,15,.1));color:var(--gold);border:1px solid rgba(212,160,23,.3)}
@@ -158,7 +158,7 @@ body.dark-mode .member-content input:not([type="range"]){background:var(--bg2)!i
 @media(min-width:861px){
   .member-sidebar{
     display:flex;flex-direction:column;
-    position:fixed;left:0;top:0;bottom:0;width:230px;
+    position:fixed;left:0;top:0;bottom:0;width:200px;
     background:#0f172a;border-right:1px solid #c8860a;z-index:50;overflow-y:auto
   }
   .member-sidebar-head{padding:22px 16px 18px;border-bottom:1px solid rgba(212,160,23,.25);text-align:center;background:linear-gradient(180deg,rgba(212,160,23,.08),transparent)}
@@ -169,7 +169,7 @@ body.dark-mode .member-content input:not([type="range"]){background:var(--bg2)!i
   .member-sidebar-footer{padding:14px 10px;border-top:1px solid rgba(212,160,23,.2)}
   .member-sidebar-logout{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:none;color:#fff;font-size:12px;cursor:pointer}
   .member-sidebar-logout:hover{background:rgba(255,255,255,.08)}
-  .member-main{margin-left:230px}
+  .member-main{margin-left:200px}
   .member-topbar-wrap{display:none!important}
 }
 .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#0f172a;border-top:1px solid rgba(212,160,23,.3);z-index:100;padding:6px 2px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(0,0,0,.25)}
@@ -179,12 +179,12 @@ body.dark-mode .member-content input:not([type="range"]){background:var(--bg2)!i
 .bottom-nav-item.active svg{opacity:1}
 
 /* MAIN */
-.top-header{margin-left:230px;background:linear-gradient(135deg,#f5f6fa 0%,#eef0f7 60%,#f5f6fa 100%);border-bottom:3px solid rgba(180,140,20,.4);padding:0;display:flex;align-items:stretch;position:sticky;top:0;z-index:90;box-shadow:0 3px 16px rgba(0,0,0,.08)}
+.top-header{margin-left:200px;background:linear-gradient(135deg,#f5f6fa 0%,#eef0f7 60%,#f5f6fa 100%);border-bottom:3px solid rgba(180,140,20,.4);padding:0;display:flex;align-items:stretch;position:sticky;top:0;z-index:90;box-shadow:0 3px 16px rgba(0,0,0,.08)}
 .top-header-logo{width:110px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:6px 10px;border-right:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
 .top-header-logo img{width:100px;height:auto;object-fit:contain;border-radius:4px}
 .top-header-body{flex:1;padding:12px 24px;display:flex;flex-direction:column;justify-content:center}
 .top-header{
-    margin-left:230px;
+    margin-left:200px;
     background:linear-gradient(135deg,#1a2540 0%,#0e1a35 60%,#1a1a2e 100%);
     border-bottom:3px solid rgba(212,160,23,.35);
     display:flex;
@@ -259,7 +259,7 @@ body.dark-mode .member-content input:not([type="range"]){background:var(--bg2)!i
 .top-header-reg{padding:12px 20px;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;border-left:1px solid rgba(255,255,255,.08);min-width:180px}
 .top-header-reg-num{font-size:10.5px;color:#7a8fb5;letter-spacing:.04em;margin-bottom:3px}
 .top-header-reg-est{font-size:11px;color:rgba(212,160,23,.75);font-family:'Tiro Devanagari Marathi',serif}
-.main{margin-left:230px;min-height:calc(100vh - 80px);padding:24px 28px}
+.main{margin-left:200px;min-height:calc(100vh - 80px);padding:24px 28px}
 .page{display:none}.page.active{display:block}
 .page-title{font-family:'Tiro Devanagari Marathi',serif;font-size:22px;font-weight:600;color:var(--text);margin-bottom:4px;letter-spacing:.02em}
 .page-sub{font-size:13px;color:var(--text2);margin-bottom:24px}
@@ -896,12 +896,6 @@ window.addEventListener('DOMContentLoaded', function(){
     </button>
   </nav>
   <div style="padding:10px 10px 0;position:relative;">
-  <!-- PWA Install Button -->
-  <button id="pwa-install-btn" onclick="installPWA()" style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:13px;color:#4ade80;border:1px solid rgba(74,222,128,.2);background:rgba(74,222,128,.06);width:100%;text-align:left;transition:all .18s;">
-    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-    <span data-i18n="btn_install_app">App Install करा</span>
-  </button>
-
   <!-- Admin / Settings / Sign out — icon-only row -->
   <div style="display:flex;gap:8px;margin-top:8px;">
     <button data-admin-toggle onclick="toggleAdminPopup()" title="Admin" style="flex:1;display:flex;align-items:center;justify-content:center;padding:10px;border-radius:10px;cursor:pointer;color:#e2b65a;border:1px solid rgba(212,160,23,.25);background:rgba(212,160,23,.08);position:relative;transition:all .18s;">
@@ -990,8 +984,6 @@ window.addEventListener('DOMContentLoaded', function(){
   <div class="top-header-rightcol" style="padding:10px 20px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
     <div id="header-date-right" style="font-size:13px;font-weight:600;color:#e2b65a;text-align:center;white-space:nowrap;"></div>
   </div>
-
-  <!-- Install App Button removed -->
 
 </div>
 
@@ -2160,7 +2152,7 @@ const translations = {
     btn_send_reg_request:"नोंदणी विनंती पाठवा", txt_login_sub:"पतपेढी व्यवस्थापन",
     nav_home:"मुख्यपृष्ठ", nav_entry:"सभासद नोंदणी", nav_loan:"कर्ज वाटप", txt_loan_sub:"सभासद निवडा आणि कर्ज वाटप करा", txt_give_loan:"सभासदाला कर्ज द्या", nav_hapta:"हप्ता नोंदणी", nav_search:"सभासद तपशील",
     nav_summary:"पूर्ण तपशील", nav_requests:"सभासद विनंत्या", nav_details:"तपशील", nav_loanreq:"कर्ज विनंती",
-    btn_install_app:"App Install करा", txt_footer_branch:"मुंबई शाखा", txt_footer_dept:"पतपेढी विभाग",
+    txt_footer_branch:"मुंबई शाखा", txt_footer_dept:"पतपेढी विभाग",
     txt_member_panel:"सभासद पॅनल", btn_logout:"लॉगआउट",
     txt_total_summary:"एकूण सारांश", txt_recent_members:"अलीकडील सभासद", txt_view_all:"सर्व पहा →",
     txt_status_report:"स्थिती अहवाल", txt_quick_actions:"त्वरित कार्य", txt_add_new_member:"नवीन सभासद जोडा",
@@ -2225,11 +2217,7 @@ const translations = {
     msg_add_member_error:"सभासद जोडताना त्रुटी: ",
     msg_added_as_new_member_pre:"नवीन सभासद (अ.क्र. ", msg_added_as_new_member_post:") म्हणून जोडले व विनंती मंजूर झाली!",
     msg_request_rejected_toast:"विनंती नाकारली.", msg_request_updated:"विनंती अद्यतन झाली!",
-    msg_request_deleted:"विनंती काढली.", msg_app_installed:"App यशस्वीरित्या Install झाले!",
-    msg_app_installing:"App Install होत आहे...",
-    msg_chrome_install_hint:"Chrome menu → \"Add to Home Screen\" वर click करा",
-    msg_safari_install_hint:"Safari → Share button → \"Add to Home Screen\" वर click करा",
-    msg_browser_install_hint:"Browser address bar मधील Install icon वर click करा",
+    msg_request_deleted:"विनंती काढली.",
     msg_request_rejected_contact:"तुमची विनंती नाकारली गेली आहे. अधिक माहितीसाठी कार्यालयाशी संपर्क साधा.",
     msg_member_info_not_found:"सभासद माहिती सापडली नाही. कार्यालयाशी संपर्क साधा.",
     msg_wrong_credentials:"चुकीचे युजरनेम/मोबाईल किंवा पासवर्ड", msg_username_not_found:"युजरनेम सापडले नाही",
@@ -2411,7 +2399,7 @@ const translations = {
     btn_send_reg_request:"Send registration request", txt_login_sub:"Society Management",
     nav_home:"Home", nav_entry:"Member Registration", nav_loan:"Loan Disbursement", txt_loan_sub:"Select a member and disburse a loan", txt_give_loan:"Give a member a loan", nav_hapta:"Installment Entry", nav_search:"Member Details",
     nav_summary:"Full Details", nav_requests:"Member Requests", nav_details:"Details", nav_loanreq:"Loan Request",
-    btn_install_app:"Install App", txt_footer_branch:"Mumbai Branch", txt_footer_dept:"Credit Society Dept",
+    txt_footer_branch:"Mumbai Branch", txt_footer_dept:"Credit Society Dept",
     txt_member_panel:"Member Panel", btn_logout:"Logout",
     txt_total_summary:"Total Summary", txt_recent_members:"Recent Members", txt_view_all:"View all →",
     txt_status_report:"Status Report", txt_quick_actions:"Quick Actions", txt_add_new_member:"Add new member",
@@ -2476,11 +2464,7 @@ const translations = {
     msg_add_member_error:"Error adding member: ",
     msg_added_as_new_member_pre:"added as new member (Sr. No. ", msg_added_as_new_member_post:") and request approved!",
     msg_request_rejected_toast:"Request rejected.", msg_request_updated:"Request updated!",
-    msg_request_deleted:"Request deleted.", msg_app_installed:"App installed successfully!",
-    msg_app_installing:"Installing app...",
-    msg_chrome_install_hint:"Click Chrome menu → \"Add to Home Screen\"",
-    msg_safari_install_hint:"Click Safari → Share button → \"Add to Home Screen\"",
-    msg_browser_install_hint:"Click the Install icon in your browser's address bar",
+    msg_request_deleted:"Request deleted.",
     msg_request_rejected_contact:"Your request has been rejected. Please contact the office for more information.",
     msg_member_info_not_found:"Member information not found. Please contact the office.",
     msg_wrong_credentials:"Incorrect username/mobile or password", msg_username_not_found:"Username not found",
@@ -6760,42 +6744,6 @@ window.addEventListener('DOMContentLoaded', function(){
 
 // Service Worker - disabled (blob URL not supported)
 // App will still work as PWA via manifest
-
-// ── Install Prompt ──
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  // Show install button
-  const installBtn = document.getElementById('pwa-install-btn');
-  if(installBtn) installBtn.style.display = 'flex';
-});
-
-window.addEventListener('appinstalled', () => {
-  const installBtn = document.getElementById('pwa-install-btn');
-  if(installBtn) installBtn.style.display = 'none';
-  toast('✅ '+t('msg_app_installed'));
-});
-
-function installPWA(){
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(choice => {
-      if(choice.outcome === 'accepted') toast('✅ '+t('msg_app_installing'));
-      deferredPrompt = null;
-    });
-  } else {
-    // Manual instructions
-    const ua = navigator.userAgent;
-    if(/android/i.test(ua)){
-      toast(t('msg_chrome_install_hint'));
-    } else if(/iphone|ipad/i.test(ua)){
-      toast(t('msg_safari_install_hint'));
-    } else {
-      toast(t('msg_browser_install_hint'));
-    }
-  }
-}
 </script>
 
 </body>
