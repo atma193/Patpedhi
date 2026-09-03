@@ -5149,7 +5149,7 @@ function selectHaptaMember(idx){
   const historyRows = m.hapte.map(h=>{
     runningBalance = Math.max(0, runningBalance - (h.hapta||0));
     return `<tr class="hapta-fixed-row" style="background:#f8fafc;">
-      <td>${h.mahina||'—'}</td>
+      <td>${fmtMonthLabel(h.mahina)}</td>
       <td>${fmtDate(h.dinank)}</td>
       <td>${h.vilamb||0}</td>
       <td>${fmt(h.dand||0)}</td>
