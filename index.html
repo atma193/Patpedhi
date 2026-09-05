@@ -31,8 +31,8 @@
   --bg3:#e8ecf2;
   --border:#bcc4d4;
   --border2:#a0abbe;
-  --accent:#3a6fd8;
-  --accent2:#1e4fb5;
+  --accent:#1a2540;
+  --accent2:#0f172a;
   --green:#1a9e5c;
   --amber:#c47d0a;
   --red:#d63031;
@@ -40,7 +40,8 @@
   --text2:#3d4a66;
   --text3:#7a8299;
   --card-r:12px;
-  --gold:#c47d0a;
+  --gold:#c8860a;
+  --gold-pale:#fdf6e3;
 }
 html{font-size:15px}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;transition:background .2s,color .2s}
@@ -55,6 +56,7 @@ body.dark-mode{
   --text:#e8ecf4;
   --text2:#b4bdd0;
   --text3:#8892a8;
+  --gold-pale:rgba(200,134,10,.14);
 }
 body.dark-mode .metric-card,
 body.dark-mode .tbl-wrap,
@@ -144,12 +146,14 @@ body.dark-mode .member-content input:not([type="range"]){background:var(--bg2)!i
 .hamburger-btn{display:none;align-items:center;justify-content:center;width:38px;height:38px;border:none;background:#1a2540;border-radius:8px;cursor:pointer;color:#fff;flex-shrink:0;position:fixed;top:12px;left:12px;z-index:101;box-shadow:0 2px 10px rgba(0,0,0,.3)}
 .mobile-admin-btn{display:none;align-items:center;justify-content:center;width:38px;height:38px;border:none;background:#1a2540;border-radius:8px;cursor:pointer;color:#e2b65a;flex-shrink:0;position:fixed;top:12px;right:12px;z-index:101;box-shadow:0 2px 10px rgba(0,0,0,.3)}
 .mobile-topbar{display:none}
-.mobile-topbar{align-items:center;justify-content:space-between;padding:10px 14px;background:#fff;border-bottom:2px solid #1a2540;position:sticky;top:0;z-index:95;box-shadow:0 2px 10px rgba(0,0,0,.06)}
-.mobile-topbar-brand{display:flex;align-items:center;gap:9px}
-.mobile-topbar-brand img{width:34px;height:34px;border-radius:50%;object-fit:cover}
-.mobile-topbar-title{font-family:'Tiro Devanagari Marathi',serif;font-size:16px;font-weight:600;color:#1a2540}
-.mobile-topbar-admin{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border:none;background:rgba(26,37,64,.08);border-radius:8px;cursor:pointer;color:#1a2540;flex-shrink:0}
-.mobile-topbar-lang{display:flex;align-items:center;justify-content:center;gap:4px;height:34px;padding:0 9px;border:none;background:rgba(26,37,64,.08);border-radius:8px;cursor:pointer;color:#1a2540;flex-shrink:0;font-size:11px;font-weight:700;margin-right:8px}
+.mobile-topbar{align-items:center;justify-content:space-between;padding:11px 14px;background:rgba(255,255,255,.94);backdrop-filter:saturate(180%) blur(10px);-webkit-backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid rgba(26,37,64,.12);position:sticky;top:0;z-index:95;box-shadow:0 1px 2px rgba(15,23,42,.04),0 6px 16px rgba(15,23,42,.05)}
+.mobile-topbar-brand{display:flex;align-items:center;gap:10px}
+.mobile-topbar-brand img{width:34px;height:34px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px rgba(200,134,10,.35)}
+.mobile-topbar-title{font-family:'Tiro Devanagari Marathi',serif;font-size:16px;font-weight:600;color:#1a2540;letter-spacing:.1px;line-height:1.15}
+.mobile-topbar-admin{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid rgba(26,37,64,.1);background:rgba(26,37,64,.055);border-radius:10px;cursor:pointer;color:#1a2540;flex-shrink:0;transition:transform .12s ease,background .15s ease}
+.mobile-topbar-admin:active{transform:scale(.92);background:rgba(26,37,64,.12)}
+.mobile-topbar-lang{display:flex;align-items:center;justify-content:center;gap:4px;height:36px;padding:0 10px;border:1px solid rgba(26,37,64,.1);background:rgba(26,37,64,.055);border-radius:10px;cursor:pointer;color:#1a2540;flex-shrink:0;font-size:11px;font-weight:700;margin-right:8px;letter-spacing:.2px;transition:transform .12s ease,background .15s ease}
+.mobile-topbar-lang:active{transform:scale(.94);background:rgba(26,37,64,.12)}
 .sidebar-close-btn{display:none;position:absolute;top:10px;right:10px;background:none;border:none;color:#fff;font-size:18px;cursor:pointer;width:32px;height:32px;border-radius:8px;z-index:2}
 .sidebar-close-btn:hover{background:rgba(255,255,255,.1)}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
@@ -175,11 +179,13 @@ body.dark-mode .member-content input:not([type="range"]){background:var(--bg2)!i
   .member-main{margin-left:200px}
   .member-topbar-wrap{display:none!important}
 }
-.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#0f172a;border-top:1px solid rgba(212,160,23,.3);z-index:100;padding:6px 2px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(0,0,0,.25)}
-.bottom-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:none;color:#9aa5b8;font-size:10px;padding:5px 2px;border-radius:10px;cursor:pointer}
-.bottom-nav-item svg{width:19px;height:19px;opacity:.75}
-.bottom-nav-item.active{color:var(--gold,#d4a017)}
-.bottom-nav-item.active svg{opacity:1}
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#0f172a;border-top:1px solid rgba(212,160,23,.25);z-index:100;padding:7px 4px calc(7px + env(safe-area-inset-bottom));box-shadow:0 -2px 4px rgba(0,0,0,.15),0 -10px 24px rgba(0,0,0,.22)}
+.bottom-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;color:#8b95a8;font-size:10px;font-weight:500;padding:6px 2px;border-radius:12px;cursor:pointer;position:relative;transition:color .18s ease,transform .12s ease}
+.bottom-nav-item:active{transform:scale(.93)}
+.bottom-nav-item svg{width:19px;height:19px;opacity:.7;transition:opacity .18s ease,transform .18s ease}
+.bottom-nav-item.active{color:#f0d999}
+.bottom-nav-item.active svg{opacity:1;transform:translateY(-1px)}
+.bottom-nav-item.active::before{content:'';position:absolute;top:1px;left:50%;transform:translateX(-50%);width:38px;height:28px;background:rgba(226,182,90,.16);border:1px solid rgba(226,182,90,.2);border-radius:10px;z-index:-1}
 
 /* MAIN */
 .top-header{margin-left:200px;background:linear-gradient(135deg,#f5f6fa 0%,#eef0f7 60%,#f5f6fa 100%);border-bottom:3px solid rgba(180,140,20,.4);padding:0;display:flex;align-items:stretch;position:sticky;top:0;z-index:90;box-shadow:0 3px 16px rgba(0,0,0,.08)}
@@ -312,7 +318,7 @@ table td input:focus{background:rgba(79,127,255,.08);border-radius:4px}
 
 /* BUTTONS */
 .btn{display:inline-flex;align-items:center;gap:7px;padding:8px 18px;border-radius:9px;font-size:13px;font-family:inherit;cursor:pointer;font-weight:500;transition:all .15s;border:none}
-.btn-primary{background:linear-gradient(135deg,#3a6fd8,#1e4fb5);color:#fff;border:none}
+.btn-primary{background:linear-gradient(135deg,#233350,#0f172a);color:#f3d98a;border:1px solid rgba(212,160,23,.4)}
 .btn-primary:hover{opacity:.88;transform:translateY(-1px)}
 .btn-ghost{background:#fff;border:1px solid var(--border);color:var(--text2)}
 .btn-ghost:hover{background:#f0f2f7;color:var(--text)}
@@ -361,6 +367,25 @@ table td input:focus{background:rgba(79,127,255,.08);border-radius:4px}
   #admin-popup{bottom:auto!important;top:56px!important;left:auto!important;right:10px!important}
   #member-dashboard .md-mobile-tabs{display:none!important}
   #member-dashboard .member-content{padding-bottom:78px}
+
+  /* Cards — softer, more tactile depth on mobile */
+  .card{border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,.06),0 4px 14px rgba(15,23,42,.055)}
+  .card-head{padding:13px 16px}
+  .card-body{padding:16px}
+  .metric-card{border-radius:14px;box-shadow:0 1px 3px rgba(15,23,42,.05),0 3px 10px rgba(15,23,42,.05)}
+  .quick-btn{border-radius:14px;transition:transform .12s ease,box-shadow .12s ease}
+  .quick-btn:active{transform:scale(.97)}
+
+  /* Buttons — bigger tap targets, tactile feedback */
+  .btn{padding:11px 20px;font-size:13.5px;border-radius:11px;min-height:44px;transition:transform .12s ease,box-shadow .15s ease,background .15s ease}
+  .btn:active{transform:scale(.97)}
+  .btn-primary{box-shadow:0 2px 10px rgba(15,23,42,.35)}
+  .btn-icon{min-width:38px;min-height:38px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;transition:transform .12s ease}
+  .btn-icon:active{transform:scale(.9)}
+
+  /* Typography rhythm */
+  .page-title{margin-bottom:3px}
+  .page-sub{margin-bottom:18px;line-height:1.5}
 }
 @media(max-width:600px){
   .top-header-body{padding:8px 10px}
@@ -409,18 +434,19 @@ table td input:focus{background:rgba(79,127,255,.08);border-radius:4px}
 .login-overlay .login-box{position:relative;z-index:1;}
 
 .login-overlay .login-box{position:relative;z-index:1;}
-.login-box{background:#1a2540;border:1px solid rgba(212,160,23,.35);border-radius:16px;padding:32px 30px;width:100%;max-width:400px;box-shadow:0 4px 16px rgba(0,0,0,.25);}
+.login-box{background:#1a2540;border:1px solid rgba(212,160,23,.35);border-radius:16px;padding:32px 30px;width:100%;max-width:400px;box-shadow:0 4px 16px rgba(0,0,0,.25),0 20px 50px rgba(0,0,0,.35),inset 0 1px 0 rgba(212,160,23,.15);position:relative;}
 .login-logo{text-align:center;margin-bottom:14px;}
 .login-logo img{width:85px;height:85px;border-radius:50%;border:2px solid rgba(212,160,23,.4);}
-.login-title{font-family:"Tiro Devanagari Marathi",serif;font-size:15px;color:#fdf0e0;text-align:center;margin:8px 0 3px;font-weight:600;}
+.login-title{font-family:"Tiro Devanagari Marathi",serif;font-size:16.5px;color:#fdf0e0;text-align:center;margin:8px 0 3px;font-weight:600;letter-spacing:.2px;}
 .login-sub{font-size:11px;color:#94a3b8;text-align:center;margin-bottom:20px;}
 .login-devata{font-family:"Tiro Devanagari Marathi",serif;font-size:12px;color:rgba(212,160,23,.8);text-align:center;margin-bottom:16px;}
 .login-field{margin-bottom:13px;}
 .login-field label{display:block;font-size:12px;color:#94a3b8;margin-bottom:5px;font-weight:500;}
-.login-field input{width:100%;padding:10px 14px;background:#0f172a;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#ffffff;font-size:13px;outline:none;box-sizing:border-box;transition:border .2s;}
-.login-field input:focus{border-color:rgba(212,160,23,.7);}
-.login-btn{width:100%;padding:11px;background:linear-gradient(135deg,#c8860a,#a06808);border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-top:4px;transition:opacity .2s;}
+.login-field input{width:100%;padding:10px 14px;background:#0f172a;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#ffffff;font-size:13px;outline:none;box-sizing:border-box;transition:border .2s,box-shadow .2s;box-shadow:inset 0 1px 3px rgba(0,0,0,.3);}
+.login-field input:focus{border-color:rgba(212,160,23,.7);box-shadow:inset 0 1px 3px rgba(0,0,0,.3),0 0 0 3px rgba(212,160,23,.15);}
+.login-btn{width:100%;padding:11px;background:linear-gradient(135deg,#c8860a,#a06808);border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-top:4px;transition:opacity .2s,transform .12s;box-shadow:0 3px 10px rgba(200,134,10,.3);}
 .login-btn:hover{opacity:.88;}
+.login-btn:active{transform:scale(.97);}
 .login-error{color:#f87171;font-size:12px;text-align:center;margin-top:8px;min-height:18px;}
 .login-links{display:flex;justify-content:space-between;margin-top:12px;}
 .login-link{background:none;border:none;color:rgba(212,160,23,.8);font-size:11px;cursor:pointer;text-decoration:underline;padding:0;}
@@ -968,7 +994,7 @@ window.addEventListener('DOMContentLoaded', function(){
   <button class="bottom-nav-item" data-page="requests" onclick="goPage('requests',this)" style="position:relative">
     <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
     <span data-i18n="nav_requests_short">विनंत्या</span>
-    <span id="req-badge-bottomnav" style="display:none;position:absolute;top:2px;right:18%;background:#e05252;color:#fff;font-size:9px;font-weight:700;border-radius:8px;padding:0 4px;min-width:14px;text-align:center;line-height:14px;"></span>
+    <span id="req-badge-bottomnav" style="display:none;position:absolute;top:0px;right:16%;background:#e0524f;color:#fff;font-size:9px;font-weight:700;border-radius:8px;padding:0 4px;min-width:14px;text-align:center;line-height:14px;border:1.5px solid #0f172a;box-shadow:0 1px 3px rgba(0,0,0,.4);"></span>
   </button>
 </nav>
 
@@ -1737,9 +1763,9 @@ window.addEventListener('DOMContentLoaded', function(){
       <div style="font-size:11px;color:#64748b;" data-i18n="txt_fund_total_expense">एकूण खर्च</div>
       <div id="fund-total-expense" style="font-size:18px;font-weight:700;color:#dc2626;">₹0</div>
     </div>
-    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;border-left:3px solid #3a6fd8;">
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;border-left:3px solid var(--accent);">
       <div style="font-size:11px;color:#64748b;" data-i18n="txt_fund_net_outstanding">सध्याची बाकी (परत करायची)</div>
-      <div id="fund-net-outstanding" style="font-size:18px;font-weight:700;color:#3a6fd8;">₹0</div>
+      <div id="fund-net-outstanding" style="font-size:18px;font-weight:700;color:var(--accent);">₹0</div>
     </div>
   </div>
 
@@ -5575,7 +5601,7 @@ function renderHomeChart(){
     data: {
       labels: monthLabels,
       datasets: [
-        { label: t('th_hapta'), data: haptaData, backgroundColor: '#3a6fd8' },
+        { label: t('th_hapta'), data: haptaData, backgroundColor: '#2c5aa0' },
         { label: t('th_dand'), data: dandData, backgroundColor: '#d97706' },
         { label: t('th_vyaj'), data: vyajData, backgroundColor: '#16a34a' }
       ]
