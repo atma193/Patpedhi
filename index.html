@@ -364,7 +364,10 @@ table td input:focus{background:rgba(79,127,255,.08);border-radius:4px}
   .bottom-nav{display:flex}
   .main{margin-left:0;padding:16px 12px 78px}
   .two-col-grid{grid-template-columns:1fr!important}
-  #admin-popup{bottom:auto!important;top:56px!important;left:auto!important;right:10px!important}
+  #admin-popup{bottom:auto!important;top:56px!important;left:auto!important;right:10px!important;width:170px!important}
+  #admin-popup button{padding:9px 11px!important;font-size:12px!important}
+  #admin-popup button svg{width:13px!important;height:13px!important}
+  #admin-popup>div:first-child{padding:8px 11px!important;font-size:10px!important}
   #member-dashboard .md-mobile-tabs{display:none!important}
   #member-dashboard .member-content{padding-bottom:78px}
 
@@ -942,7 +945,7 @@ window.addEventListener('DOMContentLoaded', function(){
 </aside>
   <!-- Admin Popup -->
   <div id="admin-popup" style="display:none;position:fixed;bottom:80px;left:10px;width:210px;background:#1e2d45;border:1px solid rgba(212,160,23,.3);border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.5);z-index:9998;overflow:hidden;">
-    <div style="padding:10px 14px;border-bottom:1px solid rgba(212,160,23,.2);font-size:11px;color:#94a3b8;">
+    <div style="padding:10px 14px;border-bottom:1px solid rgba(212,160,23,.2);font-size:11px;color:#94a3b8;background:rgba(212,160,23,.1);">
       👤 <span id="popup-username" style="color:#e2b65a;font-weight:600;">Admin</span>
     </div>
     <button onclick="goPage('requests',document.querySelector('[data-page=requests]'));closeAdminPopup();" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
