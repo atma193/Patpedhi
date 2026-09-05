@@ -722,11 +722,11 @@ window.addEventListener('DOMContentLoaded', function(){
           </div>
           <div class="login-field" id="md-loan-req-guarantor-wrap" style="display:none;">
             <label data-i18n="lbl_other_person_name">इतर व्यक्तीचे नाव</label>
-            <input type="text" id="md-loan-req-guarantor" placeholder="व्यक्तीचे पूर्ण नाव लिहा">
+            <input type="text" id="md-loan-req-guarantor" placeholder="व्यक्तीचे पूर्ण नाव लिहा" data-i18n-ph="ph_full_name_person">
           </div>
           <div class="login-field">
             <label data-i18n="lbl_loan_purpose">कारण (ऐच्छिक)</label>
-            <textarea id="md-loan-req-purpose" rows="2" placeholder="उदा. घर दुरुस्ती, व्यवसाय..." style="width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;"></textarea>
+            <textarea id="md-loan-req-purpose" rows="2" placeholder="उदा. घर दुरुस्ती, व्यवसाय..." data-i18n-ph="ph_loan_purpose_example" style="width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;"></textarea>
           </div>
           <button class="login-btn" onclick="submitLoanRequest()" style="margin-top:4px;">
             <span data-i18n="btn_send_loan_request">विनंती पाठवा</span>
@@ -951,7 +951,7 @@ window.addEventListener('DOMContentLoaded', function(){
     <button onclick="goPage('requests',document.querySelector('[data-page=requests]'));closeAdminPopup();" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
       <span style="display:flex;align-items:center;gap:10px;">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-        सभासद विनंत्या
+        <span data-i18n="nav_requests">सभासद विनंत्या</span>
       </span>
       <span id="req-badge-popup" style="display:none;background:#e05252;color:#fff;font-size:10px;font-weight:700;border-radius:10px;padding:1px 6px;min-width:16px;text-align:center;"></span>
     </button>
@@ -973,7 +973,7 @@ window.addEventListener('DOMContentLoaded', function(){
     </button>
     <button class="popup-mobile-only" onclick="doLogout()" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f87171;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(248,113,113,.08)'" onmouseout="this.style.background='none'">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-      साइन आउट करा
+      <span data-i18n="btn_signout">साइन आउट करा</span>
     </button>
   </div>
 
@@ -1138,7 +1138,7 @@ window.addEventListener('DOMContentLoaded', function(){
     </div>
     <div class="card-body">
       <div class="form-grid">
-        <div class="fg"><label data-i18n="lbl_member_name">सभासदाचे नाव</label><input type="text" id="e-nav" placeholder="पूर्ण नाव लिहा"></div>
+        <div class="fg"><label data-i18n="lbl_member_name">सभासदाचे नाव</label><input type="text" id="e-nav" placeholder="पूर्ण नाव लिहा" data-i18n-ph="ph_write_full_name"></div>
         <div class="fg"><label data-i18n="lbl_mobile">मोबाईल नंबर</label><input type="text" id="e-mobile" placeholder="9876543210" maxlength="10"></div>
         <div class="fg">
           <label data-i18n="lbl_password">पासवर्ड (Password)</label>
@@ -1785,10 +1785,10 @@ window.addEventListener('DOMContentLoaded', function(){
             <option value="expense" data-i18n="opt_expense">खर्च (Expense)</option>
           </select>
         </div>
-        <div class="fg"><label id="fund-desc-label" data-i18n="txt_fund_source_desc">स्रोत वर्णन (कोणाकडून/कशासाठी)</label><input type="text" id="fund-description" placeholder="उदा. राम पाटील यांच्याकडून कर्ज"></div>
+        <div class="fg"><label id="fund-desc-label" data-i18n="txt_fund_source_desc">स्रोत वर्णन (कोणाकडून/कशासाठी)</label><input type="text" id="fund-description" placeholder="उदा. राम पाटील यांच्याकडून कर्ज" data-i18n-ph="ph_fund_desc_example"></div>
         <div class="fg"><label data-i18n="txt_fund_amount">रक्कम (₹)</label><input type="number" id="fund-amount" placeholder="10000"></div>
       </div>
-      <div class="fg"><label data-i18n="txt_fund_notes">टीप (ऐच्छिक)</label><input type="text" id="fund-notes" placeholder="अतिरिक्त तपशील..."></div>
+      <div class="fg"><label data-i18n="txt_fund_notes">टीप (ऐच्छिक)</label><input type="text" id="fund-notes" placeholder="अतिरिक्त तपशील..." data-i18n-ph="ph_extra_details"></div>
       <div class="btn-row">
         <button class="btn btn-primary" onclick="saveFundEntry()">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
@@ -1943,7 +1943,7 @@ window.addEventListener('DOMContentLoaded', function(){
       </div>
       <div class="login-field">
         <label data-i18n="lbl_create_pass">पासवर्ड तयार करा</label>
-        <input type="text" id="new-admin-password" placeholder="किमान ६ अक्षरे" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
+        <input type="text" id="new-admin-password" placeholder="किमान ६ अक्षरे" data-i18n-ph="ph_min6" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
       </div>
       <div class="login-field">
         <label data-i18n="lbl_admin_role">भूमिका (Role)</label>
@@ -2054,7 +2054,7 @@ window.addEventListener('DOMContentLoaded', function(){
 
     <div class="login-field">
       <label data-i18n="lbl_blacklist_reason">कारण (आवश्यक)</label>
-      <textarea id="blacklist-reason" rows="3" placeholder="उदा. वारंवार हप्ता चुकवला, गैरवर्तन..." style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;"></textarea>
+      <textarea id="blacklist-reason" rows="3" placeholder="उदा. वारंवार हप्ता चुकवला, गैरवर्तन..." data-i18n-ph="ph_blacklist_reason_example" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;"></textarea>
     </div>
     <div class="login-field">
       <label data-i18n="lbl_blacklist_duration">कालावधी</label>
@@ -2197,8 +2197,10 @@ const translations = {
     ph_cur_pass:"सध्याचा पासवर्ड", lbl_new_pass:"नवीन पासवर्ड", ph_new_pass:"नवीन पासवर्ड (किमान ६ अक्षरे)",
     lbl_new_pass_confirm:"नवीन पासवर्ड पुन्हा टाका", ph_retype:"पुन्हा टाका", btn_changepass:"पासवर्ड बदला",
     hdr_register:"सभासद नोंदणी", txt_register_note:"नाव, मोबाईल व पासवर्ड भरा — अ‍ॅडमिनने approve केल्यावर तुम्ही लॉगिन करू शकाल.", txt_password_optional_hint:"रिकामे ठेवल्यास सभासदाला सध्या लॉगिन मिळणार नाही — तो नंतर स्वतः नोंदणी करू शकतो.",
-    lbl_full_name:"पूर्ण नाव", ph_full_name:"तुमचं पूर्ण नाव", ph_mobile10:"१० अंकी मोबाईल नंबर",
+    lbl_full_name:"पूर्ण नाव", ph_full_name:"तुमचं पूर्ण नाव", ph_write_full_name:"पूर्ण नाव लिहा", ph_mobile10:"१० अंकी मोबाईल नंबर",
     lbl_create_pass:"पासवर्ड तयार करा", ph_min6:"किमान ६ अक्षरे", lbl_pass_confirm:"पासवर्ड पुन्हा टाका",
+    ph_loan_purpose_example:"उदा. घर दुरुस्ती, व्यवसाय...", ph_fund_desc_example:"उदा. राम पाटील यांच्याकडून कर्ज",
+    ph_extra_details:"अतिरिक्त तपशील...", ph_blacklist_reason_example:"उदा. वारंवार हप्ता चुकवला, गैरवर्तन...",
     btn_send_reg_request:"नोंदणी विनंती पाठवा", txt_login_sub:"पतपेढी व्यवस्थापन",
     nav_home:"मुख्यपृष्ठ", nav_entry:"सभासद नोंदणी", nav_loan:"कर्ज वाटप", txt_loan_sub:"सभासद निवडा आणि कर्ज वाटप करा", txt_give_loan:"सभासदाला कर्ज द्या", nav_hapta:"हप्ता नोंदणी", nav_search:"सभासद तपशील",
     nav_summary:"पूर्ण तपशील", nav_requests:"सभासद विनंत्या", nav_details:"तपशील", nav_loanreq:"कर्ज विनंती",
@@ -2308,7 +2310,7 @@ const translations = {
     txt_bulk_already_entered:"या महिन्याची नोंद आधीच आहे",
     txt_bulk_select_month:"कृपया आधी महिना निवडा.",
     txt_bulk_saved_suffix:"सभासदांचे हप्ते जतन झाले!",
-    txt_settings:"सेटिंग्ज", txt_settings_sub:"व्याजदर व दंडदर बदला — सर्व admin devices वर लागू होईल",
+    txt_settings:"सेटिंग्ज", txt_settings_sub:"व्याजदर व दंडदर बदला — सर्व admin devices वर लागू होईल", btn_signout:"साइन आउट करा",
     lbl_interest_rate:"व्याजदर (% दर महिना)", lbl_penalty_rate:"दंडदर (₹ दर महिना)",
     lbl_reminder_day:"हप्ता स्मरणपत्र दिवस (महिन्याची तारीख)",
     txt_settings_note:"टीप: हा बदल फक्त नवीन हप्ता नोंदींच्या auto-calculation साठी लागू होतो. आधीच्या नोंदी बदलणार नाहीत.",
@@ -2444,8 +2446,10 @@ const translations = {
     ph_cur_pass:"Current password", lbl_new_pass:"New password", ph_new_pass:"New password (min 6 characters)",
     lbl_new_pass_confirm:"Re-enter new password", ph_retype:"Re-enter", btn_changepass:"Change password",
     hdr_register:"Member Registration", txt_register_note:"Fill your name, mobile and password — you can login once approved by admin.", txt_password_optional_hint:"Leave blank if this member shouldn't get login access yet — they can self-register later.",
-    lbl_full_name:"Full name", ph_full_name:"Your full name", ph_mobile10:"10-digit mobile number",
+    lbl_full_name:"Full name", ph_full_name:"Your full name", ph_write_full_name:"Write full name", ph_mobile10:"10-digit mobile number",
     lbl_create_pass:"Create password", ph_min6:"Minimum 6 characters", lbl_pass_confirm:"Re-enter password",
+    ph_loan_purpose_example:"e.g. Home repair, business...", ph_fund_desc_example:"e.g. Loan from Ram Patil",
+    ph_extra_details:"Additional details...", ph_blacklist_reason_example:"e.g. Repeatedly missed installments, misconduct...",
     btn_send_reg_request:"Send registration request", txt_login_sub:"Society Management",
     nav_home:"Home", nav_entry:"Member Registration", nav_loan:"Loan Disbursement", txt_loan_sub:"Select a member and disburse a loan", txt_give_loan:"Give a member a loan", nav_hapta:"Installment Entry", nav_search:"Member Details",
     nav_summary:"Full Details", nav_requests:"Member Requests", nav_details:"Details", nav_loanreq:"Loan Request",
@@ -2555,7 +2559,7 @@ const translations = {
     txt_bulk_already_entered:"Already entered for this month",
     txt_bulk_select_month:"Please select a month first.",
     txt_bulk_saved_suffix:"members' installments saved!",
-    txt_settings:"Settings", txt_settings_sub:"Change interest and penalty rates — applies across all admin devices",
+    txt_settings:"Settings", txt_settings_sub:"Change interest and penalty rates — applies across all admin devices", btn_signout:"Sign Out",
     lbl_interest_rate:"Interest Rate (% per month)", lbl_penalty_rate:"Penalty Rate (₹ per month)",
     lbl_reminder_day:"Installment Reminder Day (day of month)",
     txt_settings_note:"Note: This only affects auto-calculation for new installment entries. Existing records won't change.",
