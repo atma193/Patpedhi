@@ -124,6 +124,9 @@ body.dark-mode .member-content input:not([type="range"]){background:var(--bg2)!i
 
 /* SIDEBAR */
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:200px;background:#0f172a;border-right:1px solid #c8860a;display:flex;flex-direction:column;z-index:100;overflow:hidden}
+@media(min-width:861px){
+  .popup-mobile-only{display:none}
+}
 .logo{padding:20px 16px 16px;border-bottom:1px solid rgba(212,160,23,.25);text-align:center;background:linear-gradient(180deg,rgba(212,160,23,.08),transparent)}
 .logo-icon{width:56px;height:56px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center}
 .logo-title{font-family:'Tiro Devanagari Marathi',serif;font-size:14px;line-height:1.5;color:#fdf0e0;font-weight:600;letter-spacing:.01em}
@@ -346,12 +349,10 @@ table td input:focus{background:rgba(79,127,255,.08);border-radius:4px}
 .empty{text-align:center;padding:3rem;color:var(--text3);font-size:13px}
 
 @media(max-width:860px){
-  .sidebar{display:none}
-  .sidebar.open{display:flex}
-  .hamburger-btn{display:flex}
+  .sidebar{display:none;width:230px}
+  .hamburger-btn{display:none}
   .mobile-admin-btn{display:none}
   .mobile-topbar{display:flex}
-  .mobile-topbar-brand{margin-left:46px}
   .top-header{display:none}
   .sidebar-overlay{display:none}
   .bottom-nav{display:flex}
@@ -924,6 +925,26 @@ window.addEventListener('DOMContentLoaded', function(){
         सभासद विनंत्या
       </span>
       <span id="req-badge-popup" style="display:none;background:#e05252;color:#fff;font-size:10px;font-weight:700;border-radius:10px;padding:1px 6px;min-width:16px;text-align:center;"></span>
+    </button>
+    <button class="popup-mobile-only" onclick="goPage('reports');closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 17V8h2v9H9zm4 0V4h2v13h-2zm-8 0v-5h2v5H5z"/><path d="M3 20h18"/></svg>
+      <span data-i18n="nav_reports">अहवाल</span>
+    </button>
+    <button class="popup-mobile-only" onclick="goPage('ledger');closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M9 7h7M9 11h7"/></svg>
+      <span data-i18n="nav_ledger">लेजर बुक</span>
+    </button>
+    <button class="popup-mobile-only" onclick="goPage('funds');closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      <span data-i18n="nav_funds">फंड व्यवस्थापन</span>
+    </button>
+    <button class="popup-mobile-only" onclick="openSettingsModal();closeAdminPopup();" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f1f5f9;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='none'">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 8.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      <span data-i18n="txt_settings">सेटिंग्ज</span>
+    </button>
+    <button class="popup-mobile-only" onclick="doLogout()" style="display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;background:none;border:none;cursor:pointer;font-size:13px;color:#f87171;transition:background .15s;border-top:1px solid rgba(255,255,255,.05);" onmouseover="this.style.background='rgba(248,113,113,.08)'" onmouseout="this.style.background='none'">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      साइन आउट करा
     </button>
   </div>
 
