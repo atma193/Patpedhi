@@ -5872,35 +5872,60 @@ function showSection(id){
   });
 }
 
+function silentMemberSessionClear(){
+  sessionStorage.removeItem('pp_member_auth');
+  sessionStorage.removeItem('pp_member_id');
+  currentMemberSabhasadId = null;
+  currentMemberData = null;
+  const dash = document.getElementById('member-dashboard');
+  if(dash) dash.style.display='none';
+  const overlay = document.getElementById('login-overlay');
+  if(overlay) overlay.style.display='flex';
+}
+
+function attemptMemberSessionRestore(mid, overlay, allowRetry){
+  sb.from('sabhasad').select('*').eq('id',mid).single().then(({data,error})=>{
+    if(data){
+      currentMemberSabhasadId = data.id;
+      currentMemberData = data;
+      renderMemberDashboard(data);
+      overlay.style.display='none';
+      document.getElementById('member-dashboard').style.display='block';
+      const validMemberPages = ['home','details','loanreq','profile'];
+      const hashPage = (location.hash||'').replace('#','');
+      if(hashPage && validMemberPages.includes(hashPage)){
+        goMemberPage(hashPage, true);
+      } else {
+        goMemberPage('home', true);
+      }
+    } else if(allowRetry){
+      // Transient network/timing hiccup on page load — retry once silently before giving up
+      console.warn('Member session restore: no data on first try, retrying...', error?.message||error);
+      setTimeout(()=>attemptMemberSessionRestore(mid, overlay, false), 1200);
+    } else {
+      console.warn('Member session restore failed after retry:', error?.message||error);
+      silentMemberSessionClear();
+    }
+  }).catch(e=>{
+    if(allowRetry){
+      console.warn('Member session restore error, retrying...', e?.message||e);
+      setTimeout(()=>attemptMemberSessionRestore(mid, overlay, false), 1200);
+    } else {
+      console.warn('Member session restore failed after retry:', e?.message||e);
+      silentMemberSessionClear();
+    }
+  });
+}
+
 function checkLogin(){
   // Always clear old session on fresh load
   const overlay = document.getElementById('login-overlay');
   if(sessionStorage.getItem('pp_member_auth')==='true'){
     const mid = sessionStorage.getItem('pp_member_id');
     if(mid){
-      sb.from('sabhasad').select('*').eq('id',mid).single().then(({data,error})=>{
-        if(data){
-          currentMemberSabhasadId = data.id;
-          currentMemberData = data;
-          renderMemberDashboard(data);
-          overlay.style.display='none';
-          document.getElementById('member-dashboard').style.display='block';
-          const validMemberPages = ['home','details','loanreq','profile'];
-          const hashPage = (location.hash||'').replace('#','');
-          if(hashPage && validMemberPages.includes(hashPage)){
-            goMemberPage(hashPage, true);
-          } else {
-            goMemberPage('home', true);
-          }
-        } else {
-          memberLogout();
-        }
-      }).catch(e=>{
-        console.warn('Member session restore failed:', e?.message||e);
-        memberLogout();
-      });
+      attemptMemberSessionRestore(mid, overlay, true);
     } else {
-      memberLogout();
+      silentMemberSessionClear();
     }
     return;
   }
