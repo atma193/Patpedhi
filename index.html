@@ -694,6 +694,10 @@ window.addEventListener('DOMContentLoaded', function(){
           </div>
         </div>
       </div>
+      <div id="md-admin-note-card" style="display:none;background:#fdf6e3;border:1px solid #f0d999;border-radius:12px;padding:14px 16px;margin-bottom:16px;">
+        <div style="font-size:12px;font-weight:700;color:#8a6d1f;margin-bottom:5px;">📌 <span data-i18n="txt_admin_note_title">संस्थेकडून सूचना</span></div>
+        <div id="md-admin-note-text" style="font-size:12.5px;color:#5c4a13;line-height:1.6;white-space:pre-line;"></div>
+      </div>
       <div id="md-next-installment-card" style="display:none;align-items:center;gap:14px;border-radius:14px;padding:16px 18px;margin-bottom:16px;">
         <div id="md-next-installment-icon" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">📅</div>
         <div style="flex:1;min-width:0;">
@@ -745,6 +749,11 @@ window.addEventListener('DOMContentLoaded', function(){
           <div style="font-size:22px;margin-bottom:6px;">📄</div>
           <div style="font-size:13px;font-weight:600;" data-i18n="btn_download_statement">Statement डाउनलोड करा</div>
           <div style="font-size:11px;opacity:.75;margin-top:3px;" data-i18n="txt_pdf_statement">PDF स्वरूपात मिळवा</div>
+        </button>
+        <button onclick="openMemberSuggestionModal()" class="quick-btn" style="background:linear-gradient(135deg,#6d28d9,#5b21b6);">
+          <div style="font-size:22px;margin-bottom:6px;">💬</div>
+          <div style="font-size:13px;font-weight:600;" data-i18n="btn_send_suggestion">सूचना पाठवा</div>
+          <div style="font-size:11px;opacity:.75;margin-top:3px;" data-i18n="txt_send_suggestion_sub">Admin ला मेसेज पाठवा</div>
         </button>
       </div>
     </div>
@@ -952,6 +961,38 @@ window.addEventListener('DOMContentLoaded', function(){
         📱 <span data-i18n="btn_open_whatsapp">WhatsApp उघडा व पुढे जा</span>
       </button>
       <button onclick="closeBulkWhatsAppModal()" class="btn btn-ghost" style="width:100%;" data-i18n="btn_close">बंद करा</button>
+    </div>
+  </div>
+</div>
+
+<!-- Member Suggestion / Message to Admin Modal -->
+<div id="member-suggestion-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9997;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;width:100%;max-width:360px;overflow:hidden;">
+    <div style="background:linear-gradient(135deg,#6d28d9,#5b21b6);color:#fff;padding:16px 18px;">
+      <div style="font-size:14px;font-weight:700;">💬 <span data-i18n="txt_send_suggestion_title">Admin ला सूचना / मेसेज पाठवा</span></div>
+      <div style="font-size:11px;color:#e9d5ff;margin-top:3px;" data-i18n="txt_send_suggestion_note">तुमची तक्रार, सूचना किंवा प्रश्न इथे लिहा — ते थेट Admin ला दिसेल</div>
+    </div>
+    <div style="padding:18px;">
+      <textarea id="ms-suggestion-text" rows="5" placeholder="इथे लिहा..." data-i18n-ph="ph_suggestion_here" style="width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;box-sizing:border-box;margin-bottom:6px;"></textarea>
+      <div class="login-error" id="ms-suggestion-error"></div>
+      <div class="login-success" id="ms-suggestion-success"></div>
+
+      <div style="border-top:1px solid #e2e8f0;margin-top:14px;padding-top:14px;">
+        <div style="font-size:11px;font-weight:600;color:#64748b;margin-bottom:8px;" data-i18n="txt_rate_app">App बद्दल Review द्या (ऐच्छिक)</div>
+        <div id="ms-star-rating" style="display:flex;gap:6px;font-size:26px;line-height:1;margin-bottom:4px;">
+          <span class="ms-star" data-val="1" onclick="setAppRating(1)" style="cursor:pointer;color:#e2e8f0;">★</span>
+          <span class="ms-star" data-val="2" onclick="setAppRating(2)" style="cursor:pointer;color:#e2e8f0;">★</span>
+          <span class="ms-star" data-val="3" onclick="setAppRating(3)" style="cursor:pointer;color:#e2e8f0;">★</span>
+          <span class="ms-star" data-val="4" onclick="setAppRating(4)" style="cursor:pointer;color:#e2e8f0;">★</span>
+          <span class="ms-star" data-val="5" onclick="setAppRating(5)" style="cursor:pointer;color:#e2e8f0;">★</span>
+        </div>
+        <div id="ms-rating-label" style="font-size:11px;color:#94a3b8;"></div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:14px;">
+        <button class="btn btn-ghost" onclick="closeMemberSuggestionModal()" style="flex:1;" data-i18n="btn_cancel">रद्द करा</button>
+        <button class="btn" onclick="submitMemberSuggestion()" style="flex:1;background:linear-gradient(135deg,#6d28d9,#5b21b6);color:#fff;">💬 <span data-i18n="btn_send">पाठवा</span></button>
+      </div>
     </div>
   </div>
 </div>
@@ -1603,6 +1644,10 @@ window.addEventListener('DOMContentLoaded', function(){
       <span data-i18n="txt_loan_requests">कर्ज विनंत्या</span>
       <span id="loan-req-badge" style="display:none;position:absolute;top:2px;right:4px;background:#e05252;color:#fff;font-size:9px;font-weight:700;border-radius:9px;padding:1px 5px;min-width:14px;"></span>
     </button>
+    <button id="req-mode-message" onclick="switchRequestsMode('message')" style="flex:1;padding:8px 10px;border:none;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;background:none;color:var(--text2);position:relative;">
+      <span data-i18n="txt_member_messages">सभासद सूचना</span>
+      <span id="msg-req-badge" style="display:none;position:absolute;top:2px;right:4px;background:#e05252;color:#fff;font-size:9px;font-weight:700;border-radius:9px;padding:1px 5px;min-width:14px;"></span>
+    </button>
   </div>
 
   <!-- SIGNUP REQUESTS -->
@@ -1650,6 +1695,30 @@ window.addEventListener('DOMContentLoaded', function(){
       <div id="loan-req-empty" class="empty" style="display:none">
         <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:.3;margin-bottom:8px"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8"/></svg>
         <br><span data-i18n="txt_no_loan_requests">कोणतीही कर्ज विनंती सापडली नाही</span>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- MEMBER MESSAGES / SUGGESTIONS -->
+  <div id="req-message-mode" style="display:none">
+  <div class="card">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr>
+          <th data-i18n="th_sr_no">अ.क्र.</th>
+          <th data-i18n="th_date">दिनांक</th>
+          <th data-i18n="lbl_name">नाव</th>
+          <th data-i18n="th_mobile_short">मोबाईल</th>
+          <th data-i18n="lbl_message">सूचना / मेसेज</th>
+          <th data-i18n="lbl_status">स्थिती</th>
+          <th data-i18n="th_action">क्रिया</th>
+        </tr></thead>
+        <tbody id="msg-req-body"></tbody>
+      </table>
+      <div id="msg-req-empty" class="empty" style="display:none">
+        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:.3;margin-bottom:8px"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        <br><span data-i18n="txt_no_member_messages">कोणतीही सूचना सापडली नाही</span>
       </div>
     </div>
   </div>
@@ -2138,6 +2207,12 @@ window.addEventListener('DOMContentLoaded', function(){
       <div style="font-size:11px;color:#94a3b8;margin-top:3px;" data-i18n="txt_password_blank_no_change">रिकामे ठेवल्यास पासवर्ड बदलणार नाही.</div>
     </div>
 
+    <div style="margin-bottom:6px;">
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:2px;">📝 <span data-i18n="lbl_admin_note">सभासदासाठी सूचना (Admin Note)</span></div>
+      <textarea id="mp-admin-note" rows="3" placeholder="उदा. कृपया आधार कार्डची कॉपी आणून द्या..." data-i18n-ph="ph_admin_note_example" style="width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;box-sizing:border-box;"></textarea>
+      <div style="font-size:11px;color:#94a3b8;margin-top:3px;" data-i18n="txt_admin_note_hint">ही सूचना सभासदाला त्याच्या Home page वर दिसेल. रिकामे ठेवल्यास काही दिसणार नाही.</div>
+    </div>
+
     <div id="mp-error" style="color:#b91c1c;font-size:12px;margin-top:4px;"></div>
 
     <button onclick="saveMemberProfileAdmin()" style="width:100%;margin-top:14px;padding:11px 16px;background:var(--accent,#3a6fd8);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;" data-i18n="btn_save">जतन करा</button>
@@ -2348,6 +2423,16 @@ const translations = {
     btn_view_statement:"Statement पहा", msg_invalid_date_range:"'पासून' तारीख 'पर्यंत' तारखेच्या आधी असावी",
     btn_last_1m:"गेला १ महिना", btn_last_3m:"गेले ३ महिने", btn_last_6m:"गेले ६ महिने", btn_last_1y:"गेलं १ वर्ष",
     btn_full_history:"संपूर्ण इतिहास", txt_or_custom_range:"किंवा स्वतः कालावधी निवडा",
+    lbl_admin_note:"सभासदासाठी सूचना (Admin Note)", ph_admin_note_example:"उदा. कृपया आधार कार्डची कॉपी आणून द्या...",
+    txt_admin_note_hint:"ही सूचना सभासदाला त्याच्या Home page वर दिसेल. रिकामे ठेवल्यास काही दिसणार नाही.",
+    txt_admin_note_title:"संस्थेकडून सूचना",
+    txt_member_messages:"सभासद सूचना", lbl_message:"सूचना / मेसेज", txt_no_member_messages:"कोणतीही सूचना सापडली नाही",
+    txt_read:"वाचलं", txt_new:"नवीन", btn_mark_read:"वाचलं म्हणून चिन्हांकित करा",
+    msg_confirm_delete_message:"ही सूचना कायमची काढायची आहे का?", msg_message_deleted:"सूचना काढली.",
+    btn_send_suggestion:"सूचना पाठवा", txt_send_suggestion_sub:"Admin ला मेसेज पाठवा",
+    txt_send_suggestion_title:"Admin ला सूचना / मेसेज पाठवा", txt_send_suggestion_note:"तुमची तक्रार, सूचना किंवा प्रश्न इथे लिहा — ते थेट Admin ला दिसेल",
+    ph_suggestion_here:"इथे लिहा...", btn_send:"पाठवा",
+    msg_enter_suggestion:"कृपया काहीतरी लिहा", msg_suggestion_sent:"तुमची सूचना Admin ला पाठवली गेली!", txt_rate_app:"App बद्दल Review द्या (ऐच्छिक)",
     txt_total_dand:"एकूण दंड", txt_total_vyaj:"एकूण व्याज", txt_hapta_history_date:"हप्ता इतिहास (दिनांकानुसार)",
     txt_my_profile:"माझी प्रोफाईल", txt_photo_hint:"JPG/PNG, कमाल ५ MB", txt_member_profile:"सभासद प्रोफाइल", txt_password_blank_no_change:"रिकामे ठेवल्यास पासवर्ड बदलणार नाही.",
     exp_pdf_started:"PDF डाउनलोड सुरू झाले!", exp_excel_started:"Excel डाउनलोड सुरू झाले!",
@@ -2605,6 +2690,16 @@ const translations = {
     btn_view_statement:"View Statement", msg_invalid_date_range:"'From' date must be before 'To' date",
     btn_last_1m:"Last 1 month", btn_last_3m:"Last 3 months", btn_last_6m:"Last 6 months", btn_last_1y:"Last 1 year",
     btn_full_history:"Full history", txt_or_custom_range:"Or choose a custom range",
+    lbl_admin_note:"Note for Member (Admin Note)", ph_admin_note_example:"e.g. Please bring a copy of your Aadhaar card...",
+    txt_admin_note_hint:"This note will be shown to the member on their Home page. Leave blank to show nothing.",
+    txt_admin_note_title:"Notice from the Society",
+    txt_member_messages:"Member Suggestions", lbl_message:"Suggestion / Message", txt_no_member_messages:"No messages found",
+    txt_read:"Read", txt_new:"New", btn_mark_read:"Mark as read",
+    msg_confirm_delete_message:"Delete this message permanently?", msg_message_deleted:"Message deleted.",
+    btn_send_suggestion:"Send Suggestion", txt_send_suggestion_sub:"Send a message to Admin",
+    txt_send_suggestion_title:"Send a Suggestion / Message to Admin", txt_send_suggestion_note:"Write your complaint, suggestion or question here — it will be visible directly to the Admin",
+    ph_suggestion_here:"Write here...", btn_send:"Send",
+    msg_enter_suggestion:"Please write something", msg_suggestion_sent:"Your suggestion has been sent to Admin!", txt_rate_app:"Rate the App (optional)",
     txt_total_dand:"Total Penalty", txt_total_vyaj:"Total Interest", txt_hapta_history_date:"Installment History (Date-wise)",
     txt_my_profile:"My Profile", txt_photo_hint:"JPG/PNG, max 5 MB", txt_member_profile:"Member Profile", txt_password_blank_no_change:"Leave blank to keep the password unchanged.",
     exp_pdf_started:"PDF download started!", exp_excel_started:"Excel download started!",
@@ -2892,7 +2987,7 @@ function closeMemberSettingsModal(){
 async function loadMembers(){
   const {data,error} = await sb.from('sabhasad').select('*').order('kram',{ascending:true});
   if(error){ toast(t('msg_data_load_error')+error.message,'warn'); return; }
-  members = (data||[]).map(r=>({id:r.id,kram:r.kram,nav:r.nav,mobile:r.mobile,vatap:r.vatap,date:r.date,hapte:r.hapte||[],karjtype:r.karjtype,guarantor:r.guarantor,photo:r.photo||null,loan_history:r.loan_history||[],blacklist_status:r.blacklist_status||'active',blacklist_reason:r.blacklist_reason||null,blacklist_until:r.blacklist_until||null,blacklisted_at:r.blacklisted_at||null,blacklisted_by:r.blacklisted_by||null}));
+  members = (data||[]).map(r=>({id:r.id,kram:r.kram,nav:r.nav,mobile:r.mobile,vatap:r.vatap,date:r.date,hapte:r.hapte||[],karjtype:r.karjtype,guarantor:r.guarantor,photo:r.photo||null,admin_note:r.admin_note||null,loan_history:r.loan_history||[],blacklist_status:r.blacklist_status||'active',blacklist_reason:r.blacklist_reason||null,blacklist_until:r.blacklist_until||null,blacklisted_at:r.blacklisted_at||null,blacklisted_by:r.blacklisted_by||null}));
   renderHome();
   if(document.getElementById('page-search')?.classList.contains('active')) doSearch();
   if(document.getElementById('page-summary')?.classList.contains('active')) renderSum();
@@ -3035,7 +3130,7 @@ function goPage(id,btn,skipHistory){
   if(id==='home') renderHome();
   if(id==='summary'){populateYears();renderSum();}
   if(id==='search') doSearch();
-  if(id==='requests'){ loadMemberRequests(); loadLoanRequests(); }
+  if(id==='requests'){ loadMemberRequests(); loadLoanRequests(); loadMemberMessages(); }
   if(id==='reports') renderReportsPage();
   if(id==='funds'){
     const dateEl = document.getElementById('fund-date');
@@ -3344,6 +3439,7 @@ function editMemberProfile(idx){
   document.getElementById('mp-name').value = m.nav;
   document.getElementById('mp-mobile').value = m.mobile||'';
   document.getElementById('mp-password').value = '';
+  document.getElementById('mp-admin-note').value = m.admin_note||'';
   document.getElementById('mp-error').textContent = '';
   setMemberAvatarDisplay('mp-photo-preview','mp-photo-placeholder', m.photo);
   document.getElementById('member-profile-modal-overlay').style.display = 'flex';
@@ -3385,12 +3481,13 @@ async function saveMemberProfileAdmin(){
   const nav = document.getElementById('mp-name').value.trim();
   const mobile = document.getElementById('mp-mobile').value.trim();
   const password = document.getElementById('mp-password').value;
+  const adminNote = document.getElementById('mp-admin-note').value.trim();
   const errEl = document.getElementById('mp-error');
   errEl.textContent = '';
   if(!nav){ errEl.textContent = '❌ '+t('msg_enter_member_name'); return; }
   if(password && password.length<6){ errEl.textContent = '❌ '+t('msg_pass_min6'); return; }
 
-  const payload = {nav, mobile};
+  const payload = {nav, mobile, admin_note: adminNote||null};
   if(pendingAdminMemberPhoto) payload.photo = pendingAdminMemberPhoto;
 
   const {error} = await sb.from('sabhasad').update(payload).eq('id',m.id);
@@ -6439,6 +6536,13 @@ function renderMemberDashboard(m){
   if(sideNameEl) sideNameEl.textContent = m.nav;
   document.getElementById('md-welcome-msg').textContent = (getLanguage()==='en' ? 'Hello, ' : 'नमस्कार, ') + m.nav + '! 🙏';
   setMemberAvatarDisplay('md-home-avatar','md-home-avatar-placeholder', m.photo);
+  const noteCard = document.getElementById('md-admin-note-card');
+  if(m.admin_note){
+    noteCard.style.display = 'block';
+    document.getElementById('md-admin-note-text').textContent = m.admin_note;
+  } else {
+    noteCard.style.display = 'none';
+  }
   document.getElementById('md-status-notice').style.display='none';
   document.getElementById('md-approved-content').style.display='block';
   document.getElementById('md-home-summary').style.display='grid';
@@ -6589,6 +6693,54 @@ function confirmMemberStatementDownload(){
   document.getElementById('ledger-to-date').value = toVal;
   closeMemberStatementModal();
   exportLedgerPDF();
+}
+
+let msSelectedRating = 0;
+function setAppRating(n){
+  msSelectedRating = n;
+  renderAppRatingStars();
+}
+function renderAppRatingStars(){
+  const labels = getLanguage()==='en'
+    ? ['','Poor','Fair','Good','Very Good','Excellent']
+    : ['','वाईट','ठीक','चांगलं','खूप चांगलं','उत्तम'];
+  document.querySelectorAll('.ms-star').forEach(el=>{
+    const v = parseInt(el.dataset.val);
+    el.style.color = v<=msSelectedRating ? '#f0b429' : '#e2e8f0';
+  });
+  const labelEl = document.getElementById('ms-rating-label');
+  if(labelEl) labelEl.textContent = msSelectedRating>0 ? (msSelectedRating+' ★ — '+labels[msSelectedRating]) : '';
+}
+
+function openMemberSuggestionModal(){
+  document.getElementById('ms-suggestion-text').value = '';
+  document.getElementById('ms-suggestion-error').textContent = '';
+  document.getElementById('ms-suggestion-success').textContent = '';
+  msSelectedRating = 0;
+  renderAppRatingStars();
+  document.getElementById('member-suggestion-modal').style.display = 'flex';
+}
+function closeMemberSuggestionModal(){
+  document.getElementById('member-suggestion-modal').style.display = 'none';
+}
+async function submitMemberSuggestion(){
+  const text = document.getElementById('ms-suggestion-text').value.trim();
+  const errEl = document.getElementById('ms-suggestion-error');
+  const successEl = document.getElementById('ms-suggestion-success');
+  errEl.textContent = ''; successEl.textContent = '';
+  if(!text && !msSelectedRating){ errEl.textContent = '❌ '+t('msg_enter_suggestion'); return; }
+  if(!currentMemberData){ errEl.textContent = '❌ '+t('err_prefix')+'session'; return; }
+  const {error} = await sb.from('member_messages').insert({
+    sabhasad_id: currentMemberData.id,
+    member_name: currentMemberData.nav,
+    mobile: currentMemberData.mobile||null,
+    message: text||null,
+    rating: msSelectedRating||null,
+    is_read: false
+  });
+  if(error){ errEl.textContent = '❌ '+t('err_prefix')+error.message; return; }
+  successEl.textContent = '✓ '+t('msg_suggestion_sent');
+  setTimeout(()=>{ closeMemberSuggestionModal(); }, 1200);
 }
 
 
@@ -6772,7 +6924,7 @@ async function loadMemberRequests(){
 }
 
 function updateReqBadge(){
-  const pendingCount = memberRequests.filter(r=>r.status==='pending').length + loanRequests.filter(r=>r.status==='pending').length;
+  const pendingCount = memberRequests.filter(r=>r.status==='pending').length + loanRequests.filter(r=>r.status==='pending').length + (typeof memberMessages!=='undefined' ? memberMessages.filter(m=>!m.is_read).length : 0);
   ['req-badge-sidebar','req-badge-popup','req-badge-bottomnav','req-badge-sidebtn','req-badge-mobiletopbar'].forEach(id=>{
     const el = document.getElementById(id);
     if(!el) return;
@@ -6785,22 +6937,91 @@ function updateReqBadge(){
     if(loanPending>0){ loanBadge.textContent=loanPending; loanBadge.style.display='inline-block'; }
     else { loanBadge.style.display='none'; }
   }
+  const msgBadge = document.getElementById('msg-req-badge');
+  const msgUnread = (typeof memberMessages!=='undefined' ? memberMessages.filter(m=>!m.is_read).length : 0);
+  if(msgBadge){
+    if(msgUnread>0){ msgBadge.textContent=msgUnread; msgBadge.style.display='inline-block'; }
+    else { msgBadge.style.display='none'; }
+  }
+}
+
+let memberMessages = [];
+
+async function loadMemberMessages(){
+  try{
+    const {data, error} = await sb.from('member_messages').select('*').order('created_at',{ascending:false});
+    if(error){ console.warn('loadMemberMessages failed (table may not exist yet):', error.message||error); return; }
+    memberMessages = data || [];
+    updateReqBadge();
+    if(document.getElementById('req-message-mode')?.style.display==='block') renderMemberMessages();
+  }catch(e){
+    console.warn('loadMemberMessages exception:', e?.message||e);
+  }
+}
+
+function renderMemberMessages(){
+  const tbody = document.getElementById('msg-req-body');
+  const emptyEl = document.getElementById('msg-req-empty');
+  if(!memberMessages.length){
+    tbody.innerHTML = '';
+    emptyEl.style.display = 'block';
+    return;
+  }
+  emptyEl.style.display = 'none';
+  tbody.innerHTML = memberMessages.map((msg,i)=>{
+    const statusBadge = msg.is_read
+      ? '<span class="badge" style="background:#e2e8f0;color:#475569;">'+t('txt_read')+'</span>'
+      : '<span class="badge badge-amber">'+t('txt_new')+'</span>';
+    const stars = msg.rating ? '<div style="color:#f0b429;font-size:13px;letter-spacing:1px;">'+'★'.repeat(msg.rating)+'<span style="color:#e2e8f0;">'+'★'.repeat(5-msg.rating)+'</span></div>' : '';
+    return `<tr>
+      <td>${i+1}</td>
+      <td>${fmtDate((msg.created_at||'').slice(0,10))}</td>
+      <td style="font-weight:600">${msg.member_name||'—'}</td>
+      <td>${msg.mobile||'—'}</td>
+      <td style="max-width:320px;white-space:pre-line;">${stars}${msg.message||''}</td>
+      <td>${statusBadge}</td>
+      <td style="white-space:nowrap;">
+        ${!msg.is_read ? `<button class="btn-icon" onclick="markMessageRead(${msg.id})" title="${t('btn_mark_read')}">✓</button>` : ''}
+        <button class="btn-icon" onclick="deleteMemberMessage(${msg.id})" title="${t('btn_delete')}">🗑</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+async function markMessageRead(id){
+  const {error} = await sb.from('member_messages').update({is_read:true}).eq('id', id);
+  if(error){ toast(t('err_prefix')+error.message,'warn'); return; }
+  const msg = memberMessages.find(m=>m.id===id);
+  if(msg) msg.is_read = true;
+  renderMemberMessages();
+  updateReqBadge();
+}
+
+async function deleteMemberMessage(id){
+  if(!confirm(t('msg_confirm_delete_message'))) return;
+  const {error} = await sb.from('member_messages').delete().eq('id', id);
+  if(error){ toast(t('err_prefix')+error.message,'warn'); return; }
+  memberMessages = memberMessages.filter(m=>m.id!==id);
+  renderMemberMessages();
+  updateReqBadge();
+  toast('🗑 '+t('msg_message_deleted'));
 }
 
 function switchRequestsMode(mode){
   const signupBtn=document.getElementById('req-mode-signup');
   const loanBtn=document.getElementById('req-mode-loan');
+  const msgBtn=document.getElementById('req-mode-message');
   const signupPane=document.getElementById('req-signup-mode');
   const loanPane=document.getElementById('req-loan-mode');
-  if(mode==='signup'){
-    signupPane.style.display='block'; loanPane.style.display='none';
-    signupBtn.style.background='var(--accent,#3a6fd8)'; signupBtn.style.color='#fff';
-    loanBtn.style.background='none'; loanBtn.style.color='var(--text2)';
-  } else {
-    signupPane.style.display='none'; loanPane.style.display='block';
-    loanBtn.style.background='var(--accent,#3a6fd8)'; loanBtn.style.color='#fff';
-    signupBtn.style.background='none'; signupBtn.style.color='var(--text2)';
-  }
+  const msgPane=document.getElementById('req-message-mode');
+  const panes = {signup:signupPane, loan:loanPane, message:msgPane};
+  const btns = {signup:signupBtn, loan:loanBtn, message:msgBtn};
+  Object.keys(panes).forEach(k=>{
+    panes[k].style.display = (k===mode) ? 'block' : 'none';
+    btns[k].style.background = (k===mode) ? 'var(--accent,#3a6fd8)' : 'none';
+    btns[k].style.color = (k===mode) ? '#fff' : 'var(--text2)';
+  });
+  if(mode==='message') renderMemberMessages();
 }
 
 async function loadLoanRequests(){
@@ -7065,6 +7286,7 @@ window.addEventListener('DOMContentLoaded', function(){
   if(sessionStorage.getItem('pp_auth')==='true'){
     loadMembers();
     loadMemberRequests();
+    loadMemberMessages();
     // Restore last-open page after refresh (instead of always jumping to home)
     const validPages = ['home','entry','hapta','summary','requests','reports','ledger','funds'];
     const hashPage = (location.hash||'').replace('#','');
