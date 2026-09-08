@@ -178,6 +178,7 @@ body.dark-mode .member-content input:not([type="range"]){background:var(--bg2)!i
   .member-sidebar-logout:hover{background:rgba(255,255,255,.08)}
   .member-main{margin-left:200px}
   .member-topbar-wrap{display:none!important}
+  .member-content{max-width:1200px!important;}
 }
 .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#0f172a;border-top:1px solid rgba(212,160,23,.25);z-index:100;padding:7px 4px calc(7px + env(safe-area-inset-bottom));box-shadow:0 -2px 4px rgba(0,0,0,.15),0 -10px 24px rgba(0,0,0,.22)}
 .bottom-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;color:#8b95a8;font-size:10px;font-weight:500;padding:6px 2px;border-radius:12px;cursor:pointer;position:relative;transition:color .18s ease,transform .12s ease}
@@ -676,9 +677,36 @@ window.addEventListener('DOMContentLoaded', function(){
     <!-- PAGE: HOME -->
     <div id="md-page-home">
       <div style="background:linear-gradient(135deg,#1a2540,#2a3a5c);color:#fff;border-radius:14px;padding:22px 18px;margin-bottom:16px;">
-        <div style="font-size:12px;color:#e2b65a;margin-bottom:4px;" data-i18n="txt_devata_bhairi">॥ श्री भैरी देव प्रसन्न ॥</div>
-        <div id="md-welcome-msg" style="font-size:17px;font-weight:700;margin-bottom:6px;"></div>
-        <div style="font-size:12px;color:#d6def0;line-height:1.5;" data-i18n="txt_md_welcome_body">अबगुलवाडी नवतरुण ग्रामविकास मंडळ पतपेढीमध्ये आपले स्वागत आहे. तुमची कर्ज व हप्त्याची माहिती "तपशील" टॅबमध्ये बघता येईल.</div>
+        <div style="font-size:12px;color:#e2b65a;margin-bottom:12px;" data-i18n="txt_devata_bhairi">॥ श्री भैरी देव प्रसन्न ॥</div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="position:relative;width:56px;height:56px;flex-shrink:0;">
+            <img id="md-home-avatar" src="" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid rgba(226,182,90,.5);display:none;">
+            <div id="md-home-avatar-placeholder" style="width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid rgba(226,182,90,.5);display:flex;align-items:center;justify-content:center;">
+              <svg width="26" height="26" fill="none" stroke="#e2b65a" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+            </div>
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div id="md-welcome-msg" style="font-size:17px;font-weight:700;margin-bottom:2px;"></div>
+            <div style="font-size:12px;color:#d6def0;line-height:1.5;" data-i18n="txt_md_welcome_body">अबगुलवाडी नवतरुण ग्रामविकास मंडळ पतपेढीमध्ये आपले स्वागत आहे. तुमची कर्ज व हप्त्याची माहिती "तपशील" टॅबमध्ये बघता येईल.</div>
+          </div>
+        </div>
+      </div>
+      <div id="md-next-installment-card" style="display:none;align-items:center;gap:14px;border-radius:14px;padding:16px 18px;margin-bottom:16px;">
+        <div id="md-next-installment-icon" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">📅</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:11px;opacity:.85;margin-bottom:2px;" data-i18n="txt_next_installment">पुढचा हप्ता</div>
+          <div id="md-next-installment-text" style="font-size:15px;font-weight:700;"></div>
+        </div>
+      </div>
+      <div id="md-progress-card" style="display:none;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:16px 18px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:12px;font-weight:700;color:#1a2540;" data-i18n="txt_repayment_progress">कर्ज परतफेड प्रगती</span>
+          <span id="md-progress-pct" style="font-size:15px;font-weight:800;color:#16a34a;"></span>
+        </div>
+        <div style="height:10px;background:#e8eaf0;border-radius:6px;overflow:hidden;">
+          <div id="md-progress-fill" style="height:100%;background:linear-gradient(90deg,#3a6fd8,#16a34a);border-radius:6px;transition:width .5s;width:0%;"></div>
+        </div>
+        <div id="md-progress-note" style="font-size:11px;color:#64748b;margin-top:6px;"></div>
       </div>
       <div id="md-overdue-notice" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:14px 16px;margin-bottom:16px;">
         <div style="font-size:13px;font-weight:700;color:#b91c1c;margin-bottom:6px;">⚠️ <span data-i18n="txt_overdue_notice">हप्ता विलंब सूचना</span></div>
@@ -697,6 +725,24 @@ window.addEventListener('DOMContentLoaded', function(){
           <div style="font-size:11px;color:#64748b;" data-i18n="th_shillak">शिल्लक</div>
           <div id="md-home-shillak" style="font-size:18px;font-weight:700;color:#dc2626;"></div>
         </div>
+      </div>
+      <div style="font-size:10px;font-weight:600;color:#64748b;letter-spacing:.09em;text-transform:uppercase;margin:18px 0 10px;">⚡ <span data-i18n="txt_quick_actions">त्वरित कार्य</span></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:11px;">
+        <button onclick="goMemberPage('details')" class="quick-btn" style="background:linear-gradient(135deg,#1e40af,#1e3a8a);">
+          <div style="font-size:22px;margin-bottom:6px;">📋</div>
+          <div style="font-size:13px;font-weight:600;" data-i18n="nav_details">तपशील</div>
+          <div style="font-size:11px;opacity:.75;margin-top:3px;" data-i18n="txt_view_hapta_history">हप्ता इतिहास पहा</div>
+        </button>
+        <button onclick="goMemberPage('loanreq')" class="quick-btn" style="background:linear-gradient(135deg,#92400e,#78350f);">
+          <div style="font-size:22px;margin-bottom:6px;">🏦</div>
+          <div style="font-size:13px;font-weight:600;" data-i18n="nav_loanreq">कर्ज विनंती</div>
+          <div style="font-size:11px;opacity:.75;margin-top:3px;" data-i18n="txt_new_loan_request">नवीन कर्जासाठी विनंती</div>
+        </button>
+        <button onclick="downloadMyStatement()" class="quick-btn" style="background:linear-gradient(135deg,#166534,#14532d);">
+          <div style="font-size:22px;margin-bottom:6px;">📄</div>
+          <div style="font-size:13px;font-weight:600;" data-i18n="btn_download_statement">Statement डाउनलोड करा</div>
+          <div style="font-size:11px;opacity:.75;margin-top:3px;" data-i18n="txt_pdf_statement">PDF स्वरूपात मिळवा</div>
+        </button>
       </div>
     </div>
 
@@ -2241,6 +2287,8 @@ const translations = {
     txt_hapta_history:"हप्ता इतिहास", th_delay:"विलंब", btn_edit:"संपादन करा", btn_delete_record:"नोंद काढा",
     txt_md_welcome_body:"अबगुलवाडी नवतरुण ग्रामविकास मंडळ पतपेढीमध्ये आपले स्वागत आहे. तुमची कर्ज व हप्त्याची माहिती \"तपशील\" टॅबमध्ये बघता येईल.",
     txt_overdue_notice:"हप्ता विलंब सूचना", txt_total_loan_taken:"एकूण कर्ज घेतले",
+    txt_next_installment:"पुढचा हप्ता", m_est_amount:"अंदाजे", txt_repayment_progress:"कर्ज परतफेड प्रगती",
+    txt_view_hapta_history:"हप्ता इतिहास पहा", txt_new_loan_request:"नवीन कर्जासाठी विनंती", txt_pdf_statement:"PDF स्वरूपात मिळवा",
     txt_total_dand:"एकूण दंड", txt_total_vyaj:"एकूण व्याज", txt_hapta_history_date:"हप्ता इतिहास (दिनांकानुसार)",
     txt_my_profile:"माझी प्रोफाईल", txt_photo_hint:"JPG/PNG, कमाल ५ MB", txt_member_profile:"सभासद प्रोफाइल", txt_password_blank_no_change:"रिकामे ठेवल्यास पासवर्ड बदलणार नाही.",
     exp_pdf_started:"PDF डाउनलोड सुरू झाले!", exp_excel_started:"Excel डाउनलोड सुरू झाले!",
@@ -2490,6 +2538,8 @@ const translations = {
     txt_hapta_history:"Installment History", th_delay:"Delay", btn_edit:"Edit", btn_delete_record:"Delete Record",
     txt_md_welcome_body:"Welcome to Abgulwadi Navtarun Gramvikas Mandal Credit Society. You can view your loan and installment details in the \"Details\" tab.",
     txt_overdue_notice:"Installment Delay Notice", txt_total_loan_taken:"Total Loan Taken",
+    txt_next_installment:"Next Installment", m_est_amount:"Est.", txt_repayment_progress:"Loan Repayment Progress",
+    txt_view_hapta_history:"View installment history", txt_new_loan_request:"Request a new loan", txt_pdf_statement:"Get as PDF",
     txt_total_dand:"Total Penalty", txt_total_vyaj:"Total Interest", txt_hapta_history_date:"Installment History (Date-wise)",
     txt_my_profile:"My Profile", txt_photo_hint:"JPG/PNG, max 5 MB", txt_member_profile:"Member Profile", txt_password_blank_no_change:"Leave blank to keep the password unchanged.",
     exp_pdf_started:"PDF download started!", exp_excel_started:"Excel download started!",
@@ -6173,6 +6223,28 @@ function notifyMemberDueSoon(m){
   }
 }
 
+function computeNextInstallmentInfo(m){
+  const hapte = m.hapte||[];
+  const haptaTotal = hapte.reduce((s,h)=>s+(h.hapta||0),0);
+  const shillak = Math.max(0,(m.vatap||0)-haptaTotal);
+  if(shillak<=0) return null; // कर्ज फेडले आहे
+  let lastMonthNum = null;
+  hapte.forEach(h=>{
+    const n = ymToNum(h.mahina);
+    if(n!==null && (lastMonthNum===null || n>lastMonthNum)) lastMonthNum = n;
+  });
+  if(lastMonthNum===null && m.date) lastMonthNum = ymToNum(m.date.slice(0,7));
+  if(lastMonthNum===null) return null;
+  const nextMonthNum = lastMonthNum + 1;
+  const y = Math.floor(nextMonthNum/12), mo = (nextMonthNum%12)+1;
+  const nextYm = y + '-' + String(mo).padStart(2,'0');
+  const validHaptas = hapte.filter(h=>h.hapta>0).map(h=>h.hapta);
+  const estHapta = validHaptas.length ? (validHaptas.reduce((s,v)=>s+v,0)/validHaptas.length) : 0;
+  const today = new Date();
+  const curMonthNum = today.getFullYear()*12+today.getMonth();
+  return {nextYm, estHapta, isOverdue: nextMonthNum < curMonthNum, isDueThisMonth: nextMonthNum === curMonthNum};
+}
+
 function computeMemberOverdue(m){
   const hapte = m.hapte||[];
   const haptaTotal = hapte.reduce((s,h)=>s+(h.hapta||0),0);
@@ -6203,6 +6275,7 @@ function renderMemberDashboard(m){
   const sideNameEl = document.getElementById('md-side-name');
   if(sideNameEl) sideNameEl.textContent = m.nav;
   document.getElementById('md-welcome-msg').textContent = (getLanguage()==='en' ? 'Hello, ' : 'नमस्कार, ') + m.nav + '! 🙏';
+  setMemberAvatarDisplay('md-home-avatar','md-home-avatar-placeholder', m.photo);
   document.getElementById('md-status-notice').style.display='none';
   document.getElementById('md-approved-content').style.display='block';
   document.getElementById('md-home-summary').style.display='grid';
@@ -6217,8 +6290,36 @@ function renderMemberDashboard(m){
   document.getElementById('md-dand').textContent = fmt(dandTotal);
   document.getElementById('md-vyaj').textContent = fmt(vyajTotal);
   const shillakVal = Math.max(0,(m.vatap||0)-haptaTotal);
+  const progressCard = document.getElementById('md-progress-card');
+  if(m.vatap>0){
+    progressCard.style.display = 'block';
+    const pct = Math.min(100, Math.round((haptaTotal/m.vatap)*100));
+    document.getElementById('md-progress-fill').style.width = pct+'%';
+    document.getElementById('md-progress-pct').textContent = pct+'%';
+    document.getElementById('md-progress-note').textContent = shillakVal<=0
+      ? (getLanguage()==='en' ? '🎉 Loan fully repaid!' : '🎉 अभिनंदन! कर्ज पूर्ण फेडलं आहे.')
+      : fmt(haptaTotal)+' / '+fmt(m.vatap)+' '+(getLanguage()==='en' ? 'repaid' : 'भरलं');
+  } else {
+    progressCard.style.display = 'none';
+  }
   document.getElementById('md-shillak').textContent = fmt(shillakVal);
   document.getElementById('md-home-shillak').textContent = fmt(shillakVal);
+  const nextInst = computeNextInstallmentInfo(m);
+  const nextCard = document.getElementById('md-next-installment-card');
+  if(nextInst){
+    nextCard.style.display = 'flex';
+    document.getElementById('md-next-installment-icon').textContent = nextInst.isOverdue ? '⚠️' : '📅';
+    const monthLbl = fmtMonthLabel(nextInst.nextYm);
+    const dueTxt = nextInst.isOverdue ? (getLanguage()==='en'?' (Overdue)':' (विलंबित)') : nextInst.isDueThisMonth ? (getLanguage()==='en'?' (Due now)':' (या महिन्यात)') : '';
+    document.getElementById('md-next-installment-text').textContent = monthLbl + ' · ' + t('m_est_amount') + ' ' + fmt(nextInst.estHapta) + dueTxt;
+    if(nextInst.isOverdue){
+      nextCard.style.background = 'linear-gradient(135deg,#b91c1c,#dc2626)'; nextCard.style.color='#fff';
+    } else {
+      nextCard.style.background = 'linear-gradient(135deg,#0f766e,#0d9488)'; nextCard.style.color='#fff';
+    }
+  } else {
+    nextCard.style.display = 'none';
+  }
   const overdue = computeMemberOverdue(m);
   const overdueNotice = document.getElementById('md-overdue-notice');
   const overdueText = document.getElementById('md-overdue-text');
