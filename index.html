@@ -178,7 +178,7 @@ body.dark-mode .member-content input:not([type="range"]){background:var(--bg2)!i
   .member-sidebar-logout:hover{background:rgba(255,255,255,.08)}
   .member-main{margin-left:200px}
   .member-topbar-wrap{display:none!important}
-  .member-content{max-width:1200px!important;}
+  .member-content{max-width:1200px!important;margin:0!important;}
 }
 .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#0f172a;border-top:1px solid rgba(212,160,23,.25);z-index:100;padding:7px 4px calc(7px + env(safe-area-inset-bottom));box-shadow:0 -2px 4px rgba(0,0,0,.15),0 -10px 24px rgba(0,0,0,.22)}
 .bottom-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;color:#8b95a8;font-size:10px;font-weight:500;padding:6px 2px;border-radius:12px;cursor:pointer;position:relative;transition:color .18s ease,transform .12s ease}
@@ -443,6 +443,9 @@ table td input:focus{background:rgba(79,127,255,.08);border-radius:4px}
 .login-sub{font-size:11px;color:#94a3b8;text-align:center;margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid rgba(212,160,23,.15);}
 .login-devata{font-family:"Tiro Devanagari Marathi",serif;font-size:12px;color:rgba(212,160,23,.8);text-align:center;margin-bottom:16px;}
 .login-field{margin-bottom:13px;}
+.ms-preset-btn{padding:8px 14px;border-radius:20px;border:1.5px solid #e2e8f0;background:#fff;color:#334155;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;}
+.ms-preset-btn:hover{border-color:#1a2540;}
+.ms-preset-btn.active{background:#1a2540;border-color:#1a2540;color:#f3d98a;}
 .login-field label{display:block;font-size:12px;color:#94a3b8;margin-bottom:5px;font-weight:500;}
 .login-field input{width:100%;padding:10px 14px;background:#0f172a;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#ffffff;font-size:13px;outline:none;box-sizing:border-box;transition:border .2s,box-shadow .2s;box-shadow:inset 0 1px 3px rgba(0,0,0,.3);}
 .login-field input:focus{border-color:rgba(212,160,23,.7);box-shadow:inset 0 1px 3px rgba(0,0,0,.3),0 0 0 3px rgba(212,160,23,.15);}
@@ -903,7 +906,55 @@ window.addEventListener('DOMContentLoaded', function(){
   </nav>
 </div>
 
+<!-- Member Statement Period Selection Modal -->
+<div id="member-statement-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9997;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;width:100%;max-width:360px;overflow:hidden;">
+    <div style="background:linear-gradient(135deg,#1a2540,#2a3a5c);color:#fff;padding:16px 18px;">
+      <div style="font-size:14px;font-weight:700;">📄 <span data-i18n="txt_statement_period_title">Statement कालावधी निवडा</span></div>
+      <div style="font-size:11px;color:#d6def0;margin-top:3px;" data-i18n="txt_statement_period_note">रिकामे ठेवल्यास संपूर्ण इतिहासाचं statement मिळेल</div>
+    </div>
+    <div style="padding:18px;">
+      <div id="ms-preset-row" style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px;">
+        <button class="ms-preset-btn" onclick="setStatementPreset(1,this)" data-i18n="btn_last_1m">गेला १ महिना</button>
+        <button class="ms-preset-btn" onclick="setStatementPreset(3,this)" data-i18n="btn_last_3m">गेले ३ महिने</button>
+        <button class="ms-preset-btn" onclick="setStatementPreset(6,this)" data-i18n="btn_last_6m">गेले ६ महिने</button>
+        <button class="ms-preset-btn" onclick="setStatementPreset(12,this)" data-i18n="btn_last_1y">गेलं १ वर्ष</button>
+        <button class="ms-preset-btn" onclick="setStatementPreset(0,this)" data-i18n="btn_full_history">संपूर्ण इतिहास</button>
+      </div>
+      <div style="font-size:10px;font-weight:600;color:#94a3b8;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;" data-i18n="txt_or_custom_range">किंवा स्वतः कालावधी निवडा</div>
+      <div class="login-field" style="margin-bottom:12px;">
+        <label data-i18n="lbl_from_date">पासून तारीख</label>
+        <input type="date" id="ms-from-date" onchange="clearStatementPresetHighlight()" style="width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;box-sizing:border-box;">
+      </div>
+      <div class="login-field" style="margin-bottom:16px;">
+        <label data-i18n="lbl_to_date">पर्यंत तारीख</label>
+        <input type="date" id="ms-to-date" onchange="clearStatementPresetHighlight()" style="width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;box-sizing:border-box;">
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-ghost" onclick="closeMemberStatementModal()" style="flex:1;" data-i18n="btn_cancel">रद्द करा</button>
+        <button class="btn" onclick="confirmMemberStatementDownload()" style="flex:1;background:linear-gradient(135deg,#1a2540,#2a3a5c);color:#fff;">📄 <span data-i18n="btn_view_statement">Statement पहा</span></button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Bulk WhatsApp Reminder Wizard Modal -->
+<div id="bulk-whatsapp-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:14px;max-width:380px;width:100%;overflow:hidden;">
+    <div style="background:#25D366;color:#fff;padding:14px 18px;">
+      <div style="font-size:14px;font-weight:700;">📱 <span data-i18n="txt_bulk_whatsapp_title">बल्क WhatsApp पाठवा</span></div>
+      <div id="bulk-wa-progress" style="font-size:11px;opacity:.9;margin-top:2px;"></div>
+    </div>
+    <div style="padding:24px 20px;text-align:center;">
+      <div id="bulk-wa-current-name" style="font-size:17px;font-weight:700;color:#1a2540;margin-bottom:4px;"></div>
+      <div id="bulk-wa-current-mobile" style="font-size:12px;color:#64748b;margin-bottom:22px;"></div>
+      <button id="bulk-wa-send-btn" onclick="bulkWhatsAppSendCurrent()" style="width:100%;background:#25D366;color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;">
+        📱 <span data-i18n="btn_open_whatsapp">WhatsApp उघडा व पुढे जा</span>
+      </button>
+      <button onclick="closeBulkWhatsAppModal()" class="btn btn-ghost" style="width:100%;" data-i18n="btn_close">बंद करा</button>
+    </div>
+  </div>
+</div>
 
 <button class="hamburger-btn" onclick="toggleSidebar()" aria-label="मेनू उघडा">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
@@ -1445,6 +1496,9 @@ window.addEventListener('DOMContentLoaded', function(){
     <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;">
       <button id="export-selected-btn" class="btn btn-ghost" onclick="exportSelectedRows()" style="display:none;border-color:var(--accent,#3a6fd8);color:var(--accent,#3a6fd8);">
         ☑️ <span data-i18n="btn_export_selected">निवडलेले एक्सपोर्ट करा</span> (<span id="export-selected-count">0</span>)
+      </button>
+      <button id="bulk-whatsapp-btn" class="btn" onclick="startBulkWhatsAppReminders()" style="display:none;background:#25D366;color:#fff;">
+        📱 <span data-i18n="btn_bulk_whatsapp">निवडलेल्यांना WhatsApp पाठवा</span> (<span id="bulk-whatsapp-count">0</span>)
       </button>
       <div class="download-dropdown">
 
@@ -2147,7 +2201,7 @@ window.addEventListener('DOMContentLoaded', function(){
 
 <!-- Receipt / Document Preview Modal -->
 <div id="pdf-preview-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;align-items:center;justify-content:center;padding:20px;">
-  <div style="background:#e5e7eb;border-radius:14px;width:100%;max-width:520px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;">
+  <div id="pdf-preview-modal-box" style="background:#e5e7eb;border-radius:14px;width:100%;max-width:520px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;">
     <div style="background:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e2e8f0;">
       <div style="font-size:14px;font-weight:700;color:#1a2540;" id="pdf-preview-title">🧾 <span data-i18n="txt_receipt_preview">पावती पहा</span></div>
       <button onclick="closePdfPreview()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#64748b;line-height:1;">✕</button>
@@ -2289,6 +2343,11 @@ const translations = {
     txt_overdue_notice:"हप्ता विलंब सूचना", txt_total_loan_taken:"एकूण कर्ज घेतले",
     txt_next_installment:"पुढचा हप्ता", m_est_amount:"अंदाजे", txt_repayment_progress:"कर्ज परतफेड प्रगती",
     txt_view_hapta_history:"हप्ता इतिहास पहा", txt_new_loan_request:"नवीन कर्जासाठी विनंती", txt_pdf_statement:"PDF स्वरूपात मिळवा",
+    txt_statement_period_title:"Statement कालावधी निवडा", txt_statement_period_note:"रिकामे ठेवल्यास संपूर्ण इतिहासाचं statement मिळेल",
+    lbl_from_date:"पासून तारीख", lbl_to_date:"पर्यंत तारीख", btn_clear_dates:"तारखा साफ करा (संपूर्ण इतिहास)",
+    btn_view_statement:"Statement पहा", msg_invalid_date_range:"'पासून' तारीख 'पर्यंत' तारखेच्या आधी असावी",
+    btn_last_1m:"गेला १ महिना", btn_last_3m:"गेले ३ महिने", btn_last_6m:"गेले ६ महिने", btn_last_1y:"गेलं १ वर्ष",
+    btn_full_history:"संपूर्ण इतिहास", txt_or_custom_range:"किंवा स्वतः कालावधी निवडा",
     txt_total_dand:"एकूण दंड", txt_total_vyaj:"एकूण व्याज", txt_hapta_history_date:"हप्ता इतिहास (दिनांकानुसार)",
     txt_my_profile:"माझी प्रोफाईल", txt_photo_hint:"JPG/PNG, कमाल ५ MB", txt_member_profile:"सभासद प्रोफाइल", txt_password_blank_no_change:"रिकामे ठेवल्यास पासवर्ड बदलणार नाही.",
     exp_pdf_started:"PDF डाउनलोड सुरू झाले!", exp_excel_started:"Excel डाउनलोड सुरू झाले!",
@@ -2313,7 +2372,7 @@ const translations = {
     msg_saved_bang:"जतन झाले!", msg_photo_size:"फोटो ५ MB पेक्षा लहान असावा",
     err_prefix:"त्रुटी: ", msg_request_approved:"ची विनंती मंजूर झाली!",
     msg_add_member_error:"सभासद जोडताना त्रुटी: ",
-    msg_added_as_new_member_pre:"नवीन सभासद (अ.क्र. ", msg_added_as_new_member_post:") म्हणून जोडले व विनंती मंजूर झाली!",
+    msg_added_as_new_member_pre:"नवीन सभासद ", msg_added_as_new_member_post:" म्हणून जोडले व विनंती मंजूर झाली!",
     msg_request_rejected_toast:"विनंती नाकारली.", msg_request_updated:"विनंती अद्यतन झाली!",
     msg_request_deleted:"विनंती काढली.",
     msg_request_rejected_contact:"तुमची विनंती नाकारली गेली आहे. अधिक माहितीसाठी कार्यालयाशी संपर्क साधा.",
@@ -2344,7 +2403,8 @@ const translations = {
     txt_overdue_final_note:"अंतिम रक्कम हप्ता भरताना पतपेढी कार्यालयात निश्चित होईल",
     txt_overdue_pay_soon:"कृपया लवकरात लवकर हप्ता भरा 🙏",
     txt_no_record:"कोणतीही नोंद नाही", txt_no_member_found:"कोणताही सभासद सापडला नाही",
-    txt_no_mobile:"मोबाईल नाही", txt_link_arrow:"लिंक करा →",
+    txt_no_mobile:"मोबाईल नाही", txt_link_arrow:"लिंक करा →", btn_whatsapp_reminder:"WhatsApp स्मरणपत्र पाठवा",
+    btn_bulk_whatsapp:"निवडलेल्यांना WhatsApp पाठवा", txt_bulk_whatsapp_title:"बल्क WhatsApp पाठवा", btn_open_whatsapp:"WhatsApp उघडा व पुढे जा",
     txt_greeting_default:"नमस्कार! 🙏", txt_no_one_found:"कोणीही सापडले नाही",
     txt_thakit_estimate:"थकीत अंदाज",
     btn_backup:"डेटा Backup घ्या", msg_backup_starting:"Backup तयार होत आहे...",
@@ -2540,6 +2600,11 @@ const translations = {
     txt_overdue_notice:"Installment Delay Notice", txt_total_loan_taken:"Total Loan Taken",
     txt_next_installment:"Next Installment", m_est_amount:"Est.", txt_repayment_progress:"Loan Repayment Progress",
     txt_view_hapta_history:"View installment history", txt_new_loan_request:"Request a new loan", txt_pdf_statement:"Get as PDF",
+    txt_statement_period_title:"Select Statement Period", txt_statement_period_note:"Leave blank for your complete history",
+    lbl_from_date:"From date", lbl_to_date:"To date", btn_clear_dates:"Clear dates (full history)",
+    btn_view_statement:"View Statement", msg_invalid_date_range:"'From' date must be before 'To' date",
+    btn_last_1m:"Last 1 month", btn_last_3m:"Last 3 months", btn_last_6m:"Last 6 months", btn_last_1y:"Last 1 year",
+    btn_full_history:"Full history", txt_or_custom_range:"Or choose a custom range",
     txt_total_dand:"Total Penalty", txt_total_vyaj:"Total Interest", txt_hapta_history_date:"Installment History (Date-wise)",
     txt_my_profile:"My Profile", txt_photo_hint:"JPG/PNG, max 5 MB", txt_member_profile:"Member Profile", txt_password_blank_no_change:"Leave blank to keep the password unchanged.",
     exp_pdf_started:"PDF download started!", exp_excel_started:"Excel download started!",
@@ -2564,7 +2629,7 @@ const translations = {
     msg_saved_bang:"installments saved!", msg_photo_size:"Photo should be under 5 MB",
     err_prefix:"Error: ", msg_request_approved:"'s request approved!",
     msg_add_member_error:"Error adding member: ",
-    msg_added_as_new_member_pre:"added as new member (Sr. No. ", msg_added_as_new_member_post:") and request approved!",
+    msg_added_as_new_member_pre:"added as new member ", msg_added_as_new_member_post:"and request approved!",
     msg_request_rejected_toast:"Request rejected.", msg_request_updated:"Request updated!",
     msg_request_deleted:"Request deleted.",
     msg_request_rejected_contact:"Your request has been rejected. Please contact the office for more information.",
@@ -2595,7 +2660,8 @@ const translations = {
     txt_overdue_final_note:"The final amount will be confirmed at the office when you pay",
     txt_overdue_pay_soon:"Please pay your installment as soon as possible 🙏",
     txt_no_record:"No records", txt_no_member_found:"No member found",
-    txt_no_mobile:"No mobile", txt_link_arrow:"Link →",
+    txt_no_mobile:"No mobile", txt_link_arrow:"Link →", btn_whatsapp_reminder:"Send WhatsApp Reminder",
+    btn_bulk_whatsapp:"Send WhatsApp to Selected", txt_bulk_whatsapp_title:"Bulk WhatsApp Send", btn_open_whatsapp:"Open WhatsApp & Next",
     txt_greeting_default:"Hello! 🙏", txt_no_one_found:"No one found",
     txt_thakit_estimate:"Estimated Outstanding",
     btn_backup:"Download Data Backup", msg_backup_starting:"Preparing backup...",
@@ -2768,6 +2834,12 @@ function setLanguage(lang){
   try{ localStorage.setItem('appLang', lang); }catch(e){}
   try{ if(typeof updateVyajRateLabels==='function') updateVyajRateLabels(); }catch(e){}
   try{ if(typeof members!=='undefined' && members.length && typeof renderHome==='function') renderHome(); }catch(e){}
+  // Dynamically-generated content (built via JS, not plain data-i18n labels) needs a re-render
+  try{
+    if(sessionStorage.getItem('pp_member_auth')==='true' && currentMemberData){
+      renderMemberDashboard(currentMemberData);
+    }
+  }catch(e){}
 }
 
 function toggleLanguage(){
@@ -3119,7 +3191,7 @@ async function saveEntry(){
     document.getElementById('e-nav').dataset.editId='';
     document.getElementById('e-nav').dataset.editIdx='';
     logActivity('member_profile_edit', nav, 'अ.क्र. '+existing.kram+(password?' (पासवर्डसह)':''));
-    toast('✓ '+t('th_sr_no')+' '+existing.kram+' — '+nav+' '+t('msg_record_updated'));
+    toast('✓ '+nav+' '+t('msg_record_updated'));
   } else {
     const maxKram = members.length > 0 ? Math.max(...members.map(m=>m.kram)) : 0;
     const kram = maxKram + 1;
@@ -3132,7 +3204,7 @@ async function saveEntry(){
       if(reqErr){ toast(t('err_prefix')+reqErr.message,'warn'); }
     }
     logActivity('member_add', nav, 'अ.क्र. '+kram);
-    toast('✓ '+t('th_sr_no')+' '+kram+' — '+nav+' '+t('msg_record_saved'));
+    toast('✓ '+nav+' '+t('msg_record_saved'));
   }
   resetEntry();
 }
@@ -3161,7 +3233,7 @@ function doSearch(){
     const blacklistTag=isBlacklisted(m)?`<span style="font-size:10px;color:#fff;background:#450a0a;font-weight:700;margin-left:7px;padding:2px 7px;border-radius:8px;white-space:nowrap;">🚫 ${t('txt_blacklisted_badge')}</span>`:'';
     const overdueLine=overdue?`<div style="font-size:11px;color:#b91c1c;margin-top:4px;background:#fef2f2;border:1px solid #fecaca;border-radius:7px;padding:5px 8px;">⚠️ ${t('txt_thakit_estimate')}: ${t('th_hapta')} ${fmt(overdue.estPendingAmt)} &nbsp;|&nbsp; ${t('th_dand')} ${fmt(overdue.estDand)} &nbsp;|&nbsp; ${t('th_vyaj')} ${fmt(overdue.estVyaj)}</div>`:'';
     const div=document.createElement('div');div.className='s-card';
-    div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;"><div style="font-weight:600;font-size:14px;color:var(--text)"><span style="font-size:12px;font-weight:500;color:var(--text3);margin-right:6px;">${t('th_sr_no')} ${m.kram}</span>${m.nav}${overdueTag}${blacklistTag}</div>${badge}</div><div style="font-size:12px;color:var(--text2);margin-bottom:7px;">${m.mobile ? '📱 '+m.mobile+' &nbsp;|&nbsp; ' : ''}${t('exp_loan_short')}: ${fmt(m.vatap)} &nbsp;|&nbsp; ${t('th_shillak')}: ${fmt(sh)} &nbsp;|&nbsp; ${t('exp_repayment')}: ${p}%</div><div class="progress"><div class="progress-fill" style="width:${Math.min(100,p)}%"></div></div>${overdueLine}`;
+    div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;"><div style="font-weight:600;font-size:14px;color:var(--text)"><span style="font-size:12px;font-weight:500;color:var(--text3);margin-right:6px;">${m.kram}.</span>${m.nav}${overdueTag}${blacklistTag}</div>${badge}</div><div style="font-size:12px;color:var(--text2);margin-bottom:7px;">${m.mobile ? '📱 '+m.mobile+' &nbsp;|&nbsp; ' : ''}${t('exp_loan_short')}: ${fmt(m.vatap)} &nbsp;|&nbsp; ${t('th_shillak')}: ${fmt(sh)} &nbsp;|&nbsp; ${t('exp_repayment')}: ${p}%</div><div class="progress"><div class="progress-fill" style="width:${Math.min(100,p)}%"></div></div>${overdueLine}`;
     div.onclick=()=>openDrawer(members.indexOf(m));
     res.appendChild(div);
   });
@@ -3171,7 +3243,7 @@ function doSearch(){
 function openDrawer(idx){
   currentIdx=idx;const m=members[idx];
   document.getElementById('dr-name').textContent=m.nav;
-  document.getElementById('dr-sub').textContent='अ. क्र. '+m.kram+' | कर्ज दिनांक: '+fmtDate(m.date);
+  document.getElementById('dr-sub').textContent='कर्ज दिनांक: '+fmtDate(m.date);
   const tK=m.hapte.reduce((s,h)=>s+h.hapta,0);
   const tD=m.hapte.reduce((s,h)=>s+h.dand,0);
   const tV=m.hapte.reduce((s,h)=>s+h.vyaj,0);
@@ -3191,6 +3263,10 @@ function openDrawer(idx){
         <div><div style="font-size:10px;color:#7f1d1d;">${t('th_dand')}</div><div style="font-size:14px;font-weight:700;color:#b91c1c;">${fmt(overdue.estDand)}</div></div>
         <div><div style="font-size:10px;color:#7f1d1d;">${t('th_vyaj')}</div><div style="font-size:14px;font-weight:700;color:#b91c1c;">${fmt(overdue.estVyaj)}</div></div>
       </div>
+      <button onclick="sendWhatsAppReminder(members[currentIdx])" style="margin-top:10px;width:100%;background:#25D366;color:#fff;border:none;border-radius:8px;padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 004.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.95 6.46 17.5 2 12.04 2zm0 18.14a8.2 8.2 0 01-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 01-1.26-4.37c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 012.41 5.82c0 4.54-3.7 8.24-8.25 8.24zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43-.14-.01-.31-.01-.48-.01-.16 0-.43.06-.66.31-.22.25-.87.85-.87 2.08 0 1.22.89 2.4 1.02 2.57.12.17 1.75 2.67 4.24 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.23-.17-.48-.29z"/></svg>
+        <span data-i18n="btn_whatsapp_reminder">WhatsApp स्मरणपत्र पाठवा</span>
+      </button>
     </div>`;
   } else {
     overdueBox.style.display='none';
@@ -3233,7 +3309,7 @@ function openDrawer(idx){
   document.getElementById('dr-body').innerHTML=m.hapte.map((h,hIdx)=>{
     run-=h.hapta;
     const st=h.vilamb===0?'<span class="badge badge-green" style="font-size:10px">'+t('exp_on_time')+'</span>':h.vilamb<=1?'<span class="badge badge-amber" style="font-size:10px">'+t('exp_slight_delay')+'</span>':'<span class="badge badge-amber" style="font-size:10px">'+t('exp_delayed')+'</span>';
-    return `<tr><td>${h.mahina||'—'}</td><td style="font-size:11px">${fmtDate(h.dinank)}</td><td>${h.vilamb||0}</td><td>${fmt(h.dand)}</td><td>${fmt(h.vyaj)}</td><td>${fmt(h.hapta)}</td><td style="color:var(--red)">${fmt(Math.max(0,run))}</td><td>${st}</td><td><button class="btn-icon" onclick="reprintReceipt(${idx},${hIdx})" title="${t('txt_reprint_receipt')}">🧾</button></td></tr>`;
+    return `<tr><td>${fmtMonthLabel(h.mahina)}</td><td style="font-size:11px">${fmtDate(h.dinank)}</td><td>${h.vilamb||0}</td><td>${fmt(h.dand)}</td><td>${fmt(h.vyaj)}</td><td>${fmt(h.hapta)}</td><td style="color:var(--red)">${fmt(Math.max(0,run))}</td><td>${st}</td><td><button class="btn-icon" onclick="reprintReceipt(${idx},${hIdx})" title="${t('txt_reprint_receipt')}">🧾</button></td></tr>`;
   }).join('');
   document.getElementById('dr-edit-btn').onclick=()=>editMember(idx);
   document.getElementById('drawer-overlay').classList.add('open');
@@ -3332,7 +3408,7 @@ async function saveMemberProfileAdmin(){
     }catch(e){ errEl.textContent = '❌ '+t('err_prefix')+e.message; return; }
   }
 
-  toast('✓ '+t('th_sr_no')+' '+m.kram+' — '+nav+' '+t('msg_record_updated'));
+  toast('✓ '+nav+' '+t('msg_record_updated'));
   logActivity('member_profile_edit', nav, 'अ.क्र. '+m.kram+(password?' (पासवर्डसह)':'')+(pendingAdminMemberPhoto?' (फोटो बदलला)':''));
   closeMemberProfileModal();
   renderSum(); doSearch();
@@ -3361,7 +3437,7 @@ function loanSearch(){
     const sh = Math.max(0, m.vatap - m.hapte.reduce((s,h)=>s+h.hapta,0));
     return `<div onclick="selectLoanMember(${members.indexOf(m)})" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .12s;"
       onmouseover="this.style.background='var(--gold-pale)'" onmouseout="this.style.background=''">
-      <div style="font-weight:600;font-size:13px;">${t('th_sr_no')} ${m.kram} — ${m.nav}</div>
+      <div style="font-weight:600;font-size:13px;">${m.nav}</div>
       <div style="font-size:11px;color:var(--text2);margin-top:2px;">
         ${m.mobile ? '📱 '+m.mobile+' &nbsp;|&nbsp; ' : ''}कर्ज: ${fmt(m.vatap)} &nbsp;|&nbsp; शिल्लक: ${fmt(sh)}
       </div>
@@ -3376,11 +3452,11 @@ function selectLoanMember(idx){
   const m = members[idx];
 
   document.getElementById('loan-dropdown').style.display='none';
-  document.getElementById('loan-search').value = 'अ.क्र. '+m.kram+' — '+m.nav;
+  document.getElementById('loan-search').value = m.nav;
 
   const info = document.getElementById('loan-selected-info');
   info.style.display='flex';
-  document.getElementById('loan-sel-name').textContent = 'अ.क्र. '+m.kram+' — '+m.nav;
+  document.getElementById('loan-sel-name').textContent = m.nav;
   document.getElementById('loan-sel-detail').textContent = m.mobile ? '📱 '+m.mobile : '';
 
   // Pre-fill this member's current loan details (if any) for review/correction
@@ -3433,7 +3509,7 @@ async function saveLoanDisbursement(){
     members[liveIdx].karjtype=karjtype; members[liveIdx].guarantor=guarantor;
     members[liveIdx].loan_source=loanSource;
   }
-  toast('✓ '+t('th_sr_no')+' '+m.kram+' — '+m.nav+' '+t('msg_record_updated'));
+  toast('✓ '+m.nav+' '+t('msg_record_updated'));
   logActivity('loan_disbursement', m.nav, '₹'+vatap+' ('+(loanSource==='self'?'विनंतीवरून':'Admin थेट')+')');
   clearLoanSel();
 }
@@ -3502,7 +3578,7 @@ function ledgerSearch(){
     const sh = Math.max(0, m.vatap - m.hapte.reduce((s,h)=>s+h.hapta,0));
     return `<div onclick="selectLedgerMember(${members.indexOf(m)})" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .12s;"
       onmouseover="this.style.background='var(--gold-pale)'" onmouseout="this.style.background=''">
-      <div style="font-weight:600;font-size:13px;">${t('th_sr_no')} ${m.kram} — ${m.nav}</div>
+      <div style="font-weight:600;font-size:13px;">${m.nav}</div>
       <div style="font-size:11px;color:var(--text2);margin-top:2px;">
         ${m.mobile ? '📱 '+m.mobile+' &nbsp;|&nbsp; ' : ''}${t('exp_loan_short')}: ${fmt(m.vatap)} &nbsp;|&nbsp; ${t('th_shillak')}: ${fmt(sh)}
       </div>
@@ -3515,11 +3591,11 @@ function selectLedgerMember(idx){
   ledgerSelectedIdx = idx;
   const m = members[idx];
   document.getElementById('ledger-dropdown').style.display='none';
-  document.getElementById('ledger-search').value = t('th_sr_no')+' '+m.kram+' — '+m.nav;
+  document.getElementById('ledger-search').value = m.nav;
 
   const info = document.getElementById('ledger-selected-info');
   info.style.display='flex';
-  document.getElementById('ledger-sel-name').textContent = t('th_sr_no')+' '+m.kram+' — '+m.nav;
+  document.getElementById('ledger-sel-name').textContent = m.nav;
   document.getElementById('ledger-sel-detail').textContent = m.mobile ? '📱 '+m.mobile : '';
 
   renderLedger();
@@ -3548,7 +3624,7 @@ function buildLedgerEntries(m, fromDate, toDate){
       if(!h.dinank) return;
       if(h.dand) entries.push({date:h.dinank, particulars:t('th_dand')+' '+t('txt_ledger_charged'), debit:h.dand, credit:0});
       if(h.vyaj) entries.push({date:h.dinank, particulars:t('th_vyaj')+' '+t('txt_ledger_charged'), debit:h.vyaj, credit:0});
-      if(h.hapta) entries.push({date:h.dinank, particulars:t('txt_ledger_installment_paid')+(h.mahina?' ('+h.mahina+')':''), debit:0, credit:h.hapta});
+      if(h.hapta) entries.push({date:h.dinank, particulars:t('txt_ledger_installment_paid')+(h.mahina?' ('+fmtMonthLabel(h.mahina)+')':''), debit:0, credit:h.hapta});
     });
   });
   if(m.date) entries.push({date:m.date, particulars:t('txt_ledger_loan_disb'), debit:m.vatap||0, credit:0});
@@ -3556,7 +3632,7 @@ function buildLedgerEntries(m, fromDate, toDate){
     if(!h.dinank) return;
     if(h.dand) entries.push({date:h.dinank, particulars:t('th_dand')+' '+t('txt_ledger_charged'), debit:h.dand, credit:0});
     if(h.vyaj) entries.push({date:h.dinank, particulars:t('th_vyaj')+' '+t('txt_ledger_charged'), debit:h.vyaj, credit:0});
-    if(h.hapta) entries.push({date:h.dinank, particulars:t('txt_ledger_installment_paid')+(h.mahina?' ('+h.mahina+')':''), debit:0, credit:h.hapta});
+    if(h.hapta) entries.push({date:h.dinank, particulars:t('txt_ledger_installment_paid')+(h.mahina?' ('+fmtMonthLabel(h.mahina)+')':''), debit:0, credit:h.hapta});
   });
 
   entries.sort((a,b)=> a.date<b.date?-1 : a.date>b.date?1 : 0);
@@ -3637,7 +3713,7 @@ function exportLedgerPDF(){
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8">${getPDFCss()}</head><body>
   ${getOrgHeader(t('nav_ledger'))}
   <div class="info-bar">
-    <strong>${t('th_sr_no')} ${m.kram} — ${m.nav}</strong>
+    <strong>${m.nav}</strong>
     <span>${t('exp_print')}: ${dateStr}${fromDate?(' | '+t('txt_from_date')+': '+fmtDate(fromDate)):''}${toDate?(' | '+t('txt_to_date')+': '+fmtDate(toDate)):''}</span>
   </div>
   <table>
@@ -4080,6 +4156,12 @@ function updateSelectedCount(){
   if(!btn || !countEl) return;
   countEl.textContent = selectedMemberIds.size;
   btn.style.display = selectedMemberIds.size>0 ? 'inline-flex' : 'none';
+  const waBtn = document.getElementById('bulk-whatsapp-btn');
+  const waCountEl = document.getElementById('bulk-whatsapp-count');
+  if(waBtn && waCountEl){
+    waCountEl.textContent = selectedMemberIds.size;
+    waBtn.style.display = selectedMemberIds.size>0 ? 'inline-flex' : 'none';
+  }
   const selectAllCb = document.getElementById('sum-select-all');
   if(selectAllCb){
     const total = document.querySelectorAll('.sum-row-check').length;
@@ -4127,7 +4209,7 @@ function openBlacklistModal(idx){
   if(!hasPermission('blacklist_members')){ toast(t('msg_superadmin_only'),'warn'); return; }
   blacklistTargetIdx = idx;
   const m = members[idx];
-  document.getElementById('blacklist-member-name').textContent = t('th_sr_no')+' '+m.kram+' — '+m.nav;
+  document.getElementById('blacklist-member-name').textContent = m.nav;
   document.getElementById('blacklist-reason').value = '';
   document.getElementById('blacklist-duration-type').value = 'permanent';
   document.getElementById('blacklist-until-date').value = '';
@@ -4270,6 +4352,8 @@ function showPdfPreview(html, filename, orientation, onConfirm, title){
   pdfPreviewOnConfirm = onConfirm || null;
   const frame = document.getElementById('pdf-preview-frame');
   frame.srcdoc = html;
+  const box = document.getElementById('pdf-preview-modal-box');
+  if(box) box.style.maxWidth = (window.innerWidth>860 && title) ? '900px' : '520px';
   const titleEl = document.getElementById('pdf-preview-title');
   if(titleEl){
     titleEl.innerHTML = (title ? '📄 '+title : '🧾 <span data-i18n="txt_receipt_preview">'+t('txt_receipt_preview')+'</span>');
@@ -4593,7 +4677,7 @@ function buildHaptaReceiptHtml(m, entries, alreadyIncluded){
   ${getOrgHeader(t('txt_receipt_title'))}
   <div class="receipt-no"><span>${t('txt_receipt_no')}: <b>${receiptNo}</b></span><span>${t('exp_date')}: <b>${dateStr}</b></span></div>
   <div class="member-box">
-    <b>${t('th_sr_no')} ${m.kram} — ${m.nav}</b>${m.mobile ? ' &nbsp;|&nbsp; 📱 '+m.mobile : ''}
+    <b>${m.nav}</b>${m.mobile ? ' &nbsp;|&nbsp; 📱 '+m.mobile : ''}
     <div class="loan-row">
       <b>${t('txt_total_loan_taken')}: ${fmt(m.vatap)}</b>
       <b>${t('th_installment_month')}: ${monthsLabel}</b>
@@ -4630,7 +4714,7 @@ function generateBatchReceiptSheet(monthVal, batch){
   const now = new Date();
   const dateStr = fmtDate(now.toISOString().slice(0,10));
   const rows = batch.map(({m,entry})=>`<tr>
-    <td>${t('th_sr_no')} ${m.kram}</td>
+    <td>${m.kram}</td>
     <td>${m.nav}</td>
     <td style="text-align:right">${fmt(entry.hapta)}</td>
     <td style="text-align:right">${fmt(entry.dand)}</td>
@@ -4803,13 +4887,13 @@ function exportMemberPDF(idx){
   const sh=Math.max(0,m.vatap-tK);
   const p=pct(m.vatap-sh,m.vatap);
   const now=new Date();
-  const dateStr=now.toLocaleDateString('mr-IN',{day:'2-digit',month:'long',year:'numeric'});
+  const dateStr=fmtDate(now.toISOString().slice(0,10));
   let run=m.vatap;
   const rows=m.hapte.map((h,i)=>{
     run-=h.hapta;
     const bg=i%2===0?'':'background:#f8f9fc;';
     const st=h.vilamb===0?'<span style="color:#166534">'+t('exp_on_time')+'</span>':h.vilamb<=1?'<span style="color:#92400e">'+t('exp_slight_delay')+'</span>':'<span style="color:#b91c1c">'+t('exp_delayed')+'</span>';
-    return `<tr><td style="text-align:center;${bg}">${h.mahina||'—'}</td>
+    return `<tr><td style="text-align:center;${bg}">${fmtMonthLabel(h.mahina)}</td>
       <td style="${bg}">${fmtDate(h.dinank)}</td>
       <td style="text-align:center;${bg}">${h.vilamb||0}</td>
       <td style="text-align:right;color:#92400e;${bg}">${fmt(h.dand)}</td>
@@ -4833,7 +4917,7 @@ function exportMemberPDF(idx){
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8">${getPDFCss()}</head><body>
 ${getOrgHeader(t('exp_title_member_detail'))}
 <div class="info-bar">
-  <strong>${t('th_sr_no')} ${m.kram} &nbsp;|&nbsp; ${m.nav} &nbsp;<span style="font-weight:400;color:#475569;">(${m.mobile||'—'})</span></strong>
+  <strong>${m.nav} &nbsp;<span style="font-weight:400;color:#475569;">(${m.mobile||'—'})</span></strong>
   <span>${t('exp_loan_date')}: <strong>${fmtDate(m.date)}</strong> &nbsp;|&nbsp; ${t('exp_print')}: ${dateStr}</span>
 </div>
 <div class="metrics-row">
@@ -4873,14 +4957,14 @@ function exportMemberExcel(idx){
   const sh=Math.max(0,m.vatap-tK);
   const p=pct(m.vatap-sh,m.vatap);
   const now=new Date();
-  const dateStr=now.toLocaleDateString('mr-IN',{day:'2-digit',month:'long',year:'numeric'});
+  const dateStr=fmtDate(now.toISOString().slice(0,10));
   let run=m.vatap;
   const rows=m.hapte.map((h,i)=>{
     run-=h.hapta;
     const bg=i%2===0?'#ffffff':'#f8f9fc';
     const st=h.vilamb===0?t('exp_on_time'):h.vilamb<=1?t('exp_slight_delay'):t('exp_delayed');
     return `<tr style="background:${bg}">
-      <td style="padding:7px 10px;border:1px solid #e2e8f0;mso-number-format:'\@';">${h.mahina||'—'}</td>
+      <td style="padding:7px 10px;border:1px solid #e2e8f0;mso-number-format:'\@';">${fmtMonthLabel(h.mahina)}</td>
       <td style="padding:7px 10px;border:1px solid #e2e8f0;mso-number-format:'\@';">${fmtDate(h.dinank)}</td>
       <td style="padding:7px 10px;border:1px solid #e2e8f0;text-align:center;mso-number-format:'#,##0';">${h.vilamb||0}</td>
       <td style="padding:7px 10px;border:1px solid #e2e8f0;text-align:right;color:#92400e;mso-number-format:'#,##0';">${h.dand}</td>
@@ -4910,7 +4994,7 @@ function exportMemberExcel(idx){
   <tr><td colspan="9" class="sub">${t('exp_org_address_short')}</td></tr>
   <tr><td colspan="9" class="sub" style="font-size:12px;font-weight:bold;color:#e2b65a;">${t('exp_title_member_detail')}</td></tr>
   <tr><td colspan="9" style="padding:4px;"></td></tr>
-  <tr><td colspan="5" class="ibar">${t('th_sr_no')} ${m.kram} | ${m.nav} (${m.mobile||'—'})</td>
+  <tr><td colspan="5" class="ibar">${m.nav} (${m.mobile||'—'})</td>
       <td colspan="4" style="padding:8px;background:#f0f4fb;text-align:right;font-size:12px;">${t('exp_loan_date')}: ${fmtDate(m.date)} | ${t('exp_print')}: ${dateStr}</td></tr>
   <tr><td colspan="9" style="padding:4px;"></td></tr>
   <tr>
@@ -4944,7 +5028,7 @@ function exportPDF(){
   let rows=members.map(m=>({m,s:getStats(m,yr,mo)}));
   if(st) rows=rows.filter(r=>r.s.status===st);
   const now=new Date();
-  const dateStr=now.toLocaleDateString('mr-IN',{day:'2-digit',month:'long',year:'numeric'});
+  const dateStr=fmtDate(now.toISOString().slice(0,10));
   const tV=rows.reduce((s,r)=>s+r.m.vatap,0);
   const tK=rows.reduce((s,r)=>s+r.s.karj,0);
   const tD=rows.reduce((s,r)=>s+r.s.dand,0);
@@ -5017,7 +5101,7 @@ function exportExcel(memberSubset){
   let rows=sourceMembers.map(m=>({m,s:getStats(m,yr,mo)}));
   if(!memberSubset && st) rows=rows.filter(r=>r.s.status===st);
   const now=new Date();
-  const dateStr=now.toLocaleDateString('mr-IN',{day:'2-digit',month:'long',year:'numeric'});
+  const dateStr=fmtDate(now.toISOString().slice(0,10));
   const tV=rows.reduce((s,r)=>s+r.m.vatap,0);
   const tK=rows.reduce((s,r)=>s+r.s.karj,0);
   const tD=rows.reduce((s,r)=>s+r.s.dand,0);
@@ -5120,7 +5204,7 @@ function exportTxnExcel(){
   });
   txns.sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
   const now=new Date();
-  const dateStr=now.toLocaleDateString('mr-IN',{day:'2-digit',month:'long',year:'numeric'});
+  const dateStr=fmtDate(now.toISOString().slice(0,10));
   let tVatap=0,tHapta=0,tDand=0,tVyaj=0,tJama=0;
   const tableRows=txns.map((t,i)=>{
     tVatap+=t.vatapAmt;tHapta+=t.hapta;tDand+=t.dand;tVyaj+=t.vyaj;tJama+=t.jama;
@@ -5187,7 +5271,7 @@ function haptaSearch(){
     const sh = Math.max(0, m.vatap - m.hapte.reduce((s,h)=>s+h.hapta,0));
     return `<div onclick="selectHaptaMember(${members.indexOf(m)})" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .12s;"
       onmouseover="this.style.background='var(--gold-pale)'" onmouseout="this.style.background=''">
-      <div style="font-weight:600;font-size:13px;">${t('th_sr_no')} ${m.kram} — ${m.nav}</div>
+      <div style="font-weight:600;font-size:13px;">${m.nav}</div>
       <div style="font-size:11px;color:var(--text2);margin-top:2px;">
         ${m.mobile ? '📱 '+m.mobile+' &nbsp;|&nbsp; ' : ''}कर्ज: ${fmt(m.vatap)} &nbsp;|&nbsp; शिल्लक: ${fmt(sh)}
       </div>
@@ -5204,12 +5288,12 @@ function selectHaptaMember(idx){
 
   // Hide dropdown, update search input
   document.getElementById('h-dropdown').style.display='none';
-  document.getElementById('h-search').value = 'अ.क्र. '+m.kram+' — '+m.nav;
+  document.getElementById('h-search').value = m.nav;
 
   // Show selected info bar
   const info = document.getElementById('h-selected-info');
   info.style.display='flex';
-  document.getElementById('h-sel-name').textContent = 'अ.क्र. '+m.kram+' — '+m.nav;
+  document.getElementById('h-sel-name').textContent = m.nav;
   document.getElementById('h-sel-detail').textContent =
     (m.mobile ? '📱 '+m.mobile+' | ' : '') +
     'कर्ज वाटप: '+fmt(m.vatap)+' | आधीचे जमा: '+fmt(paid)+' | शिल्लक: '+fmt(sh);
@@ -5579,7 +5663,7 @@ function renderHome(){
       return `<div style="padding:8px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;" onmouseover="this.style.background='var(--gold-pale)'" onmouseout="this.style.background=''">
         <div>
           <div style="font-size:13px;font-weight:600;color:var(--text);">
-            <span style="font-size:11px;color:var(--text3);font-weight:400;margin-right:4px;">${t('th_sr_no')}${m.kram}</span>${m.nav}
+            <span style="font-size:11px;color:var(--text3);font-weight:400;margin-right:4px;">${m.kram}.</span>${m.nav}
           </div>
           <div style="font-size:11px;color:var(--text2);margin-top:2px;">${t('th_shillak')}: ${fmt(sh)}</div>
         </div>
@@ -5604,11 +5688,13 @@ function renderHome(){
       return `<div style="padding:8px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="openDrawer(${idx})" onmouseover="this.style.background='var(--gold-pale)'" onmouseout="this.style.background=''">
         <div>
           <div style="font-size:13px;font-weight:600;color:var(--text);">
-            <span style="font-size:11px;color:var(--text3);font-weight:400;margin-right:4px;">${t('th_sr_no')}${m.kram}</span>${m.nav}
+            <span style="font-size:11px;color:var(--text3);font-weight:400;margin-right:4px;">${m.kram}.</span>${m.nav}
           </div>
           <div style="font-size:11px;color:#b91c1c;margin-top:2px;">${overdue.months} ${t('txt_months_overdue')} — ${fmt(totalDue)}</div>
         </div>
-        <span style="font-size:10px;color:#fff;background:#dc2626;font-weight:700;padding:3px 8px;border-radius:8px;">⚠️</span>
+        <button onclick="event.stopPropagation();sendWhatsAppReminder(members[${idx}])" title="WhatsApp स्मरणपत्र" style="background:#25D366;border:none;color:#fff;border-radius:8px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 004.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.95 6.46 17.5 2 12.04 2zm0 18.14a8.2 8.2 0 01-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 01-1.26-4.37c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 012.41 5.82c0 4.54-3.7 8.24-8.25 8.24zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43-.14-.01-.31-.01-.48-.01-.16 0-.43.06-.66.31-.22.25-.87.85-.87 2.08 0 1.22.89 2.4 1.02 2.57.12.17 1.75 2.67 4.24 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.23-.17-.48-.29z"/></svg>
+        </button>
       </div>`;
     }).join('') : '<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px;">'+t('txt_no_defaulters')+'</div>';
   }
@@ -5694,12 +5780,13 @@ function checkLogin(){
   const overlay = document.getElementById('login-overlay');
   if(sessionStorage.getItem('pp_member_auth')==='true'){
     const mid = sessionStorage.getItem('pp_member_id');
-    overlay.style.display='none';
     if(mid){
       sb.from('sabhasad').select('*').eq('id',mid).single().then(({data,error})=>{
         if(data){
           currentMemberSabhasadId = data.id;
+          currentMemberData = data;
           renderMemberDashboard(data);
+          overlay.style.display='none';
           document.getElementById('member-dashboard').style.display='block';
           const validMemberPages = ['home','details','loanreq','profile'];
           const hashPage = (location.hash||'').replace('#','');
@@ -5713,7 +5800,10 @@ function checkLogin(){
         }
       }).catch(e=>{
         console.warn('Member session restore failed:', e?.message||e);
+        memberLogout();
       });
+    } else {
+      memberLogout();
     }
     return;
   }
@@ -5888,6 +5978,7 @@ async function doLogin(){
       const {data: mdata, error: merror} = await sb.from('sabhasad').select('*').eq('id',req.sabhasad_id).single();
       if(merror || !mdata){err.textContent='❌ '+t('msg_member_info_not_found');return;}
       currentMemberSabhasadId = mdata.id;
+      currentMemberData = mdata;
       sessionStorage.setItem('pp_member_auth','true');
       sessionStorage.setItem('pp_member_id', String(mdata.id));
       logActivity('member_login', mdata.nav, null, {username:mdata.nav, role:'member'});
@@ -6026,6 +6117,7 @@ async function doMemberRegister(){
 }
 
 let currentMemberSabhasadId = null;
+let currentMemberData = null;
 
 let pendingMemberPhoto = null;
 
@@ -6245,6 +6337,77 @@ function computeNextInstallmentInfo(m){
   return {nextYm, estHapta, isOverdue: nextMonthNum < curMonthNum, isDueThisMonth: nextMonthNum === curMonthNum};
 }
 
+function sendWhatsAppReminder(m){
+  if(!m.mobile){ toast(t('txt_no_mobile'),'warn'); return; }
+  const overdue = computeMemberOverdue(m);
+  const orgName = t('txt_org_name_short');
+  let msg;
+  if(overdue){
+    const totalDue = overdue.estPendingAmt + overdue.estDand + overdue.estVyaj;
+    msg = getLanguage()==='en'
+      ? `Dear ${m.nav},\n\nYour installment at ${orgName} is overdue by ${overdue.months} month(s).\nEstimated outstanding: ${fmt(totalDue)}\n\nKindly clear the dues at the earliest.\n\nThank you.`
+      : `नमस्कार ${m.nav} जी,\n\nआपला पतपेढीचा हप्ता ${overdue.months} महिने थकला आहे.\nअंदाजे थकबाकी: ${fmt(totalDue)}\n\nकृपया लवकरात लवकर भरणा करावा.\n\nधन्यवाद,\n${orgName}`;
+  } else {
+    const next = computeNextInstallmentInfo(m);
+    const monthLbl = next ? fmtMonthLabel(next.nextYm) : '';
+    msg = getLanguage()==='en'
+      ? (next ? `Dear ${m.nav},\n\nThis is a friendly reminder that your installment for ${monthLbl} (approx. ${fmt(next.estHapta)}) is due soon at ${orgName}.\n\nKindly pay on time.\n\nThank you.`
+              : `Dear ${m.nav},\n\nThis is a friendly reminder to pay your installment on time.\n\nThank you,\n${orgName}`)
+      : (next ? `नमस्कार ${m.nav} जी,\n\nआपला ${monthLbl} महिन्याचा हप्ता (अंदाजे ${fmt(next.estHapta)}) लवकरच देय आहे.\n\nकृपया वेळेवर भरणा करावा.\n\nधन्यवाद,\n${orgName}`
+              : `नमस्कार ${m.nav} जी,\n\nआपला हप्ता वेळेवर भरण्याची सौजन्यपूर्वक आठवण.\n\nधन्यवाद,\n${orgName}`);
+  }
+  const digits = String(m.mobile).replace(/\D/g,'').slice(-10);
+  if(digits.length!==10){ toast(t('txt_no_mobile'),'warn'); return; }
+  const url = 'https://wa.me/91'+digits+'?text='+encodeURIComponent(msg);
+  window.open(url,'_blank');
+}
+
+let bulkWhatsAppQueue = [];
+let bulkWhatsAppIdx = 0;
+
+function startBulkWhatsAppReminders(){
+  if(!selectedMemberIds.size) return;
+  bulkWhatsAppQueue = members.filter(m=>selectedMemberIds.has(m.kram));
+  bulkWhatsAppIdx = 0;
+  document.getElementById('bulk-whatsapp-modal').style.display = 'flex';
+  renderBulkWhatsAppStep();
+}
+
+function renderBulkWhatsAppStep(){
+  const total = bulkWhatsAppQueue.length;
+  const progressEl = document.getElementById('bulk-wa-progress');
+  const nameEl = document.getElementById('bulk-wa-current-name');
+  const mobEl = document.getElementById('bulk-wa-current-mobile');
+  const sendBtn = document.getElementById('bulk-wa-send-btn');
+  if(bulkWhatsAppIdx >= total){
+    progressEl.textContent = '';
+    nameEl.textContent = '✅ '+(getLanguage()==='en' ? 'All done!' : 'सर्व पाठवले!');
+    mobEl.textContent = '';
+    sendBtn.style.display = 'none';
+    return;
+  }
+  const m = bulkWhatsAppQueue[bulkWhatsAppIdx];
+  progressEl.textContent = (bulkWhatsAppIdx+1)+' / '+total;
+  nameEl.textContent = m.nav;
+  mobEl.textContent = m.mobile ? '📱 '+m.mobile : t('txt_no_mobile');
+  sendBtn.style.display = 'block';
+  sendBtn.disabled = !m.mobile;
+  sendBtn.style.opacity = m.mobile ? '1' : '.5';
+}
+
+function bulkWhatsAppSendCurrent(){
+  const m = bulkWhatsAppQueue[bulkWhatsAppIdx];
+  if(m && m.mobile) sendWhatsAppReminder(m);
+  bulkWhatsAppIdx++;
+  renderBulkWhatsAppStep();
+}
+
+function closeBulkWhatsAppModal(){
+  document.getElementById('bulk-whatsapp-modal').style.display = 'none';
+  bulkWhatsAppQueue = [];
+  bulkWhatsAppIdx = 0;
+}
+
 function computeMemberOverdue(m){
   const hapte = m.hapte||[];
   const haptaTotal = hapte.reduce((s,h)=>s+(h.hapta||0),0);
@@ -6265,7 +6428,7 @@ function computeMemberOverdue(m){
   const estHapta = validHaptas.length ? (validHaptas.reduce((s,v)=>s+v,0)/validHaptas.length) : 0;
   const n = overdueMonths;
   const estPendingAmt = estHapta*n;
-  const estDand = getPenaltyRate()*(n*(n+1)/2);
+  const estDand = getPenaltyRate()*n;
   const estVyaj = shillak*getInterestRate()*n;
   return {months:n, estHapta, estPendingAmt, estDand, estVyaj, shillak};
 }
@@ -6372,7 +6535,7 @@ function renderMemberDashboard(m){
       run -= (h.hapta||0);
       const st = h.vilamb===0 ? '<span class="badge badge-green" style="font-size:10px">'+t('exp_on_time')+'</span>' : (h.vilamb<=1 ? '<span class="badge badge-amber" style="font-size:10px">'+t('exp_slight_delay')+'</span>' : '<span class="badge badge-amber" style="font-size:10px">'+t('exp_delayed')+'</span>');
       const origIdx = m.hapte.indexOf(h);
-      return `<tr style="border-top:1px solid #f0f0f0;"><td style="padding:8px;">${h.mahina||'—'}</td><td style="padding:8px;text-align:center;">${fmtDate(h.dinank)}</td><td style="padding:8px;text-align:center;">${h.vilamb||0}</td><td style="padding:8px;text-align:right;">${fmt(h.dand||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.vyaj||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.hapta||0)}</td><td style="padding:8px;text-align:right;color:#dc2626;">${fmt(Math.max(0,run))}</td><td style="padding:8px;text-align:center;">${st}</td><td style="padding:8px;text-align:center;">${origIdx>=0 ? `<button onclick="downloadMyReceipt(${origIdx})" title="${t('txt_reprint_receipt')}" style="background:none;border:none;cursor:pointer;font-size:14px;">🧾</button>` : ''}</td></tr>`;
+      return `<tr style="border-top:1px solid #f0f0f0;"><td style="padding:8px;">${fmtMonthLabel(h.mahina)}</td><td style="padding:8px;text-align:center;">${fmtDate(h.dinank)}</td><td style="padding:8px;text-align:center;">${h.vilamb||0}</td><td style="padding:8px;text-align:right;">${fmt(h.dand||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.vyaj||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.hapta||0)}</td><td style="padding:8px;text-align:right;color:#dc2626;">${fmt(Math.max(0,run))}</td><td style="padding:8px;text-align:center;">${st}</td><td style="padding:8px;text-align:center;">${origIdx>=0 ? `<button onclick="downloadMyReceipt(${origIdx})" title="${t('txt_reprint_receipt')}" style="background:none;border:none;cursor:pointer;font-size:14px;">🧾</button>` : ''}</td></tr>`;
     }).join('');
   }
 }
@@ -6383,14 +6546,48 @@ function downloadMyReceipt(hapteIdx){
   generateHaptaReceipt(m, [m.hapte[hapteIdx]]);
 }
 
+function setStatementPreset(months, btnEl){
+  document.querySelectorAll('.ms-preset-btn').forEach(b=>b.classList.remove('active'));
+  btnEl.classList.add('active');
+  const toEl = document.getElementById('ms-to-date');
+  const fromEl = document.getElementById('ms-from-date');
+  if(months===0){
+    fromEl.value = '';
+    toEl.value = '';
+    return;
+  }
+  const today = new Date();
+  const toStr = today.toISOString().slice(0,10);
+  const fromDate = new Date(today);
+  fromDate.setMonth(fromDate.getMonth()-months);
+  toEl.value = toStr;
+  fromEl.value = fromDate.toISOString().slice(0,10);
+}
+function clearStatementPresetHighlight(){
+  document.querySelectorAll('.ms-preset-btn').forEach(b=>b.classList.remove('active'));
+}
 function downloadMyStatement(){
   const m = members.find(x=>x.id===currentMemberSabhasadId);
   if(!m) return;
   ledgerSelectedIdx = members.indexOf(m);
-  const fromEl = document.getElementById('ledger-from-date');
-  const toEl = document.getElementById('ledger-to-date');
-  if(fromEl) fromEl.value = '';
-  if(toEl) toEl.value = '';
+  document.getElementById('ms-from-date').value = '';
+  document.getElementById('ms-to-date').value = '';
+  clearStatementPresetHighlight();
+  document.getElementById('member-statement-modal').style.display = 'flex';
+}
+function closeMemberStatementModal(){
+  document.getElementById('member-statement-modal').style.display = 'none';
+}
+function confirmMemberStatementDownload(){
+  const fromVal = document.getElementById('ms-from-date').value;
+  const toVal = document.getElementById('ms-to-date').value;
+  if(fromVal && toVal && fromVal > toVal){
+    toast(t('msg_invalid_date_range'),'warn');
+    return;
+  }
+  document.getElementById('ledger-from-date').value = fromVal;
+  document.getElementById('ledger-to-date').value = toVal;
+  closeMemberStatementModal();
   exportLedgerPDF();
 }
 
@@ -6770,7 +6967,7 @@ function renderApproveSearchResults(){
   resultsDiv.innerHTML = matches.map(m=>`
     <div onclick="confirmApprove(${m.id})" style="padding:10px 12px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;" onmouseover="this.style.background='var(--gold-pale,#fdf6e3)'" onmouseout="this.style.background='none'">
       <div>
-        <div style="font-weight:600;font-size:13px;">${t('th_sr_no')} ${m.kram} — ${m.nav}</div>
+        <div style="font-weight:600;font-size:13px;">${m.nav}</div>
         <div style="font-size:11px;color:var(--text2);">${m.mobile||t('txt_no_mobile')}</div>
       </div>
       <span style="font-size:11px;color:var(--accent);font-weight:600;">${t('txt_link_arrow')}</span>
@@ -6782,7 +6979,7 @@ async function confirmApprove(sabhasadId){
   if(!currentApproveReqId) return;
   const req = memberRequests.find(r=>r.id===currentApproveReqId);
   const m = members.find(x=>x.id===sabhasadId);
-  if(!confirm(`"${req.nav}" ची विनंती "${m.nav}" (अ.क्र. ${m.kram}) शी लिंक करून approve करायची आहे का?`)) return;
+  if(!confirm(`"${req.nav}" ची विनंती "${m.nav}" शी लिंक करून approve करायची आहे का?`)) return;
   const {error} = await sb.from('member_requests').update({status:'approved', sabhasad_id:sabhasadId}).eq('id', currentApproveReqId);
   if(error){ toast(t('err_prefix')+error.message,'warn'); return; }
   toast('✓ '+req.nav+' '+t('msg_request_approved'));
@@ -6805,7 +7002,7 @@ async function addAsNewMemberAndApprove(){
   members.push({id:data.id, kram, nav:req.nav, mobile:req.mobile, vatap:0, date:today, hapte:[], karjtype:'', guarantor:'', photo:null, created_by:'self'});
   const {error:updErr} = await sb.from('member_requests').update({status:'approved', sabhasad_id:data.id}).eq('id', currentApproveReqId);
   if(updErr){ toast(t('err_prefix')+updErr.message,'warn'); return; }
-  toast('✓ '+req.nav+' '+t('msg_added_as_new_member_pre')+kram+t('msg_added_as_new_member_post'));
+  toast('✓ '+req.nav+' '+t('msg_added_as_new_member_pre')+t('msg_added_as_new_member_post'));
   closeApproveModal();
   loadMemberRequests();
 }
@@ -6865,25 +7062,27 @@ async function deleteRequest(requestId){
 window.addEventListener('DOMContentLoaded', function(){
   checkLogin();
   loadAppSettings();
-  loadMembers();
-  loadMemberRequests();
-  // Restore last-open page after refresh (instead of always jumping to home)
-  const validPages = ['home','entry','hapta','summary','requests','reports','ledger','funds'];
-  const hashPage = (location.hash||'').replace('#','');
-  if(hashPage && validPages.includes(hashPage) && hashPage!=='home'){
-    try{
-      goPage(hashPage, null, true);
-      history.replaceState({page:hashPage}, '', '#'+hashPage);
-    }catch(e){}
-  } else {
-    try{ if(!history.state){ history.replaceState({page:'home'}, '', '#home'); } }catch(e){}
-  }
-  // show username if logged in
-  const unEl=document.getElementById('sidebar-username');
-  if(unEl&&sessionStorage.getItem('pp_auth')==='true'){
-    unEl.textContent=getCreds().user;
-    const popupUn = document.getElementById('popup-username');
-    if(popupUn) popupUn.textContent = getCreds().user;
+  if(sessionStorage.getItem('pp_auth')==='true'){
+    loadMembers();
+    loadMemberRequests();
+    // Restore last-open page after refresh (instead of always jumping to home)
+    const validPages = ['home','entry','hapta','summary','requests','reports','ledger','funds'];
+    const hashPage = (location.hash||'').replace('#','');
+    if(hashPage && validPages.includes(hashPage) && hashPage!=='home'){
+      try{
+        goPage(hashPage, null, true);
+        history.replaceState({page:hashPage}, '', '#'+hashPage);
+      }catch(e){}
+    } else {
+      try{ if(!history.state){ history.replaceState({page:'home'}, '', '#home'); } }catch(e){}
+    }
+    // show username if logged in
+    const unEl=document.getElementById('sidebar-username');
+    if(unEl){
+      unEl.textContent=getCreds().user;
+      const popupUn = document.getElementById('popup-username');
+      if(popupUn) popupUn.textContent = getCreds().user;
+    }
   }
 });
 </script>
