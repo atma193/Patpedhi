@@ -2598,7 +2598,8 @@ const translations = {
     txt_action_password_change:"पासवर्ड बदलला",
     txt_action_admin_login:"Admin लॉगिन", txt_action_member_login:"सभासद भेट/लॉगिन", txt_action_member_add:"नवीन सभासद नोंदणी",
     txt_action_member_profile_edit:"सभासद प्रोफाइल बदलली", txt_action_loan_disbursement:"कर्ज वाटप",
-    txt_action_hapta_save:"हप्ता जतन केला", txt_action_member_reg_request:"नोंदणी विनंती पाठवली", txt_action_loan_request_submit:"कर्ज विनंती पाठवली",
+    txt_action_hapta_save:"हप्ता जतन केला", txt_action_member_reg_request:"नोंदणी विनंती पाठवली", txt_action_loan_request_submit:"कर्ज विनंती पाठवली", txt_action_member_suggestion_submit:"सूचना/रेटिंग पाठवली",
+    txt_last_activity:"शेवटची क्रिया", txt_actions:"क्रिया",
     txt_approve_loan_title:"कर्ज विनंती मंजूर करा", txt_requested_amount_label:"सभासदाने मागितलेली रक्कम",
     lbl_approved_amount:"मंजूर रक्कम (₹) — बदलता येईल",
     txt_approve_amount_hint:"टीप: सभासदाने मागितलेल्यापेक्षा कमी/जास्त रक्कम मंजूर करू शकता — हे सभासदाला पुढच्या पेजवर तसं दिसेल.",
@@ -2865,7 +2866,8 @@ const translations = {
     txt_action_password_change:"Password changed",
     txt_action_admin_login:"Admin login", txt_action_member_login:"Member visit/login", txt_action_member_add:"New member registered",
     txt_action_member_profile_edit:"Member profile edited", txt_action_loan_disbursement:"Loan disbursed",
-    txt_action_hapta_save:"Installment saved", txt_action_member_reg_request:"Registration request sent", txt_action_loan_request_submit:"Loan request sent",
+    txt_action_hapta_save:"Installment saved", txt_action_member_reg_request:"Registration request sent", txt_action_loan_request_submit:"Loan request sent", txt_action_member_suggestion_submit:"Suggestion/rating sent",
+    txt_last_activity:"Last activity", txt_actions:"Actions",
     txt_approve_loan_title:"Approve Loan Request", txt_requested_amount_label:"Amount requested by member",
     lbl_approved_amount:"Approved Amount (₹) — can be changed",
     txt_approve_amount_hint:"Note: You can approve a lower/higher amount than requested — the member will see this on their next page.",
@@ -5972,62 +5974,95 @@ async function logActivity(actionType, targetName, details, actorOverride){
   }
 }
 
+let auditLogData = [];
+
+function auditActionMeta(type){
+  const labels = {
+    rate_change: t('txt_action_rate_change'), admin_add: t('txt_action_admin_add'), admin_delete: t('txt_action_admin_delete'),
+    admin_permission_change: t('txt_action_admin_permission_change'), member_delete: t('txt_action_member_delete'),
+    member_blacklist: t('txt_action_member_blacklist'), member_reactivate: t('txt_action_member_reactivate'),
+    loan_request_approve: t('txt_action_loan_approve'), loan_request_reject: t('txt_action_loan_reject'),
+    new_loan_cycle: t('txt_action_new_cycle'), password_change: t('txt_action_password_change'),
+    admin_login: t('txt_action_admin_login'), member_login: t('txt_action_member_login'), member_add: t('txt_action_member_add'),
+    member_profile_edit: t('txt_action_member_profile_edit'), loan_disbursement: t('txt_action_loan_disbursement'),
+    hapta_save: t('txt_action_hapta_save'), member_registration_request: t('txt_action_member_reg_request'),
+    loan_request_submit: t('txt_action_loan_request_submit'), member_suggestion_submit: t('txt_action_member_suggestion_submit')
+  };
+  const icons = {
+    rate_change:'💰', admin_add:'➕', admin_delete:'🗑', admin_permission_change:'🔑',
+    member_delete:'🗑', member_blacklist:'🚫', member_reactivate:'✅',
+    loan_request_approve:'✅', loan_request_reject:'❌', new_loan_cycle:'🔄', password_change:'🔒',
+    admin_login:'🔑', member_login:'👤', member_add:'➕', member_profile_edit:'✏️',
+    loan_disbursement:'💵', hapta_save:'🧾', member_registration_request:'📝', loan_request_submit:'📨', member_suggestion_submit:'💬'
+  };
+  return {label: labels[type]||type, icon: icons[type]||'📌'};
+}
+
 async function openAuditLogModal(){
   if(sessionStorage.getItem('pp_admin_role')!=='superadmin'){ toast(t('msg_superadmin_only'),'warn'); return; }
   document.getElementById('audit-log-modal-overlay').style.display = 'flex';
   const listEl = document.getElementById('audit-log-list');
   listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px;">'+t('txt_loading')+'</div>';
   try{
-    const {data, error} = await sb.from('audit_log').select('*').order('created_at',{ascending:false}).limit(100);
+    const {data, error} = await sb.from('audit_log').select('*').order('created_at',{ascending:false}).limit(500);
     if(error) throw error;
-    if(!data || !data.length){
-      listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px;">'+t('txt_no_audit_log')+'</div>';
-      return;
-    }
-    const actionLabels = {
-      rate_change: t('txt_action_rate_change'),
-      admin_add: t('txt_action_admin_add'),
-      admin_delete: t('txt_action_admin_delete'),
-      admin_permission_change: t('txt_action_admin_permission_change'),
-      member_delete: t('txt_action_member_delete'),
-      member_blacklist: t('txt_action_member_blacklist'),
-      member_reactivate: t('txt_action_member_reactivate'),
-      loan_request_approve: t('txt_action_loan_approve'),
-      loan_request_reject: t('txt_action_loan_reject'),
-      new_loan_cycle: t('txt_action_new_cycle'),
-      password_change: t('txt_action_password_change'),
-      admin_login: t('txt_action_admin_login'),
-      member_login: t('txt_action_member_login'),
-      member_add: t('txt_action_member_add'),
-      member_profile_edit: t('txt_action_member_profile_edit'),
-      loan_disbursement: t('txt_action_loan_disbursement'),
-      hapta_save: t('txt_action_hapta_save'),
-      member_registration_request: t('txt_action_member_reg_request'),
-      loan_request_submit: t('txt_action_loan_request_submit')
-    };
-    const actionIcons = {
-      rate_change:'💰', admin_add:'➕', admin_delete:'🗑', admin_permission_change:'🔑',
-      member_delete:'🗑', member_blacklist:'🚫', member_reactivate:'✅',
-      loan_request_approve:'✅', loan_request_reject:'❌', new_loan_cycle:'🔄', password_change:'🔒',
-      admin_login:'🔑', member_login:'👤', member_add:'➕', member_profile_edit:'✏️',
-      loan_disbursement:'💵', hapta_save:'🧾', member_registration_request:'📝', loan_request_submit:'📨'
-    };
-    listEl.innerHTML = data.map(l=>{
-      const dt = l.created_at ? new Date(l.created_at) : null;
-      const dtStr = dt ? fmtDate(dt.toISOString().slice(0,10))+' '+dt.toTimeString().slice(0,5) : '—';
-      const label = actionLabels[l.action_type] || l.action_type;
-      const icon = actionIcons[l.action_type] || '📌';
-      return `<div style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:12px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div style="font-weight:600;color:var(--text);">${icon} ${label}${l.target_name ? ' — '+l.target_name : ''}</div>
-          <div style="font-size:10px;color:var(--text3);white-space:nowrap;">${dtStr}</div>
-        </div>
-        <div style="color:var(--text2);margin-top:3px;">👤 ${l.admin_username} (${l.admin_role||'admin'})${l.details ? '<br>'+l.details : ''}</div>
-      </div>`;
-    }).join('');
+    auditLogData = data || [];
+    renderAuditLogDashboard();
   }catch(error){
     listEl.innerHTML = '<div style="text-align:center;padding:20px;color:#dc2626;font-size:12px;">'+t('err_prefix')+error.message+'</div>';
   }
+}
+
+function renderAuditLogDashboard(){
+  const listEl = document.getElementById('audit-log-list');
+  if(!auditLogData.length){
+    listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px;">'+t('txt_no_audit_log')+'</div>';
+    return;
+  }
+  const groups = {};
+  auditLogData.forEach(l=>{
+    const uname = l.admin_username||'—';
+    const role = l.admin_role||'admin';
+    const key = uname+'|'+role;
+    if(!groups[key]) groups[key] = {username:uname, role, count:0, lastDate:l.created_at};
+    groups[key].count++;
+    if((l.created_at||'') > (groups[key].lastDate||'')) groups[key].lastDate = l.created_at;
+  });
+  const groupList = Object.values(groups).sort((a,b)=> (b.lastDate||'') < (a.lastDate||'') ? -1 : ((b.lastDate||'') > (a.lastDate||'') ? 1 : 0));
+  listEl.innerHTML = groupList.map(g=>{
+    const dt = g.lastDate ? new Date(g.lastDate) : null;
+    const dtStr = dt ? fmtDate(dt.toISOString().slice(0,10))+' '+dt.toTimeString().slice(0,5) : '—';
+    const roleIcon = g.role==='member' ? '👤' : (g.role==='superadmin' ? '👑' : '🔑');
+    const unameEsc = String(g.username).replace(/'/g,"\\'");
+    return `<div onclick="showAuditLogDetail('${unameEsc}','${g.role}')" style="padding:13px 16px;border-bottom:1px solid var(--border);font-size:12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .12s;" onmouseover="this.style.background='var(--gold-pale)'" onmouseout="this.style.background=''">
+      <div>
+        <div style="font-weight:600;color:var(--text);">${roleIcon} ${g.username} <span style="font-size:10px;color:var(--text3);font-weight:400;">(${g.role})</span></div>
+        <div style="font-size:10px;color:var(--text3);margin-top:3px;">${t('txt_last_activity')}: ${dtStr}</div>
+      </div>
+      <div style="text-align:center;flex-shrink:0;margin-left:10px;">
+        <div style="font-size:17px;font-weight:700;color:var(--accent);">${g.count}</div>
+        <div style="font-size:9px;color:var(--text3);">${t('txt_actions')}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showAuditLogDetail(username, role){
+  const listEl = document.getElementById('audit-log-list');
+  const filtered = auditLogData.filter(l=>(l.admin_username||'—')===username && (l.admin_role||'admin')===role);
+  const rows = filtered.map(l=>{
+    const dt = l.created_at ? new Date(l.created_at) : null;
+    const dtStr = dt ? fmtDate(dt.toISOString().slice(0,10))+' '+dt.toTimeString().slice(0,5) : '—';
+    const {label, icon} = auditActionMeta(l.action_type);
+    return `<div style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-weight:600;color:var(--text);">${icon} ${label}${l.target_name ? ' — '+l.target_name : ''}</div>
+        <div style="font-size:10px;color:var(--text3);white-space:nowrap;">${dtStr}</div>
+      </div>
+      ${l.details ? `<div style="color:var(--text2);margin-top:3px;">${l.details}</div>` : ''}
+    </div>`;
+  }).join('');
+  listEl.innerHTML = `<div onclick="renderAuditLogDashboard()" style="padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;font-size:12px;font-weight:700;color:var(--accent);position:sticky;top:0;background:var(--bg2);z-index:1;">← <span data-i18n="btn_back">मागे</span> &nbsp;|&nbsp; ${username} (${role})</div>` + (rows || `<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px;">${t('txt_no_audit_log')}</div>`);
 }
 function closeAuditLogModal(){
   document.getElementById('audit-log-modal-overlay').style.display = 'none';
@@ -6276,8 +6311,7 @@ function goMemberPage(id, skipHistory){
   if(bottomLoanreq) bottomLoanreq.classList.toggle('active', id==='loanreq');
 
   if(id==='loanreq'){
-    const m = members.find(x=>x.id===currentMemberSabhasadId);
-    if(m) checkLoanRequestStatus(m);
+    if(currentMemberData) checkLoanRequestStatus(currentMemberData);
   }
 
   if(!skipHistory){
@@ -6374,7 +6408,7 @@ async function submitLoanRequest(){
   const purpose = document.getElementById('md-loan-req-purpose').value.trim();
   const err = document.getElementById('md-loan-req-error');
   err.textContent='';
-  const m = members.find(x=>x.id===currentMemberSabhasadId) || {nav:'', mobile:''};
+  const m = currentMemberData || {nav:'', mobile:''};
   if(isBlacklisted(m)){ err.textContent='❌ '+t('txt_member_blacklisted_notice'); return; }
   const paidTotal = (m.hapte||[]).reduce((s,h)=>s+(h.hapta||0),0);
   const shillak = Math.max(0,(m.vatap||0)-paidTotal);
@@ -6670,7 +6704,7 @@ function renderMemberDashboard(m){
 }
 
 function downloadMyReceipt(hapteIdx){
-  const m = members.find(x=>x.id===currentMemberSabhasadId);
+  const m = currentMemberData;
   if(!m || !m.hapte[hapteIdx]) return;
   generateHaptaReceipt(m, [m.hapte[hapteIdx]]);
 }
@@ -6696,9 +6730,10 @@ function clearStatementPresetHighlight(){
   document.querySelectorAll('.ms-preset-btn').forEach(b=>b.classList.remove('active'));
 }
 function downloadMyStatement(){
-  const m = members.find(x=>x.id===currentMemberSabhasadId);
+  const m = currentMemberData;
   if(!m) return;
-  ledgerSelectedIdx = members.indexOf(m);
+  members = [m];
+  ledgerSelectedIdx = 0;
   document.getElementById('ms-from-date').value = '';
   document.getElementById('ms-to-date').value = '';
   clearStatementPresetHighlight();
@@ -6764,6 +6799,8 @@ async function submitMemberSuggestion(){
     is_read: false
   });
   if(error){ errEl.textContent = '❌ '+t('err_prefix')+error.message; return; }
+  const details = [msSelectedRating ? ('⭐'.repeat(msSelectedRating)) : null, text || null].filter(Boolean).join(' — ');
+  logActivity('member_suggestion_submit', currentMemberData.nav, details, {username:currentMemberData.nav, role:'member'});
   successEl.textContent = '✓ '+t('msg_suggestion_sent');
   setTimeout(()=>{ closeMemberSuggestionModal(); }, 1200);
 }
