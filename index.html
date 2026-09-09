@@ -957,8 +957,11 @@ window.addEventListener('DOMContentLoaded', function(){
     <div style="padding:24px 20px;text-align:center;">
       <div id="bulk-wa-current-name" style="font-size:17px;font-weight:700;color:#1a2540;margin-bottom:4px;"></div>
       <div id="bulk-wa-current-mobile" style="font-size:12px;color:#64748b;margin-bottom:22px;"></div>
-      <button id="bulk-wa-send-btn" onclick="bulkWhatsAppSendCurrent()" style="width:100%;background:#25D366;color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;">
+      <button id="bulk-wa-send-btn" onclick="bulkWhatsAppSendCurrent()" style="width:100%;background:#25D366;color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;">
         📱 <span data-i18n="btn_open_whatsapp">WhatsApp उघडा व पुढे जा</span>
+      </button>
+      <button id="bulk-sms-send-btn" onclick="bulkSmsSendCurrent()" style="width:100%;background:#1a2540;color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;">
+        💬 <span data-i18n="btn_open_sms">SMS उघडा व पुढे जा</span>
       </button>
       <button onclick="closeBulkWhatsAppModal()" class="btn btn-ghost" style="width:100%;" data-i18n="btn_close">बंद करा</button>
     </div>
@@ -2489,8 +2492,8 @@ const translations = {
     txt_overdue_final_note:"अंतिम रक्कम हप्ता भरताना पतपेढी कार्यालयात निश्चित होईल",
     txt_overdue_pay_soon:"कृपया लवकरात लवकर हप्ता भरा 🙏",
     txt_no_record:"कोणतीही नोंद नाही", txt_no_member_found:"कोणताही सभासद सापडला नाही",
-    txt_no_mobile:"मोबाईल नाही", txt_link_arrow:"लिंक करा →", btn_whatsapp_reminder:"WhatsApp स्मरणपत्र पाठवा",
-    btn_bulk_whatsapp:"निवडलेल्यांना WhatsApp पाठवा", txt_bulk_whatsapp_title:"बल्क WhatsApp पाठवा", btn_open_whatsapp:"WhatsApp उघडा व पुढे जा",
+    txt_no_mobile:"मोबाईल नाही", txt_link_arrow:"लिंक करा →", btn_whatsapp_reminder:"WhatsApp स्मरणपत्र पाठवा", btn_whatsapp_short:"WhatsApp", btn_sms_short:"SMS",
+    btn_bulk_whatsapp:"निवडलेल्यांना WhatsApp पाठवा", txt_bulk_whatsapp_title:"बल्क WhatsApp पाठवा", btn_open_whatsapp:"WhatsApp उघडा व पुढे जा", btn_open_sms:"SMS उघडा व पुढे जा",
     txt_greeting_default:"नमस्कार! 🙏", txt_no_one_found:"कोणीही सापडले नाही",
     txt_thakit_estimate:"थकीत अंदाज",
     btn_backup:"डेटा Backup घ्या", msg_backup_starting:"Backup तयार होत आहे...",
@@ -2523,7 +2526,7 @@ const translations = {
     txt_duesoon_line:"या महिन्याचा हप्ता अजून भरलेला नाही. कृपया लवकरात लवकर भरा 🙏",
     txt_notif_title:"हप्ता स्मरणपत्र — पतपेढी", txt_notif_body:"{name}, या महिन्याचा हप्ता अजून भरलेला नाही.",
     txt_recovery_trend:"महिन्यागणिक वसुली ट्रेंड", txt_top_defaulters:"सर्वाधिक थकबाकीदार",
-    txt_no_defaulters:"सध्या कोणीही थकबाकीदार नाही 🎉", txt_no_chart_data:"अजून हप्त्यांची नोंद नाही",
+    txt_no_defaulters:"सध्या कोणीही थकबाकीदार नाही 🎉", txt_no_chart_data:"अजून हप्त्यांची नोंद नाही", txt_chart_lib_failed:"चार्ट लोड होऊ शकला नाही (इंटरनेट तपासा)",
     btn_dark_mode:"डार्क मोड",
     txt_admin_mgmt:"प्रशासक व्यवस्थापन", txt_admin_mgmt_sub:"नवीन admin जोडा किंवा काढा — फक्त superadmin ला हे बदलता येईल",
     txt_add_new_admin:"नवीन प्रशासक जोडा", lbl_admin_role:"भूमिका (Role)",
@@ -2757,8 +2760,8 @@ const translations = {
     txt_overdue_final_note:"The final amount will be confirmed at the office when you pay",
     txt_overdue_pay_soon:"Please pay your installment as soon as possible 🙏",
     txt_no_record:"No records", txt_no_member_found:"No member found",
-    txt_no_mobile:"No mobile", txt_link_arrow:"Link →", btn_whatsapp_reminder:"Send WhatsApp Reminder",
-    btn_bulk_whatsapp:"Send WhatsApp to Selected", txt_bulk_whatsapp_title:"Bulk WhatsApp Send", btn_open_whatsapp:"Open WhatsApp & Next",
+    txt_no_mobile:"No mobile", txt_link_arrow:"Link →", btn_whatsapp_reminder:"Send WhatsApp Reminder", btn_whatsapp_short:"WhatsApp", btn_sms_short:"SMS",
+    btn_bulk_whatsapp:"Send WhatsApp to Selected", txt_bulk_whatsapp_title:"Bulk WhatsApp Send", btn_open_whatsapp:"Open WhatsApp & Next", btn_open_sms:"Open SMS & Next",
     txt_greeting_default:"Hello! 🙏", txt_no_one_found:"No one found",
     txt_thakit_estimate:"Estimated Outstanding",
     btn_backup:"Download Data Backup", msg_backup_starting:"Preparing backup...",
@@ -2791,7 +2794,7 @@ const translations = {
     txt_duesoon_line:"This month's installment hasn't been paid yet. Please pay as soon as possible 🙏",
     txt_notif_title:"Installment Reminder — Credit Society", txt_notif_body:"{name}, this month's installment hasn't been paid yet.",
     txt_recovery_trend:"Monthly Recovery Trend", txt_top_defaulters:"Top Defaulters",
-    txt_no_defaulters:"No defaulters right now 🎉", txt_no_chart_data:"No installment records yet",
+    txt_no_defaulters:"No defaulters right now 🎉", txt_no_chart_data:"No installment records yet", txt_chart_lib_failed:"Chart could not load (check internet)",
     btn_dark_mode:"Dark Mode",
     txt_admin_mgmt:"Admin Management", txt_admin_mgmt_sub:"Add or remove admins — only superadmins can change this",
     txt_add_new_admin:"Add New Admin", lbl_admin_role:"Role",
@@ -3350,10 +3353,16 @@ function openDrawer(idx){
     ['कर्ज वाटप',fmt(m.vatap),'blue'],['कर्ज जमा',fmt(tK),'green'],
     ['दंड जमा',fmt(tD),'amber'],['व्याज जमा',fmt(tV),'amber'],['शिल्लक',fmt(sh),'red']
   ].map(([l,v,c])=>`<div class="metric-card ${c}"><div class="metric-label">${l}</div><div class="metric-value" style="font-size:16px">${v}</div></div>`).join('');
-  document.getElementById('dr-whatsapp-btn-wrap').innerHTML = `<button onclick="sendWhatsAppReminder(members[currentIdx])" style="width:100%;background:#25D366;color:#fff;border:none;border-radius:8px;padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:14px;">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 004.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.95 6.46 17.5 2 12.04 2zm0 18.14a8.2 8.2 0 01-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 01-1.26-4.37c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 012.41 5.82c0 4.54-3.7 8.24-8.25 8.24zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43-.14-.01-.31-.01-.48-.01-.16 0-.43.06-.66.31-.22.25-.87.85-.87 2.08 0 1.22.89 2.4 1.02 2.57.12.17 1.75 2.67 4.24 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.23-.17-.48-.29z"/></svg>
-    <span data-i18n="btn_whatsapp_reminder">WhatsApp स्मरणपत्र पाठवा</span>
-  </button>`;
+  document.getElementById('dr-whatsapp-btn-wrap').innerHTML = `<div style="display:flex;gap:8px;margin-bottom:14px;">
+    <button onclick="sendWhatsAppReminder(members[currentIdx])" style="flex:1;background:#25D366;color:#fff;border:none;border-radius:8px;padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 004.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.95 6.46 17.5 2 12.04 2zm0 18.14a8.2 8.2 0 01-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 01-1.26-4.37c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 012.41 5.82c0 4.54-3.7 8.24-8.25 8.24zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43-.14-.01-.31-.01-.48-.01-.16 0-.43.06-.66.31-.22.25-.87.85-.87 2.08 0 1.22.89 2.4 1.02 2.57.12.17 1.75 2.67 4.24 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.23-.17-.48-.29z"/></svg>
+      <span data-i18n="btn_whatsapp_short">WhatsApp</span>
+    </button>
+    <button onclick="sendSmsReminder(members[currentIdx])" style="flex:1;background:#1a2540;color:#fff;border:none;border-radius:8px;padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      <span data-i18n="btn_sms_short">SMS</span>
+    </button>
+  </div>`;
   const overdue=computeMemberOverdue(m);
   const overdueBox=document.getElementById('dr-overdue-box');
   if(overdue){
@@ -5772,6 +5781,36 @@ function renderHome(){
     }).join('') : '<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px;">'+t('txt_no_members_yet')+'</div>';
   }
 
+  const statusEl = document.getElementById('home-status');
+  if(statusEl){
+    if(!members.length){
+      statusEl.innerHTML = '<div style="text-align:center;color:var(--text3);font-size:13px;padding:16px 0;">'+t('txt_no_members_yet')+'</div>';
+    } else {
+      let regular=0, delayed=0, paidOff=0, totalOutstanding=0;
+      members.forEach(m=>{
+        const s = getStats(m,null,null);
+        if(s.status==='done') paidOff++;
+        else if(s.status==='warn') delayed++;
+        else regular++;
+        totalOutstanding += s.shillak||0;
+      });
+      const rows = [
+        [t('opt_regular'), regular, '#166534', '#dcfce7'],
+        [t('opt_delayed'), delayed, '#92400e', '#fef3c7'],
+        [t('opt_paid_off'), paidOff, '#1e40af', '#dbeafe']
+      ];
+      statusEl.innerHTML = rows.map(([label,count,color,bg])=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;">
+          <span style="font-size:12px;color:var(--text2);">${label}</span>
+          <span style="font-size:12px;font-weight:700;color:${color};background:${bg};padding:2px 10px;border-radius:10px;">${count}</span>
+        </div>`).join('') +
+        `<div style="border-top:1px solid var(--border);margin-top:6px;padding-top:8px;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:12px;font-weight:600;color:var(--text);">${t('th_shillak')}</span>
+          <span style="font-size:13px;font-weight:700;color:#dc2626;">${fmt(totalOutstanding)}</span>
+        </div>`;
+    }
+  }
+
   // Monthly recovery trend chart
   renderHomeChart();
 
@@ -5795,16 +5834,30 @@ function renderHome(){
         <button onclick="event.stopPropagation();sendWhatsAppReminder(members[${idx}])" title="WhatsApp स्मरणपत्र" style="background:#25D366;border:none;color:#fff;border-radius:8px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 004.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.95 6.46 17.5 2 12.04 2zm0 18.14a8.2 8.2 0 01-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 01-1.26-4.37c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 012.41 5.82c0 4.54-3.7 8.24-8.25 8.24zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43-.14-.01-.31-.01-.48-.01-.16 0-.43.06-.66.31-.22.25-.87.85-.87 2.08 0 1.22.89 2.4 1.02 2.57.12.17 1.75 2.67 4.24 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.23-.17-.48-.29z"/></svg>
         </button>
+        <button onclick="event.stopPropagation();sendSmsReminder(members[${idx}])" title="SMS स्मरणपत्र" style="background:#1a2540;border:none;color:#fff;border-radius:8px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </button>
       </div>`;
     }).join('') : '<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px;">'+t('txt_no_defaulters')+'</div>';
   }
 }
 
 let homeChartInstance = null;
-function renderHomeChart(){
+function renderHomeChart(retryCount){
+  retryCount = retryCount || 0;
   const canvas = document.getElementById('home-chart');
   const emptyEl = document.getElementById('home-chart-empty');
-  if(!canvas || typeof Chart==='undefined') return;
+  if(!canvas) return;
+  if(typeof Chart==='undefined'){
+    if(retryCount < 1){
+      setTimeout(()=>renderHomeChart(retryCount+1), 800);
+      return;
+    }
+    canvas.style.display = 'none';
+    emptyEl.style.display = 'block';
+    emptyEl.textContent = t('txt_chart_lib_failed');
+    return;
+  }
 
   // Gather all months present in data
   const monthSet = new Set();
@@ -6494,30 +6547,42 @@ function computeNextInstallmentInfo(m){
   return {nextYm, estHapta, isOverdue: nextMonthNum < curMonthNum, isDueThisMonth: nextMonthNum === curMonthNum};
 }
 
-function sendWhatsAppReminder(m){
-  if(!m.mobile){ toast(t('txt_no_mobile'),'warn'); return; }
+function buildReminderMessage(m){
   const overdue = computeMemberOverdue(m);
   const orgName = t('txt_org_name_short');
-  let msg;
   if(overdue){
     const totalDue = overdue.estPendingAmt + overdue.estDand + overdue.estVyaj;
-    msg = getLanguage()==='en'
+    return getLanguage()==='en'
       ? `Dear ${m.nav},\n\nYour installment at ${orgName} is overdue by ${overdue.months} month(s).\nEstimated outstanding: ${fmt(totalDue)}\n\nKindly clear the dues at the earliest.\n\nThank you.`
       : `नमस्कार ${m.nav} जी,\n\nआपला पतपेढीचा हप्ता ${overdue.months} महिने थकला आहे.\nअंदाजे थकबाकी: ${fmt(totalDue)}\n\nकृपया लवकरात लवकर भरणा करावा.\n\nधन्यवाद,\n${orgName}`;
-  } else {
-    const next = computeNextInstallmentInfo(m);
-    const monthLbl = next ? fmtMonthLabel(next.nextYm) : '';
-    msg = getLanguage()==='en'
-      ? (next ? `Dear ${m.nav},\n\nThis is a friendly reminder that your installment for ${monthLbl} (approx. ${fmt(next.estHapta)}) is due soon at ${orgName}.\n\nKindly pay on time.\n\nThank you.`
-              : `Dear ${m.nav},\n\nThis is a friendly reminder to pay your installment on time.\n\nThank you,\n${orgName}`)
-      : (next ? `नमस्कार ${m.nav} जी,\n\nआपला ${monthLbl} महिन्याचा हप्ता (अंदाजे ${fmt(next.estHapta)}) लवकरच देय आहे.\n\nकृपया वेळेवर भरणा करावा.\n\nधन्यवाद,\n${orgName}`
-              : `नमस्कार ${m.nav} जी,\n\nआपला हप्ता वेळेवर भरण्याची सौजन्यपूर्वक आठवण.\n\nधन्यवाद,\n${orgName}`);
   }
+  const next = computeNextInstallmentInfo(m);
+  const monthLbl = next ? fmtMonthLabel(next.nextYm) : '';
+  return getLanguage()==='en'
+    ? (next ? `Dear ${m.nav},\n\nThis is a friendly reminder that your installment for ${monthLbl} (approx. ${fmt(next.estHapta)}) is due soon at ${orgName}.\n\nKindly pay on time.\n\nThank you.`
+            : `Dear ${m.nav},\n\nThis is a friendly reminder to pay your installment on time.\n\nThank you,\n${orgName}`)
+    : (next ? `नमस्कार ${m.nav} जी,\n\nआपला ${monthLbl} महिन्याचा हप्ता (अंदाजे ${fmt(next.estHapta)}) लवकरच देय आहे.\n\nकृपया वेळेवर भरणा करावा.\n\nधन्यवाद,\n${orgName}`
+            : `नमस्कार ${m.nav} जी,\n\nआपला हप्ता वेळेवर भरण्याची सौजन्यपूर्वक आठवण.\n\nधन्यवाद,\n${orgName}`);
+}
+
+function sendWhatsAppReminder(m){
+  if(!m.mobile){ toast(t('txt_no_mobile'),'warn'); return; }
   const digits = String(m.mobile).replace(/\D/g,'').slice(-10);
   if(digits.length!==10){ toast(t('txt_no_mobile'),'warn'); return; }
+  const msg = buildReminderMessage(m);
   const url = 'https://wa.me/91'+digits+'?text='+encodeURIComponent(msg);
   window.open(url,'_blank');
 }
+
+function sendSmsReminder(m){
+  if(!m.mobile){ toast(t('txt_no_mobile'),'warn'); return; }
+  const digits = String(m.mobile).replace(/\D/g,'').slice(-10);
+  if(digits.length!==10){ toast(t('txt_no_mobile'),'warn'); return; }
+  const msg = buildReminderMessage(m);
+  const url = 'sms:'+digits+'?body='+encodeURIComponent(msg);
+  window.open(url,'_blank');
+}
+
 
 let bulkWhatsAppQueue = [];
 let bulkWhatsAppIdx = 0;
@@ -6536,11 +6601,13 @@ function renderBulkWhatsAppStep(){
   const nameEl = document.getElementById('bulk-wa-current-name');
   const mobEl = document.getElementById('bulk-wa-current-mobile');
   const sendBtn = document.getElementById('bulk-wa-send-btn');
+  const smsBtn = document.getElementById('bulk-sms-send-btn');
   if(bulkWhatsAppIdx >= total){
     progressEl.textContent = '';
     nameEl.textContent = '✅ '+(getLanguage()==='en' ? 'All done!' : 'सर्व पाठवले!');
     mobEl.textContent = '';
     sendBtn.style.display = 'none';
+    smsBtn.style.display = 'none';
     return;
   }
   const m = bulkWhatsAppQueue[bulkWhatsAppIdx];
@@ -6550,11 +6617,21 @@ function renderBulkWhatsAppStep(){
   sendBtn.style.display = 'block';
   sendBtn.disabled = !m.mobile;
   sendBtn.style.opacity = m.mobile ? '1' : '.5';
+  smsBtn.style.display = 'block';
+  smsBtn.disabled = !m.mobile;
+  smsBtn.style.opacity = m.mobile ? '1' : '.5';
 }
 
 function bulkWhatsAppSendCurrent(){
   const m = bulkWhatsAppQueue[bulkWhatsAppIdx];
   if(m && m.mobile) sendWhatsAppReminder(m);
+  bulkWhatsAppIdx++;
+  renderBulkWhatsAppStep();
+}
+
+function bulkSmsSendCurrent(){
+  const m = bulkWhatsAppQueue[bulkWhatsAppIdx];
+  if(m && m.mobile) sendSmsReminder(m);
   bulkWhatsAppIdx++;
   renderBulkWhatsAppStep();
 }
