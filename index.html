@@ -447,8 +447,8 @@ table td input:focus{background:rgba(79,127,255,.08);border-radius:4px}
 .ms-preset-btn:hover{border-color:#1a2540;}
 .ms-preset-btn.active{background:#1a2540;border-color:#1a2540;color:#f3d98a;}
 .login-field label{display:block;font-size:12px;color:#94a3b8;margin-bottom:5px;font-weight:500;}
-.login-field input{width:100%;padding:10px 14px;background:#0f172a;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#ffffff;font-size:13px;outline:none;box-sizing:border-box;transition:border .2s,box-shadow .2s;box-shadow:inset 0 1px 3px rgba(0,0,0,.3);}
-.login-field input:focus{border-color:rgba(212,160,23,.7);box-shadow:inset 0 1px 3px rgba(0,0,0,.3),0 0 0 3px rgba(212,160,23,.15);}
+.login-field input,.login-field textarea{width:100%;padding:10px 14px;background:#0f172a;border:1px solid rgba(212,160,23,.25);border-radius:8px;color:#ffffff;font-size:13px;outline:none;box-sizing:border-box;transition:border .2s,box-shadow .2s;box-shadow:inset 0 1px 3px rgba(0,0,0,.3);font-family:inherit;}
+.login-field input:focus,.login-field textarea:focus{border-color:rgba(212,160,23,.7);box-shadow:inset 0 1px 3px rgba(0,0,0,.3),0 0 0 3px rgba(212,160,23,.15);}
 .login-btn{width:100%;padding:11px;background:linear-gradient(135deg,#c8860a,#a06808);border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-top:4px;transition:opacity .2s,transform .12s;box-shadow:0 3px 10px rgba(200,134,10,.3);}
 .login-btn:hover{opacity:.88;}
 .login-btn:active{transform:scale(.97);}
@@ -589,6 +589,10 @@ window.addEventListener('DOMContentLoaded', function(){
       <div class="login-field">
         <label>📱 <span data-i18n="lbl_mobile">मोबाईल नंबर</span></label>
         <input type="tel" id="reg-mobile" placeholder="१० अंकी मोबाईल नंबर" data-i18n-ph="ph_mobile10" maxlength="10">
+      </div>
+      <div class="login-field">
+        <label>📍 <span data-i18n="lbl_address">पत्ता</span></label>
+        <textarea id="reg-address" rows="2" placeholder="पूर्ण पत्ता लिहा" data-i18n-ph="ph_address_example" style="resize:vertical;"></textarea>
       </div>
       <div class="login-field">
         <label>🔒 <span data-i18n="lbl_create_pass">पासवर्ड तयार करा</span></label>
@@ -881,8 +885,6 @@ window.addEventListener('DOMContentLoaded', function(){
         <div style="margin-bottom:14px;">
           <div style="font-size:11px;color:#94a3b8;margin-bottom:2px;" data-i18n="lbl_address">पत्ता</div>
           <textarea id="md-address-edit" rows="2" style="width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;box-sizing:border-box;"></textarea>
-          <button onclick="saveMemberAddress()" style="margin-top:6px;padding:7px 14px;background:#8a6d1f;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:12px;" data-i18n="btn_save">जतन करा</button>
-          <div class="login-success" id="md-address-msg" style="margin-top:6px;"></div>
         </div>
 
         <div style="margin-bottom:14px;">
@@ -6323,6 +6325,7 @@ async function doChangePass(){
 async function doMemberRegister(){
   const nav=document.getElementById('reg-nav').value.trim();
   const mobile=document.getElementById('reg-mobile').value.trim();
+  const address=document.getElementById('reg-address').value.trim();
   const pass=document.getElementById('reg-pass').value;
   const conf=document.getElementById('reg-confirm').value;
   const err=document.getElementById('reg-error');
@@ -6351,12 +6354,13 @@ async function doMemberRegister(){
     // instead of inserting a fresh duplicate row.
     const rejected = (existingReqs||[]).find(r=>r.status==='rejected');
     if(rejected){
-      const {error:updErr} = await sb.from('member_requests').update({nav,password:pass,status:'pending'}).eq('id',rejected.id);
+      const {error:updErr} = await sb.from('member_requests').update({nav,password:pass,address,status:'pending'}).eq('id',rejected.id);
       if(updErr){err.textContent='❌ '+t('err_prefix')+updErr.message;return;}
       logActivity('member_registration_request', nav, mobile, {username:nav, role:'member'});
       suc.textContent='✅ '+t('msg_reg_request_sent');
       document.getElementById('reg-nav').value='';
       document.getElementById('reg-mobile').value='';
+      document.getElementById('reg-address').value='';
       document.getElementById('reg-pass').value='';
       document.getElementById('reg-confirm').value='';
       setTimeout(()=>showSection('sec-login'),3000);
@@ -6364,12 +6368,13 @@ async function doMemberRegister(){
     }
   }catch(e){ /* lookup failed — fall through and try the insert anyway */ }
 
-  const {error} = await sb.from('member_requests').insert({nav,mobile,password:pass,status:'pending'});
+  const {error} = await sb.from('member_requests').insert({nav,mobile,address,password:pass,status:'pending'});
   if(error){err.textContent='❌ '+t('err_prefix')+error.message;return;}
   logActivity('member_registration_request', nav, mobile, {username:nav, role:'member'});
   suc.textContent='✅ '+t('msg_reg_request_sent');
   document.getElementById('reg-nav').value='';
   document.getElementById('reg-mobile').value='';
+  document.getElementById('reg-address').value='';
   document.getElementById('reg-pass').value='';
   document.getElementById('reg-confirm').value='';
   setTimeout(()=>showSection('sec-login'),3000);
@@ -7049,11 +7054,14 @@ async function saveMemberProfile(){
     updatePayload.mobile = newMobile;
   }
   if(pendingMemberPhoto) updatePayload.photo = pendingMemberPhoto;
+  const newAddress = document.getElementById('md-address-edit').value.trim();
+  if(currentMemberData && newAddress !== (currentMemberData.address||'')) updatePayload.address = newAddress;
   if(Object.keys(updatePayload).length===0){msg.style.color='#dc2626';msg.textContent='❌ '+t('msg_no_changes');return;}
   const {error} = await sb.from('sabhasad').update(updatePayload).eq('id',currentMemberSabhasadId);
   if(error){msg.style.color='#dc2626';msg.textContent='❌ '+t('err_prefix')+error.message;return;}
   msg.style.color='#16a34a';
   msg.textContent='✅ '+t('msg_profile_updated');
+  if(currentMemberData && updatePayload.address!==undefined) currentMemberData.address = updatePayload.address;
   if(pendingMemberPhoto){
     setMemberAvatarDisplay('md-avatar','md-avatar-placeholder', pendingMemberPhoto);
     if(document.getElementById('md-side-avatar')) setMemberAvatarDisplay('md-side-avatar','md-side-avatar-placeholder', pendingMemberPhoto);
@@ -7065,17 +7073,6 @@ async function saveMemberProfile(){
     mobileInput.style.display='none';
     document.getElementById('md-mobile-edit-link').textContent='✏️ Edit';
   }
-}
-
-async function saveMemberAddress(){
-  const address = document.getElementById('md-address-edit').value.trim();
-  const msgEl = document.getElementById('md-address-msg');
-  msgEl.textContent = '';
-  const {error} = await sb.from('sabhasad').update({address}).eq('id', currentMemberSabhasadId);
-  if(error){ msgEl.style.color='#dc2626'; msgEl.textContent = '❌ '+t('err_prefix')+error.message; return; }
-  if(currentMemberData) currentMemberData.address = address;
-  msgEl.style.color='#16a34a';
-  msgEl.textContent = '✅ '+t('msg_address_saved');
 }
 
 async function saveMemberPassword(){
@@ -7452,10 +7449,10 @@ async function addAsNewMemberAndApprove(){
   const kram = maxKram + 1;
   const today = new Date().toISOString().slice(0,10);
   const {data, error} = await sb.from('sabhasad').insert({
-    kram, nav:req.nav, mobile:req.mobile, vatap:0, date:today, hapte:[], karjtype:'', guarantor:'', created_by:'self'
+    kram, nav:req.nav, mobile:req.mobile, address:req.address||'', vatap:0, date:today, hapte:[], karjtype:'', guarantor:'', created_by:'self'
   }).select().single();
   if(error){ toast(t('msg_add_member_error')+error.message,'warn'); return; }
-  members.push({id:data.id, kram, nav:req.nav, mobile:req.mobile, vatap:0, date:today, hapte:[], karjtype:'', guarantor:'', photo:null, created_by:'self'});
+  members.push({id:data.id, kram, nav:req.nav, mobile:req.mobile, address:req.address||'', vatap:0, date:today, hapte:[], karjtype:'', guarantor:'', photo:null, created_by:'self'});
   const {error:updErr} = await sb.from('member_requests').update({status:'approved', sabhasad_id:data.id}).eq('id', currentApproveReqId);
   if(updErr){ toast(t('err_prefix')+updErr.message,'warn'); return; }
   toast('✓ '+req.nav+' '+t('msg_added_as_new_member_pre')+t('msg_added_as_new_member_post'));
