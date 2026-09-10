@@ -118,11 +118,13 @@ body.dark-mode [style*="color:#8a6d1f"]{color:#fbbf24!important}
 body.dark-mode .member-content [style*="background:#fff"]{color:var(--text)!important}
 body.dark-mode #member-dashboard .member-content{color:var(--text)}
 body.dark-mode #md-mobile-display,
+body.dark-mode #md-address-display,
 body.dark-mode #md-profile-name,
 body.dark-mode #md-name,
 body.dark-mode #md-side-name,
 body.dark-mode #md-welcome-msg{color:var(--text)!important}
-body.dark-mode .member-content input:not([type="range"]){background:var(--bg2)!important;color:var(--text)!important;border-color:var(--border)!important}
+body.dark-mode .member-content input:not([type="range"]),
+body.dark-mode .member-content textarea{background:var(--bg2)!important;color:var(--text)!important;border-color:var(--border)!important}
 
 /* SIDEBAR */
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:200px;background:#0f172a;border-right:1px solid #c8860a;display:flex;flex-direction:column;z-index:100;overflow:hidden}
@@ -888,8 +890,12 @@ window.addEventListener('DOMContentLoaded', function(){
         </div>
 
         <div style="margin-bottom:14px;">
-          <div style="font-size:11px;color:#94a3b8;margin-bottom:2px;" data-i18n="lbl_address">पत्ता</div>
-          <textarea id="md-address-edit" rows="2" style="width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;box-sizing:border-box;"></textarea>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+            <span style="font-size:11px;color:#94a3b8;" data-i18n="lbl_address">पत्ता</span>
+            <button id="md-address-edit-link" onclick="toggleAddressEditMode()" style="background:none;border:none;color:var(--accent,#3a6fd8);font-size:11px;font-weight:600;cursor:pointer;">✏️ Edit</button>
+          </div>
+          <div id="md-address-display" style="font-size:14px;font-weight:600;color:#1e293b;white-space:pre-line;"></div>
+          <textarea id="md-address-edit" rows="2" style="display:none;width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;box-sizing:border-box;margin-top:4px;"></textarea>
         </div>
 
         <div style="margin-bottom:14px;">
@@ -4566,25 +4572,37 @@ function confirmDownloadPreviewedPdf(){
 }
 
 function downloadPDF(htmlContent, filename, orientation){
+  // The element html2canvas captures must stay in normal document flow (no
+  // position:fixed/absolute on it) — some html2canvas versions measure such
+  // elements as zero-height, producing a blank PDF. To keep it invisible to the
+  // user anyway, we nest it inside a fixed, zero-size, overflow:hidden wrapper.
+  const wrap = document.createElement('div');
+  wrap.style.position = 'fixed';
+  wrap.style.left = '0';
+  wrap.style.top = '0';
+  wrap.style.width = '0';
+  wrap.style.height = '0';
+  wrap.style.overflow = 'hidden';
+  wrap.style.zIndex = '-1';
   const el = document.createElement('div');
   el.innerHTML = htmlContent;
-  el.style.position = 'fixed';
-  el.style.left = '0';
-  el.style.top = '0';
-  el.style.opacity = '0';
-  el.style.pointerEvents = 'none';
-  el.style.zIndex = '-1';
-  document.body.appendChild(el);
-  html2pdf().set({
-    filename: filename,
-    margin: [8,8,8,8],
-    image: { type: 'jpeg', quality: 1 },
-    html2canvas: { scale: 3, useCORS: true },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: orientation || 'landscape' }
-  }).from(el).save().then(()=>{
-    document.body.removeChild(el);
-  }).catch(()=>{
-    if(el.parentNode) document.body.removeChild(el);
+  wrap.appendChild(el);
+  document.body.appendChild(wrap);
+  void el.offsetHeight;
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      html2pdf().set({
+        filename: filename,
+        margin: [8,8,8,8],
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 3, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: orientation || 'landscape' }
+      }).from(el).save().then(()=>{
+        document.body.removeChild(wrap);
+      }).catch(()=>{
+        if(wrap.parentNode) document.body.removeChild(wrap);
+      });
+    });
   });
   toast('✓ '+t('exp_pdf_started'));
 }
@@ -6956,6 +6974,7 @@ function renderMemberDashboard(m){
   }
   checkLoanRequestStatus(m);
   document.getElementById('md-mobile-edit').value = m.mobile||'';
+  document.getElementById('md-address-display').textContent = m.address||'—';
   document.getElementById('md-address-edit').value = m.address||'';
   document.getElementById('md-profile-name').textContent = m.nav;
   document.getElementById('md-mobile-display').textContent = m.mobile||'—';
@@ -7167,6 +7186,23 @@ function toggleMobileEditMode(){
   }
 }
 
+function toggleAddressEditMode(){
+  const display = document.getElementById('md-address-display');
+  const input = document.getElementById('md-address-edit');
+  const link = document.getElementById('md-address-edit-link');
+  const editing = input.style.display !== 'none';
+  if(editing){
+    input.style.display='none';
+    display.style.display='block';
+    link.textContent='✏️ Edit';
+  } else {
+    input.style.display='block';
+    display.style.display='none';
+    link.textContent='रद्द करा';
+    input.focus();
+  }
+}
+
 function togglePasswordEditMode(){
   const fields = document.getElementById('md-password-fields');
   const link = document.getElementById('md-password-edit-link');
@@ -7226,6 +7262,14 @@ async function saveMemberProfile(){
   msg.style.color='#16a34a';
   msg.textContent='✅ '+t('msg_profile_updated');
   if(currentMemberData && updatePayload.address!==undefined) currentMemberData.address = updatePayload.address;
+  const addressInput = document.getElementById('md-address-edit');
+  const isEditingAddress = addressInput.style.display !== 'none';
+  if(isEditingAddress && updatePayload.address!==undefined){
+    document.getElementById('md-address-display').textContent = updatePayload.address || '—';
+    document.getElementById('md-address-display').style.display='block';
+    addressInput.style.display='none';
+    document.getElementById('md-address-edit-link').textContent='✏️ Edit';
+  }
   if(pendingMemberPhoto){
     setMemberAvatarDisplay('md-avatar','md-avatar-placeholder', pendingMemberPhoto);
     if(document.getElementById('md-side-avatar')) setMemberAvatarDisplay('md-side-avatar','md-side-avatar-placeholder', pendingMemberPhoto);
