@@ -636,12 +636,11 @@ window.addEventListener('DOMContentLoaded', function(){
       </button>
     </div>
     <div class="member-sidebar-footer">
-      <button class="member-sidebar-logout" onclick="openMemberSettingsModal()" style="margin-bottom:10px;">
-        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 8.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-        <span data-i18n="txt_settings">सेटिंग्ज</span>
-      </button>
-      <div style="display:flex;justify-content:center;">
-        <button onclick="memberLogout()" title="लॉगआउट" style="width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+      <div style="display:flex;gap:8px;">
+        <button onclick="openMemberSettingsModal()" title="सेटिंग्ज" style="flex:1;display:flex;align-items:center;justify-content:center;padding:10px;border-radius:10px;cursor:pointer;color:#cbd5e1;border:1px solid rgba(255,255,255,.15);background:none;transition:all .18s;">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 8.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </button>
+        <button onclick="memberLogout()" title="लॉगआउट" style="flex:1;display:flex;align-items:center;justify-content:center;padding:10px;border-radius:10px;cursor:pointer;color:#f87171;border:1px solid rgba(248,113,113,.2);background:rgba(248,113,113,.06);transition:all .18s;">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24"><path d="M12 3v8"/><path d="M18.4 6.6a8 8 0 11-12.77 0"/></svg>
         </button>
       </div>
@@ -797,6 +796,9 @@ window.addEventListener('DOMContentLoaded', function(){
 
     <!-- Approved member content -->
     <div id="md-approved-content" style="display:none;">
+      <div id="md-loan-for-other-banner" style="display:none;background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12.5px;color:#3730a3;">
+        👥 <span data-i18n="txt_loan_taken_for_other">हे कर्ज इतर व्यक्तीसाठी घेतले आहे</span>: <b id="md-loan-for-other-name"></b>
+      </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:11px;margin-bottom:16px;">
         <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid var(--accent,#3a6fd8);border-radius:12px;padding:14px;">
           <div style="font-size:11px;color:#64748b;" data-i18n="txt_total_loan_taken">एकूण कर्ज घेतले</div>
@@ -836,6 +838,10 @@ window.addEventListener('DOMContentLoaded', function(){
           </table>
         </div>
       </div>
+      <div id="md-loan-history-box" style="display:none;margin-top:16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:14px 16px;">
+        <div style="font-size:12px;font-weight:700;color:#1e40af;margin-bottom:6px;">📜 <span data-i18n="txt_loan_history">मागील कर्ज इतिहास</span> (<span id="md-loan-history-count">0</span>)</div>
+        <div id="md-loan-history-list"></div>
+      </div>
     </div>
     </div>
 
@@ -870,6 +876,13 @@ window.addEventListener('DOMContentLoaded', function(){
           </div>
           <div id="md-mobile-display" style="font-size:14px;font-weight:600;color:#1e293b;"></div>
           <input type="tel" id="md-mobile-edit" maxlength="10" style="display:none;width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;margin-top:4px;">
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px;color:#94a3b8;margin-bottom:2px;" data-i18n="lbl_address">पत्ता</div>
+          <textarea id="md-address-edit" rows="2" style="width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;box-sizing:border-box;"></textarea>
+          <button onclick="saveMemberAddress()" style="margin-top:6px;padding:7px 14px;background:#8a6d1f;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:12px;" data-i18n="btn_save">जतन करा</button>
+          <div class="login-success" id="md-address-msg" style="margin-top:6px;"></div>
         </div>
 
         <div style="margin-bottom:14px;">
@@ -1279,6 +1292,7 @@ window.addEventListener('DOMContentLoaded', function(){
       <div class="form-grid">
         <div class="fg"><label data-i18n="lbl_member_name">सभासदाचे नाव</label><input type="text" id="e-nav" placeholder="पूर्ण नाव लिहा" data-i18n-ph="ph_write_full_name"></div>
         <div class="fg"><label data-i18n="lbl_mobile">मोबाईल नंबर</label><input type="text" id="e-mobile" placeholder="9876543210" maxlength="10"></div>
+        <div class="fg" style="grid-column:1/-1;"><label data-i18n="lbl_address">पत्ता</label><textarea id="e-address" rows="2" placeholder="पूर्ण पत्ता लिहा" data-i18n-ph="ph_address_example" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;box-sizing:border-box;"></textarea></div>
         <div class="fg">
           <label data-i18n="lbl_password">पासवर्ड (Password)</label>
           <input type="text" id="e-password" placeholder="किमान ६ अक्षरे" data-i18n-ph="ph_min6" autocomplete="off">
@@ -2166,6 +2180,11 @@ window.addEventListener('DOMContentLoaded', function(){
         </span>
         <span id="member-settings-dark-status" style="color:#7a8299;font-size:12px;font-weight:600;"></span>
       </button>
+
+      <button onclick="closeMemberSettingsModal();goMemberPage('profile');" style="display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13px;color:var(--text,#1e293b);border:1px solid #e2e8f0;background:none;width:100%;text-align:left;">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <span data-i18n="lnk_changepass">पासवर्ड बदला</span>
+      </button>
     </div>
 
     <button class="btn btn-ghost" onclick="closeMemberSettingsModal()" style="width:100%;margin-top:16px;" data-i18n="btn_close">बंद करा</button>
@@ -2202,6 +2221,11 @@ window.addEventListener('DOMContentLoaded', function(){
     <div style="margin-bottom:14px;">
       <div style="font-size:11px;color:#94a3b8;margin-bottom:2px;" data-i18n="lbl_mobile">मोबाईल नंबर</div>
       <input type="text" id="mp-mobile" maxlength="10" style="width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;font-weight:600;box-sizing:border-box;">
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <div style="font-size:11px;color:#94a3b8;margin-bottom:2px;" data-i18n="lbl_address">पत्ता</div>
+      <textarea id="mp-address" rows="2" style="width:100%;padding:9px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;box-sizing:border-box;"></textarea>
     </div>
 
     <div style="margin-bottom:6px;">
@@ -2285,7 +2309,7 @@ window.addEventListener('DOMContentLoaded', function(){
       <button onclick="closePdfPreview()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#64748b;line-height:1;">✕</button>
     </div>
     <div style="flex:1;overflow-y:auto;padding:16px;">
-      <iframe id="pdf-preview-frame" style="width:100%;min-height:420px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;"></iframe>
+      <iframe id="pdf-preview-frame" style="width:100%;height:420px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;"></iframe>
     </div>
     <div style="background:#fff;padding:12px 18px;border-top:1px solid #e2e8f0;display:flex;gap:8px;">
       <button class="btn btn-ghost" onclick="closePdfPreview()" style="flex:1;" data-i18n="btn_close">बंद करा</button>
@@ -2315,6 +2339,7 @@ window.addEventListener('DOMContentLoaded', function(){
       <div>
         <div style="font-family:'Tiro Devanagari Marathi',serif;font-size:17px" id="dr-name"></div>
         <div style="font-size:12px;color:var(--text2);margin-top:2px" id="dr-sub"></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px" id="dr-address"></div>
       </div>
       <button class="btn-icon" onclick="closeDrawer()">✕</button>
     </div>
@@ -2375,6 +2400,7 @@ const translations = {
     lbl_new_pass_confirm:"नवीन पासवर्ड पुन्हा टाका", ph_retype:"पुन्हा टाका", btn_changepass:"पासवर्ड बदला",
     hdr_register:"सभासद नोंदणी", txt_register_note:"नाव, मोबाईल व पासवर्ड भरा — अ‍ॅडमिनने approve केल्यावर तुम्ही लॉगिन करू शकाल.", txt_password_optional_hint:"रिकामे ठेवल्यास सभासदाला सध्या लॉगिन मिळणार नाही — तो नंतर स्वतः नोंदणी करू शकतो.",
     lbl_full_name:"पूर्ण नाव", ph_full_name:"तुमचं पूर्ण नाव", ph_write_full_name:"पूर्ण नाव लिहा", ph_mobile10:"१० अंकी मोबाईल नंबर",
+    lbl_address:"पत्ता", ph_address_example:"पूर्ण पत्ता लिहा", msg_address_saved:"पत्ता जतन झाला!",
     lbl_create_pass:"पासवर्ड तयार करा", ph_min6:"किमान ६ अक्षरे", lbl_pass_confirm:"पासवर्ड पुन्हा टाका",
     ph_loan_purpose_example:"उदा. घर दुरुस्ती, व्यवसाय...", ph_fund_desc_example:"उदा. राम पाटील यांच्याकडून कर्ज",
     ph_extra_details:"अतिरिक्त तपशील...", ph_blacklist_reason_example:"उदा. वारंवार हप्ता चुकवला, गैरवर्तन...",
@@ -2389,7 +2415,7 @@ const translations = {
     txt_entry_sub:"नवीन सभासदाची नोंद करा किंवा अस्तित्वातील नोंद अद्यतन करा", txt_member_info:"सभासद माहिती",
     lbl_loan_date:"कर्ज वाटप दिनांक", lbl_member_name:"सभासदाचे नाव", lbl_total_loan:"एकूण कर्ज वाटप (₹)",
     lbl_loan_for:"कर्ज कोणासाठी?", opt_self:"स्वतःसाठी", opt_other:"इतरांसाठी",
-    lbl_other_person_name:"इतर व्यक्तीचे नाव", ph_full_name_person:"व्यक्तीचे पूर्ण नाव लिहा",
+    lbl_other_person_name:"इतर व्यक्तीचे नाव", ph_full_name_person:"व्यक्तीचे पूर्ण नाव लिहा", txt_loan_taken_for_other:"हे कर्ज इतर व्यक्तीसाठी घेतले आहे",
     txt_hapta_entries:"हप्ता नोंदी", txt_total_details:"एकूण तपशील", txt_summary:"सारांश",
     th_installment_month:"हप्त्याचा महिना", th_date:"दिनांक", th_delay_months:"विलंब (महिने)",
     th_dand:"दंड", th_vyaj2:"व्याज @२%", th_hapta:"हप्ता", th_jama:"जमा",
@@ -2512,7 +2538,7 @@ const translations = {
     msg_invalid_rate:"कृपया योग्य दर भरा (शून्य किंवा त्यापेक्षा जास्त)", msg_settings_saved:"सेटिंग्ज जतन झाल्या!",
     txt_receipt_title:"पावती", txt_receipt_no:"पावती क्र.", txt_receiver_sign:"सही (प्राप्तकर्ता)",
     th_details:"तपशील", txt_pending_months:"प्रलंबित महिने", txt_total_in_words:"एकूण जमा (अक्षरात)",
-    txt_manager_sign:"सही (व्यवस्थापक)", txt_reprint_receipt:"पावती पुन्हा छापा",
+    txt_manager_sign:"सही (व्यवस्थापक)", txt_reprint_receipt:"पावती पुन्हा छापा", txt_digital_receipt_note:"टीप: ही पावती डिजिटल पद्धतीने स्वयंचलितपणे तयार करण्यात आलेली असल्याने स्वाक्षरीची आवश्यकता नाही.",
     txt_batch_receipt_title:"हप्ता वसुली पत्रक",
     btn_agm_report:"AGM वार्षिक अहवाल", txt_agm_title:"वार्षिक सर्वसाधारण सभा अहवाल",
     txt_agm_new_members:"नवीन सभासद", txt_agm_year_loan:"वर्षातील कर्ज वाटप",
@@ -2643,6 +2669,7 @@ const translations = {
     lbl_new_pass_confirm:"Re-enter new password", ph_retype:"Re-enter", btn_changepass:"Change password",
     hdr_register:"Member Registration", txt_register_note:"Fill your name, mobile and password — you can login once approved by admin.", txt_password_optional_hint:"Leave blank if this member shouldn't get login access yet — they can self-register later.",
     lbl_full_name:"Full name", ph_full_name:"Your full name", ph_write_full_name:"Write full name", ph_mobile10:"10-digit mobile number",
+    lbl_address:"Address", ph_address_example:"Write full address", msg_address_saved:"Address saved!",
     lbl_create_pass:"Create password", ph_min6:"Minimum 6 characters", lbl_pass_confirm:"Re-enter password",
     ph_loan_purpose_example:"e.g. Home repair, business...", ph_fund_desc_example:"e.g. Loan from Ram Patil",
     ph_extra_details:"Additional details...", ph_blacklist_reason_example:"e.g. Repeatedly missed installments, misconduct...",
@@ -2657,7 +2684,7 @@ const translations = {
     txt_entry_sub:"Register a new member or update an existing record", txt_member_info:"Member Information",
     lbl_loan_date:"Loan Disbursement Date", lbl_member_name:"Member Name", lbl_total_loan:"Total Loan Amount (₹)",
     lbl_loan_for:"Loan for?", opt_self:"Self", opt_other:"Other",
-    lbl_other_person_name:"Other Person's Name", ph_full_name_person:"Enter person's full name",
+    lbl_other_person_name:"Other Person's Name", ph_full_name_person:"Enter person's full name", txt_loan_taken_for_other:"This loan was taken for another person",
     txt_hapta_entries:"Installment Entries", txt_total_details:"Total Details", txt_summary:"Summary",
     th_installment_month:"Installment Month", th_date:"Date", th_delay_months:"Delay (Months)",
     th_dand:"Penalty", th_vyaj2:"Interest @2%", th_hapta:"Installment", th_jama:"Paid",
@@ -2780,7 +2807,7 @@ const translations = {
     msg_invalid_rate:"Please enter a valid rate (zero or greater)", msg_settings_saved:"Settings saved!",
     txt_receipt_title:"Receipt", txt_receipt_no:"Receipt No.", txt_receiver_sign:"Signature (Receiver)",
     th_details:"Details", txt_pending_months:"Pending Months", txt_total_in_words:"Total Amount (in words)",
-    txt_manager_sign:"Signature (Manager)", txt_reprint_receipt:"Reprint Receipt",
+    txt_manager_sign:"Signature (Manager)", txt_reprint_receipt:"Reprint Receipt", txt_digital_receipt_note:"Note: This is a digitally generated receipt and does not require a signature.",
     txt_batch_receipt_title:"Installment Collection Sheet",
     btn_agm_report:"AGM Annual Report", txt_agm_title:"Annual General Meeting Report",
     txt_agm_new_members:"New Members", txt_agm_year_loan:"Loans Disbursed This Year",
@@ -2993,7 +3020,7 @@ function closeMemberSettingsModal(){
 async function loadMembers(){
   const {data,error} = await sb.from('sabhasad').select('*').order('kram',{ascending:true});
   if(error){ toast(t('msg_data_load_error')+error.message,'warn'); return; }
-  members = (data||[]).map(r=>({id:r.id,kram:r.kram,nav:r.nav,mobile:r.mobile,vatap:r.vatap,date:r.date,hapte:r.hapte||[],karjtype:r.karjtype,guarantor:r.guarantor,photo:r.photo||null,admin_note:r.admin_note||null,loan_history:r.loan_history||[],blacklist_status:r.blacklist_status||'active',blacklist_reason:r.blacklist_reason||null,blacklist_until:r.blacklist_until||null,blacklisted_at:r.blacklisted_at||null,blacklisted_by:r.blacklisted_by||null}));
+  members = (data||[]).map(r=>({id:r.id,kram:r.kram,nav:r.nav,mobile:r.mobile,address:r.address||'',vatap:r.vatap,date:r.date,hapte:r.hapte||[],karjtype:r.karjtype,guarantor:r.guarantor,photo:r.photo||null,admin_note:r.admin_note||null,loan_history:r.loan_history||[],blacklist_status:r.blacklist_status||'active',blacklist_reason:r.blacklist_reason||null,blacklist_until:r.blacklist_until||null,blacklisted_at:r.blacklisted_at||null,blacklisted_by:r.blacklisted_by||null}));
   renderHome();
   if(document.getElementById('page-search')?.classList.contains('active')) doSearch();
   if(document.getElementById('page-summary')?.classList.contains('active')) renderSum();
@@ -3266,6 +3293,7 @@ function toggleGuarantor(){
 async function saveEntry(){
   const nav=document.getElementById('e-nav').value.trim();
   const mobile=document.getElementById('e-mobile').value.trim();
+  const address=document.getElementById('e-address').value.trim();
   const password=document.getElementById('e-password').value;
   if(!nav){toast(t('msg_enter_member_name'),'warn');return;}
   if(password && password.length<6){toast(t('msg_pass_min6'),'warn');return;}
@@ -3274,10 +3302,10 @@ async function saveEntry(){
   const editId = document.getElementById('e-nav').dataset.editId;
   const existing = editId ? members.find(m => String(m.id) === String(editId)) : null;
   if(existing) {
-    const {error} = await sb.from('sabhasad').update({nav,mobile}).eq('id',existing.id);
+    const {error} = await sb.from('sabhasad').update({nav,mobile,address}).eq('id',existing.id);
     if(error){toast(t('msg_save_error')+error.message,'warn');return;}
     const liveIdx = members.findIndex(m => m.id === existing.id);
-    if(liveIdx>=0){ members[liveIdx].nav = nav; members[liveIdx].mobile = mobile; }
+    if(liveIdx>=0){ members[liveIdx].nav = nav; members[liveIdx].mobile = mobile; members[liveIdx].address = address; }
     // If admin typed a password while editing, create or update this member's login
     if(password){
       try{
@@ -3296,9 +3324,9 @@ async function saveEntry(){
   } else {
     const maxKram = members.length > 0 ? Math.max(...members.map(m=>m.kram)) : 0;
     const kram = maxKram + 1;
-    const {data,error} = await sb.from('sabhasad').insert({kram,nav,mobile,vatap:0,date:null,hapte:[],karjtype:'swataha',guarantor:'',created_by:'admin'}).select().single();
+    const {data,error} = await sb.from('sabhasad').insert({kram,nav,mobile,address,vatap:0,date:null,hapte:[],karjtype:'swataha',guarantor:'',created_by:'admin'}).select().single();
     if(error){toast(t('msg_save_error')+error.message,'warn');return;}
-    members.push({id:data.id,kram,nav,mobile,vatap:0,date:null,hapte:[],karjtype:'swataha',guarantor:'',loan_history:[],created_by:'admin'});
+    members.push({id:data.id,kram,nav,mobile,address,vatap:0,date:null,hapte:[],karjtype:'swataha',guarantor:'',loan_history:[],created_by:'admin'});
     // Create an approved login for this member right away, if admin set a password
     if(password){
       const {error:reqErr} = await sb.from('member_requests').insert({nav,mobile,password,status:'approved',sabhasad_id:data.id});
@@ -3313,6 +3341,7 @@ async function saveEntry(){
 function resetEntry(){
   document.getElementById('e-nav').value='';
   document.getElementById('e-mobile').value='';
+  document.getElementById('e-address').value='';
   document.getElementById('e-password').value='';
   document.getElementById('e-nav').dataset.editIdx='';
   document.getElementById('e-nav').dataset.editId='';
@@ -3344,7 +3373,8 @@ function doSearch(){
 function openDrawer(idx){
   currentIdx=idx;const m=members[idx];
   document.getElementById('dr-name').textContent=m.nav;
-  document.getElementById('dr-sub').textContent='कर्ज दिनांक: '+fmtDate(m.date);
+  document.getElementById('dr-sub').textContent='कर्ज दिनांक: '+fmtDate(m.date)+(m.karjtype==='etar' && m.guarantor ? ' | 👥 '+t('opt_other')+' — '+m.guarantor : '');
+  document.getElementById('dr-address').textContent = m.address ? '📍 '+m.address : '';
   const tK=m.hapte.reduce((s,h)=>s+h.hapta,0);
   const tD=m.hapte.reduce((s,h)=>s+h.dand,0);
   const tV=m.hapte.reduce((s,h)=>s+h.vyaj,0);
@@ -3386,8 +3416,9 @@ function openDrawer(idx){
     historyBox.style.display='block';
     const cyclesHtml = loanHistory.map((cyc,i)=>{
       const cycPaid = (cyc.hapte||[]).reduce((s,h)=>s+(h.hapta||0),0);
+      const cycFor = cyc.karjtype==='etar' ? (' | 👥 '+t('opt_other')+(cyc.guarantor ? ' — '+cyc.guarantor : '')) : '';
       return `<div style="padding:8px 10px;background:#f8fafc;border-radius:8px;margin-top:6px;font-size:11px;color:var(--text2);">
-        <b>${t('txt_cycle')} ${i+1}:</b> ${fmtDate(cyc.date)} — ${t('m_loan_disb')} ${fmt(cyc.vatap)}, ${t('m_loan_paid')} ${fmt(cycPaid)}
+        <b>${t('txt_cycle')} ${i+1}:</b> ${fmtDate(cyc.date)} — ${t('m_loan_disb')} ${fmt(cyc.vatap)}, ${t('m_loan_paid')} ${fmt(cycPaid)}${cycFor}
         <span style="color:#166534;font-weight:600;"> ✓ ${t('txt_cycle_closed')} ${fmtDate(cyc.closed_on)}</span>
       </div>`;
     }).join('');
@@ -3413,7 +3444,13 @@ function openDrawer(idx){
     blacklistBox.innerHTML='';
   }
   let run=m.vatap;
-  document.getElementById('dr-body').innerHTML=m.hapte.map((h,hIdx)=>{
+  const drLoanMonth = m.date ? fmtMonthLabel(m.date.slice(0,7)) : '—';
+  const drAnchorRow = `<tr style="background:var(--gold-pale,#fdf6e3);font-weight:700;">
+    <td>${drLoanMonth}</td><td style="font-size:11px">${fmtDate(m.date)}</td>
+    <td>—</td><td>—</td><td>—</td><td>—</td>
+    <td style="color:var(--red)">${fmt(m.vatap||0)}</td><td>—</td><td></td>
+  </tr>`;
+  document.getElementById('dr-body').innerHTML=drAnchorRow+m.hapte.map((h,hIdx)=>{
     run-=h.hapta;
     const st=h.vilamb===0?'<span class="badge badge-green" style="font-size:10px">'+t('exp_on_time')+'</span>':h.vilamb<=1?'<span class="badge badge-amber" style="font-size:10px">'+t('exp_slight_delay')+'</span>':'<span class="badge badge-amber" style="font-size:10px">'+t('exp_delayed')+'</span>';
     return `<tr><td>${fmtMonthLabel(h.mahina)}</td><td style="font-size:11px">${fmtDate(h.dinank)}</td><td>${h.vilamb||0}</td><td>${fmt(h.dand)}</td><td>${fmt(h.vyaj)}</td><td>${fmt(h.hapta)}</td><td style="color:var(--red)">${fmt(Math.max(0,run))}</td><td>${st}</td><td><button class="btn-icon" onclick="reprintReceipt(${idx},${hIdx})" title="${t('txt_reprint_receipt')}">🧾</button></td></tr>`;
@@ -3450,6 +3487,7 @@ function editMemberProfile(idx){
   const m = members[idx];
   document.getElementById('mp-name').value = m.nav;
   document.getElementById('mp-mobile').value = m.mobile||'';
+  document.getElementById('mp-address').value = m.address||'';
   document.getElementById('mp-password').value = '';
   document.getElementById('mp-admin-note').value = m.admin_note||'';
   document.getElementById('mp-error').textContent = '';
@@ -3492,6 +3530,7 @@ async function saveMemberProfileAdmin(){
   const m = members[memberProfileTargetIdx];
   const nav = document.getElementById('mp-name').value.trim();
   const mobile = document.getElementById('mp-mobile').value.trim();
+  const address = document.getElementById('mp-address').value.trim();
   const password = document.getElementById('mp-password').value;
   const adminNote = document.getElementById('mp-admin-note').value.trim();
   const errEl = document.getElementById('mp-error');
@@ -3499,7 +3538,7 @@ async function saveMemberProfileAdmin(){
   if(!nav){ errEl.textContent = '❌ '+t('msg_enter_member_name'); return; }
   if(password && password.length<6){ errEl.textContent = '❌ '+t('msg_pass_min6'); return; }
 
-  const payload = {nav, mobile, admin_note: adminNote||null};
+  const payload = {nav, mobile, address, admin_note: adminNote||null};
   if(pendingAdminMemberPhoto) payload.photo = pendingAdminMemberPhoto;
 
   const {error} = await sb.from('sabhasad').update(payload).eq('id',m.id);
@@ -4460,7 +4499,15 @@ function showPdfPreview(html, filename, orientation, onConfirm, title){
   pdfPreviewData = { html, filename, orientation: orientation || 'landscape' };
   pdfPreviewOnConfirm = onConfirm || null;
   const frame = document.getElementById('pdf-preview-frame');
+  frame.style.height = '420px';
   frame.srcdoc = html;
+  frame.onload = function(){
+    try{
+      const doc = frame.contentWindow.document;
+      const h = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
+      frame.style.height = (h + 20) + 'px';
+    }catch(e){}
+  };
   const box = document.getElementById('pdf-preview-modal-box');
   if(box) box.style.maxWidth = (window.innerWidth>860 && title) ? '900px' : '520px';
   const titleEl = document.getElementById('pdf-preview-title');
@@ -4786,7 +4833,7 @@ function buildHaptaReceiptHtml(m, entries, alreadyIncluded){
   ${getOrgHeader(t('txt_receipt_title'))}
   <div class="receipt-no"><span>${t('txt_receipt_no')}: <b>${receiptNo}</b></span><span>${t('exp_date')}: <b>${dateStr}</b></span></div>
   <div class="member-box">
-    <b>${m.nav}</b>${m.mobile ? ' &nbsp;|&nbsp; 📱 '+m.mobile : ''}
+    <b>${m.nav}</b>${m.mobile ? ' &nbsp;|&nbsp; 📱 '+m.mobile : ''}${m.address ? '<div style="font-size:11px;color:#64748b;margin-top:2px;font-weight:400;">📍 '+m.address+'</div>' : ''}
     <div class="loan-row">
       <b>${t('txt_total_loan_taken')}: ${fmt(m.vatap)}</b>
       <b>${t('th_installment_month')}: ${monthsLabel}</b>
@@ -4809,6 +4856,7 @@ function buildHaptaReceiptHtml(m, entries, alreadyIncluded){
     <div class="sign-line">${t('txt_receiver_sign')}</div>
     <div class="sign-line">${t('txt_manager_sign')}</div>
   </div>
+  <div style="text-align:center;font-size:10.5px;color:#64748b;margin-top:16px;font-style:italic;">${t('txt_digital_receipt_note')}</div>
   </div>
   </body></html>`;
   return {html, filename: m.nav+'_'+t('txt_receipt_title')+'_'+receiptNo+'.pdf'};
@@ -5026,7 +5074,7 @@ function exportMemberPDF(idx){
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8">${getPDFCss()}</head><body>
 ${getOrgHeader(t('exp_title_member_detail'))}
 <div class="info-bar">
-  <strong>${m.nav} &nbsp;<span style="font-weight:400;color:#475569;">(${m.mobile||'—'})</span></strong>
+  <strong>${m.nav} &nbsp;<span style="font-weight:400;color:#475569;">(${m.mobile||'—'})</span></strong>${m.address ? '<div style="font-size:11px;color:#64748b;margin-top:2px;">📍 '+m.address+'</div>' : ''}
   <span>${t('exp_loan_date')}: <strong>${fmtDate(m.date)}</strong> &nbsp;|&nbsp; ${t('exp_print')}: ${dateStr}</span>
 </div>
 <div class="metrics-row">
@@ -5103,7 +5151,7 @@ function exportMemberExcel(idx){
   <tr><td colspan="9" class="sub">${t('exp_org_address_short')}</td></tr>
   <tr><td colspan="9" class="sub" style="font-size:12px;font-weight:bold;color:#e2b65a;">${t('exp_title_member_detail')}</td></tr>
   <tr><td colspan="9" style="padding:4px;"></td></tr>
-  <tr><td colspan="5" class="ibar">${m.nav} (${m.mobile||'—'})</td>
+  <tr><td colspan="5" class="ibar">${m.nav} (${m.mobile||'—'})${m.address ? ' — '+m.address : ''}</td>
       <td colspan="4" style="padding:8px;background:#f0f4fb;text-align:right;font-size:12px;">${t('exp_loan_date')}: ${fmtDate(m.date)} | ${t('exp_print')}: ${dateStr}</td></tr>
   <tr><td colspan="9" style="padding:4px;"></td></tr>
   <tr>
@@ -6684,6 +6732,29 @@ function renderMemberDashboard(m){
   document.getElementById('md-approved-content').style.display='block';
   document.getElementById('md-home-summary').style.display='grid';
   document.getElementById('md-vatap').textContent = fmt(m.vatap||0);
+  const loanForOtherBanner = document.getElementById('md-loan-for-other-banner');
+  if(m.karjtype==='etar' && m.guarantor){
+    loanForOtherBanner.style.display = 'block';
+    document.getElementById('md-loan-for-other-name').textContent = m.guarantor;
+  } else {
+    loanForOtherBanner.style.display = 'none';
+  }
+  const mLoanHistory = m.loan_history||[];
+  const historyBox = document.getElementById('md-loan-history-box');
+  if(mLoanHistory.length){
+    historyBox.style.display = 'block';
+    document.getElementById('md-loan-history-count').textContent = mLoanHistory.length;
+    document.getElementById('md-loan-history-list').innerHTML = mLoanHistory.map((cyc,i)=>{
+      const cycPaid = (cyc.hapte||[]).reduce((s,h)=>s+(h.hapta||0),0);
+      const cycFor = cyc.karjtype==='etar' ? (' | 👥 '+t('opt_other')+(cyc.guarantor ? ' — '+cyc.guarantor : '')) : (' | 🙋 '+t('opt_self'));
+      return `<div style="padding:8px 10px;background:#fff;border-radius:8px;margin-top:6px;font-size:11.5px;color:#334155;">
+        <b>${t('txt_cycle')} ${i+1}:</b> ${fmtDate(cyc.date)} — ${t('m_loan_disb')} ${fmt(cyc.vatap)}, ${t('m_loan_paid')} ${fmt(cycPaid)}${cycFor}
+        <span style="color:#166534;font-weight:600;"> ✓ ${t('txt_cycle_closed')} ${fmtDate(cyc.closed_on)}</span>
+      </div>`;
+    }).join('');
+  } else {
+    historyBox.style.display = 'none';
+  }
   document.getElementById('md-home-vatap').textContent = fmt(m.vatap||0);
   const hapte = m.hapte||[];
   const jamaTotal = hapte.reduce((s,h)=>s+(h.jama||0),0);
@@ -6754,6 +6825,7 @@ function renderMemberDashboard(m){
   }
   checkLoanRequestStatus(m);
   document.getElementById('md-mobile-edit').value = m.mobile||'';
+  document.getElementById('md-address-edit').value = m.address||'';
   document.getElementById('md-profile-name').textContent = m.nav;
   document.getElementById('md-mobile-display').textContent = m.mobile||'—';
   document.getElementById('md-mobile-display').style.display='block';
@@ -6764,15 +6836,27 @@ function renderMemberDashboard(m){
   setMemberAvatarDisplay('md-photo-preview','md-photo-placeholder', m.photo);
   if(document.getElementById('md-side-avatar')) setMemberAvatarDisplay('md-side-avatar','md-side-avatar-placeholder', m.photo);
   const tbody = document.getElementById('md-hapta-body');
+  const loanMonth = m.date ? fmtMonthLabel(m.date.slice(0,7)) : '—';
+  const anchorRow = `<tr style="background:var(--gold-pale,#fdf6e3);font-weight:700;border-top:1px solid #f0f0f0;">
+    <td style="padding:8px;">${loanMonth}</td>
+    <td style="padding:8px;text-align:center;">${fmtDate(m.date)}</td>
+    <td style="padding:8px;text-align:center;">—</td>
+    <td style="padding:8px;text-align:right;">—</td>
+    <td style="padding:8px;text-align:right;">—</td>
+    <td style="padding:8px;text-align:right;">—</td>
+    <td style="padding:8px;text-align:right;color:#dc2626;">${fmt(m.vatap||0)}</td>
+    <td style="padding:8px;text-align:center;">—</td>
+    <td style="padding:8px;"></td>
+  </tr>`;
   if(!hapte.length){
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:16px;color:#94a3b8;">'+t('txt_no_record')+'</td></tr>';
+    tbody.innerHTML = anchorRow + '<tr><td colspan="9" style="text-align:center;padding:16px;color:#94a3b8;">'+t('txt_no_record')+'</td></tr>';
   } else {
     const sortedHapte = [...hapte].sort((a,b)=>{
       const da=a.dinank||''; const db=b.dinank||'';
       return da<db?-1:da>db?1:0;
     });
     let run = m.vatap||0;
-    tbody.innerHTML = sortedHapte.map(h=>{
+    tbody.innerHTML = anchorRow + sortedHapte.map(h=>{
       run -= (h.hapta||0);
       const st = h.vilamb===0 ? '<span class="badge badge-green" style="font-size:10px">'+t('exp_on_time')+'</span>' : (h.vilamb<=1 ? '<span class="badge badge-amber" style="font-size:10px">'+t('exp_slight_delay')+'</span>' : '<span class="badge badge-amber" style="font-size:10px">'+t('exp_delayed')+'</span>');
       const origIdx = m.hapte.indexOf(h);
@@ -6981,6 +7065,17 @@ async function saveMemberProfile(){
     mobileInput.style.display='none';
     document.getElementById('md-mobile-edit-link').textContent='✏️ Edit';
   }
+}
+
+async function saveMemberAddress(){
+  const address = document.getElementById('md-address-edit').value.trim();
+  const msgEl = document.getElementById('md-address-msg');
+  msgEl.textContent = '';
+  const {error} = await sb.from('sabhasad').update({address}).eq('id', currentMemberSabhasadId);
+  if(error){ msgEl.style.color='#dc2626'; msgEl.textContent = '❌ '+t('err_prefix')+error.message; return; }
+  if(currentMemberData) currentMemberData.address = address;
+  msgEl.style.color='#16a34a';
+  msgEl.textContent = '✅ '+t('msg_address_saved');
 }
 
 async function saveMemberPassword(){
