@@ -3906,6 +3906,7 @@ function exportLedgerPDF(){
       <td style="text-align:right;font-weight:700;">${fmt(closingBalance)}</td>
     </tr></tfoot>
   </table>
+  <div style="text-align:center;font-size:10.5px;color:#64748b;margin-top:16px;font-style:italic;">${t('txt_digital_receipt_note')}</div>
   </body></html>`;
   showPdfPreview(html, m.nav+'_Ledger.pdf', 'portrait', null, m.nav+' — '+t('nav_ledger'));
 }
@@ -4965,6 +4966,7 @@ function generateBatchReceiptSheet(monthVal, batch){
       <td style="text-align:right">${fmt(tJama)}</td>
     </tr></tfoot>
   </table>
+  <div style="text-align:center;font-size:10.5px;color:#64748b;margin-top:16px;font-style:italic;">${t('txt_digital_receipt_note')}</div>
   </body></html>`;
   showPdfPreview(html, t('txt_batch_receipt_title')+'_'+monthVal+'.pdf', 'portrait');
 }
@@ -5163,6 +5165,7 @@ ${getOrgHeader(t('exp_title_member_detail'))}
   </tr></tfoot>
 </table>
 ${historySection}
+<div style="text-align:center;font-size:10.5px;color:#64748b;margin-top:16px;font-style:italic;">${t('txt_digital_receipt_note')}</div>
 </body></html>`;
   showPdfPreview(html, m.nav+'_'+t('exp_file_details')+'.pdf', 'landscape', null, m.nav+' — '+t('exp_file_details'));
 }
