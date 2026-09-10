@@ -759,6 +759,11 @@ window.addEventListener('DOMContentLoaded', function(){
           <div style="font-size:11px;opacity:.75;margin-top:3px;" data-i18n="txt_send_suggestion_sub">Admin ला मेसेज पाठवा</div>
         </button>
       </div>
+      <div id="md-contact-help-card" style="display:none;margin-top:16px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;">
+        <div style="font-size:12px;font-weight:700;color:#1a2540;margin-bottom:8px;">📞 <span data-i18n="txt_contact_help">संपर्क / मदत</span></div>
+        <div id="md-contact-phone-row" style="display:none;font-size:12.5px;color:#334155;margin-bottom:4px;">📱 <a id="md-contact-phone-link" href="#" style="color:#1a2540;font-weight:600;text-decoration:none;"></a></div>
+        <div id="md-office-hours-row" style="display:none;font-size:12.5px;color:#334155;">🕒 <span id="md-office-hours-text"></span></div>
+      </div>
     </div>
 
     <!-- PAGE: LOAN REQUEST -->
@@ -991,6 +996,7 @@ window.addEventListener('DOMContentLoaded', function(){
       <div style="font-size:11px;color:#e9d5ff;margin-top:3px;" data-i18n="txt_send_suggestion_note">तुमची तक्रार, सूचना किंवा प्रश्न इथे लिहा — ते थेट Admin ला दिसेल</div>
     </div>
     <div style="padding:18px;">
+    <div id="ms-compose-view">
       <textarea id="ms-suggestion-text" rows="5" placeholder="इथे लिहा..." data-i18n-ph="ph_suggestion_here" style="width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;box-sizing:border-box;margin-bottom:6px;"></textarea>
       <div class="login-error" id="ms-suggestion-error"></div>
       <div class="login-success" id="ms-suggestion-success"></div>
@@ -1007,10 +1013,20 @@ window.addEventListener('DOMContentLoaded', function(){
         <div id="ms-rating-label" style="font-size:11px;color:#94a3b8;"></div>
       </div>
 
+      <div style="text-align:center;margin-top:12px;">
+        <button onclick="showMySuggestionsHistory()" style="background:none;border:none;color:#6d28d9;font-size:11.5px;font-weight:600;cursor:pointer;text-decoration:underline;">📋 <span data-i18n="lnk_my_suggestions">माझ्या मागील सूचना पहा</span></button>
+      </div>
+
       <div style="display:flex;gap:8px;margin-top:14px;">
         <button class="btn btn-ghost" onclick="closeMemberSuggestionModal()" style="flex:1;" data-i18n="btn_cancel">रद्द करा</button>
         <button class="btn" onclick="submitMemberSuggestion()" style="flex:1;background:linear-gradient(135deg,#6d28d9,#5b21b6);color:#fff;">💬 <span data-i18n="btn_send">पाठवा</span></button>
       </div>
+    </div>
+
+    <div id="ms-history-view" style="display:none;">
+      <button onclick="showMySuggestionsCompose()" style="background:none;border:none;color:#6d28d9;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:12px;padding:0;">← <span data-i18n="btn_back">मागे</span></button>
+      <div id="ms-history-list" style="max-height:340px;overflow-y:auto;"></div>
+    </div>
     </div>
   </div>
 </div>
@@ -2068,6 +2084,14 @@ window.addEventListener('DOMContentLoaded', function(){
         <label data-i18n="lbl_reminder_day">हप्ता स्मरणपत्र दिवस (महिन्याची तारीख)</label>
         <input type="number" id="settings-reminder-day" step="1" min="1" max="28" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
       </div>
+      <div class="login-field">
+        <label data-i18n="lbl_contact_phone">संपर्क फोन नंबर (सभासदांसाठी)</label>
+        <input type="text" id="settings-contact-phone" placeholder="उदा. 9876543210" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
+      </div>
+      <div class="login-field">
+        <label data-i18n="lbl_office_hours">कार्यालयीन वेळ</label>
+        <input type="text" id="settings-office-hours" placeholder="उदा. सोम-शनि, सकाळी १० ते सायं ५" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
+      </div>
       <div style="font-size:11px;color:var(--text3);background:#f8fafc;border-radius:8px;padding:8px 10px;margin-top:2px;" data-i18n="txt_settings_note">टीप: हा बदल फक्त नवीन हप्ता नोंदींच्या auto-calculation साठी लागू होतो. आधीच्या नोंदी बदलणार नाहीत.</div>
       <button class="btn" onclick="saveSettings()" style="width:100%;background:var(--accent,#3a6fd8);color:#fff;margin-top:12px;" data-i18n="btn_save">जतन करा</button>
       <div class="login-success" id="settings-success" style="margin-top:8px;"></div>
@@ -2463,7 +2487,7 @@ const translations = {
     msg_confirm_delete_message:"ही सूचना कायमची काढायची आहे का?", msg_message_deleted:"सूचना काढली.",
     btn_send_suggestion:"सूचना पाठवा", txt_send_suggestion_sub:"Admin ला मेसेज पाठवा",
     txt_send_suggestion_title:"Admin ला सूचना / मेसेज पाठवा", txt_send_suggestion_note:"तुमची तक्रार, सूचना किंवा प्रश्न इथे लिहा — ते थेट Admin ला दिसेल",
-    ph_suggestion_here:"इथे लिहा...", btn_send:"पाठवा",
+    ph_suggestion_here:"इथे लिहा...", btn_send:"पाठवा", lnk_my_suggestions:"माझ्या मागील सूचना पहा",
     msg_enter_suggestion:"कृपया काहीतरी लिहा", msg_suggestion_sent:"तुमची सूचना Admin ला पाठवली गेली!", txt_rate_app:"App बद्दल Review द्या (ऐच्छिक)",
     txt_total_dand:"एकूण दंड", txt_total_vyaj:"एकूण व्याज", txt_hapta_history_date:"हप्ता इतिहास (दिनांकानुसार)",
     txt_my_profile:"माझी प्रोफाईल", txt_photo_hint:"JPG/PNG, कमाल ५ MB", txt_member_profile:"सभासद प्रोफाइल", txt_password_blank_no_change:"रिकामे ठेवल्यास पासवर्ड बदलणार नाही.",
@@ -2535,7 +2559,7 @@ const translations = {
     txt_bulk_saved_suffix:"सभासदांचे हप्ते जतन झाले!",
     txt_settings:"सेटिंग्ज", txt_settings_sub:"व्याजदर व दंडदर बदला — सर्व admin devices वर लागू होईल", btn_signout:"साइन आउट करा",
     lbl_interest_rate:"व्याजदर (% दर महिना)", lbl_penalty_rate:"दंडदर (₹ दर महिना)",
-    lbl_reminder_day:"हप्ता स्मरणपत्र दिवस (महिन्याची तारीख)",
+    lbl_reminder_day:"हप्ता स्मरणपत्र दिवस (महिन्याची तारीख)", lbl_contact_phone:"संपर्क फोन नंबर (सभासदांसाठी)", lbl_office_hours:"कार्यालयीन वेळ", txt_contact_help:"संपर्क / मदत",
     txt_settings_note:"टीप: हा बदल फक्त नवीन हप्ता नोंदींच्या auto-calculation साठी लागू होतो. आधीच्या नोंदी बदलणार नाहीत.",
     msg_invalid_rate:"कृपया योग्य दर भरा (शून्य किंवा त्यापेक्षा जास्त)", msg_settings_saved:"सेटिंग्ज जतन झाल्या!",
     txt_receipt_title:"पावती", txt_receipt_no:"पावती क्र.", txt_receiver_sign:"सही (प्राप्तकर्ता)",
@@ -2732,7 +2756,7 @@ const translations = {
     msg_confirm_delete_message:"Delete this message permanently?", msg_message_deleted:"Message deleted.",
     btn_send_suggestion:"Send Suggestion", txt_send_suggestion_sub:"Send a message to Admin",
     txt_send_suggestion_title:"Send a Suggestion / Message to Admin", txt_send_suggestion_note:"Write your complaint, suggestion or question here — it will be visible directly to the Admin",
-    ph_suggestion_here:"Write here...", btn_send:"Send",
+    ph_suggestion_here:"Write here...", btn_send:"Send", lnk_my_suggestions:"View my previous suggestions",
     msg_enter_suggestion:"Please write something", msg_suggestion_sent:"Your suggestion has been sent to Admin!", txt_rate_app:"Rate the App (optional)",
     txt_total_dand:"Total Penalty", txt_total_vyaj:"Total Interest", txt_hapta_history_date:"Installment History (Date-wise)",
     txt_my_profile:"My Profile", txt_photo_hint:"JPG/PNG, max 5 MB", txt_member_profile:"Member Profile", txt_password_blank_no_change:"Leave blank to keep the password unchanged.",
@@ -2804,7 +2828,7 @@ const translations = {
     txt_bulk_saved_suffix:"members' installments saved!",
     txt_settings:"Settings", txt_settings_sub:"Change interest and penalty rates — applies across all admin devices", btn_signout:"Sign Out",
     lbl_interest_rate:"Interest Rate (% per month)", lbl_penalty_rate:"Penalty Rate (₹ per month)",
-    lbl_reminder_day:"Installment Reminder Day (day of month)",
+    lbl_reminder_day:"Installment Reminder Day (day of month)", lbl_contact_phone:"Contact Phone Number (for members)", lbl_office_hours:"Office Hours", txt_contact_help:"Contact / Help",
     txt_settings_note:"Note: This only affects auto-calculation for new installment entries. Existing records won't change.",
     msg_invalid_rate:"Please enter a valid rate (zero or greater)", msg_settings_saved:"Settings saved!",
     txt_receipt_title:"Receipt", txt_receipt_no:"Receipt No.", txt_receiver_sign:"Signature (Receiver)",
@@ -4576,7 +4600,7 @@ function downloadExcel(htmlContent, filename){
 }
 
 /* ── SETTINGS (व्याजदर / दंडदर) ── */
-let appSettingsCache = { interest_rate: null, penalty_rate: null, reminder_day: null, loaded: false };
+let appSettingsCache = { interest_rate: null, penalty_rate: null, reminder_day: null, contact_phone: null, office_hours: null, loaded: false };
 
 async function loadAppSettings(){
   try{
@@ -4586,6 +4610,8 @@ async function loadAppSettings(){
       appSettingsCache.interest_rate = data.interest_rate;
       appSettingsCache.penalty_rate = data.penalty_rate;
       appSettingsCache.reminder_day = data.reminder_day;
+      appSettingsCache.contact_phone = data.contact_phone;
+      appSettingsCache.office_hours = data.office_hours;
       appSettingsCache.loaded = true;
       updateVyajRateLabels();
     }
@@ -4607,6 +4633,14 @@ function getReminderDay(){
   if(appSettingsCache.loaded && appSettingsCache.reminder_day!==null) return appSettingsCache.reminder_day;
   try{ const v = parseInt(localStorage.getItem('pp_reminder_day')); return isNaN(v) ? 20 : v; }catch(e){ return 20; }
 }
+function getContactPhone(){
+  if(appSettingsCache.loaded && appSettingsCache.contact_phone) return appSettingsCache.contact_phone;
+  try{ return localStorage.getItem('pp_contact_phone') || ''; }catch(e){ return ''; }
+}
+function getOfficeHours(){
+  if(appSettingsCache.loaded && appSettingsCache.office_hours) return appSettingsCache.office_hours;
+  try{ return localStorage.getItem('pp_office_hours') || ''; }catch(e){ return ''; }
+}
 function updateVyajRateLabels(){
   const pct = (getInterestRate()*100);
   const pctStr = pct % 1 === 0 ? pct.toFixed(0) : pct.toFixed(2);
@@ -4618,6 +4652,8 @@ function openSettingsModal(){
   document.getElementById('settings-interest-rate').value = (getInterestRate()*100).toFixed(2);
   document.getElementById('settings-penalty-rate').value = getPenaltyRate();
   document.getElementById('settings-reminder-day').value = getReminderDay();
+  document.getElementById('settings-contact-phone').value = getContactPhone();
+  document.getElementById('settings-office-hours').value = getOfficeHours();
   document.getElementById('settings-success').textContent = '';
   const statusEl = document.getElementById('settings-dark-status');
   if(statusEl) statusEl.textContent = getDarkMode() ? t('txt_on') : t('txt_off');
@@ -4639,6 +4675,8 @@ async function saveSettings(){
   const interestPct = parseFloat(document.getElementById('settings-interest-rate').value);
   const penaltyAmt = parseFloat(document.getElementById('settings-penalty-rate').value);
   const reminderDay = parseInt(document.getElementById('settings-reminder-day').value);
+  const contactPhone = document.getElementById('settings-contact-phone').value.trim();
+  const officeHours = document.getElementById('settings-office-hours').value.trim();
   const suc = document.getElementById('settings-success');
   if(isNaN(interestPct) || interestPct < 0 || isNaN(penaltyAmt) || penaltyAmt < 0 || isNaN(reminderDay) || reminderDay<1 || reminderDay>28){
     suc.style.color = '#dc2626';
@@ -4652,6 +4690,8 @@ async function saveSettings(){
       interest_rate: newInterestRate,
       penalty_rate: penaltyAmt,
       reminder_day: reminderDay,
+      contact_phone: contactPhone||null,
+      office_hours: officeHours||null,
       updated_at: new Date().toISOString(),
       updated_by: sessionStorage.getItem('pp_admin_username')||''
     });
@@ -4659,6 +4699,8 @@ async function saveSettings(){
     appSettingsCache.interest_rate = newInterestRate;
     appSettingsCache.penalty_rate = penaltyAmt;
     appSettingsCache.reminder_day = reminderDay;
+    appSettingsCache.contact_phone = contactPhone||null;
+    appSettingsCache.office_hours = officeHours||null;
     appSettingsCache.loaded = true;
   }catch(e){
     // app_settings table may not exist yet — fall back to localStorage only (this device)
@@ -4667,6 +4709,8 @@ async function saveSettings(){
       localStorage.setItem('pp_interest_rate', newInterestRate.toString());
       localStorage.setItem('pp_penalty_rate', penaltyAmt.toString());
       localStorage.setItem('pp_reminder_day', reminderDay.toString());
+      localStorage.setItem('pp_contact_phone', contactPhone);
+      localStorage.setItem('pp_office_hours', officeHours);
     }catch(e2){}
   }
   logActivity('rate_change', null, 'व्याजदर: '+interestPct+'%, दंडदर: ₹'+penaltyAmt+', स्मरणपत्र दिवस: '+reminderDay);
@@ -6189,6 +6233,17 @@ function isBlacklisted(m){
   return true;
 }
 
+const LOGIN_MAX_ATTEMPTS = 5;
+const LOGIN_LOCKOUT_MINUTES = 15;
+
+function formatLockoutRemaining(lockedUntilStr){
+  const remainMs = new Date(lockedUntilStr).getTime() - Date.now();
+  const remainMin = Math.max(1, Math.ceil(remainMs/60000));
+  return getLanguage()==='en'
+    ? `Too many failed attempts. Try again in ${remainMin} minute(s).`
+    : `खूप चुकीचे प्रयत्न झाले. कृपया ${remainMin} मिनिटांनी पुन्हा प्रयत्न करा.`;
+}
+
 async function doLogin(){
   const u=document.getElementById('login-user').value.trim();
   const p=document.getElementById('login-pass').value;
@@ -6197,17 +6252,41 @@ async function doLogin(){
 
   // Try admins table first (multi-admin)
   try{
-    const {data, error} = await sb.from('admins').select('*').eq('username',u).eq('password',p).limit(1);
-    if(!error && data && data.length){
-      const admin = data[0];
-      sessionStorage.setItem('pp_auth','true');
-      sessionStorage.setItem('pp_admin_id', String(admin.id));
-      sessionStorage.setItem('pp_admin_username', admin.username);
-      sessionStorage.setItem('pp_admin_role', admin.role);
-      applyAdminSession(admin);
-      logActivity('admin_login', admin.username, null, {username:admin.username, role:admin.role});
-      document.getElementById('login-overlay').style.display='none';
-      return;
+    const {data: adminRows, error: lookupErr} = await sb.from('admins').select('*').eq('username',u).limit(1);
+    if(!lookupErr && adminRows && adminRows.length){
+      const admin = adminRows[0];
+      if(admin.locked_until && new Date(admin.locked_until) > new Date()){
+        err.textContent = '🔒 ' + formatLockoutRemaining(admin.locked_until);
+        return;
+      }
+      if(admin.password === p){
+        if(admin.failed_attempts || admin.locked_until){
+          try{ await sb.from('admins').update({failed_attempts:0, locked_until:null}).eq('id',admin.id); }catch(e){}
+        }
+        sessionStorage.setItem('pp_auth','true');
+        sessionStorage.setItem('pp_admin_id', String(admin.id));
+        sessionStorage.setItem('pp_admin_username', admin.username);
+        sessionStorage.setItem('pp_admin_role', admin.role);
+        applyAdminSession(admin);
+        logActivity('admin_login', admin.username, null, {username:admin.username, role:admin.role});
+        document.getElementById('login-overlay').style.display='none';
+        return;
+      } else {
+        const attempts = (admin.failed_attempts||0) + 1;
+        const payload = {failed_attempts: attempts};
+        if(attempts >= LOGIN_MAX_ATTEMPTS){
+          payload.locked_until = new Date(Date.now() + LOGIN_LOCKOUT_MINUTES*60000).toISOString();
+        }
+        try{ await sb.from('admins').update(payload).eq('id',admin.id); }catch(e){}
+        if(payload.locked_until){
+          err.textContent = '🔒 ' + formatLockoutRemaining(payload.locked_until);
+        } else {
+          const left = LOGIN_MAX_ATTEMPTS - attempts;
+          err.textContent = '❌ ' + t('msg_wrong_credentials') + ' (' + (getLanguage()==='en' ? left+' attempts left' : left+' प्रयत्न शिल्लक') + ')';
+        }
+        document.getElementById('login-pass').value='';
+        return;
+      }
     }
   }catch(e){ /* admins table may not exist yet — fall through */ }
 
@@ -6224,9 +6303,32 @@ async function doLogin(){
   }
   // Not admin — try member login (username field doubles as mobile number)
   if(/^\d{10}$/.test(u)){
-    const {data, error} = await sb.from('member_requests').select('*').eq('mobile',u).eq('password',p).order('created_at',{ascending:false}).limit(1);
-    if(!error && data && data.length){
-      const req = data[0];
+    const {data: reqRows, error} = await sb.from('member_requests').select('*').eq('mobile',u).order('created_at',{ascending:false}).limit(1);
+    if(!error && reqRows && reqRows.length){
+      const req = reqRows[0];
+      if(req.locked_until && new Date(req.locked_until) > new Date()){
+        err.textContent = '🔒 ' + formatLockoutRemaining(req.locked_until);
+        return;
+      }
+      if(req.password !== p){
+        const attempts = (req.failed_attempts||0) + 1;
+        const payload = {failed_attempts: attempts};
+        if(attempts >= LOGIN_MAX_ATTEMPTS){
+          payload.locked_until = new Date(Date.now() + LOGIN_LOCKOUT_MINUTES*60000).toISOString();
+        }
+        try{ await sb.from('member_requests').update(payload).eq('id',req.id); }catch(e){}
+        if(payload.locked_until){
+          err.textContent = '🔒 ' + formatLockoutRemaining(payload.locked_until);
+        } else {
+          const left = LOGIN_MAX_ATTEMPTS - attempts;
+          err.textContent = '❌ ' + t('msg_wrong_credentials') + ' (' + (getLanguage()==='en' ? left+' attempts left' : left+' प्रयत्न शिल्लक') + ')';
+        }
+        document.getElementById('login-pass').value='';
+        return;
+      }
+      if(req.failed_attempts || req.locked_until){
+        try{ await sb.from('member_requests').update({failed_attempts:0, locked_until:null}).eq('id',req.id); }catch(e){}
+      }
       if(req.status==='pending'){
         err.textContent='⏳ '+t('msg_reg_pending');
         return;
@@ -6726,6 +6828,30 @@ function renderMemberDashboard(m){
   if(sideNameEl) sideNameEl.textContent = m.nav;
   document.getElementById('md-welcome-msg').textContent = (getLanguage()==='en' ? 'Hello, ' : 'नमस्कार, ') + m.nav + '! 🙏';
   setMemberAvatarDisplay('md-home-avatar','md-home-avatar-placeholder', m.photo);
+  const contactCard = document.getElementById('md-contact-help-card');
+  const contactPhone = getContactPhone();
+  const officeHours = getOfficeHours();
+  if(contactPhone || officeHours){
+    contactCard.style.display = 'block';
+    const phoneRow = document.getElementById('md-contact-phone-row');
+    if(contactPhone){
+      phoneRow.style.display = 'block';
+      const phoneLink = document.getElementById('md-contact-phone-link');
+      phoneLink.textContent = contactPhone;
+      phoneLink.href = 'tel:'+contactPhone.replace(/\D/g,'');
+    } else {
+      phoneRow.style.display = 'none';
+    }
+    const hoursRow = document.getElementById('md-office-hours-row');
+    if(officeHours){
+      hoursRow.style.display = 'block';
+      document.getElementById('md-office-hours-text').textContent = officeHours;
+    } else {
+      hoursRow.style.display = 'none';
+    }
+  } else {
+    contactCard.style.display = 'none';
+  }
   const noteCard = document.getElementById('md-admin-note-card');
   if(m.admin_note){
     noteCard.style.display = 'block';
@@ -6939,12 +7065,50 @@ function renderAppRatingStars(){
   if(labelEl) labelEl.textContent = msSelectedRating>0 ? (msSelectedRating+' ★ — '+labels[msSelectedRating]) : '';
 }
 
+function showMySuggestionsCompose(){
+  document.getElementById('ms-compose-view').style.display = 'block';
+  document.getElementById('ms-history-view').style.display = 'none';
+}
+
+async function showMySuggestionsHistory(){
+  document.getElementById('ms-compose-view').style.display = 'none';
+  document.getElementById('ms-history-view').style.display = 'block';
+  const listEl = document.getElementById('ms-history-list');
+  listEl.innerHTML = '<div style="text-align:center;padding:20px;color:#94a3b8;font-size:12px;">'+t('txt_loading')+'</div>';
+  if(!currentMemberData){ listEl.innerHTML = ''; return; }
+  try{
+    const {data, error} = await sb.from('member_messages').select('*').eq('sabhasad_id', currentMemberData.id).order('created_at',{ascending:false});
+    if(error) throw error;
+    if(!data || !data.length){
+      listEl.innerHTML = '<div style="text-align:center;padding:20px;color:#94a3b8;font-size:12px;">'+t('txt_no_member_messages')+'</div>';
+      return;
+    }
+    listEl.innerHTML = data.map(msg=>{
+      const stars = msg.rating ? '<div style="color:#f0b429;font-size:13px;letter-spacing:1px;margin-bottom:3px;">'+'★'.repeat(msg.rating)+'<span style="color:#e2e8f0;">'+'★'.repeat(5-msg.rating)+'</span></div>' : '';
+      const statusBadge = msg.is_read
+        ? '<span style="font-size:9px;font-weight:700;color:#166534;background:#dcfce7;padding:2px 8px;border-radius:8px;">'+t('txt_read')+'</span>'
+        : '<span style="font-size:9px;font-weight:700;color:#92400e;background:#fef3c7;padding:2px 8px;border-radius:8px;">'+t('txt_new')+'</span>';
+      return `<div style="padding:10px 12px;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:10.5px;color:#94a3b8;">${fmtDate((msg.created_at||'').slice(0,10))}</span>
+          ${statusBadge}
+        </div>
+        ${stars}
+        ${msg.message ? '<div style="font-size:12.5px;color:#334155;white-space:pre-line;">'+msg.message+'</div>' : ''}
+      </div>`;
+    }).join('');
+  }catch(e){
+    listEl.innerHTML = '<div style="text-align:center;padding:20px;color:#dc2626;font-size:12px;">'+t('err_prefix')+(e?.message||e)+'</div>';
+  }
+}
+
 function openMemberSuggestionModal(){
   document.getElementById('ms-suggestion-text').value = '';
   document.getElementById('ms-suggestion-error').textContent = '';
   document.getElementById('ms-suggestion-success').textContent = '';
   msSelectedRating = 0;
   renderAppRatingStars();
+  showMySuggestionsCompose();
   document.getElementById('member-suggestion-modal').style.display = 'flex';
 }
 function closeMemberSuggestionModal(){
