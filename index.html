@@ -6358,6 +6358,20 @@ function formatLockoutRemaining(lockedUntilStr){
     : `खूप चुकीचे प्रयत्न झाले. कृपया ${remainMin} मिनिटांनी पुन्हा प्रयत्न करा.`;
 }
 
+async function initAdminDashboardAfterLogin(){
+  const loadingScreen = document.getElementById('member-restore-loading');
+  const loadingText = document.getElementById('member-restore-loading-text');
+  if(loadingScreen){
+    if(loadingText) loadingText.textContent = t('txt_loading');
+    loadingScreen.style.display = 'flex';
+  }
+  try{ await loadMembers(); }catch(e){ console.warn('loadMembers failed after login:', e?.message||e); }
+  try{ await loadMemberRequests(); }catch(e){ console.warn('loadMemberRequests failed after login:', e?.message||e); }
+  try{ await loadMemberMessages(); }catch(e){ console.warn('loadMemberMessages failed after login:', e?.message||e); }
+  try{ goPage('home'); }catch(e){ console.warn('goPage home failed after login:', e?.message||e); }
+  if(loadingScreen) loadingScreen.style.display = 'none';
+}
+
 async function doLogin(){
   const u=document.getElementById('login-user').value.trim();
   const p=document.getElementById('login-pass').value;
@@ -6384,6 +6398,7 @@ async function doLogin(){
         try{ applyAdminSession(admin); }catch(e){ console.warn('applyAdminSession failed on login (non-fatal):', e?.message||e); }
         logActivity('admin_login', admin.username, null, {username:admin.username, role:admin.role});
         document.getElementById('login-overlay').style.display='none';
+        await initAdminDashboardAfterLogin();
         return;
       } else {
         const attempts = (admin.failed_attempts||0) + 1;
@@ -6413,6 +6428,7 @@ async function doLogin(){
     try{ applyAdminSession({username:u, role:'superadmin'}); }catch(e){ console.warn('applyAdminSession failed on legacy login (non-fatal):', e?.message||e); }
     logActivity('admin_login', u, null, {username:u, role:'superadmin'});
     document.getElementById('login-overlay').style.display='none';
+    await initAdminDashboardAfterLogin();
     return;
   }
   // Not admin — try member login (username field doubles as mobile number)
