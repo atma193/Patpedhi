@@ -2592,8 +2592,12 @@ const translations = {
     txt_agm_outstanding:"एकूण थकबाकी (सध्याची)", txt_agm_income_statement:"उत्पन्न स्टेटमेंट",
     txt_agm_income_head:"उत्पन्न प्रकार", txt_agm_total_income:"एकूण उत्पन्न",
     txt_agm_member_detail:"सभासदनिहाय वार्षिक तपशील", txt_agm_new_loan:"नवीन कर्ज",
-    txt_agm_disclaimer:"टीप: हा एक व्यवस्थापकीय सारांश अहवाल आहे. एकूण थकबाकी सध्याच्या तारखेनुसार आहे, वर्षअखेरीची नाही. अधिकृत लेखापरीक्षित ताळेबंदासाठी संस्थेच्या CA/लेखापरीक्षकाशी संपर्क साधा.",
+    txt_agm_disclaimer:"टीप: हा एक व्यवस्थापकीय सारांश अहवाल आहे. अधिकृत लेखापरीक्षित ताळेबंदासाठी संस्थेच्या CA/लेखापरीक्षकाशी संपर्क साधा.",
+    txt_agm_loan_reconcile:"कर्ज ताळमेळ (Loan Reconciliation)", txt_agm_opening_outstanding:"सुरुवातीची थकबाकी (मागील शिल्लक)",
+    txt_agm_closing_outstanding:"वर्षअखेरची थकबाकी", txt_agm_reconcile_note:"टीप: सुरुवातीची थकबाकी + चालू वर्षातील कर्ज वाटप − चालू वर्षातील मुद्दल वसुली = वर्षअखेरची थकबाकी.",
+    txt_agm_opening_short:"मागील शिल्लक", txt_agm_closing_short:"अखेरची शिल्लक",
     txt_agm_president:"अध्यक्ष सही", txt_agm_secretary:"सचिव सही", txt_agm_treasurer:"खजिनदार सही",
+    txt_agm_fund_summary:"फंड व्यवस्थापन सारांश", txt_agm_fund_note:"टीप: वरील रक्कमा निवडलेल्या वर्षातील आहेत, सध्याची बाकी मात्र आत्तापर्यंतची एकूण (cumulative) आहे.",
     txt_duesoon_notice:"हप्ता स्मरणपत्र",
     txt_duesoon_line:"या महिन्याचा हप्ता अजून भरलेला नाही. कृपया लवकरात लवकर भरा 🙏",
     txt_notif_title:"हप्ता स्मरणपत्र — पतपेढी", txt_notif_body:"{name}, या महिन्याचा हप्ता अजून भरलेला नाही.",
@@ -2861,8 +2865,12 @@ const translations = {
     txt_agm_outstanding:"Total Outstanding (Current)", txt_agm_income_statement:"Income Statement",
     txt_agm_income_head:"Income Type", txt_agm_total_income:"Total Income",
     txt_agm_member_detail:"Member-wise Annual Detail", txt_agm_new_loan:"New Loan",
-    txt_agm_disclaimer:"Note: This is a management summary report. Total outstanding is as of the current date, not year-end. Please consult the society's CA/auditor for an official audited balance sheet.",
+    txt_agm_disclaimer:"Note: This is a management summary report. Please consult the society's CA/auditor for an official audited balance sheet.",
+    txt_agm_loan_reconcile:"Loan Reconciliation", txt_agm_opening_outstanding:"Opening Outstanding (Previous Balance)",
+    txt_agm_closing_outstanding:"Closing Outstanding (Year-end)", txt_agm_reconcile_note:"Note: Opening outstanding + loans disbursed this year − principal recovered this year = closing outstanding.",
+    txt_agm_opening_short:"Opening Bal.", txt_agm_closing_short:"Closing Bal.",
     txt_agm_president:"President's Signature", txt_agm_secretary:"Secretary's Signature", txt_agm_treasurer:"Treasurer's Signature",
+    txt_agm_fund_summary:"Fund Management Summary", txt_agm_fund_note:"Note: Amounts above are for the selected year; the net outstanding is the overall cumulative figure to date.",
     txt_duesoon_notice:"Installment Reminder",
     txt_duesoon_line:"This month's installment hasn't been paid yet. Please pay as soon as possible 🙏",
     txt_notif_title:"Installment Reminder — Credit Society", txt_notif_body:"{name}, this month's installment hasn't been paid yet.",
@@ -4986,7 +4994,23 @@ function generateBatchReceiptSheet(monthVal, batch){
 }
 
 /* ── AGM वार्षिक अहवाल ── */
-function exportAGMReport(){
+function computeMemberOutstandingAsOf(m, cutoffDateStr){
+  let total = 0;
+  const cycles = [...(m.loan_history||[]), {vatap:m.vatap, date:m.date, hapte:m.hapte}];
+  cycles.forEach(cyc=>{
+    if(!cyc.date || cyc.date > cutoffDateStr) return;
+    const paidByCutoff = (cyc.hapte||[]).reduce((s,h)=> (h.dinank && h.dinank<=cutoffDateStr) ? s+(h.hapta||0) : s, 0);
+    total += Math.max(0, (cyc.vatap||0) - paidByCutoff);
+  });
+  return total;
+}
+
+function computeOutstandingAsOf(cutoffDateStr){
+  return members.reduce((s,m)=>s+computeMemberOutstandingAsOf(m, cutoffDateStr), 0);
+}
+
+async function exportAGMReport(){
+  await loadFundTransactions();
   const yrSel = document.getElementById('f-yr').value;
   const yr = yrSel || String(new Date().getFullYear());
   const now = new Date();
@@ -5008,20 +5032,32 @@ function exportAGMReport(){
     return {m, s};
   }).filter(r => r.s.karj>0 || r.s.dand>0 || r.s.vyaj>0 || (r.m.date && r.m.date.startsWith(yr)) || (r.m.loan_history||[]).some(c=>c.date && c.date.startsWith(yr)));
 
-  const totalOutstanding = members.reduce((s,m)=>s+Math.max(0,m.vatap-m.hapte.reduce((a,h)=>a+h.hapta,0)),0);
+  const totalOutstanding = computeOutstandingAsOf(yr+'-12-31');
+  const openingOutstanding = computeOutstandingAsOf((parseInt(yr)-1)+'-12-31');
   const totalIncome = tDand + tVyaj;
+
+  const fundInYear = fundTransactions.filter(f=>f.type==='fund_in' && f.txn_date && f.txn_date.startsWith(yr)).reduce((s,f)=>s+f.amount,0);
+  const fundReturnYear = fundTransactions.filter(f=>f.type==='fund_return' && f.txn_date && f.txn_date.startsWith(yr)).reduce((s,f)=>s+f.amount,0);
+  const fundExpenseYear = fundTransactions.filter(f=>f.type==='expense' && f.txn_date && f.txn_date.startsWith(yr)).reduce((s,f)=>s+f.amount,0);
+  const fundTotalIn = fundTransactions.filter(f=>f.type==='fund_in').reduce((s,f)=>s+f.amount,0);
+  const fundTotalReturn = fundTransactions.filter(f=>f.type==='fund_return').reduce((s,f)=>s+f.amount,0);
+  const fundNetOutstanding = Math.max(0, fundTotalIn - fundTotalReturn);
 
   const rows = memberRows.map(({m,s})=>{
     let yearLoanAmt = (m.date && m.date.startsWith(yr)) ? (m.vatap||0) : 0;
     (m.loan_history||[]).forEach(cyc=>{ if(cyc.date && cyc.date.startsWith(yr)) yearLoanAmt += (cyc.vatap||0); });
+    const mOpening = computeMemberOutstandingAsOf(m, (parseInt(yr)-1)+'-12-31');
+    const mClosing = computeMemberOutstandingAsOf(m, yr+'-12-31');
     return `<tr>
     <td>${m.kram}</td>
     <td>${m.nav}</td>
+    <td style="text-align:right">${fmt(mOpening)}</td>
     <td style="text-align:right">${yearLoanAmt>0 ? fmt(yearLoanAmt) : '—'}</td>
     <td style="text-align:right">${fmt(s.karj)}</td>
     <td style="text-align:right">${fmt(s.dand)}</td>
     <td style="text-align:right">${fmt(s.vyaj)}</td>
     <td style="text-align:right;font-weight:700">${fmt(s.jama)}</td>
+    <td style="text-align:right;font-weight:700">${fmt(mClosing)}</td>
   </tr>`;
   }).join('');
 
@@ -5044,7 +5080,18 @@ function exportAGMReport(){
     <div class="metric-box" style="background:#fef2f2;border-color:#fecaca;"><div class="lbl">${t('txt_agm_outstanding')}</div><div class="val" style="color:#b91c1c;">${fmt(totalOutstanding)}</div></div>
   </div>
 
-  <div style="font-size:12px;font-weight:700;color:#1a2540;margin:14px 0 6px;">${t('txt_agm_income_statement')}</div>
+  <div style="font-size:12px;font-weight:700;color:#1a2540;margin:14px 0 6px;">${t('txt_agm_loan_reconcile')} (${yr})</div>
+  <table style="max-width:480px;">
+    <tbody>
+      <tr><td>${t('txt_agm_opening_outstanding')}</td><td style="text-align:right">${fmt(openingOutstanding)}</td></tr>
+      <tr><td>(+) ${t('txt_agm_year_loan')}</td><td style="text-align:right;color:#166534;">${fmt(yearLoanDisbursed)}</td></tr>
+      <tr><td>(−) ${t('txt_agm_year_recovery')}</td><td style="text-align:right;color:#b91c1c;">${fmt(tHapta)}</td></tr>
+    </tbody>
+    <tfoot><tr><td>${t('txt_agm_closing_outstanding')}</td><td style="text-align:right;font-weight:700;">${fmt(totalOutstanding)}</td></tr></tfoot>
+  </table>
+  <div style="font-size:10px;color:#94a3b8;margin-top:4px;">${t('txt_agm_reconcile_note')}</div>
+
+  <div style="font-size:12px;font-weight:700;color:#1a2540;margin:16px 0 6px;">${t('txt_agm_income_statement')}</div>
   <table style="max-width:420px;">
     <thead><tr><th>${t('txt_agm_income_head')}</th><th style="text-align:right">${t('exp_total')} (₹)</th></tr></thead>
     <tbody>
@@ -5054,16 +5101,28 @@ function exportAGMReport(){
     <tfoot><tr><td>${t('txt_agm_total_income')}</td><td style="text-align:right">${fmt(totalIncome)}</td></tr></tfoot>
   </table>
 
+  <div style="font-size:12px;font-weight:700;color:#1a2540;margin:16px 0 6px;">${t('txt_agm_fund_summary')} (${yr})</div>
+  <div class="metrics-row">
+    <div class="metric-box" style="background:#f0fdf4;border-color:#bbf7d0;"><div class="lbl">${t('txt_fund_total_in')}</div><div class="val" style="color:#16a34a;">${fmt(fundInYear)}</div></div>
+    <div class="metric-box" style="background:#fffbeb;border-color:#fde68a;"><div class="lbl">${t('txt_fund_total_return')}</div><div class="val" style="color:#d97706;">${fmt(fundReturnYear)}</div></div>
+    <div class="metric-box" style="background:#fef2f2;border-color:#fecaca;"><div class="lbl">${t('txt_fund_total_expense')}</div><div class="val" style="color:#dc2626;">${fmt(fundExpenseYear)}</div></div>
+    <div class="metric-box" style="background:#eff6ff;border-color:#bfdbfe;"><div class="lbl">${t('txt_fund_net_outstanding')}</div><div class="val" style="color:#1d4ed8;">${fmt(fundNetOutstanding)}</div></div>
+  </div>
+  <div style="font-size:10px;color:#94a3b8;margin-top:4px;">${t('txt_agm_fund_note')}</div>
+
   <div style="font-size:12px;font-weight:700;color:#1a2540;margin:16px 0 6px;">${t('txt_agm_member_detail')}</div>
   <table>
-    <thead><tr><th>${t('th_sr_no')}</th><th>${t('lbl_name')}</th><th>${t('txt_agm_new_loan')}</th><th>${t('m_loan_paid')}</th><th>${t('th_dand')}</th><th>${t('th_vyaj')}</th><th>${t('m_total_paid')}</th></tr></thead>
+    <thead><tr><th>${t('th_sr_no')}</th><th>${t('lbl_name')}</th><th>${t('txt_agm_opening_short')}</th><th>${t('txt_agm_new_loan')}</th><th>${t('m_loan_paid')}</th><th>${t('th_dand')}</th><th>${t('th_vyaj')}</th><th>${t('m_total_paid')}</th><th>${t('txt_agm_closing_short')}</th></tr></thead>
     <tbody>${rows}</tbody>
     <tfoot><tr>
-      <td colspan="3">${t('exp_total')}</td>
+      <td colspan="2">${t('exp_total')}</td>
+      <td style="text-align:right">${fmt(openingOutstanding)}</td>
+      <td></td>
       <td style="text-align:right">${fmt(tHapta)}</td>
       <td style="text-align:right">${fmt(tDand)}</td>
       <td style="text-align:right">${fmt(tVyaj)}</td>
       <td style="text-align:right">${fmt(tJama)}</td>
+      <td style="text-align:right">${fmt(totalOutstanding)}</td>
     </tr></tfoot>
   </table>
 
