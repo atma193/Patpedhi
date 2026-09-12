@@ -8133,8 +8133,14 @@ window.addEventListener('DOMContentLoaded', function(){
 <script>
 // Manifest already linked via <link rel="manifest"> in <head>
 
-// Service Worker - disabled (blob URL not supported)
-// App will still work as PWA via manifest
+// Register the service worker (must be a real file: service-worker.js,
+// placed in the same folder as this index.html on your server).
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .catch((err) => console.warn('Service worker registration failed:', err?.message || err));
+  });
+}
 </script>
 
 </body>
