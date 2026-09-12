@@ -7171,10 +7171,6 @@ function maybeShowBroadcastPopup(m){
   const customImage = getBroadcastImage();
   const overlay = document.getElementById('member-broadcast-popup-overlay');
   if((!msg && !customImage) || !overlay){ if(overlay) overlay.style.display='none'; return; }
-  let lastSeen = '';
-  try{ lastSeen = localStorage.getItem('pp_broadcast_seen_'+m.id) || ''; }catch(e){}
-  const seenKey = msg + '|' + (customImage ? customImage.slice(0,50) : '');
-  if(lastSeen === seenKey) return; // already dismissed this exact broadcast
 
   const orgLogoSrc = (document.querySelector('link[rel="apple-touch-icon"]')||{}).href || '';
   const orgName = 'अबगुलवाडी नवतरुण ग्रामविकास मंडळ';
@@ -7218,12 +7214,6 @@ function maybeShowBroadcastPopup(m){
 function closeBroadcastPopup(){
   const overlay = document.getElementById('member-broadcast-popup-overlay');
   if(overlay) overlay.style.display = 'none';
-  if(currentMemberData){
-    const msg = getBroadcastMessage();
-    const customImage = getBroadcastImage();
-    const seenKey = msg + '|' + (customImage ? customImage.slice(0,50) : '');
-    try{ localStorage.setItem('pp_broadcast_seen_'+currentMemberData.id, seenKey); }catch(e){}
-  }
 }
 
 function renderMemberDashboard(m){
