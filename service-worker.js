@@ -3,7 +3,7 @@
 // embedded inline or loaded from a blob: URL, since browsers only allow service
 // worker registration from a genuine same-origin HTTPS (or localhost) file path.
 
-const CACHE_NAME = 'patpedhi-cache-v1';
+const CACHE_NAME = 'patpedhi-cache-v2';
 const APP_SHELL = [
   './index.html',
   './manifest.json'

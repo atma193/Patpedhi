@@ -8176,6 +8176,20 @@ window.addEventListener('DOMContentLoaded', function(){
   checkLogin();
   loadAppSettings().then(()=>{
     try{ maybeShowSplashBanner(); }catch(e){ console.warn('splash banner failed:', e?.message||e); }
+    // On a slow/flaky connection the first settings fetch can come back empty,
+    // which used to mean the splash banner never appeared until a manual refresh.
+    // Retry once shortly after, and show the banner then if the image has arrived.
+    if(!getBroadcastImage()){
+      setTimeout(()=>{
+        loadAppSettings().then(()=>{
+          try{
+            const overlay = document.getElementById('splash-banner-overlay');
+            const alreadyShown = overlay && overlay.style.display === 'flex';
+            if(!alreadyShown) maybeShowSplashBanner();
+          }catch(e){ console.warn('splash banner retry failed:', e?.message||e); }
+        });
+      }, 1500);
+    }
   });
   if(sessionStorage.getItem('pp_auth')==='true'){
     try{ loadMembers(); }catch(e){ console.warn('loadMembers failed:', e?.message||e); }
