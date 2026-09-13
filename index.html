@@ -522,6 +522,41 @@ window.addEventListener('DOMContentLoaded', function(){
 @keyframes member-restore-spin{ to { transform: rotate(360deg); } }
 </style>
 
+<!-- SPLASH BANNER (festival image shown when the app first opens) -->
+<div id="splash-banner-overlay" style="display:none;position:fixed;inset:0;background:#0f172a;z-index:10001;align-items:center;justify-content:center;">
+  <div id="splash-banner-card" style="position:relative;width:100%;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+    <img id="splash-banner-bg-blur" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(28px) brightness(.55);transform:scale(1.1);">
+    <img id="splash-banner-image" style="position:relative;display:block;width:100%;height:100%;object-fit:contain;">
+    <button onclick="closeSplashBanner()" id="splash-skip-btn" style="position:absolute;top:14px;right:14px;background:rgba(0,0,0,.55);border:none;color:#fff;padding:8px 16px;border-radius:16px;cursor:pointer;font-size:13px;font-weight:700;">Skip</button>
+    <div style="position:absolute;left:0;right:0;bottom:0;padding:26px 20px 16px;background:linear-gradient(to top,rgba(15,23,42,1) 30%,rgba(15,23,42,0));text-align:center;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;">
+        <span style="flex:1;height:2px;background:linear-gradient(to right,rgba(253,230,138,0),rgba(253,230,138,.8));"></span>
+        <span style="color:#fde68a;font-size:14px;">✦</span>
+        <span style="flex:1;height:2px;background:linear-gradient(to left,rgba(253,230,138,0),rgba(253,230,138,.8));"></span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:flex-start;gap:10px;text-align:left;">
+        <img id="splash-footer-logo" style="width:36px;height:36px;border-radius:50%;object-fit:cover;box-shadow:0 3px 10px rgba(0,0,0,.3),0 0 0 2px #fff,0 0 0 3px rgba(253,230,138,.5);flex-shrink:0;">
+        <span id="splash-footer-name" style="font-family:'Tiro Devanagari Marathi',serif;color:#fff;font-size:14px;font-weight:700;"></span>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+/* Desktop: show the splash as a centered card instead of edge-to-edge */
+@media (min-width: 861px){
+  #splash-banner-overlay{ padding:20px; background:rgba(15,23,42,.97); }
+  #splash-banner-card{
+    width:auto !important; height:auto !important;
+    max-width:min(620px, 92vw); max-height:92vh;
+    border-radius:22px;
+    border:3px solid rgba(255,255,255,.5);
+    box-shadow:0 30px 80px rgba(0,0,0,.55),0 8px 24px rgba(0,0,0,.3);
+  }
+  #splash-banner-image{ width:auto !important; height:auto !important; max-width:min(620px, 92vw); max-height:92vh; object-fit:contain; }
+  #splash-banner-bg-blur{ display:none !important; }
+}
+</style>
+
 <div class="login-overlay" id="login-overlay" style="display:flex;">
   <div class="login-box">
     <div class="login-logo"><img src="./logo-login.png" alt="Logo"></div>
@@ -6369,6 +6404,46 @@ function attemptMemberSessionRestore(mid, overlay, allowRetry){
   });
 }
 
+let splashCountdownTimer = null;
+
+function closeSplashBanner(){
+  if(splashCountdownTimer){ clearInterval(splashCountdownTimer); splashCountdownTimer = null; }
+  const overlay = document.getElementById('splash-banner-overlay');
+  if(overlay) overlay.style.display = 'none';
+}
+
+function maybeShowSplashBanner(){
+  const overlay = document.getElementById('splash-banner-overlay');
+  const img = getBroadcastImage();
+  // Only show when the admin has actually set a festival image.
+  if(!overlay || !img) return;
+
+  document.getElementById('splash-banner-image').src = img;
+  const blurEl = document.getElementById('splash-banner-bg-blur');
+  if(blurEl) blurEl.src = img;
+  const orgLogoSrc = (document.querySelector('link[rel="apple-touch-icon"]')||{}).href || '';
+  const logoEl = document.getElementById('splash-footer-logo');
+  if(logoEl && orgLogoSrc) logoEl.src = orgLogoSrc;
+  const nameEl = document.getElementById('splash-footer-name');
+  if(nameEl) nameEl.textContent = 'अबगुलवाडी नवतरुण ग्रामविकास मंडळ';
+
+  overlay.style.display = 'flex';
+
+  // Countdown on the Skip button, then auto-close.
+  let secondsLeft = 5;
+  const btn = document.getElementById('splash-skip-btn');
+  if(btn) btn.textContent = 'Skip (' + secondsLeft + ')';
+  if(splashCountdownTimer) clearInterval(splashCountdownTimer);
+  splashCountdownTimer = setInterval(()=>{
+    secondsLeft--;
+    if(secondsLeft <= 0){
+      closeSplashBanner();
+    } else if(btn){
+      btn.textContent = 'Skip (' + secondsLeft + ')';
+    }
+  }, 1000);
+}
+
 function checkLogin(){
   // Always clear old session on fresh load
   const overlay = document.getElementById('login-overlay');
@@ -8099,7 +8174,9 @@ async function deleteRequest(requestId){
 
 window.addEventListener('DOMContentLoaded', function(){
   checkLogin();
-  loadAppSettings();
+  loadAppSettings().then(()=>{
+    try{ maybeShowSplashBanner(); }catch(e){ console.warn('splash banner failed:', e?.message||e); }
+  });
   if(sessionStorage.getItem('pp_auth')==='true'){
     try{ loadMembers(); }catch(e){ console.warn('loadMembers failed:', e?.message||e); }
     try{ loadMemberRequests(); }catch(e){ console.warn('loadMemberRequests failed:', e?.message||e); }
