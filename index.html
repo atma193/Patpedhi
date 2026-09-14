@@ -752,6 +752,20 @@ window.addEventListener('DOMContentLoaded', function(){
         <div style="font-size:12px;font-weight:700;color:#8a6d1f;margin-bottom:5px;">📌 <span data-i18n="txt_admin_note_title">संस्थेकडून सूचना</span></div>
         <div id="md-admin-note-text" style="font-size:12.5px;color:#5c4a13;line-height:1.6;white-space:pre-line;"></div>
       </div>
+      <div id="md-loan-invite-card" style="display:none;background:linear-gradient(135deg,#166534,#14532d);color:#fff;border-radius:14px;padding:18px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+          <div style="font-size:26px;">🏦</div>
+          <div>
+            <div style="font-size:15px;font-weight:700;" data-i18n="txt_loan_invite_title">कर्जाची गरज आहे का?</div>
+            <div style="font-size:12px;opacity:.85;margin-top:2px;" data-i18n="txt_loan_invite_sub">संस्थेकडून सोप्या अटींवर कर्ज मिळवा</div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;line-height:1.7;opacity:.92;margin-bottom:14px;" data-i18n="txt_loan_invite_body">तुम्ही आमचे सन्माननीय सभासद आहात. गरजेच्या वेळी संस्था तुमच्या पाठीशी आहे — सोपी प्रक्रिया, वाजवी व्याजदर आणि सुलभ मासिक हप्ते.</div>
+        <button onclick="goMemberPage('loanreq')" style="width:100%;background:#fff;color:#166534;border:none;border-radius:10px;padding:11px;font-size:13.5px;font-weight:700;cursor:pointer;">
+          📝 <span data-i18n="btn_apply_loan_now">आत्ताच कर्ज विनंती करा</span>
+        </button>
+      </div>
+
       <div id="md-next-installment-card" style="display:none;align-items:center;gap:14px;border-radius:14px;padding:16px 18px;margin-bottom:16px;">
         <div id="md-next-installment-icon" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">📅</div>
         <div style="flex:1;min-width:0;">
@@ -1376,6 +1390,10 @@ window.addEventListener('DOMContentLoaded', function(){
   <!-- Summary Cards -->
   <div style="font-size:10px;font-weight:600;color:#64748b;letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px;">📊 <span data-i18n="txt_total_summary">एकूण सारांश</span></div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:11px;margin-bottom:22px;" id="home-metrics"></div>
+
+  <!-- This month vs last month -->
+  <div style="font-size:10px;font-weight:600;color:#64748b;letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px;">📈 <span data-i18n="txt_month_compare">महिन्याची तुलना</span></div>
+  <div id="home-month-compare" style="background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:22px;"></div>
 
   <!-- Two column -->
   <div class="two-col-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px;">
@@ -2264,6 +2282,14 @@ window.addEventListener('DOMContentLoaded', function(){
       <div style="font-size:11px;color:var(--text3);background:#f8fafc;border-radius:8px;padding:8px 10px;margin-top:2px;" data-i18n="txt_settings_note">टीप: हा बदल फक्त नवीन हप्ता नोंदींच्या auto-calculation साठी लागू होतो. आधीच्या नोंदी बदलणार नाहीत.</div>
       <button class="btn" onclick="saveSettings()" style="width:100%;background:var(--accent,#3a6fd8);color:#fff;margin-top:12px;" data-i18n="btn_save">जतन करा</button>
       <div class="login-success" id="settings-success" style="margin-top:8px;"></div>
+
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);">
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;">💾 <span data-i18n="txt_backup_title">डेटा बॅकअप</span></div>
+        <div style="font-size:10.5px;color:var(--text3);margin-bottom:8px;" data-i18n="txt_backup_note">संपूर्ण डेटाची (सभासद, हप्ते, विनंत्या, फंड, सेटिंग्ज) एक प्रत तुमच्या उपकरणावर उतरवा. महिन्यातून एकदा घेणे उत्तम.</div>
+        <button onclick="downloadFullBackup()" style="width:100%;background:#166534;color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;">
+          💾 <span data-i18n="btn_download_backup">बॅकअप डाउनलोड करा</span>
+        </button>
+      </div>
     </div>
 
     <div id="settings-rate-restricted-note" style="font-size:12px;color:var(--text2);background:#f8fafc;border-radius:8px;padding:10px 12px;margin-bottom:2px;line-height:1.6;" data-i18n="txt_rate_restricted">व्याजदर/दंडदर सेटिंग्ज बदलण्याचा अधिकार फक्त Superadmin ला आहे.</div>
@@ -2714,6 +2740,15 @@ const translations = {
     txt_overdue_pay_soon:"कृपया लवकरात लवकर हप्ता भरा 🙏",
     txt_no_record:"कोणतीही नोंद नाही", txt_no_member_found:"कोणताही सभासद सापडला नाही",
     txt_no_mobile:"मोबाईल नाही", txt_link_arrow:"लिंक करा →", btn_whatsapp_reminder:"WhatsApp स्मरणपत्र पाठवा", btn_whatsapp_short:"WhatsApp", btn_sms_short:"SMS",
+    txt_loan_invite_title:"कर्जाची गरज आहे का?", txt_loan_invite_sub:"संस्थेकडून सोप्या अटींवर कर्ज मिळवा",
+    txt_backup_title:"डेटा बॅकअप", txt_backup_note:"संपूर्ण डेटाची (सभासद, हप्ते, विनंत्या, फंड, सेटिंग्ज) एक प्रत तुमच्या उपकरणावर उतरवा. महिन्यातून एकदा घेणे उत्तम.",
+    btn_download_backup:"बॅकअप डाउनलोड करा", msg_backup_preparing:"बॅकअप तयार होत आहे...", msg_backup_done:"बॅकअप डाउनलोड झाला!",
+    txt_action_data_backup:"डेटा बॅकअप घेतला",
+    txt_month_compare:"महिन्याची तुलना", txt_this_month:"या महिन्यात", txt_last_month:"गेल्या महिन्यात",
+    txt_share_whatsapp:"WhatsApp वर पाठवा",
+    txt_vs_last_month:"गेल्या महिन्याच्या तुलनेत", txt_installments_word:"हप्ते", txt_new_this_month:"नवीन",
+    txt_loan_invite_body:"तुम्ही आमचे सन्माननीय सभासद आहात. गरजेच्या वेळी संस्था तुमच्या पाठीशी आहे — सोपी प्रक्रिया, वाजवी व्याजदर आणि सुलभ मासिक हप्ते.",
+    btn_apply_loan_now:"आत्ताच कर्ज विनंती करा",
     btn_bulk_whatsapp:"निवडलेल्यांना WhatsApp पाठवा", txt_bulk_whatsapp_title:"बल्क WhatsApp पाठवा", btn_open_whatsapp:"WhatsApp उघडा व पुढे जा", btn_open_sms:"SMS उघडा व पुढे जा",
     lbl_bulk_custom_message:"🎉 कस्टम संदेश (ऐच्छिक — उदा. सणाच्या शुभेच्छा)", ph_bulk_custom_message:"रिकामं ठेवल्यास नेहमीचं हप्ता स्मरणपत्र पाठवलं जाईल",
     txt_greeting_default:"नमस्कार! 🙏", txt_no_one_found:"कोणीही सापडले नाही",
@@ -2991,6 +3026,15 @@ const translations = {
     txt_overdue_pay_soon:"Please pay your installment as soon as possible 🙏",
     txt_no_record:"No records", txt_no_member_found:"No member found",
     txt_no_mobile:"No mobile", txt_link_arrow:"Link →", btn_whatsapp_reminder:"Send WhatsApp Reminder", btn_whatsapp_short:"WhatsApp", btn_sms_short:"SMS",
+    txt_loan_invite_title:"Need a loan?", txt_loan_invite_sub:"Get a loan from the society on easy terms",
+    txt_backup_title:"Data Backup", txt_backup_note:"Download a copy of all your data (members, installments, requests, funds, settings) to this device. Once a month is a good habit.",
+    btn_download_backup:"Download Backup", msg_backup_preparing:"Preparing backup...", msg_backup_done:"Backup downloaded!",
+    txt_action_data_backup:"Data backup taken",
+    txt_month_compare:"Month Comparison", txt_this_month:"This month", txt_last_month:"Last month",
+    txt_share_whatsapp:"Share on WhatsApp",
+    txt_vs_last_month:"vs last month", txt_installments_word:"installments", txt_new_this_month:"new",
+    txt_loan_invite_body:"You are a valued member of our society. We are here for you in times of need — simple process, fair interest rate and easy monthly installments.",
+    btn_apply_loan_now:"Apply for a loan now",
     btn_bulk_whatsapp:"Send WhatsApp to Selected", txt_bulk_whatsapp_title:"Bulk WhatsApp Send", btn_open_whatsapp:"Open WhatsApp & Next", btn_open_sms:"Open SMS & Next",
     lbl_bulk_custom_message:"🎉 Custom message (optional — e.g. festival greetings)", ph_bulk_custom_message:"Leave blank to send the usual installment reminder",
     txt_greeting_default:"Hello! 🙏", txt_no_one_found:"No one found",
@@ -4797,6 +4841,45 @@ function downloadExcel(htmlContent, filename){
   toast('✓ '+t('exp_excel_started'));
 }
 
+async function downloadFullBackup(){
+  toast('⏳ '+t('msg_backup_preparing'));
+  const backup = {
+    backup_version: 1,
+    generated_at: new Date().toISOString(),
+    generated_by: sessionStorage.getItem('pp_admin_username') || '',
+    tables: {}
+  };
+
+  // Pull every table straight from Supabase so the backup reflects the live
+  // database rather than whatever happens to be loaded in this browser tab.
+  const tables = ['sabhasad','member_requests','loan_requests','fund_transactions','member_messages','app_settings','admins','audit_log'];
+  for(const tbl of tables){
+    try{
+      const {data, error} = await sb.from(tbl).select('*');
+      if(error) throw error;
+      backup.tables[tbl] = data || [];
+    }catch(e){
+      console.warn('backup: could not read '+tbl+':', e?.message||e);
+      backup.tables[tbl] = { error: String(e?.message||e) };
+    }
+  }
+
+  const blob = new Blob([JSON.stringify(backup, null, 2)], {type:'application/json;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const stamp = new Date().toISOString().slice(0,10);
+  a.href = url; a.download = 'Patpedhi_Backup_'+stamp+'.json';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+
+  const counts = Object.entries(backup.tables)
+    .filter(([,v]) => Array.isArray(v))
+    .map(([k,v]) => k+': '+v.length).join(', ');
+  console.log('Backup contents —', counts);
+  toast('✓ '+t('msg_backup_done'));
+  logActivity('data_backup', stamp, counts);
+}
+
 /* ── SETTINGS (व्याजदर / दंडदर) ── */
 let appSettingsCache = { interest_rate: null, penalty_rate: null, reminder_day: null, contact_phone: null, office_hours: null, broadcast_message: null, broadcast_theme: null, broadcast_image: null, loaded: false };
 
@@ -6106,6 +6189,18 @@ function saveHapta(){
   if(missingHapta){toast(t('msg_enter_hapta_each_row'),'warn');return;}
   if(!newHapte.length){toast(t('msg_enter_at_least_one_hapta'),'warn');return;}
   const m = members[haptaSelectedIdx];
+
+  // Guard against accidentally recording the same month twice for this member.
+  const existingMonths = new Set(getAllHapte(m).map(h=>h.mahina).filter(Boolean));
+  const dupMonths = [...new Set(newHapte.map(h=>h.mahina).filter(mo=>existingMonths.has(mo)))];
+  if(dupMonths.length){
+    const labels = dupMonths.map(fmtMonthLabel).join(', ');
+    const warn = getLanguage()==='en'
+      ? `⚠️ An installment is already recorded for ${labels} for ${m.nav}.\n\nDo you still want to save this as a separate entry?`
+      : `⚠️ ${m.nav} यांचा ${labels} या महिन्याचा हप्ता आधीच नोंदवलेला आहे.\n\nतरीही वेगळी नोंद म्हणून जतन करायचे आहे का?`;
+    if(!confirm(warn)) return;
+  }
+
   // Show the receipt first — actual save only happens if admin confirms from the preview
   const {html, filename} = buildHaptaReceiptHtml(m, newHapte, false);
   showPdfPreview(html, filename, 'portrait', ()=>confirmSaveHapta(m, newHapte));
@@ -6119,6 +6214,19 @@ async function confirmSaveHapta(m, newHapte){
   const totalHaptaAmt = newHapte.reduce((s,h)=>s+(h.hapta||0),0);
   logActivity('hapta_save', m.nav, newHapte.length+' हप्ता, एकूण ₹'+totalHaptaAmt);
   toast('✓ '+m.nav+' '+t('msg_your')+' '+newHapte.length+' '+t('exp_installments')+' '+t('msg_saved_bang'));
+
+  // Celebrate if this payment cleared the loan entirely.
+  const paidNow = updatedHapte.reduce((s,h)=>s+(h.hapta||0),0);
+  const paidBefore = paidNow - totalHaptaAmt;
+  if((m.vatap||0) > 0 && paidNow >= m.vatap && paidBefore < m.vatap){
+    setTimeout(()=>{
+      const msg = getLanguage()==='en'
+        ? `🎉 Congratulations!\n\n${m.nav} has fully repaid their loan of ${fmt(m.vatap)}.\n\nYou can start a new loan cycle for them from the Loan Disbursement page.`
+        : `🎉 अभिनंदन!\n\n${m.nav} यांनी ${fmt(m.vatap)} चे कर्ज पूर्णपणे फेडले आहे.\n\nत्यांच्यासाठी नवीन कर्ज चक्र "कर्ज वाटप" पानावरून सुरू करता येईल.`;
+      alert(msg);
+    }, 600);
+  }
+
   clearHaptaRows();
   calcHapta();
 }
@@ -6195,6 +6303,54 @@ function renderHome(){
         <div style="font-size:11px;font-weight:600;color:${p>=100?'#166534':'#92400e'}">${p}%</div>
       </div>`;
     }).join('') : '<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px;">'+t('txt_no_members_yet')+'</div>';
+  }
+
+  // This month vs last month recovery comparison
+  const cmpEl = document.getElementById('home-month-compare');
+  if(cmpEl){
+    const now = new Date();
+    const thisYm = now.toISOString().slice(0,7);
+    const lastDate = new Date(now.getFullYear(), now.getMonth()-1, 1);
+    const lastYm = lastDate.toISOString().slice(0,7);
+
+    const sumFor = (ym) => {
+      let hapta=0, dand=0, vyaj=0, count=0;
+      members.forEach(m=>{
+        getAllHapte(m).forEach(h=>{
+          if(h.dinank && h.dinank.slice(0,7)===ym){
+            hapta += h.hapta||0; dand += h.dand||0; vyaj += h.vyaj||0; count++;
+          }
+        });
+      });
+      return {hapta, dand, vyaj, count, total: hapta+dand+vyaj};
+    };
+
+    const cur = sumFor(thisYm), prev = sumFor(lastYm);
+    let diffHtml = '';
+    if(prev.total > 0){
+      const pct = Math.round(((cur.total - prev.total)/prev.total)*100);
+      if(pct > 0) diffHtml = `<span style="color:#166534;font-weight:700;">▲ ${pct}%</span>`;
+      else if(pct < 0) diffHtml = `<span style="color:#dc2626;font-weight:700;">▼ ${Math.abs(pct)}%</span>`;
+      else diffHtml = `<span style="color:#64748b;font-weight:700;">—</span>`;
+    } else if(cur.total > 0){
+      diffHtml = `<span style="color:#166534;font-weight:700;">▲ ${t('txt_new_this_month')}</span>`;
+    }
+
+    cmpEl.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="border-right:1px solid var(--border);padding-right:12px;">
+          <div style="font-size:10.5px;color:var(--text3);margin-bottom:3px;">${t('txt_this_month')} (${fmtMonthLabel(thisYm)})</div>
+          <div style="font-size:19px;font-weight:700;color:#166534;">${fmt(cur.total)}</div>
+          <div style="font-size:10.5px;color:var(--text3);margin-top:3px;">${cur.count} ${t('txt_installments_word')}</div>
+        </div>
+        <div>
+          <div style="font-size:10.5px;color:var(--text3);margin-bottom:3px;">${t('txt_last_month')} (${fmtMonthLabel(lastYm)})</div>
+          <div style="font-size:19px;font-weight:700;color:var(--text2);">${fmt(prev.total)}</div>
+          <div style="font-size:10.5px;color:var(--text3);margin-top:3px;">${prev.count} ${t('txt_installments_word')}</div>
+        </div>
+      </div>
+      ${diffHtml ? `<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:12px;color:var(--text2);">${t('txt_vs_last_month')}: ${diffHtml}</div>` : ''}
+    `;
   }
 
   const statusEl = document.getElementById('home-status');
@@ -6516,14 +6672,15 @@ function auditActionMeta(type){
     admin_login: t('txt_action_admin_login'), member_login: t('txt_action_member_login'), member_add: t('txt_action_member_add'),
     member_profile_edit: t('txt_action_member_profile_edit'), loan_disbursement: t('txt_action_loan_disbursement'),
     hapta_save: t('txt_action_hapta_save'), member_registration_request: t('txt_action_member_reg_request'),
-    loan_request_submit: t('txt_action_loan_request_submit'), member_suggestion_submit: t('txt_action_member_suggestion_submit')
+    loan_request_submit: t('txt_action_loan_request_submit'), member_suggestion_submit: t('txt_action_member_suggestion_submit'),
+    data_backup: t('txt_action_data_backup')
   };
   const icons = {
     rate_change:'💰', admin_add:'➕', admin_delete:'🗑', admin_permission_change:'🔑',
     member_delete:'🗑', member_blacklist:'🚫', member_reactivate:'✅',
     loan_request_approve:'✅', loan_request_reject:'❌', new_loan_cycle:'🔄', password_change:'🔒',
     admin_login:'🔑', member_login:'👤', member_add:'➕', member_profile_edit:'✏️',
-    loan_disbursement:'💵', hapta_save:'🧾', member_registration_request:'📝', loan_request_submit:'📨', member_suggestion_submit:'💬'
+    loan_disbursement:'💵', hapta_save:'🧾', member_registration_request:'📝', loan_request_submit:'📨', member_suggestion_submit:'💬', data_backup:'💾'
   };
   return {label: labels[type]||type, icon: icons[type]||'📌'};
 }
@@ -7378,6 +7535,12 @@ function renderMemberDashboard(m){
   } else {
     progressCard.style.display = 'none';
   }
+  // Encourage members who have never taken a loan to apply for one.
+  const loanInviteCard = document.getElementById('md-loan-invite-card');
+  if(loanInviteCard){
+    const hasNoLoanEver = (!m.vatap || m.vatap <= 0) && !(m.loan_history && m.loan_history.length);
+    loanInviteCard.style.display = hasNoLoanEver ? 'block' : 'none';
+  }
   document.getElementById('md-shillak').textContent = fmt(shillakVal);
   document.getElementById('md-home-shillak').textContent = fmt(shillakVal);
   const nextInst = computeNextInstallmentInfo(m);
@@ -7462,9 +7625,21 @@ function renderMemberDashboard(m){
       run -= (h.hapta||0);
       const st = h.vilamb===0 ? '<span class="badge badge-green" style="font-size:10px">'+t('exp_on_time')+'</span>' : (h.vilamb<=1 ? '<span class="badge badge-amber" style="font-size:10px">'+t('exp_slight_delay')+'</span>' : '<span class="badge badge-amber" style="font-size:10px">'+t('exp_delayed')+'</span>');
       const origIdx = m.hapte.indexOf(h);
-      return `<tr style="border-top:1px solid #f0f0f0;"><td style="padding:8px;">${fmtMonthLabel(h.mahina)}</td><td style="padding:8px;text-align:center;">${fmtDate(h.dinank)}</td><td style="padding:8px;text-align:center;">${h.vilamb||0}</td><td style="padding:8px;text-align:right;">${fmt(h.dand||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.vyaj||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.hapta||0)}</td><td style="padding:8px;text-align:right;color:#dc2626;">${fmt(Math.max(0,run))}</td><td style="padding:8px;text-align:center;">${st}</td><td style="padding:8px;text-align:center;">${origIdx>=0 ? `<button onclick="downloadMyReceipt(${origIdx})" title="${t('txt_reprint_receipt')}" style="background:none;border:none;cursor:pointer;font-size:14px;">🧾</button>` : ''}</td></tr>`;
+      return `<tr style="border-top:1px solid #f0f0f0;"><td style="padding:8px;">${fmtMonthLabel(h.mahina)}</td><td style="padding:8px;text-align:center;">${fmtDate(h.dinank)}</td><td style="padding:8px;text-align:center;">${h.vilamb||0}</td><td style="padding:8px;text-align:right;">${fmt(h.dand||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.vyaj||0)}</td><td style="padding:8px;text-align:right;">${fmt(h.hapta||0)}</td><td style="padding:8px;text-align:right;color:#dc2626;">${fmt(Math.max(0,run))}</td><td style="padding:8px;text-align:center;">${st}</td><td style="padding:8px;text-align:center;white-space:nowrap;">${origIdx>=0 ? `<button onclick="downloadMyReceipt(${origIdx})" title="${t('txt_reprint_receipt')}" style="background:none;border:none;cursor:pointer;font-size:14px;">🧾</button><button onclick="shareMyReceiptWhatsApp(${origIdx})" title="${t('txt_share_whatsapp')}" style="background:none;border:none;cursor:pointer;font-size:14px;">📲</button>` : ''}</td></tr>`;
     }).join('');
   }
+}
+
+function shareMyReceiptWhatsApp(hapteIdx){
+  const m = currentMemberData;
+  if(!m || !m.hapte[hapteIdx]) return;
+  const h = m.hapte[hapteIdx];
+  const total = (h.hapta||0) + (h.dand||0) + (h.vyaj||0);
+  const orgName = t('txt_org_name_short');
+  const msg = getLanguage()==='en'
+    ? `*${orgName}*\nPayment Receipt\n\nName: ${m.nav}\nMonth: ${fmtMonthLabel(h.mahina)}\nDate: ${fmtDate(h.dinank)}\n\nInstallment: ${fmt(h.hapta||0)}\nPenalty: ${fmt(h.dand||0)}\nInterest: ${fmt(h.vyaj||0)}\n*Total Paid: ${fmt(total)}*\n\nThank you!`
+    : `*${orgName}*\nहप्ता पावती\n\nनाव: ${m.nav}\nमहिना: ${fmtMonthLabel(h.mahina)}\nदिनांक: ${fmtDate(h.dinank)}\n\nहप्ता: ${fmt(h.hapta||0)}\nदंड: ${fmt(h.dand||0)}\nव्याज: ${fmt(h.vyaj||0)}\n*एकूण भरणा: ${fmt(total)}*\n\nधन्यवाद!`;
+  window.open('https://wa.me/?text='+encodeURIComponent(msg), '_blank');
 }
 
 function downloadMyReceipt(hapteIdx){
