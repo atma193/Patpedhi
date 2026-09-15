@@ -1038,7 +1038,7 @@ window.addEventListener('DOMContentLoaded', function(){
 
 <!-- Bulk WhatsApp Reminder Wizard Modal -->
 <div id="bulk-whatsapp-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;align-items:center;justify-content:center;padding:20px;">
-  <div style="background:#fff;border-radius:14px;max-width:380px;width:100%;overflow:hidden;">
+  <div style="background:#fff;border-radius:14px;max-width:380px;width:100%;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;">
     <div style="background:#25D366;color:#fff;padding:14px 18px;">
       <div style="font-size:14px;font-weight:700;">📱 <span data-i18n="txt_bulk_whatsapp_title">बल्क WhatsApp पाठवा</span></div>
       <div id="bulk-wa-progress" style="font-size:11px;opacity:.9;margin-top:2px;"></div>
@@ -1152,7 +1152,7 @@ window.addEventListener('DOMContentLoaded', function(){
 
 <!-- Member Suggestion / Message to Admin Modal -->
 <div id="member-suggestion-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9997;align-items:center;justify-content:center;padding:16px;">
-  <div style="background:#fff;border-radius:14px;width:100%;max-width:360px;overflow:hidden;">
+  <div style="background:#fff;border-radius:14px;width:100%;max-width:360px;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;">
     <div style="background:linear-gradient(135deg,#6d28d9,#5b21b6);color:#fff;padding:16px 18px;">
       <div style="font-size:14px;font-weight:700;">💬 <span data-i18n="txt_send_suggestion_title">Admin ला सूचना / मेसेज पाठवा</span></div>
       <div style="font-size:11px;color:#e9d5ff;margin-top:3px;" data-i18n="txt_send_suggestion_note">तुमची तक्रार, सूचना किंवा प्रश्न इथे लिहा — ते थेट Admin ला दिसेल</div>
@@ -1523,7 +1523,7 @@ window.addEventListener('DOMContentLoaded', function(){
           <div style="font-weight:600;font-size:14px;" id="loan-sel-name"></div>
           <div style="font-size:12px;color:var(--text2);margin-top:2px;" id="loan-sel-detail"></div>
         </div>
-        <button onclick="clearLoanSel()" class="btn btn-ghost" style="padding:5px 12px;font-size:12px;">✕ <span data-i18n="btn_change">बदला</span></button>
+        <button onclick="clearLoanSel()" class="btn btn-ghost" style="padding:5px 12px;font-size:12px;">✕ <span data-i18n="btn_change">रद्द करा</span></button>
       </div>
     </div>
   </div>
@@ -1559,7 +1559,6 @@ window.addEventListener('DOMContentLoaded', function(){
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
             <span data-i18n="btn_save">जतन करा</span>
           </button>
-          <button class="btn btn-ghost" onclick="clearLoanSel()" data-i18n="btn_reset">रिसेट</button>
         </div>
       </div>
     </div>
@@ -1939,8 +1938,8 @@ window.addEventListener('DOMContentLoaded', function(){
     <div class="card">
       <div class="card-head"><span class="card-head-title">💾 <span data-i18n="btn_backup">डेटा Backup घ्या</span></span></div>
       <div class="card-body" style="padding:16px 18px;">
-        <div style="font-size:12px;color:var(--text2);margin-bottom:14px;line-height:1.6;" data-i18n="txt_report_backup_desc">सर्व सभासद व विनंत्यांचा संपूर्ण डेटा JSON फाईलमध्ये डाउनलोड करा.</div>
-        <button class="btn btn-primary" style="width:100%;" onclick="backupData()">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:14px;line-height:1.6;" data-i18n="txt_report_backup_desc">सर्व सभासद, हप्ते, विनंत्या, फंड, सूचना व सेटिंग्जचा संपूर्ण डेटा JSON फाईलमध्ये डाउनलोड करा.</div>
+        <button class="btn btn-primary" style="width:100%;" onclick="downloadFullBackup()">
           <span data-i18n="btn_backup">डेटा Backup घ्या</span>
         </button>
       </div>
@@ -2079,7 +2078,7 @@ window.addEventListener('DOMContentLoaded', function(){
           <div style="font-weight:600;font-size:14px;" id="ledger-sel-name"></div>
           <div style="font-size:12px;color:var(--text2);margin-top:2px;" id="ledger-sel-detail"></div>
         </div>
-        <button onclick="clearLedgerSelection()" class="btn btn-ghost" style="padding:5px 12px;font-size:12px;">✕ <span data-i18n="btn_change">बदला</span></button>
+        <button onclick="clearLedgerSelection()" class="btn btn-ghost" style="padding:5px 12px;font-size:12px;">✕ <span data-i18n="btn_change">रद्द करा</span></button>
       </div>
     </div>
   </div>
@@ -2220,8 +2219,8 @@ window.addEventListener('DOMContentLoaded', function(){
       <input type="tel" id="edit-req-mobile" maxlength="10" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
     </div>
     <div class="login-field">
-      <label data-i18n="th_password">पासवर्ड</label>
-      <input type="text" id="edit-req-password" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:monospace;">
+      <label data-i18n="lbl_new_password_optional">नवीन पासवर्ड (बदलायचा असेल तरच)</label>
+      <input type="text" id="edit-req-password" placeholder="रिकामे ठेवल्यास पासवर्ड बदलणार नाही" data-i18n-ph="ph_leave_blank_keep_pass" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;">
     </div>
     <div style="display:flex;gap:8px;margin-top:14px;">
       <button class="btn btn-ghost" onclick="closeEditRequestModal()" style="flex:1;" data-i18n="btn_cancel">रद्द करा</button>
@@ -2232,8 +2231,8 @@ window.addEventListener('DOMContentLoaded', function(){
 </div>
 
 <!-- Settings Modal -->
-<div id="settings-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9997;align-items:center;justify-content:center;">
-  <div style="background:#fff;border-radius:14px;width:90%;max-width:380px;padding:20px;">
+<div id="settings-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9997;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;width:100%;max-width:380px;padding:20px;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;">
     <div style="font-size:15px;font-weight:700;margin-bottom:4px;">⚙️ <span data-i18n="txt_settings">सेटिंग्ज</span></div>
 
     <div data-perm="edit_rates" data-perm-display="block" style="display:none;">
@@ -2282,14 +2281,6 @@ window.addEventListener('DOMContentLoaded', function(){
       <div style="font-size:11px;color:var(--text3);background:#f8fafc;border-radius:8px;padding:8px 10px;margin-top:2px;" data-i18n="txt_settings_note">टीप: हा बदल फक्त नवीन हप्ता नोंदींच्या auto-calculation साठी लागू होतो. आधीच्या नोंदी बदलणार नाहीत.</div>
       <button class="btn" onclick="saveSettings()" style="width:100%;background:var(--accent,#3a6fd8);color:#fff;margin-top:12px;" data-i18n="btn_save">जतन करा</button>
       <div class="login-success" id="settings-success" style="margin-top:8px;"></div>
-
-      <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);">
-        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;">💾 <span data-i18n="txt_backup_title">डेटा बॅकअप</span></div>
-        <div style="font-size:10.5px;color:var(--text3);margin-bottom:8px;" data-i18n="txt_backup_note">संपूर्ण डेटाची (सभासद, हप्ते, विनंत्या, फंड, सेटिंग्ज) एक प्रत तुमच्या उपकरणावर उतरवा. महिन्यातून एकदा घेणे उत्तम.</div>
-        <button onclick="downloadFullBackup()" style="width:100%;background:#166534;color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;">
-          💾 <span data-i18n="btn_download_backup">बॅकअप डाउनलोड करा</span>
-        </button>
-      </div>
     </div>
 
     <div id="settings-rate-restricted-note" style="font-size:12px;color:var(--text2);background:#f8fafc;border-radius:8px;padding:10px 12px;margin-bottom:2px;line-height:1.6;" data-i18n="txt_rate_restricted">व्याजदर/दंडदर सेटिंग्ज बदलण्याचा अधिकार फक्त Superadmin ला आहे.</div>
@@ -2381,8 +2372,8 @@ window.addEventListener('DOMContentLoaded', function(){
 </div>
 
 <!-- Member Settings Modal -->
-<div id="member-settings-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9997;align-items:center;justify-content:center;">
-  <div style="background:#fff;border-radius:14px;width:90%;max-width:340px;padding:20px;">
+<div id="member-settings-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9997;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;width:100%;max-width:340px;padding:20px;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;">
     <div style="font-size:15px;font-weight:700;margin-bottom:14px;">⚙️ <span data-i18n="txt_settings">सेटिंग्ज</span></div>
 
     <div style="display:flex;flex-direction:column;gap:8px;">
@@ -2644,7 +2635,7 @@ const translations = {
     m_total_paid:"एकूण जमा", m_balance_loan:"शिल्लक कर्ज", m_prev_paid:"आधीचे जमा",
     btn_save:"जतन करा", btn_reset:"रिसेट",
     txt_hapta_sub:"सभासद निवडा आणि हप्ता जोडा", txt_select_member:"सभासद निवडा",
-    lbl_name_or_no:"सभासदाचे नाव किंवा अ. क्र. लिहा", ph_type_name:"नाव टाइप करा...", btn_change:"बदला", btn_edit_profile:"नाव/मोबाईल बदला",
+    lbl_name_or_no:"सभासदाचे नाव किंवा अ. क्र. लिहा", ph_type_name:"नाव टाइप करा...", btn_change:"रद्द करा", btn_edit_profile:"नाव/मोबाईल बदला",
     txt_new_hapta:"नवीन हप्ता जोडा", btn_save_hapta:"हप्ता जतन करा",
     txt_search_sub:"नाव किंवा अ. क्र. टाकून सभासदाचे कर्ज तपशील पहा", lbl_no_or_name:"अ. क्र. किंवा नाव टाका",
     ph_no_or_name:"अ. क्र. किंवा नाव लिहा...",
@@ -2721,7 +2712,7 @@ const translations = {
     msg_pass_mismatch:"पासवर्ड जुळत नाही", msg_reg_request_sent:"नोंदणी विनंती पाठवली! अ‍ॅडमिनने approve केल्यावर तुम्ही लॉगिन करू शकाल.",
     msg_valid_mobile:"योग्य १० अंकी मोबाईल नंबर भरा", msg_no_changes:"काहीही बदल केलेला नाही",
     msg_profile_updated:"प्रोफाईल अद्यतन झालं!", msg_enter_name:"कृपया नाव भरा",
-    msg_pass_changed_short:"पासवर्ड बदलला!", msg_enter_password:"कृपया पासवर्ड भरा",
+    msg_pass_changed_short:"पासवर्ड बदलला!", lbl_new_password_optional:"नवीन पासवर्ड (बदलायचा असेल तरच)", ph_leave_blank_keep_pass:"रिकामे ठेवल्यास पासवर्ड बदलणार नाही", msg_enter_password:"कृपया पासवर्ड भरा",
     msg_reg_pending:"तुमची नोंदणी विनंती अजून प्रलंबित आहे. अ‍ॅडमिनने approve केल्यावर लॉगिन करता येईल.",
     txt_devata_vitthal:"॥ श्री विठ्ठल रखुमाई प्रसन्न ॥", txt_devata_bhairi:"॥ श्री भैरी देव प्रसन्न ॥",
     txt_org_name_short:"अबगुलवाडी नवतरुण ग्रामविकास मंडळ", txt_org_name_mobile:"अबगुलवाडी पतपेढी",
@@ -2743,7 +2734,7 @@ const translations = {
     txt_loan_invite_title:"कर्जाची गरज आहे का?", txt_loan_invite_sub:"संस्थेकडून सोप्या अटींवर कर्ज मिळवा",
     txt_backup_title:"डेटा बॅकअप", txt_backup_note:"संपूर्ण डेटाची (सभासद, हप्ते, विनंत्या, फंड, सेटिंग्ज) एक प्रत तुमच्या उपकरणावर उतरवा. महिन्यातून एकदा घेणे उत्तम.",
     btn_download_backup:"बॅकअप डाउनलोड करा", msg_backup_preparing:"बॅकअप तयार होत आहे...", msg_backup_done:"बॅकअप डाउनलोड झाला!",
-    txt_action_data_backup:"डेटा बॅकअप घेतला",
+    txt_action_data_backup:"डेटा बॅकअप घेतला", txt_action_hapta_delete:"हप्ता नोंद काढली", txt_delete_hapta:"ही हप्ता नोंद काढा", msg_hapta_deleted:"हप्ता नोंद काढली!",
     txt_month_compare:"महिन्याची तुलना", txt_this_month:"या महिन्यात", txt_last_month:"गेल्या महिन्यात",
     txt_share_whatsapp:"WhatsApp वर पाठवा",
     txt_vs_last_month:"गेल्या महिन्याच्या तुलनेत", txt_installments_word:"हप्ते", txt_new_this_month:"नवीन",
@@ -2805,7 +2796,7 @@ const translations = {
     nav_reports:"अहवाल", txt_reports_sub:"सर्व अहवाल एका ठिकाणी",
     txt_report_requests_desc:"सभासदांनी केलेल्या नोंदणी विनंत्या पहा व approve/reject करा.",
     txt_view_requests:"विनंत्या पहा",
-    txt_report_backup_desc:"सर्व सभासद व विनंत्यांचा संपूर्ण डेटा JSON फाईलमध्ये डाउनलोड करा.",
+    txt_report_backup_desc:"सर्व सभासद, हप्ते, विनंत्या, फंड, सूचना व सेटिंग्जचा संपूर्ण डेटा JSON फाईलमध्ये डाउनलोड करा.",
     txt_report_agm_desc:"निवडलेल्या वर्षाचा संपूर्ण वार्षिक अहवाल (उत्पन्न, वसुली, सभासदनिहाय तपशील).",
     btn_generate:"तयार करा",
     txt_outstanding_list:"थकबाकीदार यादी", txt_report_outstanding_desc:"सर्व थकबाकीदार सभासदांची संपूर्ण यादी — हप्ता/दंड/व्याज ब्रेकडाउनसह.",
@@ -2931,7 +2922,7 @@ const translations = {
     m_total_paid:"Total Paid", m_balance_loan:"Balance Loan", m_prev_paid:"Previously Paid",
     btn_save:"Save", btn_reset:"Reset",
     txt_hapta_sub:"Select a member and add an installment", txt_select_member:"Select Member",
-    lbl_name_or_no:"Enter member name or serial no.", ph_type_name:"Type name...", btn_change:"Change", btn_edit_profile:"Edit name/mobile",
+    lbl_name_or_no:"Enter member name or serial no.", ph_type_name:"Type name...", btn_change:"Cancel", btn_edit_profile:"Edit name/mobile",
     txt_new_hapta:"Add New Installment", btn_save_hapta:"Save Installment",
     txt_search_sub:"Enter name or serial no. to view a member's loan details", lbl_no_or_name:"Enter serial no. or name",
     ph_no_or_name:"Enter serial no. or name...",
@@ -3008,7 +2999,7 @@ const translations = {
     msg_pass_mismatch:"Passwords don't match", msg_reg_request_sent:"Registration request sent! You can log in once approved by admin.",
     msg_valid_mobile:"Enter a valid 10-digit mobile number", msg_no_changes:"No changes made",
     msg_profile_updated:"Profile updated!", msg_enter_name:"Please enter a name",
-    msg_pass_changed_short:"Password changed!", msg_enter_password:"Please enter a password",
+    msg_pass_changed_short:"Password changed!", lbl_new_password_optional:"New password (only if changing)", ph_leave_blank_keep_pass:"Leave blank to keep the current password", msg_enter_password:"Please enter a password",
     msg_reg_pending:"Your registration request is still pending. You can log in once approved by admin.",
     txt_devata_vitthal:"॥ Salutations to Lord Vitthal Rakhumai ॥", txt_devata_bhairi:"॥ Salutations to Lord Bhairi Dev ॥",
     txt_org_name_short:"Abgulwadi Navtarun Gramvikas Mandal", txt_org_name_mobile:"Abgulwadi Credit Society",
@@ -3030,7 +3021,7 @@ const translations = {
     txt_loan_invite_title:"Need a loan?", txt_loan_invite_sub:"Get a loan from the society on easy terms",
     txt_backup_title:"Data Backup", txt_backup_note:"Download a copy of all your data (members, installments, requests, funds, settings) to this device. Once a month is a good habit.",
     btn_download_backup:"Download Backup", msg_backup_preparing:"Preparing backup...", msg_backup_done:"Backup downloaded!",
-    txt_action_data_backup:"Data backup taken",
+    txt_action_data_backup:"Data backup taken", txt_action_hapta_delete:"Installment entry deleted", txt_delete_hapta:"Delete this installment", msg_hapta_deleted:"Installment entry deleted!",
     txt_month_compare:"Month Comparison", txt_this_month:"This month", txt_last_month:"Last month",
     txt_share_whatsapp:"Share on WhatsApp",
     txt_vs_last_month:"vs last month", txt_installments_word:"installments", txt_new_this_month:"new",
@@ -3092,7 +3083,7 @@ const translations = {
     nav_reports:"Reports", txt_reports_sub:"All reports in one place",
     txt_report_requests_desc:"View and approve/reject registration requests submitted by members.",
     txt_view_requests:"View Requests",
-    txt_report_backup_desc:"Download the complete data of all members and requests as a JSON file.",
+    txt_report_backup_desc:"Download all your data — members, installments, requests, funds, messages and settings — as a JSON file.",
     txt_report_agm_desc:"Full annual report for the selected year (income, recovery, member-wise detail).",
     btn_generate:"Generate",
     txt_outstanding_list:"Outstanding List", txt_report_outstanding_desc:"Complete list of all outstanding members — with installment/penalty/interest breakdown.",
@@ -3568,9 +3559,9 @@ async function saveEntry(){
       try{
         const {data: existingReq} = await sb.from('member_requests').select('*').eq('sabhasad_id', existing.id).eq('status','approved').limit(1);
         if(existingReq && existingReq.length){
-          await sb.from('member_requests').update({password,nav,mobile}).eq('id', existingReq[0].id);
+          await sb.from('member_requests').update({password: await hashPassword(password, mobile),nav,mobile}).eq('id', existingReq[0].id);
         } else {
-          await sb.from('member_requests').insert({nav,mobile,password,status:'approved',sabhasad_id:existing.id});
+          await sb.from('member_requests').insert({nav,mobile,password: await hashPassword(password, mobile),status:'approved',sabhasad_id:existing.id});
         }
       }catch(e){ toast(t('err_prefix')+e.message,'warn'); }
     }
@@ -3586,7 +3577,7 @@ async function saveEntry(){
     members.push({id:data.id,kram,nav,mobile,address,vatap:0,date:null,hapte:[],karjtype:'swataha',guarantor:'',loan_history:[],created_by:'admin'});
     // Create an approved login for this member right away, if admin set a password
     if(password){
-      const {error:reqErr} = await sb.from('member_requests').insert({nav,mobile,password,status:'approved',sabhasad_id:data.id});
+      const {error:reqErr} = await sb.from('member_requests').insert({nav,mobile,password: await hashPassword(password, mobile),status:'approved',sabhasad_id:data.id});
       if(reqErr){ toast(t('err_prefix')+reqErr.message,'warn'); }
     }
     logActivity('member_add', nav, 'अ.क्र. '+kram);
@@ -3710,10 +3701,34 @@ function openDrawer(idx){
   document.getElementById('dr-body').innerHTML=drAnchorRow+m.hapte.map((h,hIdx)=>{
     run-=h.hapta;
     const st=h.vilamb===0?'<span class="badge badge-green" style="font-size:10px">'+t('exp_on_time')+'</span>':h.vilamb<=1?'<span class="badge badge-amber" style="font-size:10px">'+t('exp_slight_delay')+'</span>':'<span class="badge badge-amber" style="font-size:10px">'+t('exp_delayed')+'</span>';
-    return `<tr><td>${fmtMonthLabel(h.mahina)}</td><td style="font-size:11px">${fmtDate(h.dinank)}</td><td>${h.vilamb||0}</td><td>${fmt(h.dand)}</td><td>${fmt(h.vyaj)}</td><td>${fmt(h.hapta)}</td><td style="color:var(--red)">${fmt(Math.max(0,run))}</td><td>${st}</td><td><button class="btn-icon" onclick="reprintReceipt(${idx},${hIdx})" title="${t('txt_reprint_receipt')}">🧾</button></td></tr>`;
+    return `<tr><td>${fmtMonthLabel(h.mahina)}</td><td style="font-size:11px">${fmtDate(h.dinank)}</td><td>${h.vilamb||0}</td><td>${fmt(h.dand)}</td><td>${fmt(h.vyaj)}</td><td>${fmt(h.hapta)}</td><td style="color:var(--red)">${fmt(Math.max(0,run))}</td><td>${st}</td><td style="white-space:nowrap"><button class="btn-icon" onclick="reprintReceipt(${idx},${hIdx})" title="${t('txt_reprint_receipt')}">🧾</button><button class="btn-icon" onclick="deleteHaptaEntry(${idx},${hIdx})" title="${t('txt_delete_hapta')}" style="color:var(--red)">🗑</button></td></tr>`;
   }).join('');
   document.getElementById('dr-edit-btn').onclick=()=>editMember(idx);
   document.getElementById('drawer-overlay').classList.add('open');
+}
+
+async function deleteHaptaEntry(idx, hIdx){
+  const m = members[idx];
+  if(!m) return;
+  const h = m.hapte[hIdx];
+  if(!h) return;
+
+  const total = (h.hapta||0) + (h.dand||0) + (h.vyaj||0);
+  const detail = fmtMonthLabel(h.mahina) + ' · ' + fmtDate(h.dinank) + ' · ' + fmt(total);
+  const warn = getLanguage()==='en'
+    ? `Delete this installment entry?\n\n${m.nav}\n${detail}\n\nThis cannot be undone. The member's balance will increase by ${fmt(h.hapta||0)}.`
+    : `ही हप्ता नोंद काढून टाकायची आहे का?\n\n${m.nav}\n${detail}\n\nही कृती पूर्ववत करता येणार नाही. सभासदाची शिल्लक ${fmt(h.hapta||0)} ने वाढेल.`;
+  if(!confirm(warn)) return;
+
+  const updatedHapte = m.hapte.filter((_, i) => i !== hIdx);
+  const {error} = await sb.from('sabhasad').update({hapte: updatedHapte}).eq('id', m.id);
+  if(error){ toast(t('err_prefix')+error.message, 'warn'); return; }
+
+  m.hapte = updatedHapte;
+  logActivity('hapta_delete', m.nav, detail);
+  toast('🗑 ' + t('msg_hapta_deleted'));
+  openDrawer(idx);   // refresh the drawer so totals and the table update
+  renderSum();
 }
 
 function reprintReceipt(idx, hIdx){
@@ -3808,7 +3823,7 @@ async function saveMemberProfileAdmin(){
       if(existingReq && existingReq.length){
         await sb.from('member_requests').update({password,nav,mobile}).eq('id', existingReq[0].id);
       } else {
-        await sb.from('member_requests').insert({nav,mobile,password,status:'approved',sabhasad_id:m.id});
+        await sb.from('member_requests').insert({nav,mobile,password: await hashPassword(password, mobile),status:'approved',sabhasad_id:m.id});
       }
     }catch(e){ errEl.textContent = '❌ '+t('err_prefix')+e.message; return; }
   }
@@ -5469,42 +5484,6 @@ async function exportAGMReport(){
   showPdfPreview(html, t('txt_agm_title')+'_'+yr+'.pdf', 'landscape', null, t('txt_agm_title'));
 }
 
-async function backupData(){
-  toast(t('msg_backup_starting'));
-  try{
-    const [{data:sabhasadData, error:err1}, {data:requestsData, error:err2}] = await Promise.all([
-      sb.from('sabhasad').select('*').order('kram',{ascending:true}),
-      sb.from('member_requests').select('*').order('created_at',{ascending:false})
-    ]);
-    if(err1) throw err1;
-    if(err2) throw err2;
-
-    const backup = {
-      backup_created_at: new Date().toISOString(),
-      app: 'Abgulwadi Navtarun Gramvikas Mandal — Patpedhi',
-      version: 1,
-      counts: { sabhasad: (sabhasadData||[]).length, member_requests: (requestsData||[]).length },
-      sabhasad: sabhasadData || [],
-      member_requests: requestsData || []
-    };
-
-    const json = JSON.stringify(backup, null, 2);
-    const blob = new Blob([json], {type:'application/json;charset=utf-8'});
-    const url = URL.createObjectURL(blob);
-    const now = new Date();
-    const pad = n => String(n).padStart(2,'0');
-    const stamp = now.getFullYear()+''+pad(now.getMonth()+1)+''+pad(now.getDate())+'_'+pad(now.getHours())+pad(now.getMinutes());
-    const a = document.createElement('a');
-    a.href = url; a.download = 'Patpedhi_Backup_'+stamp+'.json';
-    document.body.appendChild(a); a.click();
-    document.body.removeChild(a); URL.revokeObjectURL(url);
-
-    toast('✓ '+t('msg_backup_done')+' ('+backup.counts.sabhasad+' '+t('exp_members_word')+')');
-  }catch(error){
-    toast(t('err_prefix')+error.message,'warn');
-  }
-}
-
 /* ── सभासद PDF ── */
 function exportMemberPDF(idx){
   const m = members[idx]; if(!m) return;
@@ -6694,14 +6673,14 @@ function auditActionMeta(type){
     member_profile_edit: t('txt_action_member_profile_edit'), loan_disbursement: t('txt_action_loan_disbursement'),
     hapta_save: t('txt_action_hapta_save'), member_registration_request: t('txt_action_member_reg_request'),
     loan_request_submit: t('txt_action_loan_request_submit'), member_suggestion_submit: t('txt_action_member_suggestion_submit'),
-    data_backup: t('txt_action_data_backup')
+    data_backup: t('txt_action_data_backup'), hapta_delete: t('txt_action_hapta_delete')
   };
   const icons = {
     rate_change:'💰', admin_add:'➕', admin_delete:'🗑', admin_permission_change:'🔑',
     member_delete:'🗑', member_blacklist:'🚫', member_reactivate:'✅',
     loan_request_approve:'✅', loan_request_reject:'❌', new_loan_cycle:'🔄', password_change:'🔒',
     admin_login:'🔑', member_login:'👤', member_add:'➕', member_profile_edit:'✏️',
-    loan_disbursement:'💵', hapta_save:'🧾', member_registration_request:'📝', loan_request_submit:'📨', member_suggestion_submit:'💬', data_backup:'💾'
+    loan_disbursement:'💵', hapta_save:'🧾', member_registration_request:'📝', loan_request_submit:'📨', member_suggestion_submit:'💬', data_backup:'💾', hapta_delete:'🗑'
   };
   return {label: labels[type]||type, icon: icons[type]||'📌'};
 }
@@ -6818,6 +6797,38 @@ async function initAdminDashboardAfterLogin(){
   if(loadingScreen) loadingScreen.style.display = 'none';
 }
 
+/* ── PASSWORD SECURITY ──
+   Passwords are stored as a salted SHA-256 hash rather than plain text, so
+   anyone who can read the database cannot see members' actual passwords.
+   Records saved before this change are still plain text; verifyPassword()
+   accepts those too and the login flow quietly re-saves them as a hash. */
+
+async function hashPassword(plain, identifier){
+  const input = 'patpedhi$' + (identifier || '') + '$' + plain;
+  try{
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(input));
+    return 'sha256$' + Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }catch(e){
+    // crypto.subtle needs a secure context (https). If it is unavailable we
+    // must not silently fall back to storing plain text.
+    console.error('Password hashing unavailable:', e?.message||e);
+    throw new Error('hash_unavailable');
+  }
+}
+
+function isHashedPassword(stored){
+  return typeof stored === 'string' && stored.startsWith('sha256$');
+}
+
+async function verifyPassword(stored, plain, identifier){
+  if(stored === null || stored === undefined) return false;
+  if(isHashedPassword(stored)){
+    try{ return stored === await hashPassword(plain, identifier); }
+    catch(e){ return false; }
+  }
+  return stored === plain;   // legacy plain-text record
+}
+
 async function doLogin(){
   const u=document.getElementById('login-user').value.trim();
   const p=document.getElementById('login-pass').value;
@@ -6833,9 +6844,17 @@ async function doLogin(){
         err.textContent = '🔒 ' + formatLockoutRemaining(admin.locked_until);
         return;
       }
-      if(admin.password === p){
+      if(await verifyPassword(admin.password, p, admin.username)){
+        const resetPayload = {};
         if(admin.failed_attempts || admin.locked_until){
-          try{ await sb.from('admins').update({failed_attempts:0, locked_until:null}).eq('id',admin.id); }catch(e){}
+          resetPayload.failed_attempts = 0; resetPayload.locked_until = null;
+        }
+        // Upgrade an old plain-text record to a hash now that we know the password is right.
+        if(!isHashedPassword(admin.password)){
+          try{ resetPayload.password = await hashPassword(p, admin.username); }catch(e){}
+        }
+        if(Object.keys(resetPayload).length){
+          try{ await sb.from('admins').update(resetPayload).eq('id',admin.id); }catch(e){}
         }
         sessionStorage.setItem('pp_auth','true');
         sessionStorage.setItem('pp_admin_id', String(admin.id));
@@ -6886,7 +6905,7 @@ async function doLogin(){
         err.textContent = '🔒 ' + formatLockoutRemaining(req.locked_until);
         return;
       }
-      if(req.password !== p){
+      if(!(await verifyPassword(req.password, p, req.mobile))){
         const attempts = (req.failed_attempts||0) + 1;
         const payload = {failed_attempts: attempts};
         if(attempts >= LOGIN_MAX_ATTEMPTS){
@@ -6902,8 +6921,15 @@ async function doLogin(){
         document.getElementById('login-pass').value='';
         return;
       }
+      const memberResetPayload = {};
       if(req.failed_attempts || req.locked_until){
-        try{ await sb.from('member_requests').update({failed_attempts:0, locked_until:null}).eq('id',req.id); }catch(e){}
+        memberResetPayload.failed_attempts = 0; memberResetPayload.locked_until = null;
+      }
+      if(!isHashedPassword(req.password)){
+        try{ memberResetPayload.password = await hashPassword(p, req.mobile); }catch(e){}
+      }
+      if(Object.keys(memberResetPayload).length){
+        try{ await sb.from('member_requests').update(memberResetPayload).eq('id',req.id); }catch(e){}
       }
       if(req.status==='pending'){
         err.textContent='⏳ '+t('msg_reg_pending');
@@ -6952,7 +6978,7 @@ async function doForgot(){
   try{
     const {data} = await sb.from('admins').select('*').eq('username',u).limit(1);
     if(data && data.length){
-      const {error:updErr} = await sb.from('admins').update({password:'patpedhi@2025'}).eq('id',data[0].id);
+      const {error:updErr} = await sb.from('admins').update({password: await hashPassword('patpedhi@2025', u)}).eq('id',data[0].id);
       if(!updErr){
         suc.textContent='✅ '+t('msg_password_reset')+' patpedhi@2025';
         setTimeout(()=>showSection('sec-login'),3000);
@@ -6980,9 +7006,9 @@ async function doChangePass(){
   if(newP!==conf){err.textContent='❌ '+t('msg_new_pass_mismatch');return;}
 
   try{
-    const {data} = await sb.from('admins').select('*').eq('username',u).eq('password',oldP).limit(1);
-    if(data && data.length){
-      const {error:updErr} = await sb.from('admins').update({password:newP}).eq('id',data[0].id);
+    const {data} = await sb.from('admins').select('*').eq('username',u).limit(1);
+    if(data && data.length && await verifyPassword(data[0].password, oldP, u)){
+      const {error:updErr} = await sb.from('admins').update({password: await hashPassword(newP, u)}).eq('id',data[0].id);
       if(!updErr){
         logActivity('password_change', u, null);
         suc.textContent='✅ '+t('msg_pass_changed');
@@ -7040,7 +7066,7 @@ async function doMemberRegister(){
     // instead of inserting a fresh duplicate row.
     const rejected = (existingReqs||[]).find(r=>r.status==='rejected');
     if(rejected){
-      const {error:updErr} = await sb.from('member_requests').update({nav,password:pass,address,status:'pending'}).eq('id',rejected.id);
+      const {error:updErr} = await sb.from('member_requests').update({nav,password: await hashPassword(pass, mobile),address,status:'pending'}).eq('id',rejected.id);
       if(updErr){err.textContent='❌ '+t('err_prefix')+updErr.message;return;}
       logActivity('member_registration_request', nav, mobile, {username:nav, role:'member'});
       suc.textContent='✅ '+t('msg_reg_request_sent');
@@ -7054,7 +7080,7 @@ async function doMemberRegister(){
     }
   }catch(e){ /* lookup failed — fall through and try the insert anyway */ }
 
-  const {error} = await sb.from('member_requests').insert({nav,mobile,address,password:pass,status:'pending'});
+  const {error} = await sb.from('member_requests').insert({nav,mobile,address,password: await hashPassword(pass, mobile),status:'pending'});
   if(error){err.textContent='❌ '+t('err_prefix')+error.message;return;}
   logActivity('member_registration_request', nav, mobile, {username:nav, role:'member'});
   suc.textContent='✅ '+t('msg_reg_request_sent');
@@ -7938,7 +7964,7 @@ async function saveMemberPassword(){
   msg.textContent='';
   if(newPass.length<6){msg.style.color='#dc2626';msg.textContent='❌ '+t('msg_pass_min6');return;}
   if(newPass!==confirmPass){msg.style.color='#dc2626';msg.textContent='❌ '+t('msg_pass_mismatch');return;}
-  const {error} = await sb.from('member_requests').update({password:newPass}).eq('sabhasad_id',currentMemberSabhasadId).eq('status','approved');
+  const {error} = await sb.from('member_requests').update({password: await hashPassword(newPass, currentMemberData && currentMemberData.mobile)}).eq('sabhasad_id',currentMemberSabhasadId).eq('status','approved');
   if(error){msg.style.color='#dc2626';msg.textContent='❌ '+t('err_prefix')+error.message;return;}
   msg.style.color='#16a34a';
   msg.textContent='✅ '+t('msg_pass_changed_short');
@@ -8243,7 +8269,7 @@ function renderRequests(){
       actions += `<button class="btn-icon" title="Approve" onclick="openApproveModal(${r.id})" style="color:var(--green,#16a34a)">✅</button>
                  <button class="btn-icon" title="Reject" onclick="rejectRequest(${r.id})" style="color:var(--red,#dc2626)">❌</button>`;
     }
-    return `<tr><td>${i+1}</td><td>${dt}</td><td style="font-weight:600">${r.nav}</td><td>${r.mobile}</td><td style="font-family:monospace">${r.password}</td><td style="${statusColor[r.status]||''}">${statusLabel[r.status]||r.status}</td><td style="white-space:nowrap">${actions}</td></tr>`;
+    return `<tr><td>${i+1}</td><td>${dt}</td><td style="font-weight:600">${r.nav}</td><td>${r.mobile}</td><td style="font-family:monospace;color:var(--text3)">••••••</td><td style="${statusColor[r.status]||''}">${statusLabel[r.status]||r.status}</td><td style="white-space:nowrap">${actions}</td></tr>`;
   }).join('');
 }
 
@@ -8333,7 +8359,7 @@ function openEditRequestModal(requestId){
   currentEditReqId = requestId;
   document.getElementById('edit-req-nav').value = req.nav;
   document.getElementById('edit-req-mobile').value = req.mobile;
-  document.getElementById('edit-req-password').value = req.password;
+  document.getElementById('edit-req-password').value = '';
   document.getElementById('edit-req-error').textContent = '';
   document.getElementById('edit-req-modal-overlay').style.display = 'flex';
 }
@@ -8351,8 +8377,12 @@ async function saveEditRequest(){
   err.textContent='';
   if(!nav){err.textContent='❌ '+t('msg_enter_name');return;}
   if(!/^\d{10}$/.test(mobile)){err.textContent='❌ '+t('msg_valid_mobile');return;}
-  if(!password){err.textContent='❌ '+t('msg_enter_password');return;}
-  const {error} = await sb.from('member_requests').update({nav,mobile,password}).eq('id',currentEditReqId);
+  const payload = {nav, mobile};
+  if(password){
+    if(password.length < 6){err.textContent='❌ '+t('msg_pass_min6');return;}
+    payload.password = await hashPassword(password, mobile);
+  }
+  const {error} = await sb.from('member_requests').update(payload).eq('id',currentEditReqId);
   if(error){err.textContent='❌ '+t('err_prefix')+error.message;return;}
   toast('✓ '+t('msg_request_updated'));
   closeEditRequestModal();
