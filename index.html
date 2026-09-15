@@ -2770,6 +2770,7 @@ const translations = {
     lbl_broadcast_image:"📷 सणासाठी सानुकूल फोटो (ऐच्छिक)", btn_remove_image:"फोटो काढा", txt_broadcast_image_note:"फोटो दिल्यास, popup मध्ये तोच पार्श्वभूमी म्हणून वापरला जाईल (डिझाईनऐवजी).",
     txt_settings_note:"टीप: हा बदल फक्त नवीन हप्ता नोंदींच्या auto-calculation साठी लागू होतो. आधीच्या नोंदी बदलणार नाहीत.",
     msg_invalid_rate:"कृपया योग्य दर भरा (शून्य किंवा त्यापेक्षा जास्त)", msg_settings_saved:"सेटिंग्ज जतन झाल्या!",
+    msg_settings_saved_local_only:"सेटिंग्ज फक्त या उपकरणावर जतन झाल्या — डेटाबेसमध्ये जतन होऊ शकल्या नाहीत. (Supabase मध्ये आवश्यक column जोडलेला आहे का तपासा)",
     txt_receipt_title:"पावती", txt_receipt_no:"पावती क्र.", txt_receiver_sign:"सही (प्राप्तकर्ता)",
     th_details:"तपशील", txt_pending_months:"प्रलंबित महिने", txt_total_in_words:"एकूण जमा (अक्षरात)",
     txt_manager_sign:"सही (व्यवस्थापक)", txt_reprint_receipt:"पावती पुन्हा छापा", txt_digital_receipt_note:"टीप: ही पावती डिजिटल पद्धतीने स्वयंचलितपणे तयार करण्यात आलेली असल्याने स्वाक्षरीची आवश्यकता नाही.",
@@ -3056,6 +3057,7 @@ const translations = {
     lbl_broadcast_image:"📷 Custom photo for the festival (optional)", btn_remove_image:"Remove photo", txt_broadcast_image_note:"If provided, this photo will be used as the popup background instead of the design.",
     txt_settings_note:"Note: This only affects auto-calculation for new installment entries. Existing records won't change.",
     msg_invalid_rate:"Please enter a valid rate (zero or greater)", msg_settings_saved:"Settings saved!",
+    msg_settings_saved_local_only:"Settings saved on this device only — could not save to the database. (Check that the required column exists in Supabase)",
     txt_receipt_title:"Receipt", txt_receipt_no:"Receipt No.", txt_receiver_sign:"Signature (Receiver)",
     th_details:"Details", txt_pending_months:"Pending Months", txt_total_in_words:"Total Amount (in words)",
     txt_manager_sign:"Signature (Manager)", txt_reprint_receipt:"Reprint Receipt", txt_digital_receipt_note:"Note: This is a digitally generated receipt and does not require a signature.",
@@ -4926,7 +4928,7 @@ function getOfficeHours(){
   try{ return localStorage.getItem('pp_office_hours') || ''; }catch(e){ return ''; }
 }
 function getBroadcastMessage(){
-  if(appSettingsCache.loaded) return appSettingsCache.broadcast_message || '';
+  if(appSettingsCache.loaded && appSettingsCache.broadcast_message) return appSettingsCache.broadcast_message;
   try{ return localStorage.getItem('pp_broadcast_message') || ''; }catch(e){ return ''; }
 }
 function getBroadcastTheme(){
@@ -4934,7 +4936,10 @@ function getBroadcastTheme(){
   try{ return localStorage.getItem('pp_broadcast_theme') || 'general'; }catch(e){ return 'general'; }
 }
 function getBroadcastImage(){
-  if(appSettingsCache.loaded) return appSettingsCache.broadcast_image || '';
+  // Prefer the value from the database, but fall back to the local copy when the
+  // database has nothing for it (e.g. the broadcast_image column has not been
+  // added yet) — otherwise the banner would vanish after a logout or refresh.
+  if(appSettingsCache.loaded && appSettingsCache.broadcast_image) return appSettingsCache.broadcast_image;
   try{ return localStorage.getItem('pp_broadcast_image') || ''; }catch(e){ return ''; }
 }
 function updateVyajRateLabels(){
@@ -5051,8 +5056,15 @@ async function saveSettings(){
     appSettingsCache.broadcast_theme = broadcastTheme||'general';
     appSettingsCache.broadcast_image = broadcastImage||null;
     appSettingsCache.loaded = true;
+    // Keep a local copy too, so the banner survives even if this row is ever
+    // re-read before the column exists on some other device.
+    try{
+      localStorage.setItem('pp_broadcast_message', broadcastMessage);
+      localStorage.setItem('pp_broadcast_theme', broadcastTheme);
+      localStorage.setItem('pp_broadcast_image', broadcastImage||'');
+    }catch(e2){}
   }catch(e){
-    // app_settings table may not exist yet — fall back to localStorage only (this device)
+    // app_settings table/column may not exist yet — fall back to localStorage only (this device)
     console.warn('saveSettings DB write failed, using local fallback:', e?.message||e);
     try{
       localStorage.setItem('pp_interest_rate', newInterestRate.toString());
@@ -5064,6 +5076,15 @@ async function saveSettings(){
       localStorage.setItem('pp_broadcast_theme', broadcastTheme);
       localStorage.setItem('pp_broadcast_image', broadcastImage||'');
     }catch(e2){}
+    // Also mirror into the in-memory cache so the rest of this session behaves
+    // as if the save worked.
+    appSettingsCache.broadcast_message = broadcastMessage||null;
+    appSettingsCache.broadcast_theme = broadcastTheme||'general';
+    appSettingsCache.broadcast_image = broadcastImage||null;
+    suc.style.color = '#d97706';
+    suc.textContent = '⚠️ ' + t('msg_settings_saved_local_only');
+    logActivity('rate_change', null, 'व्याजदर: '+interestPct+'%, दंडदर: ₹'+penaltyAmt+', स्मरणपत्र दिवस: '+reminderDay+' (local only)');
+    return;
   }
   logActivity('rate_change', null, 'व्याजदर: '+interestPct+'%, दंडदर: ₹'+penaltyAmt+', स्मरणपत्र दिवस: '+reminderDay);
   suc.style.color = '#16a34a';
