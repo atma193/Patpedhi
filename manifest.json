@@ -1,24 +1,16 @@
 {
-  "name": "अबगुलवाडी नवतरुण ग्रामविकास मंडळ पतपेढी",
-  "short_name": "पतपेढी",
+  "name": "KG Chatboat",
+  "short_name": "KG Chatboat",
+  "description": "K.GIRDHARLAL team chat with file and photo sharing",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#0f172a",
-  "orientation": "any",
+  "background_color": "#0B0E18",
+  "theme_color": "#10162B",
+  "orientation": "portrait-primary",
   "icons": [
-    {
-      "src": "./logo-app.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "./logo-app.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
